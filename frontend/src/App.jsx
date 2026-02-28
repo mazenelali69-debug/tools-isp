@@ -228,7 +228,7 @@ const [monitors, setMonitors] = useState([]);
 
     setPingField(id, { out: "", running: true });
 
-    const url = API + "/api/ping/stream?ip=" + encodeURIComponent(target);
+    const url = API + "/api/ping?ip=" + encodeURIComponent(target);
     const es = new EventSource(url);
     pingSrcRef.current[id] = es;
 
@@ -484,6 +484,7 @@ const [monitors, setMonitors] = useState([]);
     </div>
   );
 }
+
 
 
 
