@@ -1,0 +1,61 @@
+﻿import DragResizeWindow from "./DragResizeWindow.jsx";
+import TrafficGraph from "./TrafficGraph.jsx";
+
+export default function MonitorBox({ monitor, live, points, onClose }) {
+  /* TOOLS_MONITORBOX_NEON_OK_v1 */
+  const bwClass = (v) => (v > 400 ? "bw-insane" : v > 150 ? "bw-high" : v > 50 ? "bw-mid" : "bw-low");
+
+  const down = Number(live?.down ?? 0);
+  const up   = Number(live?.up ?? 0);
+
+  const ipText = monitor?.ip ? String(monitor.ip) : "";
+  const id = monitor?.id;
+
+  return (
+    <DragResizeWindow
+      id={id}
+      title="Drag / Resize"
+      ipText={ipText}
+      defaultRect={{ x: 80, y: 150, w: 520, h: 240 }}
+      minW={360}
+      minH={200}
+      onClose={onClose}
+    >
+      <div style={{ display: "grid", gap: 10, height: "100%" }}>
+
+        {/* Neon BW pills */}
+        <div className="bwRow" data-bw="1">
+          <span className={"bwPill " + bwClass(down)} title={"Download: " + down.toFixed(3) + " Mbps"}>
+            <span className="bwLabel">Download</span>
+            <span className="bwVal">{(down).toFixed?.(3) ?? "0"} Mbps</span>
+          </span>
+
+          <span className={"bwPill " + bwClass(up)} title={"Upload: " + up.toFixed(3) + " Mbps"}>
+            <span className="bwLabel">Upload</span>
+            <span className="bwVal">{(up).toFixed?.(3) ?? "0"} Mbps</span>
+          </span>
+        </div>
+
+        {/* Graph */}
+        <div
+          style={{
+            flex: 1,
+            minHeight: 120,
+            borderRadius: 14,
+            border: "1px solid rgba(255,255,255,0.08)",
+            background: "rgba(0,0,0,0.12)",
+            overflow: "hidden"
+          }}
+        >
+          <TrafficGraph points={points || []} height={160} />
+        </div>
+
+        {!live?.ok && live?.err ? (
+          <div style={{ color: "#ff6b6b", fontSize: 12, fontWeight: 800 }}>
+            {live.err}
+          </div>
+        ) : null}
+      </div>
+    </DragResizeWindow>
+  );
+}

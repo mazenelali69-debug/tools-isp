@@ -1,0 +1,428 @@
+﻿require("dotenv").config();
+const express = require("express");
+const http = require("http");
+const cors = require("cors");
+const { Server } = require("socket.io");
+const snmp = require("net-snmp");
+const { v4: uuidv4 } = require("uuid");
+
+process.on("uncaughtException", (err) => console.error("🔥 UncaughtException:", err));
+process.on("unhandledRejection", (err) => console.error("🔥 UnhandledRejection:", err));
+
+const app = express();
+app.use(cors({ origin: true, credentials: true }));
+app.use(express.json());
+
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: true, credentials: true } });
+
+// In-memory monitor registry
+const monitors = new Map();
+
+function snmpGet(session, oids) {
+  return new Promise((resolve, reject) => {
+    session.get(oids, (err, varbinds) => {
+      if (err) return reject(err);
+      resolve(varbinds);
+    });
+  });
+}
+
+function makeSession(ip, community) {
+  const session = snmp.createSession(ip, community, {
+    timeout: 2000,
+    retries: 1,
+    version: snmp.Version2c,
+  });
+  session.on("error", (err) => console.error("SNMP session error:", ip, err?.message || err));
+  return session;
+}
+
+// Traffic OIDs (HC counters)
+const OID_ifHCIn  = "1.3.6.1.2.1.31.1.1.1.6";
+const OID_ifIn    = "1.3.6.1.2.1.2.2.1.10";
+const OID_ifHCOut = "1.3.6.1.2.1.31.1.1.1.10";
+const OID_ifOut   = "1.3.6.1.2.1.2.2.1.16";
+
+// ---------- Routes ----------
+app.get("/health", (req, res) => res.json({ ok: true, service: "tools-isp-backend" }));
+
+// SNMP basic test (sysDescr.0)
+app.post("/api/snmp/test", async (req, res) => {
+  const { ip, community } = req.body || {};
+  if (!ip || !community) return res.status(400).json({ ok: false, error: "ip+community required" });
+
+  const session = makeSession(ip, community);
+  try {
+    const vb = (await snmpGet(session, ["1.3.6.1.2.1.1.1.0"]))[0];
+    if (!vb) return res.status(502).json({ ok: false, error: "No varbind returned" });
+    if (snmp.isVarbindError(vb)) return res.status(502).json({ ok: false, error: String(snmp.varbindError(vb)) });
+    return res.json({ ok: true, sysDescr: String(vb.value) });
+  } catch (e) {
+    return res.status(502).json({ ok: false, error: String(e.message || e) });
+  } finally {
+    try { session.close(); } catch {}
+  }
+});
+
+// Interfaces (robust):
+// 1) Try tableColumns (fast)
+// 2) If 0 rows, fallback to by-index using ifNumber + GET per index (works when walk/table blocked)
+app.post("/api/interfaces", async (req, res) => {
+  const { ip, community } = req.body || {};
+  if (!ip || !community) return res.status(400).json({ ok: false, error: "ip+community required" });
+
+  const session = makeSession(ip, community);
+
+  const IFENTRY_BASE  = "1.3.6.1.2.1.2.2.1";      // 2=ifDescr, 5=ifSpeed
+  const IFXENTRY_BASE = "1.3.6.1.2.1.31.1.1.1";   // 1=ifName
+
+  const OID_ifNumber = "1.3.6.1.2.1.2.1.0";
+  const OID_ifDescr  = "1.3.6.1.2.1.2.2.1.2";
+  const OID_ifSpeed  = "1.3.6.1.2.1.2.2.1.5";
+  const OID_ifName   = "1.3.6.1.2.1.31.1.1.1.1";
+
+  function tableColumns(baseOid, columns) {
+    return new Promise((resolve, reject) => {
+      session.tableColumns(baseOid, columns, (err, table) => {
+        if (err) return reject(err);
+        resolve(table || {});
+      });
+    });
+  }
+
+  async function tryTable() {
+    let ifTable = {};
+    let ifXTable = {};
+    try { ifTable = await tableColumns(IFENTRY_BASE, [2, 5]); } catch { ifTable = {}; }
+    try { ifXTable = await tableColumns(IFXENTRY_BASE, [1]); } catch { ifXTable = {}; }
+
+    const idxSet = new Set([...Object.keys(ifTable || {}), ...Object.keys(ifXTable || {})]);
+    const rows = [];
+
+    for (const k of idxSet) {
+      const ifIndex = parseInt(k, 10);
+      if (!Number.isFinite(ifIndex)) continue;
+
+      const ifDescrV = ifTable?.[k]?.[2];
+      const ifSpeedV = ifTable?.[k]?.[5];
+      const ifNameV  = ifXTable?.[k]?.[1];
+
+      const ifDescr = ifDescrV != null ? String(ifDescrV) : null;
+      const ifSpeed = ifSpeedV != null ? Number(ifSpeedV) : null;
+      const ifName  = ifNameV  != null ? String(ifNameV)  : (ifDescr || null);
+
+      if (ifName || ifDescr) rows.push({ ifIndex, ifName, ifDescr, ifSpeed: Number.isFinite(ifSpeed) ? ifSpeed : null });
+    }
+
+    rows.sort((a,b)=>a.ifIndex-b.ifIndex);
+    return rows;
+  }
+
+  async function tryByIndex() {
+    const vbN = (await snmpGet(session, [OID_ifNumber]))[0];
+    if (!vbN) throw new Error("No response for ifNumber.0");
+    if (snmp.isVarbindError(vbN)) throw new Error(String(snmp.varbindError(vbN)));
+
+    const n = Number(vbN.value);
+    if (!Number.isFinite(n) || n <= 0 || n > 2048) throw new Error(`Invalid ifNumber value: ${vbN.value}`);
+
+    const rows = [];
+    for (let i = 1; i <= n; i++) {
+      try {
+        const oids = [`${OID_ifName}.${i}`, `${OID_ifDescr}.${i}`, `${OID_ifSpeed}.${i}`];
+        const vbs = await snmpGet(session, oids);
+
+        const vbName  = vbs[0];
+        const vbDescr = vbs[1];
+        const vbSpeed = vbs[2];
+
+        const ifName  = (vbName  && !snmp.isVarbindError(vbName))  ? String(vbName.value)  : null;
+        const ifDescr = (vbDescr && !snmp.isVarbindError(vbDescr)) ? String(vbDescr.value) : null;
+        const ifSpeed = (vbSpeed && !snmp.isVarbindError(vbSpeed)) ? Number(vbSpeed.value) : null;
+
+        if (ifName || ifDescr) {
+          rows.push({
+            ifIndex: i,
+            ifName: ifName || ifDescr,
+            ifDescr: ifDescr || ifName,
+            ifSpeed: Number.isFinite(ifSpeed) ? ifSpeed : null
+          });
+        }
+      } catch {
+        // ignore missing indices
+      }
+    }
+
+    rows.sort((a,b)=>a.ifIndex-b.ifIndex);
+    return rows;
+  }
+
+  try {
+    let rows = await tryTable();
+    if (rows.length === 0) rows = await tryByIndex();
+
+    if (rows.length === 0) {
+      return res.status(502).json({
+        ok: false,
+        error: "SNMP reachable (sysDescr works) but interfaces not accessible. RouterOS SNMP view/permissions likely block IF-MIB."
+      });
+    }
+
+    return res.json({ ok: true, interfaces: rows });
+  } catch (e) {
+    return res.status(502).json({ ok: false, error: String(e.message || e) });
+  } finally {
+    try { session.close(); } catch {}
+  }
+});
+
+
+function parseCounter(vb) {
+  if (!vb || snmp.isVarbindError(vb)) return null;
+
+  const val = vb.value;
+
+  if (typeof val === "number") return val;
+  if (typeof val === "bigint") return Number(val);
+
+  if (Buffer.isBuffer(val)) {
+    try {
+      return parseInt(val.toString("hex"), 16);
+    } catch {
+      return null;
+    }
+  }
+
+  if (typeof val?.toString === "function") {
+    const n = Number(val.toString());
+    if (Number.isFinite(n)) return n;
+  }
+
+  return null;
+}
+// Start monitor (SNMP traffic) - pushes updates over Socket.IO
+app.post("/api/monitors", (req, res) => {
+  const { ip, community, ifIndex, label, intervalMs } = req.body || {};
+  if (!ip || !community || !ifIndex) return res.status(400).json({ ok: false, error: "ip+community+ifIndex required" });
+
+  const id = uuidv4();
+  const poll = Math.max(1000, Math.min(5000, Number(intervalMs || 1000)));
+  const session = makeSession(ip, community);
+
+  const state = { id, ip, label: label || ip, ifIndex: Number(ifIndex), poll, session, last: null, timer: null };
+
+  state.timer = setInterval(async () => {
+    const now = Date.now();
+    try {
+      const oids = [`${OID_ifHCIn}.${state.ifIndex}`, `${OID_ifHCOut}.${state.ifIndex}`];
+      const vbs = await snmpGet(session, oids);
+
+      const inOct = parseCounter(vbs[0]);
+      const outOct = parseCounter(vbs[1]);
+      if (!Number.isFinite(inOct) || !Number.isFinite(outOct)) throw new Error("Invalid counter values (non-numeric).");
+
+      if (state.last) {
+        const dt = (now - state.last.t) / 1000;
+        const din = inOct - state.last.in;
+        const dout = outOct - state.last.out;
+
+        const downMbps = (din * 8) / dt / 1_000_000;
+        const upMbps   = (dout * 8) / dt / 1_000_000;
+
+        io.emit("monitor:update", {
+          id: state.id, ip: state.ip, label: state.label, ifIndex: state.ifIndex, ts: now,
+          down_mbps: Math.max(0, Number(downMbps.toFixed(3))),
+          up_mbps: Math.max(0, Number(upMbps.toFixed(3))),
+          ok: true
+        });
+      }
+
+      state.last = { t: now, in: inOct, out: outOct };
+    } catch (e) {
+      io.emit("monitor:update", {
+        id: state.id, ip: state.ip, label: state.label, ifIndex: state.ifIndex, ts: now,
+        ok: false, error: String(e.message || e)
+      });
+    }
+  }, poll);
+
+  monitors.set(id, state);
+  res.json({ ok: true, id });
+});
+
+// Stop monitor
+app.delete("/api/monitors/:id", (req, res) => {
+  const id = req.params.id;
+  const m = monitors.get(id);
+  if (!m) return res.json({ ok: true });
+
+  clearInterval(m.timer);
+  try { m.session.close(); } catch {}
+  monitors.delete(id);
+
+  io.emit("monitor:stopped", { id });
+  res.json({ ok: true });
+});
+
+// List monitors
+app.get("/api/monitors", (req, res) => {
+  const list = [...monitors.values()].map(m => ({ id: m.id, ip: m.ip, label: m.label, ifIndex: m.ifIndex, poll: m.poll }));
+  res.json({ ok: true, monitors: list });
+});
+
+
+app.post("/api/debug/walk-ifdescr", async (req, res) => {
+  const { ip, community } = req.body || {};
+  if (!ip || !community) return res.status(400).json({ ok:false });
+
+  const session = makeSession(ip, community);
+  const OID = "1.3.6.1.2.1.2.2.1.2";
+
+  const rows = [];
+
+  try {
+    await new Promise((resolve, reject) => {
+      session.subtree(OID, (vb) => {
+        if (!snmp.isVarbindError(vb)) {
+          rows.push({
+            oid: vb.oid,
+            value: vb.value.toString()
+          });
+        }
+      }, (err)=> err?reject(err):resolve());
+    });
+
+    res.json({ ok:true, rows });
+
+  } catch(e) {
+    res.status(500).json({ ok:false, error:String(e) });
+  } finally {
+    try { session.close(); } catch {}
+  }
+});
+ 
+ 
+// API: Universal interfaces (robust): walk ifIndex -> GET ifDescr per index (timeout-guarded)
+app.post("/api/interfaces-universal",(req,res)=>{
+  const {ip,community}=req.body||{};
+  if(!ip||!community) return res.status(400).json({ok:false,error:"ip+community required"});
+
+  const session=makeSession(ip,community);
+
+  const OID_ifIndex="1.3.6.1.2.1.2.2.1.1"; // ifIndex
+  const OID_ifDescr="1.3.6.1.2.1.2.2.1.2"; // ifDescr
+  const OID_ifSpeed="1.3.6.1.2.1.2.2.1.5"; // ifSpeed
+
+  const idxs=new Set();
+  let finished=false;
+
+  const done = (payload, code=200) => {
+    if (finished) return;
+    finished=true;
+    try{ session.close(); } catch {}
+    return res.status(code).json(payload);
+  };
+
+  // Hard stop so it never hangs
+  const killer = setTimeout(()=>{
+    done({ok:false,error:"SNMP walk timed out"},504);
+  }, 8000);
+
+  // 1) walk ifIndex (fast, small)
+  session.walk(OID_ifIndex, 10, (vb)=>{
+    try{
+      if(!vb||!vb.oid||typeof vb.oid!=="string") return;
+      if(snmp.isVarbindError(vb)) return;
+      const parts=vb.oid.split(".");
+      const last=parseInt(parts[parts.length-1],10);
+      if(Number.isFinite(last)) idxs.add(last);
+    } catch {}
+  }, async (err)=>{
+    if (finished) return;
+    if (err) { clearTimeout(killer); return done({ok:false,error:String(err.message||err)},502); }
+
+    const indices=[...idxs].filter(n=>Number.isFinite(n)).sort((a,b)=>a-b);
+
+    // If nothing found, fail fast
+    if(indices.length===0){
+      clearTimeout(killer);
+      return done({ok:false,error:"No ifIndex entries returned"},502);
+    }
+
+    // 2) For each index, GET ifDescr + ifSpeed (batched)
+    const rows=[];
+    const chunk=12;
+
+    const getAsync = (oids) => new Promise((resolve,reject)=>{
+      session.get(oids,(e,vbs)=> e ? reject(e) : resolve(vbs));
+    });
+
+    try{
+      for(let i=0;i<indices.length;i+=chunk){
+        const slice=indices.slice(i,i+chunk);
+        const oids=[];
+        for(const idx of slice){
+          oids.push(`${OID_ifDescr}.${idx}`);
+          oids.push(`${OID_ifSpeed}.${idx}`);
+        }
+
+        const vbs = await getAsync(oids);
+
+        for(let k=0;k<slice.length;k++){
+          const idx=slice[k];
+          const vbD=vbs[k*2];
+          const vbS=vbs[k*2+1];
+
+          const ifName = (vbD && !snmp.isVarbindError(vbD)) ? String(vbD.value) : null;
+          const ifSpeed = (vbS && !snmp.isVarbindError(vbS)) ? Number(vbS.value) : null;
+
+          if(ifName){
+            rows.push({ ifIndex: idx, ifName, ifSpeed: Number.isFinite(ifSpeed)?ifSpeed:null });
+          }
+        }
+      }
+
+      clearTimeout(killer);
+      return done({ok:true,count:rows.length,interfaces:rows.sort((a,b)=>a.ifIndex-b.ifIndex)});
+    } catch(e){
+      clearTimeout(killer);
+      return done({ok:false,error:String(e.message||e)},502);
+    }
+  });
+});
+const session=makeSession(ip,community);
+  const OID="1.3.6.1.2.1.2.2.1.2"; // ifDescr
+  const rows={};
+
+  session.walk(OID,50,(vb)=>{
+    try{
+      if(!vb||!vb.oid||typeof vb.oid!=="string") return;
+      if(snmp.isVarbindError(vb)) return;
+
+      const parts=vb.oid.split(".");
+      const idx=parseInt(parts[parts.length-1],10);
+      if(!Number.isFinite(idx)) return;
+
+      rows[idx]={ ifIndex: idx, ifName: String(vb.value) };
+    } catch {
+      // ignore malformed
+    }
+  },(err)=>{
+    try{ session.close(); } catch {}
+
+    if(err) return res.status(500).json({ok:false,error:String(err.message||err)});
+
+    const list = Object.values(rows).sort((a,b)=>a.ifIndex-b.ifIndex);
+    res.json({ok:true,count:list.length,interfaces:list});
+  });
+});
+
+const PORT = process.env.PORT || 9090;
+server.listen(PORT, "0.0.0.0", () => console.log("✅ tools-isp backend listening on", PORT));
+
+
+
+
+
+

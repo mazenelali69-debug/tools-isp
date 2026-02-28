@@ -1,0 +1,63 @@
+﻿import { useEffect, useMemo, useState } from "react";
+import { Rnd } from "react-rnd";
+
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+export default function MonitorBox({ id, children }) {
+  const key = useMemo(() => `tisp.box.${id}`, [id]);
+
+  // defaults (بتقدر تغيّرها بعدين)
+  const [st, setSt] = useState(() => ({
+    x: 20,
+    y: 220,
+    w: 760,
+    h: 260
+  }));
+
+  useEffect(() => {
+    try{
+      const raw = localStorage.getItem(key);
+      if(!raw) return;
+      const j = JSON.parse(raw);
+      if(!j) return;
+      setSt(s => ({
+        x: Number.isFinite(j.x) ? j.x : s.x,
+        y: Number.isFinite(j.y) ? j.y : s.y,
+        w: Number.isFinite(j.w) ? j.w : s.w,
+        h: Number.isFinite(j.h) ? j.h : s.h
+      }));
+    } catch {}
+  }, [key]);
+
+  function save(next){
+    setSt(next);
+    try{ localStorage.setItem(key, JSON.stringify(next)); } catch {}
+  }
+
+  return (
+    <Rnd
+      bounds="window"
+      size={{ width: st.w, height: st.h }}
+      position={{ x: st.x, y: st.y }}
+      minWidth={420}
+      minHeight={200}
+      dragHandleClassName="mb-drag"
+      onDragStop={(e, d) => {
+        save({ ...st, x: d.x, y: d.y });
+      }}
+      onResizeStop={(e, dir, ref, delta, pos) => {
+        const w = clamp(ref.offsetWidth, 420, 2200);
+        const h = clamp(ref.offsetHeight, 200, 1400);
+        save({ x: pos.x, y: pos.y, w, h });
+      }}
+      enableResizing={{
+        top:true, right:true, bottom:true, left:true,
+        topRight:true, bottomRight:true, bottomLeft:true, topLeft:true
+      }}
+    >
+      <div style={{ width: "100%", height: "100%" }}>
+        {children}
+      </div>
+    </Rnd>
+  );
+}

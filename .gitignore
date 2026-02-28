@@ -1,0 +1,12 @@
+﻿node_modules/
+dist/
+build/
+.vite/
+.cache/
+*.log
+.env
+.env.*
+_audit/
+logs/
+.DS_Store
+Thumbs.db

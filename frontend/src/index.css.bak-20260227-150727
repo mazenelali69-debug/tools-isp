@@ -1,0 +1,164 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* === TOOLS-ISP PRO MAX THEME (safe: CSS only) === */
+:root{
+  --bg0:#070A12;
+  --bg1:#0B1020;
+  --card: rgba(255,255,255,.06);
+  --card2: rgba(255,255,255,.09);
+  --stroke: rgba(255,255,255,.12);
+  --stroke2: rgba(255,255,255,.18);
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.62);
+  --shadow: 0 12px 40px rgba(0,0,0,.45);
+  --radius: 18px;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  color:var(--text);
+  background:
+    radial-gradient(900px 500px at 20% 10%, rgba(120,90,255,.18), transparent 60%),
+    radial-gradient(900px 500px at 80% 15%, rgba(0,255,200,.12), transparent 60%),
+    radial-gradient(900px 600px at 50% 90%, rgba(255,170,0,.10), transparent 60%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+/* helpers (optional) */
+.tools-container{
+  width: min(1200px, calc(100% - 32px));
+  margin: 18px auto;
+}
+.tools-grid{
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 14px;
+}
+.col-6{ grid-column: span 6; }
+.col-4{ grid-column: span 4; }
+.col-3{ grid-column: span 3; }
+@media (max-width: 900px){
+  .col-6,.col-4,.col-3{ grid-column: span 12; }
+}
+
+/* cards */
+.card, .panel, .box, .widget, .tile{
+  background: linear-gradient(180deg, var(--card2), var(--card));
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.card:hover, .panel:hover, .box:hover, .widget:hover, .tile:hover{
+  border-color: var(--stroke2);
+  transform: translateY(-1px);
+  transition: 160ms ease;
+}
+
+/* headings */
+.small-muted{ color: var(--muted); font-size: 12px; }
+
+/* inputs */
+input, select, textarea{
+  color: var(--text);
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 12px;
+  padding: 10px 12px;
+  outline: none;
+}
+input:focus, select:focus, textarea:focus{
+  border-color: rgba(0,255,200,.35);
+  box-shadow: 0 0 0 3px rgba(0,255,200,.14);
+}
+
+/* buttons */
+button{
+  color: var(--text);
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 14px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+button:hover{
+  border-color: rgba(255,255,255,.22);
+  transform: translateY(-1px);
+  transition: 160ms ease;
+}
+
+/* glow */
+.glow-down{ box-shadow: 0 0 0 1px rgba(0,255,200,.18), 0 18px 60px rgba(0,255,200,.10); }
+.glow-up{   box-shadow: 0 0 0 1px rgba(255,170,0,.18), 0 18px 60px rgba(255,170,0,.10); }
+
