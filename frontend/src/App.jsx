@@ -1,4 +1,36 @@
 ﻿import { useEffect, useRef, useState } from "react";
+
+const STORAGE_KEY = "tools-isp:pings:v1";
+const STORAGE_UI_KEY = "tools-isp:ui:v1";
+
+function safeParse(json, fallback) {
+  try { return JSON.parse(json); } catch { return fallback; }
+}
+function loadSavedPings() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  const arr = safeParse(raw, null);
+  if (!Array.isArray(arr)) return null;
+  // minimal validation + defaults
+  return arr.map(p => ({
+    id: String(p.id || (crypto?.randomUUID ? crypto.randomUUID() : Date.now())),
+    ip: String(p.ip || ""),
+    out: String(p.out || ""),
+    running: false,            // never restore running
+    x: Number.isFinite(p.x) ? p.x : 40,
+    y: Number.isFinite(p.y) ? p.y : 160,
+    w: Number.isFinite(p.w) ? p.w : (p.w ?? undefined),
+    h: Number.isFinite(p.h) ? p.h : (p.h ?? undefined),
+  }));
+}
+function savePingsNow(pings) {
+  try {
+    const toSave = (pings || []).map(p => ({
+      id: p.id, ip: p.ip, out: p.out,
+      x: p.x, y: p.y, w: p.w, h: p.h
+    }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+  } catch {}
+}
 import { io } from "socket.io-client";
 import MonitorBox from "./MonitorBox.jsx";
 import TrafficGraph from "./TrafficGraph.jsx";
@@ -14,7 +46,32 @@ export default function App() {
   const [label, setLabel] = useState("WAN-ether1");
   // Ping UI (multi boxes)
   const [showPing, setShowPing] = useState(false);
-  const [pings, setPings] = useState([]); // [{id, ip, out, running, x, y}]
+  const [pings, setPings] = useState([]); 
+useEffect(() => {
+  // Restore pings positions + last IPs
+  const saved = loadSavedPings();
+  if (saved && saved.length) {
+    setPings(saved);
+  }
+
+  // (Optional) restore simple UI state (interface/group) if you want later:
+  // const ui = safeParse(localStorage.getItem(STORAGE_UI_KEY), null);
+  // if (ui && typeof ui === "object") {
+  //   if (ui.iface != null) setSelectedInterface(String(ui.iface));
+  // }
+}, []);
+
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+// [{id, ip, out, running, x, y}]
   const pingSrcRef = useRef({});          // { [id]: EventSource }
   const dragRef = useRef({ active:false, id:null, dx:0, dy:0 });
 
@@ -74,7 +131,18 @@ const [monitors, setMonitors] = useState([]);
   }, []);
 
 
-  // PING_RESIZE_ENGINE_START
+  
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+// PING_RESIZE_ENGINE_START
   useEffect(() => {
     function onMove(e) {
       const r = resizeRef.current;
@@ -102,7 +170,18 @@ const [monitors, setMonitors] = useState([]);
       window.removeEventListener("mouseup", onUp);
     };
   }, []);
-  // PING_RESIZE_ENGINE_END
+  
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+// PING_RESIZE_ENGINE_END
   async function loadMonitors() {
     const r = await fetch(API + "/api/monitors");
     const j = await r.json();
@@ -115,7 +194,18 @@ const [monitors, setMonitors] = useState([]);
 
   
 
-  // cleanup pings on unmount
+  
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+// cleanup pings on unmount
   useEffect(() => {
     return () => {
       try {
@@ -125,7 +215,18 @@ const [monitors, setMonitors] = useState([]);
     };
   }, []);
 
-  // PING_RESIZE_ENGINE_START
+  
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+// PING_RESIZE_ENGINE_START
   useEffect(() => {
     function onMove(e) {
       const r = resizeRef.current;
@@ -153,7 +254,18 @@ const [monitors, setMonitors] = useState([]);
       window.removeEventListener("mouseup", onUp);
     };
   }, []);
-  // PING_RESIZE_ENGINE_END
+  
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+// PING_RESIZE_ENGINE_END
 // close interface dropdown on outside click
   useEffect(() => {
     function onDoc(e){
@@ -165,7 +277,18 @@ const [monitors, setMonitors] = useState([]);
     }
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
-  }, []);async function fetchInterfaces() {
+  }, []);
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+async function fetchInterfaces() {
     setStatus("Loading interfaces...");
     const r = await fetch(API + "/api/interfaces-cli", {
       method: "POST",
@@ -510,6 +633,7 @@ const [monitors, setMonitors] = useState([]);
     </div>
   );
 }
+
 
 
 
