@@ -513,3 +513,101 @@ app.get("/api/ping", (req, res) => {
   });
 });
 
+
+
+
+// =========================
+// SSE Ping stream (for frontend EventSource)
+// GET /api/ping/stream?ip=8.8.8.8
+// =========================
+// SSE sanity test (no ping) - should emit data every 1s
+app.get("/api/sse-test", (req, res) => {
+  res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
+  res.setHeader("Cache-Control", "no-cache, no-transform");
+  res.setHeader("Connection", "keep-alive");
+  res.setHeader("X-Accel-Buffering", "no");
+  if (res.flushHeaders) res.flushHeaders();
+
+  
+  res.write(": ping-stream-start\\n\\n");
+// immediate output so clients see something right away
+  res.write(": sse-test-start\\n\\n");
+
+  let n = 0;
+  const t = setInterval(() => {
+    n++;
+    res.write("data: " + JSON.stringify({ ok:true, n, ts: Date.now() }) + "\\n\\n");
+  }, 1000);
+
+  req.on("close", () => {
+    clearInterval(t);
+    try { res.end(); } catch {}
+  });
+});
+
+
+
+
+// =========================
+// SSE Ping stream (stable)
+// GET /api/ping/stream?ip=8.8.8.8
+app.get("/api/ping/stream", (req, res) => {
+  const ip = (req.query.ip || "").toString().trim();
+  if (!ip) return res.status(400).end("Missing ip");
+  if (!ip.match(/^[a-zA-Z0-9.\-:]+$/)) return res.status(400).end("Invalid ip");
+
+  // IMPORTANT: write headers ONCE (no setHeader after this)
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream; charset=utf-8",
+    "Cache-Control": "no-cache, no-transform",
+    "Connection": "keep-alive",
+    "X-Accel-Buffering": "no"
+  });
+
+  res.write(": ping-stream-start\\n\\n");
+
+  let closed = false;
+  req.on("close", () => { closed = true; });
+
+  const send = (obj) => {
+    if (closed) return;
+    try {
+      res.write("data: " + JSON.stringify(obj) + "\\n\\n");
+    } catch (e) {
+      closed = true;
+      try { res.end(); } catch {}
+    }
+  };
+
+  const oncePing = () => {
+    const args = ["-n", "1", "-w", "1000", ip];
+    execFile("ping", args, { windowsHide: true }, (err, stdout, stderr) => {
+      const out = ((stdout || "") + (stderr || "")).trim();
+      const m = out.match(/time[=<]\\s*([0-9]+)\\s*ms/i);
+      const timeMs = m ? Number(m[1]) : null;
+      const alive = !err && /TTL=/i.test(out);
+      send({ ok: true, ip, alive, timeMs, raw: out });
+    });
+  };
+
+  // send immediately + every 1s
+  oncePing();
+  const timer = setInterval(() => {
+    if (closed) { clearInterval(timer); return; }
+    oncePing();
+  }, 1000);
+
+  // keep-alive comment every 15s
+  const ka = setInterval(() => {
+    if (closed) { clearInterval(ka); return; }
+    try { res.write(": keep-alive\\n\\n"); } catch {}
+  }, 15000);
+
+  req.on("close", () => {
+    clearInterval(timer);
+    clearInterval(ka);
+    try { res.end(); } catch {}
+  });
+});
+
+
