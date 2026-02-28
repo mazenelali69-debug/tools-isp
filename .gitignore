@@ -10,3 +10,33 @@ _audit/
 logs/
 .DS_Store
 Thumbs.db
+
+# ---- junk / backups ----
+*.bak
+*.bak-*
+*.bak_*
+*.backup
+frontend_old_*/
+**/*.bak
+**/*.bak-*
+**/*.bak_*
+
+# ---- node/vite ----
+**/node_modules/
+**/dist/
+**/build/
+**/.vite/
+**/.cache/
+*.log
+
+# ---- local env ----
+.env
+.env.*
+
+# ---- audit/logs ----
+_audit/
+logs/
+
+# ---- backend runtime junk ----
+backend/y/modules/
+backend/y/pids/
