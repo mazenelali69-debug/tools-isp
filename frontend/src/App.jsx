@@ -226,36 +226,62 @@ const [monitors, setMonitors] = useState([]);
     // stop previous if any
     stopPingId(id);
 
-    setPingField(id, { out: "", running: true });
+    // show header + keep running
+    setPingField(id, { out: "Pinging " + target + " ...\n", running: true });
 
-    const url = API + "/api/ping?ip=" + encodeURIComponent(target);
+    // ✅ SSE live stream
+    const url = API + "/api/ping-sse?ip=" + encodeURIComponent(target);
     const es = new EventSource(url);
     pingSrcRef.current[id] = es;
 
-    es.addEventListener("line", (e) => {
+    let startedAt = Date.now();
+    let lineCount = 0;
+
+    const append = (line) => {
+      lineCount++;
+      // Append + force react re-render/scroll using a tiny changing suffix
+      setPings(prev => prev.map(pp => {
+        if (pp.id !== id) return pp;
+        const base = (pp.out || "");
+        const next = base + String(line || "") + "\n";
+        return { ...pp, out: next, _scroll: Date.now() };
+      }));
+
+      // ✅ Auto-scroll output to bottom (after DOM updates)
+      setTimeout(() => {
+        try {
+          const el = document.querySelector(`[data-ping-out="${id}"]`);
+          if (el) { el.scrollTop = el.scrollHeight; }
+        } catch {}
+      }, 0);
+    };
+
+    es.addEventListener("line", (ev) => {
       try {
-        const j = JSON.parse(e.data);
-        const line = j.line || "";
-        setPings(prev => prev.map(pp => {
-          if (pp.id !== id) return pp;
-          const nextOut = pp.out ? (pp.out + "\n" + line) : line;
-          // keep last ~200 lines
-          const lines = nextOut.split("\n");
-          const trimmed = lines.length > 200 ? lines.slice(lines.length - 200).join("\n") : nextOut;
-          return { ...pp, out: trimmed };
-        }));
-      } catch {}
+        const obj = JSON.parse(ev.data || "{}");
+        append(obj.line ?? String(ev.data ?? ""));
+      } catch {
+        append(String(ev.data ?? ""));
+      }
     });
 
     es.addEventListener("end", () => {
-      stopPingId(id);
+      try { es.close(); } catch {}
+      try { delete pingSrcRef.current[id]; } catch {}
+      const ms = Date.now() - startedAt;
+      append("[done] " + ms + "ms");
+      setPingField(id, { running: false });
     });
 
-    es.addEventListener("error", () => {
-      // server closed or network issue
-      stopPingId(id);
-    });
-  }
+    es.onerror = () => {
+      // NOTE: EventSource auto-reconnects, but backend closes when client closes.
+      // We will show error and stop to avoid endless loop.
+      try { es.close(); } catch {}
+      try { delete pingSrcRef.current[id]; } catch {}
+      append("[error] stream disconnected");
+      setPingField(id, { running: false });
+    };
+}
 
   function onPingMouseDown(e, id) {
     const p = pings.find(x => x.id === id);
@@ -323,7 +349,7 @@ const [monitors, setMonitors] = useState([]);
                 minWidth: 320,
                 minHeight: 240,
                 resize: "both",
-                overflow: "hidden",
+                overflow: "auto",
                 background: "rgba(10, 14, 20, 0.78)",
                 border: "1px solid rgba(255,255,255,0.14)",
                 borderRadius: 10,
@@ -366,12 +392,12 @@ const [monitors, setMonitors] = useState([]);
                 </button>
               </div>
 
-              <pre
+              <pre data-ping-out={p.id}
                 onMouseDown={(e) => e.stopPropagation()}
                 style={{
                   marginTop: 10,
                   height: 160,
-                  overflow: "hidden",
+                  overflow: "auto",
                   whiteSpace: "pre-wrap",
                   fontFamily: "Consolas, monospace",
                   fontSize: 12,
@@ -484,6 +510,15 @@ const [monitors, setMonitors] = useState([]);
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
 
 
 

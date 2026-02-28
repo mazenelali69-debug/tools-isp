@@ -1,4 +1,6 @@
 ﻿require("dotenv").config();
+const net = require("net");
+const { spawn } = require("child_process");
 const { execFile } = require("child_process");
 const express = require("express");
 const http = require("http");
@@ -492,6 +494,64 @@ server.listen(PORT, "0.0.0.0", () => console.log("✅ tools-isp backend listenin
 // =========================
 // Ping any IP/host (Windows-safe)
 // GET /api/ping?ip=8.8.8.8
+
+/**
+ * Live ping over SSE
+ * GET /api/ping-sse?ip=1.1.1.1
+ * events: line/end
+ */
+app.get("/api/ping-sse", (req, res) => {
+  try {
+    const ip = String(req.query.ip || "").trim();
+    if (!ip) return res.status(400).json({ ok:false, error:"Missing ip" });
+
+    res.writeHead(200, {
+      "Content-Type": "text/event-stream; charset=utf-8",
+      "Cache-Control": "no-cache, no-transform",
+      "Connection": "keep-alive",
+      "X-Accel-Buffering": "no"
+    });
+    res.write("\n");
+
+    const child = spawn("ping", ["-t", ip], { windowsHide: true });
+
+    let closed = false;
+    const send = (evt, obj) => {
+      if (closed) return;
+      res.write("event: " + evt + "\n");
+      res.write("data: " + JSON.stringify(obj) + "\n\n");
+    };
+
+    let buf = "";
+    child.stdout.on("data", (d) => {
+      buf += d.toString("utf8");
+      const parts = buf.split(/\r?\n/);
+      buf = parts.pop() ?? "";
+      for (const line of parts) {
+        const s = String(line);
+        if (s.trim() !== "") send("line", { line: s });
+      }
+    });
+
+    child.stderr.on("data", (d) => {
+      const s = d.toString("utf8").trim();
+      if (s) send("line", { line: "[err] " + s });
+    });
+
+    const cleanup = () => {
+      if (closed) return;
+      closed = true;
+      try { child.kill(); } catch {}
+      try { send("end", {}); } catch {}
+      try { res.end(); } catch {}
+    };
+
+    child.on("close", cleanup);
+    req.on("close", cleanup);
+  } catch (e) {
+    try { res.status(500).json({ ok:false, error:String(e) }); } catch {}
+  }
+});
 app.get("/api/ping", (req, res) => {
   const ip = (req.query.ip || "").toString().trim();
   if(!ip) return res.status(400).json({ ok:false, error:"Missing ip" });
@@ -511,5 +571,71 @@ app.get("/api/ping", (req, res) => {
 
     return res.json({ ok:true, ip, alive, timeMs, raw: out });
   });
+});
+
+
+
+
+/**
+ * Live TCP ping over SSE (NO ping.exe)
+ * GET /api/tcp-ping-sse?host=8.8.8.8&port=443&interval=1000&timeout=1200
+ * events: line/end
+ */
+app.get("/api/tcp-ping-sse", (req, res) => {
+  const host = String(req.query.host || req.query.ip || "").trim();
+  const port = Math.max(1, Math.min(65535, parseInt(req.query.port || "443", 10)));
+  const interval = Math.max(250, Math.min(10000, parseInt(req.query.interval || "1000", 10)));
+  const timeout = Math.max(200, Math.min(10000, parseInt(req.query.timeout || "1200", 10)));
+
+  if (!host) return res.status(400).json({ ok:false, error:"Missing host" });
+
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream; charset=utf-8",
+    "Cache-Control": "no-cache, no-transform",
+    "Connection": "keep-alive",
+    "X-Accel-Buffering": "no"
+  });
+  res.write("\n");
+
+  let closed = false;
+  const send = (evt, obj) => {
+    if (closed) return;
+    res.write("event: " + evt + "\n");
+    res.write("data: " + JSON.stringify(obj) + "\n\n");
+  };
+
+  const tick = () => {
+    if (closed) return;
+    const t0 = Date.now();
+    const sock = net.connect({ host, port });
+
+    let done = false;
+    const finish = (ok, err) => {
+      if (done) return;
+      done = true;
+      try { sock.destroy(); } catch {}
+      const ms = Date.now() - t0;
+      if (ok) send("line", { line: `TCP ${host}:${port}  time=${ms}ms` });
+      else send("line", { line: `TCP ${host}:${port}  timeout (${ms}ms)${err ? " err=" + err : ""}` });
+    };
+
+    sock.setTimeout(timeout);
+    sock.on("connect", () => finish(true, ""));
+    sock.on("timeout", () => finish(false, "timeout"));
+    sock.on("error", (e) => finish(false, (e && e.code) ? e.code : String(e)));
+  };
+
+  const timer = setInterval(tick, interval);
+  tick();
+
+  const cleanup = () => {
+    if (closed) return;
+    closed = true;
+    try { clearInterval(timer); } catch {}
+    try { send("end", {}); } catch {}
+    try { res.end(); } catch {}
+  };
+
+  req.on("close", cleanup);
 });
 
