@@ -486,3 +486,30 @@ server.listen(PORT, "0.0.0.0", () => console.log("✅ tools-isp backend listenin
 
 
 
+
+
+
+// =========================
+// Ping any IP/host (Windows-safe)
+// GET /api/ping?ip=8.8.8.8
+app.get("/api/ping", (req, res) => {
+  const ip = (req.query.ip || "").toString().trim();
+  if(!ip) return res.status(400).json({ ok:false, error:"Missing ip" });
+
+  // حماية بسيطة ضد injection (بدنا نسمح IP/hostname فقط)
+  if(!ip.match(/^[a-zA-Z0-9\.\-:]+$/)) {
+    return res.status(400).json({ ok:false, error:"Invalid ip" });
+  }
+
+  // ping على Windows: -n 1
+  const args = ["-n","1","-w","1000", ip]; // 1 ping, timeout 1000ms
+  execFile("ping", args, { windowsHide:true }, (err, stdout, stderr) => {
+    const out = ((stdout||"") + (stderr||"")).trim();
+    const m = out.match(/time[=<]\s*([0-9]+)\s*ms/i);
+    const timeMs = m ? Number(m[1]) : null;
+    const alive = !err && /TTL=/i.test(out);
+
+    return res.json({ ok:true, ip, alive, timeMs, raw: out });
+  });
+});
+
