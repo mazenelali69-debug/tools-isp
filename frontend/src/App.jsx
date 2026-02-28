@@ -34,8 +34,42 @@ function savePingsNow(pings) {
 import { io } from "socket.io-client";
 import MonitorBox from "./MonitorBox.jsx";
 import TrafficGraph from "./TrafficGraph.jsx";
+import "./packet-loss.css";
+import "./ping-modern.css";
 
 const API = window.location.origin.replace(/:\d+$/, ":9090");
+function getPacketLossPct(out) {
+  if (!out) return null;
+  const s = String(out);
+  const lines = s.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+  const tail = lines.slice(-50); // آخر 50 نتيجة
+  let sent = 0;
+  let lost = 0;
+  for (const l of tail) {
+    // نجاح
+    if (/^reply from/i.test(l) || /bytes=\d+/i.test(l)) {
+      sent++;
+      continue;
+    }
+    // فشل (ويندوز + حالات شائعة)
+    if (/request timed out/i.test(l) || /destination host unreachable/i.test(l) || /general failure/i.test(l) || /transmit failed/i.test(l) || /unreachable/i.test(l)) {
+      sent++;
+      lost++;
+      continue;
+    }
+  }
+  if (sent === 0) return null;
+  const pct = (lost / sent) * 100;
+  return Math.round(pct * 10) / 10; // 1 decimal
+}
+function cleanPingText(out){
+  if(!out) return "";
+  return String(out)
+    .split(/\r?\n/)
+    .filter(line => !/^Pinging\s+/i.test(line))  // remove "Pinging x.x.x.x ..."
+    .filter(line => line.trim() !== "")         // remove empty lines
+    .join("\n");
+}
 
 export default function App() {
   const [ip, setIp] = useState("88.88.88.10");
@@ -469,8 +503,8 @@ async function fetchInterfaces() {
                 width: (p.w ?? 360),
                 height: (p.h ?? 320),
                 boxSizing: "border-box",
-                minWidth: 320,
-                minHeight: 240,
+                minWidth: 300,
+                minHeight: 220,
                 resize: "both",
                 overflow: "auto",
                 background: "rgba(10, 14, 20, 0.78)",
@@ -485,7 +519,7 @@ async function fetchInterfaces() {
             >
               <div onMouseDown={(e) => onPingMouseDown(e, p.id)}  style={{ display: "flex",
                 flexDirection: "column", justifyContent: "space-between", cursor: "move", userSelect: "none", alignItems: "center", marginBottom: 8 }}>
-                <div style={{ fontWeight: 700, fontSize: 12 }}>PING</div>
+                <div style={{ fontWeight: 700, fontSize: 12 }}>Packet loss</div>
                 <button type="button" onClick={() => removePing(p.id)} style={{ cursor: "pointer" }}>✕</button>
               </div>
 
@@ -515,23 +549,100 @@ async function fetchInterfaces() {
                 </button>
               </div>
 
-              <pre data-ping-out={p.id}
-                onMouseDown={(e) => e.stopPropagation()}
-                style={{
-                  marginTop: 10,
-                  height: 160,
-                  overflow: "auto",
-                  whiteSpace: "pre-wrap",
-                  fontFamily: "Consolas, monospace",
-                  fontSize: 12,
-                  background: "#0b0f14",
-                  color: "#e6edf3",
-                  padding: 10,
-                  borderRadius: 8
-                }}
-              >
-                {p.out}
-              </pre>
+              {(() => {
+  const loss = getPacketLossPct(p.out);
+  const pct = (loss === null) ? 0 : Math.max(0, Math.min(100, loss));
+  const lossText = (loss === null) ? "—" : (pct + "%");
+
+  // Sparkline from real ping times: time=23ms / time<1ms / time=23.5ms
+  const times = (p.out || "")
+    .split(/\r?\n/)
+    .map((l) => {
+      const m = l.match(/time\s*[=<]\s*([0-9.]+)\s*ms/i);
+      return m ? Number(m[1]) : null;
+    })
+    .filter((v) => v !== null && !Number.isNaN(v))
+    .slice(-40);
+
+  const maxT = times.length ? Math.max(...times) : null;
+  const minT = times.length ? Math.min(...times) : null;
+
+  const sparkPoints = (() => {
+    if (!times.length) return "";
+    const w = 100, h = 14;
+    const span = Math.max(1, (maxT - minT));
+    const n = times.length;
+    return times.map((t, i) => {
+      const x = (n === 1) ? 0 : (i * (w / (n - 1)));
+      const y = h - ((t - minT) / span) * h;
+      return `${x.toFixed(2)},${y.toFixed(2)}`;
+    }).join(" ");
+  })();
+
+  const sparkColor =
+    maxT === null ? "rgba(0,0,0,0)" :
+    (maxT >= 150 ? "rgba(255,80,80,0.98)" :
+     maxT >= 80  ? "rgba(255,200,0,0.98)" :
+                   "rgba(0,255,200,0.98)");
+
+  const pingLabel =
+    maxT === null ? "—" :
+    (Math.round(maxT) + "ms");
+
+  return (
+    <div className="pingMetaWrap">
+      <div className="pingMetaRow">
+        <div className="pingMetaLeft">
+          <div className="pingMetaLabel">Packet loss</div>
+          <div className="pingMetaValue">{lossText}</div>
+        </div>
+        <div className={"pingDotBox " + (p.running ? "on" : "")}>
+          <span className="pingDot" />
+        </div>
+      </div>
+
+      <div
+        className="plBar"
+        style={{ position: "relative", overflow: "hidden" }}
+        title={"Ping: " + pingLabel + " | Packet loss: " + lossText}
+      >
+        <div className="plFill" style={{ width: pct + "%", position:"absolute", left:0, top:0, bottom:0, zIndex:1, opacity:0.22 }} />
+
+        {/* Real-time ping sparkline */}
+        <svg className="plSpark" viewBox="0 0 100 14" width="100%" height="14"
+          preserveAspectRatio="none"
+          style={{ position:"absolute", left:0, top:0, width:"100%", height:"100%", zIndex:3, pointerEvents:"none" }}
+        >
+          <polyline
+  points={sparkPoints}
+  style={(() => {
+    const ms = (() => {
+      const m = String(pingLabel || "").match(/(\d+)\s*ms/);
+      return m ? parseInt(m[1], 10) : null;
+    })();
+    const stroke =
+      ms === null ? "rgba(120,200,255,0.9)" :
+      ms >= 200 ? "rgba(255,90,90,0.95)" :
+      ms >= 80  ? "rgba(255,210,70,0.95)" :
+                  "rgba(60,255,190,0.95)";
+    return {
+      fill: "none",
+      stroke,
+      strokeWidth: 2,
+      strokeLinejoin: "round",
+      strokeLinecap: "round",
+      filter: "drop-shadow(0 0 6px rgba(120,220,255,0.35))"
+    };
+  })()}
+/>
+        </svg>
+      </div>
+
+      <div className={"pingNeonLine " + (p.running ? "on" : "")} />
+    </div>
+  );
+})()}
+<pre data-ping-out={p.id} className="pingOut">{cleanPingText(p.out)}</pre>
             
               {/* PING_RESIZE_GRIP */}
               <div
@@ -633,6 +744,16 @@ async function fetchInterfaces() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

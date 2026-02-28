@@ -1,0 +1,491 @@
+﻿/* =========================
+   PING BOX â€” ENTERPRISE STYLE
+   ========================= */
+
+.pingBox{
+  position: relative !important;
+  border-radius: 22px !important;
+  background:
+    radial-gradient(900px 360px at 15% 0%, rgba(120,200,255,.16), transparent 60%),
+    radial-gradient(900px 360px at 85% 10%, rgba(90,255,200,.12), transparent 60%),
+    rgba(10,14,20,.86) !important;
+
+  border: 1px solid rgba(140,220,255,.22) !important;
+  box-shadow:
+    0 28px 90px rgba(0,0,0,.70),
+    0 0 0 1px rgba(255,255,255,.06) inset,
+    0 0 60px rgba(120,200,255,.10) inset !important;
+
+  backdrop-filter: blur(16px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+  overflow: hidden !important;
+}
+
+.pingBox:before{
+  content:"";
+  position:absolute; left:0; right:0; top:0; height:2px;
+  background: linear-gradient(90deg, rgba(120,200,255,0), rgba(120,200,255,.95), rgba(90,255,200,.75), rgba(120,200,255,0));
+  opacity:.85;
+}
+
+.pingBox > div:first-child{
+  width:100% !important;
+  padding: 10px 12px !important;
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+  background: rgba(255,255,255,.03) !important;
+  border-radius: 22px 22px 0 0 !important;
+}
+
+.pingBox > div:first-child div{
+  font-weight: 950 !important;
+  font-size: 13px !important;
+  letter-spacing: .35px !important;
+  color: rgba(200,240,255,.95) !important;
+}
+
+.pingBox > div:first-child button{
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  background: rgba(255,255,255,.06) !important;
+  color: rgba(255,255,255,.92) !important;
+}
+.pingBox > div:first-child button:hover{
+  background: rgba(255,255,255,.10) !important;
+  box-shadow: 0 0 0 3px rgba(120,200,255,.10) !important;
+}
+
+.pingBox input{
+  height: 38px !important;
+  border-radius: 16px !important;
+  background: rgba(0,0,0,.26) !important;
+  border: 1px solid rgba(140,220,255,.22) !important;
+  color: rgba(255,255,255,.95) !important;
+  padding: 0 12px !important;
+}
+
+.pingBox button{
+  height: 38px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(140,220,255,.22) !important;
+  background: rgba(120,200,255,.10) !important;
+  color: rgba(255,255,255,.95) !important;
+  font-weight: 950 !important;
+}
+
+.pingMetaWrap{
+  margin: 10px 0 12px 0 !important;
+  padding: 10px 12px !important;
+  border-radius: 16px !important;
+  background: rgba(120,200,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+}
+
+.plBar{
+  height: 10px; border-radius: 999px; overflow:hidden;
+  background: rgba(120,200,255,.10);
+  border: 1px solid rgba(255,255,255,.10);
+}
+.plFill{
+  height: 100%;
+  background: linear-gradient(90deg, rgba(120,200,255,.98), rgba(90,255,200,.85));
+  box-shadow: 0 0 18px rgba(0,255,200,.22);
+}
+
+.pingOut{
+  margin-top: 12px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  padding: 14px;
+  color: rgba(235,255,255,.92);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.42;
+}
+
+/* CYBER_PATCH_START */
+
+/* FIX: hide the duplicate Packet loss block (works because they are consecutive) */
+.pingMetaWrap + .pingMetaWrap{
+  display: none !important;
+}
+
+/* Keep box layout stable + scroll only inside output */
+.pingBox{
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  position: relative;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(10,14,20,.62);
+  box-shadow:
+    0 18px 55px rgba(0,0,0,.55),
+    0 0 28px rgba(0,200,255,.12),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.pingOut{
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto !important;
+  scrollbar-gutter: stable;
+  border-radius: 14px;
+}
+
+/* Cyber scanlines */
+.pingBox:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(120,200,255,.05) 0px,
+    rgba(120,200,255,.05) 1px,
+    transparent 3px,
+    transparent 6px
+  );
+  opacity:.25;
+  mix-blend-mode: screen;
+}
+
+/* Neon packet-loss bar */
+.plFill{
+  background: linear-gradient(90deg,#00e0ff,#007bff);
+  box-shadow: 0 0 10px rgba(0,200,255,.6);
+}
+
+/* Scrollbar */
+.pingOut::-webkit-scrollbar{ width: 10px; }
+.pingOut::-webkit-scrollbar-thumb{
+  background: rgba(120,200,255,.22);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 999px;
+}
+.pingOut::-webkit-scrollbar-track{ background: rgba(0,0,0,.10); }
+
+/* CYBER_PATCH_END */
+
+/* PING_COMPACT_START */
+
+/* Make Ping box smaller + cleaner */
+/* TOOLSISP_UNLOCK_RESIZE_v1 removed hard width/height lock */
+
+/* Smaller title + close */
+.pingTitle, .pingHeaderTitle{
+  font-size: 12px !important;
+  letter-spacing: .2px !important;
+}
+
+/* Inputs + buttons smaller */
+.pingBox input{
+  height: 34px !important;
+  font-size: 12px !important;
+  padding: 6px 10px !important;
+  border-radius: 12px !important;
+}
+
+.pingBox button{
+  height: 34px !important;
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+  border-radius: 12px !important;
+}
+
+/* Packet loss bar thinner */
+.plBar{
+  height: 6px !important;
+  border-radius: 999px !important;
+}
+.plFill{
+  border-radius: 999px !important;
+}
+
+/* Output text smaller + tighter */
+.pingOut{
+  font-size: 11px !important;
+  line-height: 1.25 !important;
+  padding: 10px !important;
+  border-radius: 14px !important;
+}
+
+/* Reduce extra gaps */
+.pingMetaWrap{ margin-top: 6px !important; }
+.pingMetaRow{ gap: 8px !important; }
+
+/* PING_COMPACT_END */
+
+
+ /* HEIGHT_COMPACT_START */
+
+.pingBox{
+  height: 420px !important;
+  min-height: 320px !important;
+}
+
+.pingOut{
+  max-height: 240px !important;
+}
+
+ /* HEIGHT_COMPACT_END */
+
+
+ /* SCROLL_FIX_START */
+
+.pingBox{
+  height: 400px !important;
+  overflow: hidden !important;
+}
+
+.pingOut{
+  height: 240px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+ /* SCROLL_FIX_END */
+
+/* DOUBLE_SCROLL_FIX_START */
+
+/* The box must NOT scroll */
+.pingBox{
+  height: 420px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Everything above output stays natural height */
+.pingBox > *{
+  flex: 0 0 auto;
+}
+
+/* Output is the ONLY scrolling area */
+.pingOut{
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  max-height: none !important;
+}
+
+/* If there is any wrapper around pingOut, make it not scroll */
+.pingBody, .pingContent, .pingInner{
+  overflow: hidden !important;
+}
+
+/* DOUBLE_SCROLL_FIX_END */
+
+/* NEON_REAL_START */
+
+/* ping box more cyber-clean */
+.pingBox{
+  border: 1px solid rgba(255,255,255,.10) !important;
+  box-shadow: 0 20px 70px rgba(0,0,0,.65) !important;
+}
+
+/* neon "bell line" */
+.pingNeonLine{
+  height: 2px !important;
+  border-radius: 999px !important;
+  margin-top: 8px !important;
+  background: var(--neon, rgba(0,255,200,.9)) !important;
+  opacity: .9;
+  position: relative;
+  overflow: hidden;
+}
+
+/* scan shimmer */
+.pingNeonLine::after{
+  content:"";
+  position:absolute;
+  inset:-6px 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+  transform: translateX(-120%);
+  animation: neonScan 1.1s linear infinite;
+  filter: blur(2px);
+}
+
+@keyframes neonScan{
+  0%{ transform: translateX(-120%); }
+  100%{ transform: translateX(260%); }
+}
+
+/* glow levels */
+.pingNeonLine.ok{
+  box-shadow: 0 0 10px var(--neon), 0 0 18px rgba(0,255,200,.35);
+}
+.pingNeonLine.warn{
+  box-shadow: 0 0 10px var(--neon), 0 0 18px rgba(255,200,0,.35);
+}
+.pingNeonLine.bad{
+  box-shadow: 0 0 10px var(--neon), 0 0 22px rgba(255,70,70,.45);
+}
+
+/* NEON_REAL_END */
+
+/* PING_SPARK_CSS_START */
+
+.plBar{
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.pingSpark{
+  position:absolute;
+  inset: 2px 6px;
+  width: calc(100% - 12px);
+  height: calc(100% - 4px);
+  pointer-events:none;
+  opacity: .95;
+}
+
+.pingSpark path{
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px rgba(0,0,0,.35));
+}
+
+.pingSpark.ok path{ stroke: rgba(0,255,200,.95); filter: drop-shadow(0 0 8px rgba(0,255,200,.35)); }
+.pingSpark.warn path{ stroke: rgba(255,200,0,.95); filter: drop-shadow(0 0 10px rgba(255,200,0,.40)); }
+.pingSpark.bad path{ stroke: rgba(255,70,70,.95); filter: drop-shadow(0 0 12px rgba(255,70,70,.45)); }
+
+/* keep loss fill behind the spark */
+.plFill{
+  position:absolute !important;
+  left:0; top:0; bottom:0;
+  opacity:.25 !important;
+}
+
+/* PING_SPARK_CSS_END */
+
+
+/* SAFE_TIGHTEN_PING */
+.pingOut{ font-size: 11px; line-height: 1.35; }
+.pingMetaWrap{ padding: 8px; }
+.pingMetaLabel{ opacity: .85; letter-spacing: .2px; }
+.pingBox{ box-shadow: 0 20px 80px rgba(0,0,0,.55); }
+
+
+
+/* ===== Ping Box Pro/Cyber tweaks (SAFE CSS only) ===== */
+/* TOOLSISP_UNLOCK_RESIZE_v1 removed hard width/height lock */
+
+/* خلّي الجزء الفوقاني (العنوان + input + buttons) يضل ثابت */
+.pingBox > .pingHeader,
+.pingBox .pingTop,
+.pingBox .pingHead,
+.pingBox .pingTitleRow{
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 5 !important;
+  background: rgba(10,14,20,.88) !important;
+  backdrop-filter: blur(14px) !important;
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+}
+
+/* صغّر الخطوط شوي */
+.pingBox, .pingBox *{
+  font-size: 12px !important;
+}
+
+/* خلي منطقة الـ output بس هي اللي تسكّرول */
+.pingOut{
+  max-height: 320px !important;
+  overflow: auto !important;
+}
+
+/* شيل أي margin/فراغات كبيرة */
+.pingMetaWrap{ margin-top: 6px !important; }
+.pingMetaRow{ gap: 8px !important; }
+
+/* زرار Run/Stop شكل أقوى */
+.pingBox button{
+  border-radius: 12px !important;
+  padding: 8px 12px !important;
+  font-weight: 800 !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(255,255,255,.06) !important;
+}
+.pingBox button:hover{
+  background: rgba(255,255,255,.10) !important;
+}
+
+/* Packet loss bar: خليها أنحف */
+.plBar{
+  height: 6px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+}
+.plFill{
+  filter: saturate(1.2) !important;
+}
+
+
+/* ===== FINAL CLEAN TUNING ===== */
+
+/* TOOLSISP_UNLOCK_RESIZE_v1 removed hard width/height lock */
+
+/* output area */
+.pingOut{
+  max-height: 270px !important;
+  font-size: 11px !important;
+}
+
+/* header tighter */
+.pingBox input{
+  height: 34px !important;
+  font-size: 12px !important;
+}
+
+.pingBox button{
+  padding: 6px 10px !important;
+  font-size: 12px !important;
+}
+
+/* packet loss bar cleaner */
+.plBar{
+  height: 5px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.06) !important;
+}
+
+.plFill{
+  background: linear-gradient(90deg,#00e5c3,#00bcd4) !important;
+  box-shadow: 0 0 10px rgba(0,255,200,.5) !important;
+}
+
+/* soften neon */
+.pingNeonLine{
+  opacity:.7 !important;
+}
+
+/* TOOLSISP_POINTER_EVENTS_FIX_v1
+   Fix: drag/resize not working بسبب CSS pointer-events:none على .pingBox أو أولاده
+   نرجّع pointer events للـ box والأطفال، ونترك الـ pseudo elements none لأنها overlay تجميلي
+*/
+.pingBox { pointer-events: auto !important; }
+.pingBox * { pointer-events: auto !important; }
+.pingBox:before,
+.pingBox:after { pointer-events: none !important; }
+
+/* optional: make resize handle always clickable */
+.pingBox [title="Resize"] { pointer-events: auto !important; }
+
+/* TOOLSISP_RESIZE_CSS_OVERRIDE_v1
+   Fix: ping-modern.css كان يفرض width/height ثابتين على .pingBox (مع !important)
+   وهذا يمنع resize من الظهور. نخلي القياس يتحكم فيه inline styles من React.
+*/
+.pingBox{
+  width: auto !important;
+  height: auto !important;
+}
+

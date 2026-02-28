@@ -16,7 +16,25 @@ export default function DragResizeWindow({
   const key = useMemo(() => `toolsisp:panel:${id}`, [id]);
   const ref = useRef(null);
 
-  const [rect, setRect] = useState(() => {
+const uiLockRef = useRef({ overflow: "", userSelect: "" });
+
+const lockUI = () => {
+  try {
+    uiLockRef.current.overflow = document.body.style.overflow || "";
+    uiLockRef.current.userSelect = document.body.style.userSelect || "";
+    document.body.style.overflow = "hidden";
+    document.body.style.userSelect = "none";
+  } catch {}
+};
+
+const unlockUI = () => {
+  try {
+    document.body.style.overflow = uiLockRef.current.overflow || "";
+    document.body.style.userSelect = uiLockRef.current.userSelect || "";
+  } catch {}
+};
+/* TOOLSISP_SCROLL_LOCK_v1 */
+const [rect, setRect] = useState(() => {
     try {
       const raw = localStorage.getItem(key);
       if (raw) return { ...defaultRect, ...JSON.parse(raw) };
@@ -25,89 +43,136 @@ export default function DragResizeWindow({
   });
 
   // keep in viewport on resize
-  useEffect(() => {
-    const onResize = () => {
-      setRect(r => {
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        const w = clamp(r.w, minW, vw - 16);
-        const h = clamp(r.h, minH, vh - 16);
-        const x = clamp(r.x, 8, Math.max(8, vw - w - 8));
-        const y = clamp(r.y, 8, Math.max(8, vh - h - 8));
-        return { x, y, w, h };
-      });
-    };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [minW, minH]);
 
-  // persist
-  useEffect(() => {
-    try { localStorage.setItem(key, JSON.stringify(rect)); } catch {}
-  }, [key, rect]);
+useEffect(() => {
+  const end = () => unlockUI();
+  window.addEventListener("pointerup", end, { passive: true });
+  window.addEventListener("pointercancel", end, { passive: true });
+  window.addEventListener("blur", end);
+  return () => {
+    window.removeEventListener("pointerup", end);
+    window.removeEventListener("pointercancel", end);
+    window.removeEventListener("blur", end);
+  };
+}, []);
+/* TOOLSISP_UNLOCK_SAFETY_v1 */
 
   const reset = () => {
     try { localStorage.removeItem(key); } catch {}
     setRect(defaultRect);
   };
+  // Drag (pointer-based)
+  const dragRef = useRef({ on: false, dx: 0, dy: 0, pointerId: null });
 
-  // Drag
-  const dragRef = useRef({ on: false, dx: 0, dy: 0 });
   const onHeaderDown = (e) => {
-    if (e.button !== 0) return;
+    const t = e.target;
+    if (t && (t.closest?.("button") || t.closest?.("a") || t.closest?.("input"))) return;
+    /* TOOLSISP_CLOSE_CLICK_FIX_v1 */
+    // support mouse + touch + pen
+    if (e.button != null && e.button !== 0) return;
     e.preventDefault();
+    e.stopPropagation();
+    lockUI();
     dragRef.current.on = true;
+    dragRef.current.pointerId = e.pointerId ?? null;
     dragRef.current.dx = e.clientX - rect.x;
     dragRef.current.dy = e.clientY - rect.y;
-    document.addEventListener("mousemove", onDragMove);
-    document.addEventListener("mouseup", onDragUp);
-  };
-  const onDragMove = (e) => {
-    if (!dragRef.current.on) return;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const x = clamp(e.clientX - dragRef.current.dx, 8, vw - rect.w - 8);
-    const y = clamp(e.clientY - dragRef.current.dy, 8, vh - rect.h - 8);
-    setRect(r => ({ ...r, x, y }));
-  };
-  const onDragUp = () => {
-    dragRef.current.on = false;
-    document.removeEventListener("mousemove", onDragMove);
-    document.removeEventListener("mouseup", onDragUp);
+
+    // capture pointer so movement continues even if cursor leaves window/element
+    try { e.currentTarget.setPointerCapture?.(e.pointerId); } catch {}
+
+    window.addEventListener("pointermove", onDragMove, { passive: false });
+    window.addEventListener("pointerup", onDragUp, { passive: false });
+    window.addEventListener("pointercancel", onDragUp, { passive: false });
   };
 
-  // Resize (bottom-right)
-  const rsRef = useRef({ on: false, x: 0, y: 0, w: 0, h: 0 });
-  const onResizeDown = (e) => {
-    if (e.button !== 0) return;
+  const onDragMove = (e) => {
+    if (!dragRef.current.on) return;
+    // if we stored a pointerId, ignore others
+    if (dragRef.current.pointerId != null && e.pointerId != null && e.pointerId !== dragRef.current.pointerId) return;
+
     e.preventDefault();
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
+
+    // use functional update so we always clamp with latest rect.w/h
+    setRect((r) => {
+      const x = clamp(e.clientX - dragRef.current.dx, 8, vw - r.w - 8);
+      const y = clamp(e.clientY - dragRef.current.dy, 8, vh - r.h - 8);
+      return { ...r, x, y };
+    });
+  };
+
+  const onDragUp = (e) => {
+    // only end the active pointer
+    if (dragRef.current.pointerId != null && e?.pointerId != null && e.pointerId !== dragRef.current.pointerId) return;
+
+    unlockUI();
+
+    dragRef.current.on = false;
+    dragRef.current.pointerId = null;
+    window.removeEventListener("pointermove", onDragMove);
+    window.removeEventListener("pointerup", onDragUp);
+    window.removeEventListener("pointercancel", onDragUp);
+  };
+
+  // Resize (bottom-right) pointer-based
+  const rsRef = useRef({ on: false, x: 0, y: 0, w: 0, h: 0, pointerId: null });
+
+  const onResizeDown = (e) => {
+    if (e.button != null && e.button !== 0) return;
+    e.preventDefault();
+    e.stopPropagation();
+    lockUI();
     rsRef.current.on = true;
+    rsRef.current.pointerId = e.pointerId ?? null;
     rsRef.current.x = e.clientX;
     rsRef.current.y = e.clientY;
     rsRef.current.w = rect.w;
     rsRef.current.h = rect.h;
-    document.addEventListener("mousemove", onResizeMove);
-    document.addEventListener("mouseup", onResizeUp);
+
+    try { e.currentTarget.setPointerCapture?.(e.pointerId); } catch {}
+
+    window.addEventListener("pointermove", onResizeMove, { passive: false });
+    window.addEventListener("pointerup", onResizeUp, { passive: false });
+    window.addEventListener("pointercancel", onResizeUp, { passive: false });
   };
+
   const onResizeMove = (e) => {
     if (!rsRef.current.on) return;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
+    if (rsRef.current.pointerId != null && e.pointerId != null && e.pointerId !== rsRef.current.pointerId) return;
+
+    e.preventDefault();
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
+
     const dw = e.clientX - rsRef.current.x;
     const dh = e.clientY - rsRef.current.y;
 
-    const w = clamp(rsRef.current.w + dw, minW, vw - rect.x - 8);
-    const h = clamp(rsRef.current.h + dh, minH, vh - rect.y - 8);
-    setRect(r => ({ ...r, w, h }));
-  };
-  const onResizeUp = () => {
-    rsRef.current.on = false;
-    document.removeEventListener("mousemove", onResizeMove);
-    document.removeEventListener("mouseup", onResizeUp);
+    // clamp using latest rect.x/y from state to avoid stale closure issues
+    setRect((r) => {
+      const w = clamp(rsRef.current.w + dw, minW, vw - r.x - 8);
+      const h = clamp(rsRef.current.h + dh, minH, vh - r.y - 8);
+      return { ...r, w, h };
+    });
   };
 
+  const onResizeUp = (e) => {
+    if (rsRef.current.pointerId != null && e?.pointerId != null && e.pointerId !== rsRef.current.pointerId) return;
+
+    unlockUI();
+
+    rsRef.current.on = false;
+    rsRef.current.pointerId = null;
+    window.removeEventListener("pointermove", onResizeMove);
+    window.removeEventListener("pointerup", onResizeUp);
+    window.removeEventListener("pointercancel", onResizeUp);
+  };
+
+
+
   return (
-    <div
+    <div className="toolsWindow"
       ref={ref}
       style={{
         position: "fixed",
@@ -126,7 +191,7 @@ export default function DragResizeWindow({
     >
       {/* Header */}
       <div
-        onMouseDown={onHeaderDown}
+        onPointerDown={onHeaderDown}
         style={{
           height: 36,
           display: "flex",
@@ -153,7 +218,7 @@ export default function DragResizeWindow({
 
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <button
-            onClick={reset}
+            onPointerDown={(e)=>{e.stopPropagation();}} onClick={reset}
             style={{
               height: 24,
               padding: "0 8px",
@@ -169,7 +234,7 @@ export default function DragResizeWindow({
            className="twBtn twReset">Reset</button>
 
           <button
-  type="button"
+  onPointerDown={(e)=>{e.stopPropagation();}} type="button"
   className="twBtn twClose"
   onClick={onClose}
   title="Close"
@@ -181,13 +246,18 @@ export default function DragResizeWindow({
       </div>
 
       {/* Body */}
-      <div style={{ padding: 8, height: "calc(100% - 36px)" }}>
+      <div style={{
+  padding: 8,
+  height: "calc(100% - 36px)",
+  overflow: "auto",
+  boxSizing: "border-box"
+}}>
         {children}
       </div>
 
       {/* Resize handle */}
       <div
-        onMouseDown={onResizeDown}
+        onPointerDown={onResizeDown}
         style={{
           position: "absolute",
           right: 6,
@@ -207,4 +277,21 @@ export default function DragResizeWindow({
 
 
 /* TOOLS_TIGHTPAD_DRG_v1 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* TOOLSISP_BTN_STOPPROP_v1 */
+
+
 
