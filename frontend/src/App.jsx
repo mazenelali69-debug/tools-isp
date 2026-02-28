@@ -12,7 +12,15 @@ export default function App() {
   const [ifIndex, setIfIndex] = useState(2);
   const [ifOpen, setIfOpen] = useState(false);
   const [label, setLabel] = useState("WAN-ether1");
-  const [monitors, setMonitors] = useState([]);
+  // Ping UI (multi boxes)
+  const [showPing, setShowPing] = useState(false);
+  const [pings, setPings] = useState([]); // [{id, ip, out, running, x, y}]
+  const pingSrcRef = useRef({});          // { [id]: EventSource }
+  const dragRef = useRef({ active:false, id:null, dx:0, dy:0 });
+
+  const resizeRef = useRef({ active:false, id:null, sx:0, sy:0, sw:0, sh:0 });
+const [pingSrc, setPingSrc] = useState(null);
+const [monitors, setMonitors] = useState([]);
   const [live, setLive] = useState({});
   const [history, setHistory] = useState({}); // { [id]: [{t,down,up}, ...] }
   const [status, setStatus] = useState("");
@@ -58,14 +66,43 @@ export default function App() {
         delete copyH[id];
         return copyH;
       });
-
-      loadMonitors();
-    });
+    loadMonitors();
+  });
 
     return () => s.close();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
+  // PING_RESIZE_ENGINE_START
+  useEffect(() => {
+    function onMove(e) {
+      const r = resizeRef.current;
+      if (!r || !r.active || !r.id) return;
+
+      const dx = e.clientX - r.sx;
+      const dy = e.clientY - r.sy;
+
+      const nw = Math.max(280, r.sw + dx);
+      const nh = Math.max(220, r.sh + dy);
+
+      setPings(prev => prev.map(pp => (pp.id === r.id ? { ...pp, w: nw, h: nh } : pp)));
+    }
+
+    function onUp() {
+      const r = resizeRef.current;
+      if (!r) return;
+      resizeRef.current = { active:false, id:null, sx:0, sy:0, sw:0, sh:0 };
+    }
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, []);
+  // PING_RESIZE_ENGINE_END
   async function loadMonitors() {
     const r = await fetch(API + "/api/monitors");
     const j = await r.json();
@@ -76,7 +113,48 @@ export default function App() {
 
   
 
-  // close interface dropdown on outside click
+  
+
+  // cleanup pings on unmount
+  useEffect(() => {
+    return () => {
+      try {
+        const m = pingSrcRef.current || {};
+        Object.keys(m).forEach(k => { try { m[k].close(); } catch {} });
+      } catch {}
+    };
+  }, []);
+
+  // PING_RESIZE_ENGINE_START
+  useEffect(() => {
+    function onMove(e) {
+      const r = resizeRef.current;
+      if (!r || !r.active || !r.id) return;
+
+      const dx = e.clientX - r.sx;
+      const dy = e.clientY - r.sy;
+
+      const nw = Math.max(280, r.sw + dx);
+      const nh = Math.max(220, r.sh + dy);
+
+      setPings(prev => prev.map(pp => (pp.id === r.id ? { ...pp, w: nw, h: nh } : pp)));
+    }
+
+    function onUp() {
+      const r = resizeRef.current;
+      if (!r) return;
+      resizeRef.current = { active:false, id:null, sx:0, sy:0, sw:0, sh:0 };
+    }
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, []);
+  // PING_RESIZE_ENGINE_END
+// close interface dropdown on outside click
   useEffect(() => {
     function onDoc(e){
       const el = e.target;
@@ -110,25 +188,240 @@ export default function App() {
     if (!j.ok) { setStatus(j.error); return; }
     loadMonitors();
   }
-
   async function stopMonitor(id) {
     await fetch(API + "/api/monitors/" + id, { method: "DELETE" });
     loadMonitors();
   }
+
+  function addPing() {
+    const id = (crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random().toString(16).slice(2));
+    const baseX = 40 + (pings.length * 30);
+    const baseY = 160 + (pings.length * 30);
+    setPings(prev => prev.concat([{ id, ip: "", out: "", running: false, x: baseX, y: baseY }]));
+  }
+
+  function removePing(id) {
+    stopPingId(id);
+    setPings(prev => prev.filter(p => p.id !== id));
+  }
+
+  function setPingField(id, patch) {
+    setPings(prev => prev.map(p => (p.id === id ? { ...p, ...patch } : p)));
+  }
+
+  function stopPingId(id) {
+    try {
+      const es = pingSrcRef.current?.[id];
+      if (es) { try { es.close(); } catch {} }
+      if (pingSrcRef.current) delete pingSrcRef.current[id];
+    } catch {}
+    setPingField(id, { running: false });
+  }
+
+  function startPingId(id) {
+    const p = pings.find(x => x.id === id);
+    const target = String((p?.ip || "")).trim();
+    if (!target) { setPingField(id, { out: "Enter IP first" }); return; }
+
+    // stop previous if any
+    stopPingId(id);
+
+    setPingField(id, { out: "", running: true });
+
+    const url = API + "/api/ping/stream?ip=" + encodeURIComponent(target);
+    const es = new EventSource(url);
+    pingSrcRef.current[id] = es;
+
+    es.addEventListener("line", (e) => {
+      try {
+        const j = JSON.parse(e.data);
+        const line = j.line || "";
+        setPings(prev => prev.map(pp => {
+          if (pp.id !== id) return pp;
+          const nextOut = pp.out ? (pp.out + "\n" + line) : line;
+          // keep last ~200 lines
+          const lines = nextOut.split("\n");
+          const trimmed = lines.length > 200 ? lines.slice(lines.length - 200).join("\n") : nextOut;
+          return { ...pp, out: trimmed };
+        }));
+      } catch {}
+    });
+
+    es.addEventListener("end", () => {
+      stopPingId(id);
+    });
+
+    es.addEventListener("error", () => {
+      // server closed or network issue
+      stopPingId(id);
+    });
+  }
+
+  function onPingMouseDown(e, id) {
+    const p = pings.find(x => x.id === id);
+    if (!p) return;
+    dragRef.current = {
+      active: true,
+      id,
+      dx: e.clientX - (p.x || 0),
+      dy: e.clientY - (p.y || 0)
+    };
+    e.preventDefault();
+  }
+  function onPingResizeDown(e, id) {
+    if (e.button !== 0) return;
+    const p = pings.find(x => x.id === id);
+    if (!p) return;
+
+    const sw = (p.w ?? 360);
+    const sh = (p.h ?? 320);
+
+    resizeRef.current = { active:true, id, sx:e.clientX, sy:e.clientY, sw, sh };
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  useEffect(() => {
+    function onMove(e) {
+      const d = dragRef.current;
+      if (!d?.active || !d.id) return;
+      const x = Math.max(0, e.clientX - d.dx);
+      const y = Math.max(0, e.clientY - d.dy);
+      setPingField(d.id, { x, y });
+    }
+    function onUp() {
+      const d = dragRef.current;
+      if (!d) return;
+      dragRef.current = { active:false, id:null, dx:0, dy:0 };
+    }
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, [pings]);
 
   return (
     <div style={{ fontFamily: "Arial", padding: 20 }}>
       <h2>tools-isp Dashboard</h2>
       <div style={{ marginBottom: 10 }}>{status}</div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10 }}>
+      
+      {showPing ? (
+        <div>
+          {pings.map(p => (
+            <div
+              key={p.id}
+              style={{
+                position: "fixed",
+                left: (p.x ?? 40),
+                top: (p.y ?? 160),
+                width: (p.w ?? 360),
+                height: (p.h ?? 320),
+                boxSizing: "border-box",
+                minWidth: 320,
+                minHeight: 240,
+                resize: "both",
+                overflow: "hidden",
+                background: "rgba(10, 14, 20, 0.78)",
+                border: "1px solid rgba(255,255,255,0.14)",
+                borderRadius: 10,
+                
+                paddingBottom: 24,boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
+                padding: 10,
+                cursor: "move",
+                zIndex: 9999
+              }}
+            >
+              <div onMouseDown={(e) => onPingMouseDown(e, p.id)}  style={{ display: "flex",
+                flexDirection: "column", justifyContent: "space-between", cursor: "move", userSelect: "none", alignItems: "center", marginBottom: 8 }}>
+                <div style={{ fontWeight: 700, fontSize: 12 }}>PING</div>
+                <button type="button" onClick={() => removePing(p.id)} style={{ cursor: "pointer" }}>✕</button>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
+                <input
+                  value={p.ip}
+                  onChange={(e) => setPingField(p.id, { ip: e.target.value })}
+                  placeholder="IP / Host (8.8.8.8)"
+                  style={{ cursor: "text" }}
+                  onMouseDown={(e) => e.stopPropagation()}
+                />
+                <button
+                  type="button"
+                  onClick={() => startPingId(p.id)}
+                  disabled={p.running}
+                  onMouseDown={(e) => e.stopPropagation()}
+                >
+                  Run
+                </button>
+                <button
+                  type="button"
+                  onClick={() => stopPingId(p.id)}
+                  disabled={!p.running}
+                  onMouseDown={(e) => e.stopPropagation()}
+                >
+                  Stop
+                </button>
+              </div>
+
+              <pre
+                onMouseDown={(e) => e.stopPropagation()}
+                style={{
+                  marginTop: 10,
+                  height: 160,
+                  overflow: "hidden",
+                  whiteSpace: "pre-wrap",
+                  fontFamily: "Consolas, monospace",
+                  fontSize: 12,
+                  background: "#0b0f14",
+                  color: "#e6edf3",
+                  padding: 10,
+                  borderRadius: 8
+                }}
+              >
+                {p.out}
+              </pre>
+            
+              {/* PING_RESIZE_GRIP */}
+              <div
+                onMouseDown={(e) => onPingResizeDown(e, p.id)}
+                style={{
+                  position: "absolute",
+                  right: 6,
+                  bottom: 6,
+                  width: 14,
+                  height: 14,
+                  cursor: "nwse-resize",
+                  borderRadius: 3,
+                  background: "rgba(0,0,0,0.25)",
+                  border: "1px solid rgba(255,255,255,0.25)"
+                }}
+              /></div>
+          ))}
+        </div>
+      ) : null}
+<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10 }}>
         <input value={ip} onChange={e => setIp(e.target.value)} placeholder="IP" />
         <input value={community} onChange={e => setCommunity(e.target.value)} placeholder="Community" />
-        <input value={label} onChange={e => setLabel(e.target.value)} placeholder="Label" />
+                <button
+          type="button"
+          onClick={() => setShowPing(v => !v)}
+          title="Ping any IP"
+        >
+          Ping
+        </button>
         <button onClick={fetchInterfaces}>Fetch Interfaces</button>
       </div>
-
-      <div className="dd" style={{ marginTop: 10 }}>
+      {showPing ? (
+        <div style={{ marginTop: 10, display: "flex",
+                flexDirection: "column", gap: 10, alignItems: "center" }}>
+          <button type="button" onClick={addPing}>+ New Ping</button>
+          <span style={{ fontSize: 12, opacity: 0.7 }}>Drag boxes, run multiple pings</span>
+        </div>
+      ) : null}
+<div className="dd" style={{ marginTop: 10 }}>
   <button
     type="button"
     className="ddBtn"
@@ -191,6 +484,8 @@ export default function App() {
     </div>
   );
 }
+
+
 
 
 
