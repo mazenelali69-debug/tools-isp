@@ -40,3 +40,20 @@ logs/
 # ---- backend runtime junk ----
 backend/y/modules/
 backend/y/pids/
+PROJECT_EVERYTHING_DUMP.txt
+TOOLS_ISP_FULL_EXPORT.txt
+tools-isp-export.zip
+.run-pids-tools-isp.txt
+_backup-frontend-*.zip
+# local dumps / exports (do not commit)
+PROJECT_EVERYTHING_DUMP.txt
+TOOLS_ISP_FULL_EXPORT.txt
+tools-isp-export.zip
+.run-pids-tools-isp.txt
+_backup-frontend-*.zip
+# local dumps / exports (do not commit)
+PROJECT_EVERYTHING_DUMP.txt
+TOOLS_ISP_FULL_EXPORT.txt
+tools-isp-export.zip
+.run-pids-tools-isp.txt
+_backup-frontend-*.zip

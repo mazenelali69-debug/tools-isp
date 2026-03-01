@@ -1,0 +1,58 @@
+﻿/* ===== Packet Loss UI ===== */
+.pingMetaWrap{ margin:8px 0 10px 0; }
+.pingMetaRow{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.pingMetaLeft{ display:flex; align-items:baseline; gap:10px; }
+.pingMetaLabel{ font-size:12px; opacity:.75; letter-spacing:.2px; }
+.pingMetaValue{ font-size:13px; font-weight:800; }
+.plBar{
+  height:10px; border-radius:999px; overflow:hidden; margin-top:8px;
+  background: rgba(120,200,255,.14);
+  border: 1px solid rgba(255,255,255,.10);
+}
+.plFill{
+  height:100%;
+  background: rgba(120,200,255,.85);
+  box-shadow: 0 0 10px rgba(120,200,255,.35), 0 0 18px rgba(120,200,255,.18);
+  width:0%;
+}
+.pingDotBox{
+  width:34px; height:18px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+  display:flex; align-items:center; justify-content:center;
+}
+.pingDot{ width:8px; height:8px; border-radius:999px; background: rgba(120,200,255,.25); transition: all .25s ease; }
+.pingDotBox.on .pingDot{
+  background: rgba(120,200,255,.95);
+  box-shadow: 0 0 10px rgba(120,200,255,.45), 0 0 18px rgba(120,200,255,.22);
+}
+.pingNeonLine{ height:2px; border-radius:999px; margin-top:8px; background: rgba(120,200,255,.12); }
+.pingNeonLine.on{ background: rgba(120,200,255,.85); box-shadow: 0 0 10px rgba(120,200,255,.35), 0 0 18px rgba(120,200,255,.18); }
+.pingOut{ white-space:pre-wrap; }
+
+/* ===== Sparkline inside Packet loss bar ===== */
+.plBar{ position:relative; overflow:hidden; }
+.plSpark{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:.95; }
+.plSpark polyline{
+  fill:none;
+  stroke: rgba(120, 220, 255, .95);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 6px rgba(120,220,255,.55));
+}
+.plBar.warn .plSpark polyline{
+  stroke: rgba(255, 210, 90, .95);
+  filter: drop-shadow(0 0 6px rgba(255,210,90,.55));
+}
+.plBar.danger .plSpark polyline{
+  stroke: rgba(255, 90, 120, .95);
+  filter: drop-shadow(0 0 6px rgba(255,90,120,.55));
+}
+
+
+
+/* PL_SPARKLINE_FIX */
+.plBar { position: relative; overflow: hidden; }
+.plFill { position: relative; z-index: 1; }
+.plSpark { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
+.plSpark polyline { stroke-width: 2; fill: none; }
+.plSpark path, .plSpark line { fill: none; }
