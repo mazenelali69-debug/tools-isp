@@ -70,3 +70,55 @@
   outline:none;
   resize:vertical;
 }
+
+/* ===== Ping Tool (Workspace) ===== */
+.wsPingRoot{ display:flex; flex-direction:column; gap:10px; }
+.wsPingRow{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.wsPingLeft{ display:flex; align-items:center; gap:10px; min-width:260px; }
+.wsPingLabel{ font-size:12px; font-weight:900; opacity:.75; }
+.wsPingInput{
+  height:32px; width:220px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+  padding:0 10px;
+  outline:none;
+  color:inherit;
+}
+.wsPingBtns{ display:flex; gap:8px; }
+.wsPingBtn{
+  height:32px; padding:0 12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  cursor:pointer;
+  font-weight:900;
+  font-size:12px;
+}
+.wsPingBtn.ghost{ background: transparent; }
+.wsPingBtn.danger{ border-color: rgba(255,120,120,.35); background: rgba(255,80,80,.10); }
+.wsPingMeta{ display:flex; align-items:baseline; justify-content:space-between; }
+.wsPingMetaLabel{ font-size:12px; opacity:.75; font-weight:900; }
+.wsPingMetaValue{ font-size:13px; font-weight:900; }
+.wsPingBar{
+  height:10px; border-radius:999px; overflow:hidden;
+  background: rgba(120,200,255,.14);
+  border: 1px solid rgba(255,255,255,.10);
+}
+.wsPingFill{
+  height:100%;
+  background: rgba(120,200,255,.85);
+  box-shadow: 0 0 10px rgba(120,200,255,.35);
+}
+.wsPingOut{
+  margin:0;
+  height:180px;
+  overflow:auto;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.22);
+  padding:10px;
+  font-size:12px;
+  line-height:1.45;
+  white-space:pre-wrap;
+}

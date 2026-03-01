@@ -14,9 +14,9 @@ export default function App(){
   function openWin(type){
     const id = uid();
     const base = {
-      id,
+        id,
       type,
-      title: type === "ping" ? "Ping" : type === "monitor" ? "Monitor" : "Note",
+      title: type === "ping" ? "Ping — 88.88.88.10" : type === "monitor" ? "Monitor" : "Note",
       x: 140 + (windows.length * 18),
       y: 120 + (windows.length * 14),
       w: type === "note" ? 420 : 560,
@@ -40,3 +40,4 @@ export default function App(){
     </AppShell>
   );
 }
+

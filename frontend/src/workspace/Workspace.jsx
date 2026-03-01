@@ -50,13 +50,11 @@ export default function Workspace({ windows, setWindows, children }) {
             onChange={(patch) => update(w.id, patch)}
           >
             {w.type === "ping" && (
-              <div className="wsPanel">
-                <div className="wsHint">Ping window (placeholder)</div>
-                <div className="wsText">
-                  الخطوة الجاية: مننقل Ping الحقيقي لهون تدريجياً بدون ما نكسر Legacy.
-                </div>
-              </div>
-            )}
+  <PingTool
+    ip={w.ip ?? "88.88.88.10"}
+    onIpChange={(next)=> update(w.id, { ip: next, title: "Ping — " + (String(next||"").trim() || "…") })}
+  />
+)}
 
             {w.type === "monitor" && (
               <div className="wsPanel">
@@ -84,3 +82,4 @@ export default function Workspace({ windows, setWindows, children }) {
     </div>
   );
 }
+
