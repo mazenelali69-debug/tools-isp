@@ -1,0 +1,204 @@
+﻿/* ===== Workspace Layer ===== */
+.wsRoot{ position:relative; width:100%; height:100%; min-height: calc(100vh - 52px); }
+.wsBase{ position:relative; z-index:1; }
+.wsOverlay{ position:absolute; inset:0; z-index:50; pointer-events:none; }
+.wsOverlay .wsWin{ pointer-events:auto; }
+
+/* ===== Window ===== */
+.wsWin{
+  position:absolute;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(10,12,16,.55);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.40);
+  overflow:hidden;
+}
+
+.wsWinHead{
+  height:38px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 10px;
+  border-bottom:1px solid rgba(255,255,255,.10);
+  cursor:grab;
+  user-select:none;
+}
+
+.wsWinTitle{
+  font-size:13px;
+  font-weight:900;
+  opacity:.95;
+}
+
+.wsWinBtns{ display:flex; gap:8px; }
+.wsWinBtn{
+  height:26px; width:32px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  cursor:pointer;
+}
+
+.wsWinBody{
+  height:calc(100% - 38px);
+  overflow:auto;
+  padding:12px;
+}
+
+.wsWinResize{
+  position:absolute;
+  right:8px; bottom:8px;
+  width:14px; height:14px;
+  border-right:2px solid rgba(255,255,255,.35);
+  border-bottom:2px solid rgba(255,255,255,.35);
+  opacity:.7;
+  cursor:nwse-resize;
+}
+
+.wsPanel{ display:flex; flex-direction:column; gap:10px; }
+.wsHint{ font-size:12px; font-weight:900; opacity:.85; }
+.wsText{ font-size:13px; opacity:.85; line-height:1.5; }
+.wsNote{
+  width:100%;
+  min-height:160px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+  padding:10px;
+  outline:none;
+  resize:vertical;
+}
+
+/* ===== Ping Tool (Workspace) ===== */
+.wsPingRoot{ display:flex; flex-direction:column; gap:10px; }
+.wsPingRow{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.wsPingLeft{ display:flex; align-items:center; gap:10px; min-width:260px; }
+.wsPingLabel{ font-size:12px; font-weight:900; opacity:.75; }
+.wsPingInput{
+  height:32px; width:220px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+  padding:0 10px;
+  outline:none;
+  color:inherit;
+}
+.wsPingBtns{ display:flex; gap:8px; }
+.wsPingBtn{
+  height:32px; padding:0 12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  cursor:pointer;
+  font-weight:900;
+  font-size:12px;
+}
+.wsPingBtn.ghost{ background: transparent; }
+.wsPingBtn.danger{ border-color: rgba(255,120,120,.35); background: rgba(255,80,80,.10); }
+.wsPingMeta{ display:flex; align-items:baseline; justify-content:space-between; }
+.wsPingMetaLabel{ font-size:12px; opacity:.75; font-weight:900; }
+.wsPingMetaValue{ font-size:13px; font-weight:900; }
+.wsPingBar{
+  height:10px; border-radius:999px; overflow:hidden;
+  background: rgba(120,200,255,.14);
+  border: 1px solid rgba(255,255,255,.10);
+}
+.wsPingFill{
+  height:100%;
+  background: rgba(120,200,255,.85);
+  box-shadow: 0 0 10px rgba(120,200,255,.35);
+}
+.wsPingOut{
+  margin:0;
+  height:180px;
+  overflow:auto;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.22);
+  padding:10px;
+  font-size:12px;
+  line-height:1.45;
+  white-space:pre-wrap;
+}
+
+/* ===== Monitor Tool (Workspace) ===== */
+.wsMonRoot{ display:flex; flex-direction:column; gap:12px; }
+.wsMonTop{ display:flex; flex-wrap:wrap; gap:10px; align-items:end; justify-content:space-between; }
+.wsMonField{ display:flex; flex-direction:column; gap:6px; min-width:210px; }
+.wsMonLbl{ font-size:12px; font-weight:900; opacity:.75; }
+.wsMonIn, .wsMonSel{
+  height:34px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+  padding:0 10px;
+  outline:none;
+  color:inherit;
+}
+.wsMonSel{ padding-right:8px; }
+.wsMonBtns{ display:flex; gap:8px; align-items:center; }
+.wsMonBtn{
+  height:34px; padding:0 12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.07);
+  cursor:pointer;
+  font-weight:900;
+  font-size:12px;
+}
+.wsMonBtn:disabled{ opacity:.5; cursor:not-allowed; }
+.wsMonBtn.ghost{ background: transparent; }
+.wsMonBtn.danger{ border-color: rgba(255,120,120,.35); background: rgba(255,80,80,.10); }
+
+.wsMonErr{
+  border:1px solid rgba(255,120,120,.25);
+  background: rgba(255,80,80,.08);
+  padding:10px 12px;
+  border-radius:14px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.wsMonCards{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+@media (max-width: 820px){ .wsMonCards{ grid-template-columns: 1fr; } }
+
+.wsMonCard{
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  padding:12px;
+}
+.wsMonCardTop{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:8px; }
+.wsMonCardTitle{ font-size:12px; font-weight:900; opacity:.8; letter-spacing:.2px; }
+.wsMonCardVal{ font-size:18px; font-weight:1000; opacity:.95; }
+
+.wsMonSpark{
+  width:100%;
+  height:34px;
+  opacity:.95;
+}
+.wsMonFoot{ display:flex; justify-content:space-between; align-items:center; }
+.wsMonHint{ font-size:12px; opacity:.75; font-weight:800; }
+
+/* WS-SELECT-FIX-START */
+/* Try to force native selects to match dark theme (Windows/Chrome can be stubborn) */
+.wsWin select,
+.wsWin option{
+  background-color: rgba(10,12,16,.92) !important;
+  color: rgba(255,255,255,.92) !important;
+}
+
+/* dropdown box look */
+.wsWin select{
+  border:1px solid rgba(255,255,255,.14) !important;
+  border-radius:12px !important;
+  padding:6px 10px !important;
+  outline:none !important;
+  appearance:auto;
+}
+
+/* If browser supports it, this helps */
+:root{ color-scheme: dark; }
+/* WS-SELECT-FIX-END */
