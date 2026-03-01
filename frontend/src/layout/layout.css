@@ -1,0 +1,52 @@
+﻿/* ===== AppShell Layout ===== */
+.appShell{ display:flex; min-height:100vh; width:100%; }
+
+.side{
+  width:240px; flex:0 0 240px;
+  border-right:1px solid rgba(255,255,255,.08);
+  background: rgba(10,12,16,.55);
+  backdrop-filter: blur(10px);
+  display:flex; flex-direction:column;
+}
+.side--collapsed{ width:64px; flex:0 0 64px; }
+
+.sideHead{ display:flex; align-items:center; justify-content:space-between; padding:12px 10px; gap:10px; }
+.sideBrand{ display:flex; align-items:center; gap:10px; min-width:0; }
+.sideLogo{ font-size:18px; }
+.sideTitle{ font-weight:900; letter-spacing:.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.sideBtn{
+  height:30px; width:30px; border-radius:10px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  cursor:pointer;
+}
+
+.sideNav{ padding:8px; display:flex; flex-direction:column; gap:6px; }
+
+.sideItem{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 10px; border-radius:12px;
+  border:1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.04);
+  cursor:pointer; text-align:left;
+}
+.sideItem:hover{ background: rgba(255,255,255,.07); }
+.sideItem.isActive{ background: rgba(120,200,255,.14); border-color: rgba(120,200,255,.25); }
+
+.sideIcon{ width:22px; display:flex; justify-content:center; }
+.sideLabel{ font-weight:800; font-size:13px; }
+
+.sideFoot{ margin-top:auto; padding:10px; opacity:.7; font-size:12px; }
+
+.appMain{ flex:1; min-width:0; display:flex; flex-direction:column; }
+
+.topbar{
+  height:52px; display:flex; align-items:center; justify-content:space-between;
+  padding:0 14px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.15);
+}
+.topbarTitle{ font-weight:900; letter-spacing:.2px; }
+
+.appContent{ flex:1; min-width:0; padding:14px; }
