@@ -1,7 +1,6 @@
 ﻿import React, { useMemo, useState, useEffect } from "react";
 import AppShell from "./layout/AppShell";
 import Workspace from "./workspace/Workspace";
-import LegacyApp from "./App.legacy";
 
 const STORAGE_KEY = "toolsisp_windows_v1";
 
@@ -10,7 +9,6 @@ function uid(){
 }
 
 export default function App(){
-
   const [active, setActive] = useState("dashboard");
 
   const [windows, setWindows] = useState(() => {
@@ -23,28 +21,26 @@ export default function App(){
   });
 
   useEffect(() => {
-    try{
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(windows));
-    }catch{}
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(windows)); }catch{}
   }, [windows]);
 
   function openWin(type){
     const id = uid();
-
     const base = {
       id,
       type,
       ip: (type === "ping" ? "88.88.88.10" : undefined),
       community: (type === "monitor" ? "public" : undefined),
-      title: type === "ping" ? "Ping — 88.88.88.10" :
-             type === "monitor" ? "Monitor" : "Note",
+      title:
+        type === "ping" ? "Ping — 88.88.88.10" :
+        type === "monitor" ? "Monitor" :
+        "Note",
       x: 140 + (windows.length * 18),
       y: 120 + (windows.length * 14),
       w: type === "note" ? 420 : 560,
       h: type === "note" ? 320 : 340,
       z: 10 + windows.length
     };
-
     setWindows(prev => [...prev, base]);
   }
 
@@ -54,20 +50,11 @@ export default function App(){
     onNewNote: () => openWin("note"),
   }), [windows]);
 
-    useEffect(() => {
+  useEffect(() => {
     function onKey(e){
-      if(e.ctrlKey && e.key.toLowerCase() === "p"){
-        e.preventDefault();
-        openWin("ping");
-      }
-      if(e.ctrlKey && e.key.toLowerCase() === "m"){
-        e.preventDefault();
-        openWin("monitor");
-      }
-      if(e.ctrlKey && e.key.toLowerCase() === "n"){
-        e.preventDefault();
-        openWin("note");
-      }
+      if(e.ctrlKey && e.key.toLowerCase() === "p"){ e.preventDefault(); openWin("ping"); }
+      if(e.ctrlKey && e.key.toLowerCase() === "m"){ e.preventDefault(); openWin("monitor"); }
+      if(e.ctrlKey && e.key.toLowerCase() === "n"){ e.preventDefault(); openWin("note"); }
       if(e.key === "Escape"){
         setWindows(prev => {
           if(!prev.length) return prev;
@@ -77,17 +64,22 @@ export default function App(){
         });
       }
     }
-
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [windows]);
+
   return (
     <AppShell active={active} setActive={setActive} actions={actions}>
       <Workspace windows={windows} setWindows={setWindows}>
-        <LegacyApp />
+        <div className="tools-container">
+          <div className="card" style={{padding:14}}>
+            <div style={{fontWeight:900, fontSize:14, marginBottom:6}}>Dashboard</div>
+            <div style={{opacity:.75, fontSize:12}}>
+              Use the Topbar actions (or Ctrl+P / Ctrl+M / Ctrl+N) to open windows.
+            </div>
+          </div>
+        </div>
       </Workspace>
     </AppShell>
   );
 }
-
-

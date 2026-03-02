@@ -27,11 +27,13 @@ export default function WindowFrame({ win, onFocus, onClose, onChange, children 
   function stopDragListeners(){
     window.removeEventListener("mousemove", onMoveDrag, true);
     window.removeEventListener("mouseup", onUpDrag, true);
+    document.documentElement.classList.remove("wsNoSelect");
   }
 
   function stopResizeListeners(){
     window.removeEventListener("mousemove", onMoveResize, true);
     window.removeEventListener("mouseup", onUpResize, true);
+    document.documentElement.classList.remove("wsNoSelect");
   }
 
   function onDownHeader(e){
@@ -51,6 +53,7 @@ export default function WindowFrame({ win, onFocus, onClose, onChange, children 
       baseY: rect.top,
     };
 
+    document.documentElement.classList.add("wsNoSelect");
     window.addEventListener("mousemove", onMoveDrag, true);
     window.addEventListener("mouseup", onUpDrag, true);
   }
@@ -91,6 +94,7 @@ export default function WindowFrame({ win, onFocus, onClose, onChange, children 
       baseH: rect.height
     };
 
+    document.documentElement.classList.add("wsNoSelect");
     window.addEventListener("mousemove", onMoveResize, true);
     window.addEventListener("mouseup", onUpResize, true);
   }
@@ -114,10 +118,24 @@ export default function WindowFrame({ win, onFocus, onClose, onChange, children 
     stopResizeListeners();
   }
 
+  function onReset(e){
+    e?.stopPropagation?.();
+    // Safe defaults based on window type (no assumptions about tools internals)
+    const t = String(win.type || "").toLowerCase();
+    const base = {
+      x: 140,
+      y: 120,
+      w: (t === "note" ? 420 : 560),
+      h: (t === "note" ? 320 : 360),
+    };
+    onChange?.(base);
+    onFocus?.();
+  }
+
   return (
     <div
       ref={ref}
-      className="wsWin"
+      className={"wsWin" + (win.isTop ? " isTop" : "")}
       style={style}
       onMouseDown={() => onFocus?.()}
     >
@@ -125,7 +143,14 @@ export default function WindowFrame({ win, onFocus, onClose, onChange, children 
         <div className="wsWinTitle">{win.title ?? win.type ?? "Window"}</div>
         <div className="wsWinBtns">
           <button
-            className="wsWinBtn"
+            className="wsWinBtn wsWinBtnReset"
+            onClick={onReset}
+            title="Reset position/size"
+          >
+            Reset
+          </button>
+          <button
+            className="wsWinBtn wsWinBtnClose"
             onClick={(e)=>{ e.stopPropagation(); onClose?.(); }}
             title="Close"
           >

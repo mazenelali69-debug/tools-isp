@@ -13,75 +13,81 @@ export default function Workspace({ windows, setWindows, children }) {
 
   const byId = useMemo(() => {
     const m = new Map();
-    for(const w of windows) m.set(w.id, w);
+    for (const w of windows) m.set(w.id, w);
     return m;
   }, [windows]);
 
-  function focus(id){
+  function focus(id) {
     setWindows(prev => {
       const w = prev.find(x => x.id === id);
-      if(!w) return prev;
+      if (!w) return prev;
       const maxZ = Math.max(10, ...prev.map(x => x.z ?? 10));
       const nextZ = maxZ + 1;
       setZTop(nextZ);
-      return prev.map(x => x.id === id ? { ...x, z: nextZ } : x);
+      return prev.map(x => (x.id === id ? { ...x, z: nextZ } : x));
     });
   }
 
-  function close(id){
+  function close(id) {
     setWindows(prev => prev.filter(x => x.id !== id));
   }
 
-  function update(id, patch){
-    setWindows(prev => prev.map(x => x.id === id ? { ...x, ...patch } : x));
+  function update(id, patch) {
+    setWindows(prev => prev.map(x => (x.id === id ? { ...x, ...patch } : x)));
   }
+
+  const maxZ = Math.max(10, ...windows.map(x => x.z ?? 10));
 
   return (
     <div className="wsRoot">
-      <div className="wsBase">
-        {children}
-      </div>
+      <div className="wsBase">{children}</div>
 
       <div className="wsOverlay">
-        {windows.map(w => (
-          <WindowFrame
-            key={w.id}
-            win={w}
-            onFocus={() => focus(w.id)}
-            onClose={() => close(w.id)}
-            onChange={(patch) => update(w.id, patch)}
-          >
-            {w.type === "ping" && (
-  <PingTool
-    ip={w.ip ?? "88.88.88.10"}
-    onIpChange={(next)=> update(w.id, { ip: next, title: "Ping — " + (String(next||"").trim() || "…") })}
-  />
-)}
+        {windows.map(w => {
+          const ww = { ...w, isTop: ((w.z ?? 10) === maxZ) };
 
-            {w.type === "monitor" && (
-  <MonitorTool
-    win={w}
-    onChange={(patch)=> update(w.id, patch)}
-  />
-)}
-
-            {w.type === "note" && (
-              <div className="wsPanel">
-                <div className="wsHint">Note</div>
-                <textarea
-                  className="wsNote"
-                  value={w.note ?? ""}
-                  onChange={(e)=> update(w.id, { note: e.target.value })}
-                  placeholder="اكتب ملاحظاتك…"
+          return (
+            <WindowFrame
+              key={w.id}
+              win={ww}
+              onFocus={() => focus(w.id)}
+              onClose={() => close(w.id)}
+              onChange={(patch) => update(w.id, patch)}
+            >
+              {w.type === "ping" && (
+                <PingTool
+                  ip={w.ip ?? "88.88.88.10"}
+                  onIpChange={(next) =>
+                    update(w.id, {
+                      ip: next,
+                      title: "Ping — " + (String(next || "").trim() || "…"),
+                    })
+                  }
                 />
-              </div>
-            )}
-          </WindowFrame>
-        ))}
+              )}
+
+              {w.type === "monitor" && (
+                <MonitorTool
+                  win={ww}
+                  onChange={(patch) => update(w.id, patch)}
+                />
+              )}
+
+              {w.type === "note" && (
+                <div className="wsPanel">
+                  <div className="wsHint">Note</div>
+                  <textarea
+                    className="wsNote"
+                    value={w.note ?? ""}
+                    onChange={(e) => update(w.id, { note: e.target.value })}
+                    placeholder="اكتب ملاحظاتك…"
+                  />
+                </div>
+              )}
+            </WindowFrame>
+          );
+        })}
       </div>
     </div>
   );
 }
-
-
-

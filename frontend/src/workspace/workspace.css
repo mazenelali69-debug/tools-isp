@@ -1,4 +1,101 @@
-﻿/* ===== Workspace Layer ===== */
+﻿/* ===== WS_PRO_POLISH_v1 ===== */
+
+/* prevent text selection while dragging/resizing */
+.wsNoSelect, .wsNoSelect *{
+  user-select: none !important;
+}
+
+/* optional workspace subtle grid */
+.wsRoot::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: radial-gradient(800px 420px at 30% 10%, rgba(0,0,0,1), transparent 70%);
+  opacity:.55;
+}
+
+/* ensure base/overlay are above grid */
+.wsBase{ position:relative; z-index:1; }
+.wsOverlay{ z-index:50; }
+
+/* window polish */
+.wsWin{
+  background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(10,12,16,.55));
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+.wsWin.isTop{
+  border-color: rgba(0,255,200,.22);
+  box-shadow: 0 0 0 3px rgba(0,255,200,.10), 0 18px 60px rgba(0,0,0,.45);
+}
+
+/* header polish */
+.wsWinHead{
+  height: 40px;
+  padding: 0 10px 0 12px;
+  background: rgba(0,0,0,.16);
+}
+
+.wsWinTitle{
+  font-size: 12px;
+  font-weight: 950;
+  opacity: .92;
+}
+
+/* buttons */
+.wsWinBtn{
+  height: 24px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 0 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.90);
+}
+.wsWinBtn:hover{
+  border-color: rgba(255,255,255,.22);
+  transform: translateY(-1px);
+  transition: 160ms ease;
+}
+
+.wsWinBtnReset{
+  opacity: .9;
+}
+
+.wsWinBtnClose{
+  width: 24px;
+  padding: 0;
+}
+.wsWinBtnClose:hover{
+  background: rgba(255,70,70,.16);
+  border-color: rgba(255,70,70,.45);
+  box-shadow: 0 0 0 3px rgba(255,70,70,.10);
+}
+
+/* resize handle nicer */
+.wsWinResize{
+  width: 16px; height: 16px;
+  right: 8px; bottom: 8px;
+  border-right: 2px solid rgba(255,255,255,.40);
+  border-bottom: 2px solid rgba(255,255,255,.40);
+  border-radius: 4px;
+  opacity: .75;
+}
+.wsWinResize:hover{ opacity: 1; }
+
+/* body spacing */
+.wsWinBody{
+  padding: 12px;
+}
+
+/* ===== Workspace Layer ===== */
 .wsRoot{ position:relative; width:100%; height:100%; min-height: calc(100vh - 52px); }
 .wsBase{ position:relative; z-index:1; }
 .wsOverlay{ position:absolute; inset:0; z-index:50; pointer-events:none; }
@@ -202,3 +299,4 @@
 /* If browser supports it, this helps */
 :root{ color-scheme: dark; }
 /* WS-SELECT-FIX-END */
+
