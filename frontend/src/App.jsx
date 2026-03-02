@@ -1,10 +1,11 @@
-﻿import { useEffect, useRef, useState } from "react";
+﻿import React, { useMemo, useState, useEffect } from "react";
+import AppShell from "./layout/AppShell";
+import Workspace from "./workspace/Workspace";
 
-const STORAGE_KEY = "tools-isp:pings:v1";
-const STORAGE_UI_KEY = "tools-isp:ui:v1";
+const STORAGE_KEY = "toolsisp_windows_v1";
 
-function safeParse(json, fallback) {
-  try { return JSON.parse(json); } catch { return fallback; }
+function uid(){
+  return "w_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
 }
 function loadSavedPings() {
   const raw = localStorage.getItem(STORAGE_KEY);
@@ -71,419 +72,62 @@ function cleanPingText(out){
     .join("\n");
 }
 
-export default function App() {
-  const [ip, setIp] = useState("88.88.88.10");
-  const [community, setCommunity] = useState("public");
-  const [interfaces, setInterfaces] = useState([]);
-  const [ifIndex, setIfIndex] = useState(2);
-  const [ifOpen, setIfOpen] = useState(false);
-  const [label, setLabel] = useState("WAN-ether1");
-  // Ping UI (multi boxes)
-  const [showPing, setShowPing] = useState(false);
-  const [pings, setPings] = useState([]); 
-useEffect(() => {
-  // Restore pings positions + last IPs
-  const saved = loadSavedPings();
-  if (saved && saved.length) {
-    setPings(saved);
-  }
-
-  // (Optional) restore simple UI state (interface/group) if you want later:
-  // const ui = safeParse(localStorage.getItem(STORAGE_UI_KEY), null);
-  // if (ui && typeof ui === "object") {
-  //   if (ui.iface != null) setSelectedInterface(String(ui.iface));
-  // }
-}, []);
-
-useEffect(() => {
-  // Debounced save to localStorage
-  let saveTimer = setTimeout(() => {
-    savePingsNow(pings);
-  }, 150);
-
-  return () => {
-    try { clearTimeout(saveTimer); } catch {}
-  };
-}, [pings]);
-// [{id, ip, out, running, x, y}]
-  const pingSrcRef = useRef({});          // { [id]: EventSource }
-  const dragRef = useRef({ active:false, id:null, dx:0, dy:0 });
-
-  const resizeRef = useRef({ active:false, id:null, sx:0, sy:0, sw:0, sh:0 });
-const [pingSrc, setPingSrc] = useState(null);
-const [monitors, setMonitors] = useState([]);
-  const [live, setLive] = useState({});
-  const [history, setHistory] = useState({}); // { [id]: [{t,down,up}, ...] }
-  const [status, setStatus] = useState("");
-  const socketRef = useRef(null);
-
-  useEffect(() => {
-    const s = io(API);
-    socketRef.current = s;
-
-    s.on("monitor:update", (msg) => {
-      setLive(prev => ({
-        ...prev,
-        [msg.id]: {
-          down: msg.down_mbps ?? 0,
-          up: msg.up_mbps ?? 0,
-          ok: msg.ok,
-          err: msg.error
-        }
-      }));
-
-      setHistory(prev => {
-        const id = msg.id;
-        const prevArr = prev[id] || [];
-        const next = prevArr.concat([{
-          t: Date.now(),
-          down: msg.down_mbps ?? 0,
-          up: msg.up_mbps ?? 0
-        }]);
-        const sliced = next.length > 120 ? next.slice(next.length - 120) : next;
-        return { ...prev, [id]: sliced };
-      });
-    });
-
-    s.on("monitor:stopped", ({ id }) => {
-      setLive(prev => {
-        const copy = { ...prev };
-        delete copy[id];
-        return copy;
-      });
-
-      setHistory(prevH => {
-        const copyH = { ...prevH };
-        delete copyH[id];
-        return copyH;
-      });
-    loadMonitors();
+  const [windows, setWindows] = useState(() => {
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch{
+      return [];
+    }
   });
 
-    return () => s.close();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-
-  
-useEffect(() => {
-  // Debounced save to localStorage
-  let saveTimer = setTimeout(() => {
-    savePingsNow(pings);
-  }, 150);
-
-  return () => {
-    try { clearTimeout(saveTimer); } catch {}
-  };
-}, [pings]);
-// PING_RESIZE_ENGINE_START
   useEffect(() => {
-    function onMove(e) {
-      const r = resizeRef.current;
-      if (!r || !r.active || !r.id) return;
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(windows)); }catch{}
+  }, [windows]);
 
-      const dx = e.clientX - r.sx;
-      const dy = e.clientY - r.sy;
-
-      const nw = Math.max(280, r.sw + dx);
-      const nh = Math.max(220, r.sh + dy);
-
-      setPings(prev => prev.map(pp => (pp.id === r.id ? { ...pp, w: nw, h: nh } : pp)));
-    }
-
-    function onUp() {
-      const r = resizeRef.current;
-      if (!r) return;
-      resizeRef.current = { active:false, id:null, sx:0, sy:0, sw:0, sh:0 };
-    }
-
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onUp);
-    };
-  }, []);
-  
-useEffect(() => {
-  // Debounced save to localStorage
-  let saveTimer = setTimeout(() => {
-    savePingsNow(pings);
-  }, 150);
-
-  return () => {
-    try { clearTimeout(saveTimer); } catch {}
-  };
-}, [pings]);
-// PING_RESIZE_ENGINE_END
-  async function loadMonitors() {
-    const r = await fetch(API + "/api/monitors");
-    const j = await r.json();
-    setMonitors(j.monitors || []);
-  }
-
-  useEffect(() => { loadMonitors(); }, []);
-
-  
-
-  
-
-  
-useEffect(() => {
-  // Debounced save to localStorage
-  let saveTimer = setTimeout(() => {
-    savePingsNow(pings);
-  }, 150);
-
-  return () => {
-    try { clearTimeout(saveTimer); } catch {}
-  };
-}, [pings]);
-// cleanup pings on unmount
-  useEffect(() => {
-    return () => {
-      try {
-        const m = pingSrcRef.current || {};
-        Object.keys(m).forEach(k => { try { m[k].close(); } catch {} });
-      } catch {}
-    };
-  }, []);
-
-  
-useEffect(() => {
-  // Debounced save to localStorage
-  let saveTimer = setTimeout(() => {
-    savePingsNow(pings);
-  }, 150);
-
-  return () => {
-    try { clearTimeout(saveTimer); } catch {}
-  };
-}, [pings]);
-// PING_RESIZE_ENGINE_START
-  useEffect(() => {
-    function onMove(e) {
-      const r = resizeRef.current;
-      if (!r || !r.active || !r.id) return;
-
-      const dx = e.clientX - r.sx;
-      const dy = e.clientY - r.sy;
-
-      const nw = Math.max(280, r.sw + dx);
-      const nh = Math.max(220, r.sh + dy);
-
-      setPings(prev => prev.map(pp => (pp.id === r.id ? { ...pp, w: nw, h: nh } : pp)));
-    }
-
-    function onUp() {
-      const r = resizeRef.current;
-      if (!r) return;
-      resizeRef.current = { active:false, id:null, sx:0, sy:0, sw:0, sh:0 };
-    }
-
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onUp);
-    };
-  }, []);
-  
-useEffect(() => {
-  // Debounced save to localStorage
-  let saveTimer = setTimeout(() => {
-    savePingsNow(pings);
-  }, 150);
-
-  return () => {
-    try { clearTimeout(saveTimer); } catch {}
-  };
-}, [pings]);
-// PING_RESIZE_ENGINE_END
-// close interface dropdown on outside click
-  useEffect(() => {
-    function onDoc(e){
-      const el = e.target;
-      if (!el) return;
-      // if click is inside dropdown, ignore
-      if (el.closest && el.closest(".dd")) return;
-      setIfOpen(false);
-    }
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
-  }, []);
-useEffect(() => {
-  // Debounced save to localStorage
-  let saveTimer = setTimeout(() => {
-    savePingsNow(pings);
-  }, 150);
-
-  return () => {
-    try { clearTimeout(saveTimer); } catch {}
-  };
-}, [pings]);
-async function fetchInterfaces() {
-    setStatus("Loading interfaces...");
-    const r = await fetch(API + "/api/interfaces-cli", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ip, community })
-    });
-    const j = await r.json();
-    if (!j.ok) { setStatus(j.error); return; }
-    setInterfaces(j.interfaces);
-    setStatus("Interfaces loaded");
-  }
-
-  async function startMonitor() {
-    const r = await fetch(API + "/api/monitors", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ip, community, ifIndex: Number(ifIndex), label })
-    });
-    const j = await r.json();
-    if (!j.ok) { setStatus(j.error); return; }
-    loadMonitors();
-  }
-  async function stopMonitor(id) {
-    await fetch(API + "/api/monitors/" + id, { method: "DELETE" });
-    loadMonitors();
-  }
-
-  function addPing() {
-    const id = (crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random().toString(16).slice(2));
-    const baseX = 40 + (pings.length * 30);
-    const baseY = 160 + (pings.length * 30);
-    setPings(prev => prev.concat([{ id, ip: "", out: "", running: false, x: baseX, y: baseY }]));
-  }
-
-  function removePing(id) {
-    stopPingId(id);
-    setPings(prev => prev.filter(p => p.id !== id));
-  }
-
-  function setPingField(id, patch) {
-    setPings(prev => prev.map(p => (p.id === id ? { ...p, ...patch } : p)));
-  }
-
-  function stopPingId(id) {
-    try {
-      const es = pingSrcRef.current?.[id];
-      if (es) { try { es.close(); } catch {} }
-      if (pingSrcRef.current) delete pingSrcRef.current[id];
-    } catch {}
-    setPingField(id, { running: false });
-  }
-
-  function startPingId(id) {
-    const p = pings.find(x => x.id === id);
-    const target = String((p?.ip || "")).trim();
-    if (!target) { setPingField(id, { out: "Enter IP first" }); return; }
-
-    // stop previous if any
-    stopPingId(id);
-
-    // show header + keep running
-    setPingField(id, { out: "Pinging " + target + " ...\n", running: true });
-
-    // ✅ SSE live stream
-    const url = API + "/api/ping-sse?ip=" + encodeURIComponent(target);
-    const es = new EventSource(url);
-    pingSrcRef.current[id] = es;
-
-    let startedAt = Date.now();
-    let lineCount = 0;
-
-    const append = (line) => {
-      lineCount++;
-      // Append + force react re-render/scroll using a tiny changing suffix
-      setPings(prev => prev.map(pp => {
-        if (pp.id !== id) return pp;
-        const base = (pp.out || "");
-        const next = base + String(line || "") + "\n";
-        return { ...pp, out: next, _scroll: Date.now() };
-      }));
-
-      // ✅ Auto-scroll output to bottom (after DOM updates)
-      setTimeout(() => {
-        try {
-          const el = document.querySelector(`[data-ping-out="${id}"]`);
-          if (el) { el.scrollTop = el.scrollHeight; }
-        } catch {}
-      }, 0);
-    };
-
-    es.addEventListener("line", (ev) => {
-      try {
-        const obj = JSON.parse(ev.data || "{}");
-        append(obj.line ?? String(ev.data ?? ""));
-      } catch {
-        append(String(ev.data ?? ""));
-      }
-    });
-
-    es.addEventListener("end", () => {
-      try { es.close(); } catch {}
-      try { delete pingSrcRef.current[id]; } catch {}
-      const ms = Date.now() - startedAt;
-      append("[done] " + ms + "ms");
-      setPingField(id, { running: false });
-    });
-
-    es.onerror = () => {
-      // NOTE: EventSource auto-reconnects, but backend closes when client closes.
-      // We will show error and stop to avoid endless loop.
-      try { es.close(); } catch {}
-      try { delete pingSrcRef.current[id]; } catch {}
-      append("[error] stream disconnected");
-      setPingField(id, { running: false });
-    };
-}
-
-  function onPingMouseDown(e, id) {
-    const p = pings.find(x => x.id === id);
-    if (!p) return;
-    dragRef.current = {
-      active: true,
+  function openWin(type){
+    const id = uid();
+    const base = {
       id,
-      dx: e.clientX - (p.x || 0),
-      dy: e.clientY - (p.y || 0)
+      type,
+      ip: (type === "ping" ? "88.88.88.10" : undefined),
+      community: (type === "monitor" ? "public" : undefined),
+      title:
+        type === "ping" ? "Ping — 88.88.88.10" :
+        type === "monitor" ? "Monitor" :
+        "Note",
+      x: 140 + (windows.length * 18),
+      y: 120 + (windows.length * 14),
+      w: type === "note" ? 420 : 560,
+      h: type === "note" ? 320 : 340,
+      z: 10 + windows.length
     };
-    e.preventDefault();
+    setWindows(prev => [...prev, base]);
   }
-  function onPingResizeDown(e, id) {
-    if (e.button !== 0) return;
-    const p = pings.find(x => x.id === id);
-    if (!p) return;
 
-    const sw = (p.w ?? 360);
-    const sh = (p.h ?? 320);
-
-    resizeRef.current = { active:true, id, sx:e.clientX, sy:e.clientY, sw, sh };
-    e.preventDefault();
-    e.stopPropagation();
-  }
+  const actions = useMemo(() => ({
+    onNewPing: () => openWin("ping"),
+    onNewMonitor: () => openWin("monitor"),
+    onNewNote: () => openWin("note"),
+  }), [windows]);
 
   useEffect(() => {
-    function onMove(e) {
-      const d = dragRef.current;
-      if (!d?.active || !d.id) return;
-      const x = Math.max(0, e.clientX - d.dx);
-      const y = Math.max(0, e.clientY - d.dy);
-      setPingField(d.id, { x, y });
+    function onKey(e){
+      if(e.ctrlKey && e.key.toLowerCase() === "p"){ e.preventDefault(); openWin("ping"); }
+      if(e.ctrlKey && e.key.toLowerCase() === "m"){ e.preventDefault(); openWin("monitor"); }
+      if(e.ctrlKey && e.key.toLowerCase() === "n"){ e.preventDefault(); openWin("note"); }
+      if(e.key === "Escape"){
+        setWindows(prev => {
+          if(!prev.length) return prev;
+          const sorted = [...prev].sort((a,b)=>(b.z??0)-(a.z??0));
+          const top = sorted[0];
+          return prev.filter(w => w.id !== top.id);
+        });
+      }
     }
-    function onUp() {
-      const d = dragRef.current;
-      if (!d) return;
-      dragRef.current = { active:false, id:null, dx:0, dy:0 };
-    }
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onUp);
-    };
-  }, [pings]);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [windows]);
 
   return (
     <div style={{ fontFamily: "Arial", padding: 20 }}>
@@ -661,89 +305,11 @@ async function fetchInterfaces() {
               /></div>
           ))}
         </div>
-      ) : null}
-<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10 }}>
-        <input value={ip} onChange={e => setIp(e.target.value)} placeholder="IP" />
-        <input value={community} onChange={e => setCommunity(e.target.value)} placeholder="Community" />
-                <button
-          type="button"
-          onClick={() => setShowPing(v => !v)}
-          title="Ping any IP"
-        >
-          Ping
-        </button>
-        <button onClick={fetchInterfaces}>Fetch Interfaces</button>
-      </div>
-      {showPing ? (
-        <div style={{ marginTop: 10, display: "flex",
-                flexDirection: "column", gap: 10, alignItems: "center" }}>
-          <button type="button" onClick={addPing}>+ New Ping</button>
-          <span style={{ fontSize: 12, opacity: 0.7 }}>Drag boxes, run multiple pings</span>
-        </div>
-      ) : null}
-<div className="dd" style={{ marginTop: 10 }}>
-  <button
-    type="button"
-    className="ddBtn"
-    onClick={() => setIfOpen(v => !v)}
-    aria-expanded={ifOpen ? "true" : "false"}
-    title={(interfaces.find(i => String(i.ifIndex) === String(ifIndex))?.ifName) || ""}
-  >
-    <span>
-      {(() => {
-        const sel = interfaces.find(i => String(i.ifIndex) === String(ifIndex));
-        return sel ? `#${sel.ifIndex} - ${sel.ifName}` : `#${ifIndex}`;
-      })()}
-    </span>
-    <span className="ddCaret">▾</span>
-  </button>
-
-  {ifOpen ? (
-    <div className="ddMenu">
-      {interfaces.map(i => {
-        const active = String(i.ifIndex) === String(ifIndex);
-        return (
-          <button
-            key={i.ifIndex}
-            type="button"
-            className={"ddItem" + (active ? " ddItemActive" : "")}
-            onClick={() => { setIfIndex(i.ifIndex); setIfOpen(false); }}
-          >
-            #{i.ifIndex} - {i.ifName}
-          </button>
-        );
-      })}
-      {interfaces.length === 0 ? (
-        <div style={{ padding: 10, color: "rgba(255,255,255,.7)" }}>
-          No interfaces loaded
-        </div>
-      ) : null}
-    </div>
-  ) : null}
-</div>
-
-      <button onClick={startMonitor} style={{ marginLeft: 10 }}>+ Add</button>
-
-      <hr />
-
-      {monitors.map(m => {
-        const L = live[m.id] || {};
-        const down = (L.down ?? 0);
-        const up = (L.up ?? 0);
-
-        return (
-          <MonitorBox
-            key={m.id}
-            monitor={m}
-            live={L}
-            points={(history[m.id] || [])}
-            onClose={() => stopMonitor(m.id)}
-          />
-        );
-      })}
-    </div>
+      </Workspace>
+    </AppShell>
   );
 }
+<<<<<<< HEAD
 
 
 
@@ -773,5 +339,9 @@ async function fetchInterfaces() {
 
 
 
+
+
+=======
+>>>>>>> autosave-clean
 
 
