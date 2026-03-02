@@ -167,3 +167,4 @@ export default function WindowFrame({ win, onFocus, onClose, onChange, children 
     </div>
   );
 }
+

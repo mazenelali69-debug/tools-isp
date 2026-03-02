@@ -300,3 +300,23 @@
 :root{ color-scheme: dark; }
 /* WS-SELECT-FIX-END */
 
+
+/* WS_WIN_TOP_GLOW_v1 */
+.wsWinTop{
+  border-color: rgba(0,255,200,.35);
+  box-shadow:
+    0 0 0 1px rgba(0,255,200,.18),
+    0 0 40px rgba(0,255,200,.08),
+    0 20px 60px rgba(0,0,0,.50);
+  transform: translateZ(0);
+}
+
+/* WS_WIN_TOP_GLOW_v1 */
+.wsWinTop{
+  border-color: rgba(0,255,200,.35);
+  box-shadow:
+    0 0 0 1px rgba(0,255,200,.18),
+    0 0 40px rgba(0,255,200,.08),
+    0 20px 60px rgba(0,0,0,.50);
+  transform: translateZ(0);
+}
