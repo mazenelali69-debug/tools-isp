@@ -1,59 +1,16 @@
-﻿node_modules/
-dist/
-build/
-.vite/
-.cache/
-*.log
-.env
-.env.*
+﻿
+
+# ===== tools-isp local/generated =====
+PROJECT_CODE_DUMP.txt
+PROJECT_STRUCTURE.txt
+PROJECT_STRUCTURE_CLEAN.txt
+WORKSPACE_DUMP_tools-isp_*.txt
+
+# audits
 _audit/
-logs/
-.DS_Store
-Thumbs.db
 
-# ---- junk / backups ----
-*.bak
-*.bak-*
-*.bak_*
-*.backup
-frontend_old_*/
-**/*.bak
-**/*.bak-*
-**/*.bak_*
-
-# ---- node/vite ----
+# dependencies
 **/node_modules/
-**/dist/
-**/build/
-**/.vite/
-**/.cache/
-*.log
 
-# ---- local env ----
-.env
-.env.*
-
-# ---- audit/logs ----
-_audit/
-logs/
-
-# ---- backend runtime junk ----
-backend/y/modules/
-backend/y/pids/
-PROJECT_EVERYTHING_DUMP.txt
-TOOLS_ISP_FULL_EXPORT.txt
-tools-isp-export.zip
-.run-pids-tools-isp.txt
-_backup-frontend-*.zip
-# local dumps / exports (do not commit)
-PROJECT_EVERYTHING_DUMP.txt
-TOOLS_ISP_FULL_EXPORT.txt
-tools-isp-export.zip
-.run-pids-tools-isp.txt
-_backup-frontend-*.zip
-# local dumps / exports (do not commit)
-PROJECT_EVERYTHING_DUMP.txt
-TOOLS_ISP_FULL_EXPORT.txt
-tools-isp-export.zip
-.run-pids-tools-isp.txt
-_backup-frontend-*.zip
+# local backups
+*.bak-*
