@@ -1,0 +1,188 @@
+﻿tools-isp AUDIT REPORT - 20260227-141725
+ProjectRoot: C:\apps\tools-isp
+---------------------------------------------------
+
+==================== PM2 List ====================
+
+ΓöîΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé id Γöé name      Γöé namespace   Γöé version Γöé mode    Γöé pid      Γöé uptime Γöé Γå║    Γöé status    Γöé cpu      Γöé mem      Γöé user     Γöé watching Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+
+==================== PM2 Describe (each process) ====================
+
+No PM2 processes found.
+
+==================== PM2 Env (redacted) ====================
+
+No PM2 processes found.
+
+==================== Listening Ports + Owners (focus 5173/9090) ====================
+
+  TCP    0.0.0.0:5173           0.0.0.0:0              LISTENING       16020
+  TCP    [::]:5173              [::]:0                 LISTENING       16020
+  TCP    [::1]:5173             [::1]:54181            ESTABLISHED     16020
+  TCP    [::1]:54181            [::1]:5173             ESTABLISHED     22440
+  TCP    0.0.0.0:9090           0.0.0.0:0              LISTENING       2248
+  TCP    127.0.0.1:9090         127.0.0.1:60538        ESTABLISHED     2248
+  TCP    127.0.0.1:60538        127.0.0.1:9090         ESTABLISHED     22440
+
+--- Get-NetTCPConnection for 5173/9090 ---
+
+LocalAddress LocalPort       State OwningProcess
+------------ ---------       ----- -------------
+::1               5173 Established         16020
+::                5173      Listen         16020
+127.0.0.1         9090 Established          2248
+0.0.0.0           9090      Listen          2248
+
+
+
+--- Process details ---
+ERROR: Cannot overwrite variable PID because it is read-only or constant.
+
+==================== Firewall Allow rules (5173/9090) ====================
+
+
+### Port 5173 allow inbound ###
+
+### Port 9090 allow inbound ###
+
+==================== Health Checks (CORRECT URLs) ====================
+
+
+--- Backend Health (http://127.0.0.1:9090/health) ---
+{
+    "ok":  true,
+    "service":  "tools-isp-backend"
+}
+
+--- Frontend GET (http://127.0.0.1:5173) ---
+Status: 200
+Type: text/html
+Len: 612
+
+==================== PM2 Logs (last 120 lines) ====================
+
+[1m[90m[TAILING] Tailing last 120 lines for [all] processes (change the value with --lines option)[39m[22m
+[90mC:\pm2\pm2.log last 120 lines:[39m
+[34mPM2        | [39m2026-02-27T11:08:29: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:08:32: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:08:32: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:08:32: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:08:36: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:08:36: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:08:36: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:08:39: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:08:39: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:08:39: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:08:42: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:08:42: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:08:42: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:08:45: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:08:45: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:08:45: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:08:48: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:08:48: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:08:48: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:08:51: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:08:51: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:08:51: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:08:54: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:08:54: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:08:54: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:08:57: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:08:57: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:08:57: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:00: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:00: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:00: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:03: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:03: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:03: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:06: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:06: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:07: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:10: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:10: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:10: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:13: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:13: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:13: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:16: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:16: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:16: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:19: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:19: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:19: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:22: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:22: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:22: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:25: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:25: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:25: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:28: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:28: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:28: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:31: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:31: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:31: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:34: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:34: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:34: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:37: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:37: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:37: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:41: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:41: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:41: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:44: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:44: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:44: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:47: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:47: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:47: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:50: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:50: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:50: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:53: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:53: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:53: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:56: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:56: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:56: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:09:59: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:09:59: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:09:59: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:10:02: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:10:02: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:10:02: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:10:05: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:10:05: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:10:05: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:10:08: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:10:08: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:10:08: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:10:12: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:10:12: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:10:12: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T11:10:15: PM2 log: App [nocomment-backend:0] exited with code [0] via signal [SIGINT]
+[34mPM2        | [39m2026-02-27T11:10:15: PM2 log: App [nocomment-backend:0] starting in -fork mode-
+[34mPM2        | [39m2026-02-27T11:10:15: PM2 log: App [nocomment-backend:0] online
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: ===============================================================================
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: --- New PM2 Daemon started ----------------------------------------------------
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: Time                 : Fri Feb 27 2026 14:14:26 GMT+0200 (Eastern European Standard Time)
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: PM2 version          : 6.0.14
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: Node.js version      : 24.13.1
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: Current arch         : x64
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: PM2 home             : C:\pm2
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: PM2 PID file         : C:\pm2\pm2.pid
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: RPC socket file      : \\.\pipe\rpc.sock
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: BUS socket file      : \\.\pipe\pub.sock
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: Application log path : C:\pm2\logs
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: Worker Interval      : 30000
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: Process dump file    : C:\pm2\dump.pm2
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: Concurrent actions   : 2
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: SIGTERM timeout      : 1600
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: Runtime Binary       : C:\Program Files\nodejs\node.exe
+[34mPM2        | [39m2026-02-27T14:14:26: PM2 log: ===============================================================================
+

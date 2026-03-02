@@ -1,59 +1,9 @@
-﻿node_modules/
-dist/
-build/
-.vite/
-.cache/
-*.log
-.env
-.env.*
-_audit/
-logs/
-.DS_Store
-Thumbs.db
+﻿# dumps / exports
+WORKSPACE_DUMP_tools-isp_*.txt
+PROJECT_EVERYTHING_DUMP*.txt
+*.zip
 
-# ---- junk / backups ----
-*.bak
-*.bak-*
-*.bak_*
-*.backup
-frontend_old_*/
-**/*.bak
-**/*.bak-*
-**/*.bak_*
-
-# ---- node/vite ----
-**/node_modules/
-**/dist/
-**/build/
-**/.vite/
-**/.cache/
-*.log
-
-# ---- local env ----
-.env
-.env.*
-
-# ---- audit/logs ----
-_audit/
-logs/
-
-# ---- backend runtime junk ----
-backend/y/modules/
-backend/y/pids/
-PROJECT_EVERYTHING_DUMP.txt
-TOOLS_ISP_FULL_EXPORT.txt
-tools-isp-export.zip
+# local runtime / pids
 .run-pids-tools-isp.txt
-_backup-frontend-*.zip
-# local dumps / exports (do not commit)
-PROJECT_EVERYTHING_DUMP.txt
-TOOLS_ISP_FULL_EXPORT.txt
-tools-isp-export.zip
-.run-pids-tools-isp.txt
-_backup-frontend-*.zip
-# local dumps / exports (do not commit)
-PROJECT_EVERYTHING_DUMP.txt
-TOOLS_ISP_FULL_EXPORT.txt
-tools-isp-export.zip
-.run-pids-tools-isp.txt
-_backup-frontend-*.zip
+pm2*.log
+*.bak*

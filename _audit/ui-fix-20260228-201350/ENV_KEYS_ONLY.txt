@@ -1,0 +1,7 @@
+﻿NOTE: values removed intentionally.
+
+## C:\apps\tools-isp\backend\.env
+PORT=***
+
+## C:\apps\tools-isp\frontend\.env.local
+VITE_API_BASE=***

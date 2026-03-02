@@ -1,0 +1,81 @@
+﻿ 547:       </div>
+ 548: 
+ 549:       <div className="plBar" title={"Packet loss: " + lossText}>
+ 550:         <div className="plFill" style={{ width: pct + "%" }} />
+ 551:       </div>
+ 552: 
+ 553:       <div className={"pingNeonLine " + (p.running ? "on" : "")} />
+ 554:     </div>
+ 555:   );
+ 556: })()}
+ 557: <pre data-ping-out={p.id} className="pingOut">{cleanPingText(p.out)}</pre>
+ 558:             
+ 559:               {/* PING_RESIZE_GRIP */}
+ 560:               <div
+ 561:                 onMouseDown={(e) => onPingResizeDown(e, p.id)}
+ 562:                 style={{
+ 563:                   position: "absolute",
+ 564:                   right: 6,
+ 565:                   bottom: 6,
+ 566:                   width: 14,
+ 567:                   height: 14,
+ 568:                   cursor: "nwse-resize",
+ 569:                   borderRadius: 3,
+ 570:                   background: "rgba(0,0,0,0.25)",
+ 571:                   border: "1px solid rgba(255,255,255,0.25)"
+ 572:                 }}
+ 573:               /></div>
+ 574:           ))}
+ 575:         </div>
+ 576:       ) : null}
+ 577: <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10 }}>
+ 578:         <input value={ip} onChange={e => setIp(e.target.value)} placeholder="IP" />
+ 579:         <input value={community} onChange={e => setCommunity(e.target.value)} placeholder="Community" />
+ 580:                 <button
+ 581:           type="button"
+ 582:           onClick={() => setShowPing(v => !v)}
+ 583:           title="Ping any IP"
+ 584:         >
+ 585:           Ping
+ 586:         </button>
+ 587:         <button onClick={fetchInterfaces}>Fetch Interfaces</button>
+ 588:       </div>
+ 589:       {showPing ? (
+ 590:         <div style={{ marginTop: 10, display: "flex",
+ 591:                 flexDirection: "column", gap: 10, alignItems: "center" }}>
+ 592:           <button type="button" onClick={addPing}>+ New Ping</button>
+ 593:           <span style={{ fontSize: 12, opacity: 0.7 }}>Drag boxes, run multiple pings</span>
+ 594:         </div>
+ 595:       ) : null}
+ 596: <div className="dd" style={{ marginTop: 10 }}>
+ 597:   <button
+ 598:     type="button"
+ 599:     className="ddBtn"
+ 600:     onClick={() => setIfOpen(v => !v)}
+ 601:     aria-expanded={ifOpen ? "true" : "false"}
+ 602:     title={(interfaces.find(i => String(i.ifIndex) === String(ifIndex))?.ifName) || ""}
+ 603:   >
+ 604:     <span>
+ 605:       {(() => {
+ 606:         const sel = interfaces.find(i => String(i.ifIndex) === String(ifIndex));
+ 607:         return sel ? `#${sel.ifIndex} - ${sel.ifName}` : `#${ifIndex}`;
+ 608:       })()}
+ 609:     </span>
+ 610:     <span className="ddCaret">▾</span>
+ 611:   </button>
+ 612: 
+ 613:   {ifOpen ? (
+ 614:     <div className="ddMenu">
+ 615:       {interfaces.map(i => {
+ 616:         const active = String(i.ifIndex) === String(ifIndex);
+ 617:         return (
+ 618:           <button
+ 619:             key={i.ifIndex}
+ 620:             type="button"
+ 621:             className={"ddItem" + (active ? " ddItemActive" : "")}
+ 622:             onClick={() => { setIfIndex(i.ifIndex); setIfOpen(false); }}
+ 623:           >
+ 624:             #{i.ifIndex} - {i.ifName}
+ 625:           </button>
+ 626:         );
+ 627:       })}

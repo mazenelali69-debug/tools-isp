@@ -1,0 +1,6476 @@
+﻿tools-isp AUDIT REPORT - 20260227-141422
+ProjectRoot: C:\apps\tools-isp
+User: TheLord | Computer: DESKTOP-UTL15BQ
+---------------------------------------------------
+
+==================== System Info ====================
+
+
+Host Name:                     DESKTOP-UTL15BQ
+OS Name:                       Microsoft Windows 11 Pro
+OS Version:                    10.0.26220 N/A Build 26220
+OS Manufacturer:               Microsoft Corporation
+OS Configuration:              Standalone Workstation
+OS Build Type:                 Multiprocessor Free
+Registered Owner:              TheLord
+Registered Organization:       
+Product ID:                    00330-80000-00000-AA216
+Original Install Date:         2/22/2026, 3:59:44 AM
+System Boot Time:              2/25/2026, 4:42:56 PM
+System Manufacturer:           Micro-Star International Co., Ltd.
+System Model:                  MS-7D99
+System Type:                   x64-based PC
+Processor(s):                  1 Processor(s) Installed.
+                               [01]: Intel64 Family 6 Model 183 Stepping 1 GenuineIntel ~3500 Mhz
+BIOS Version:                  American Megatrends International, LLC. A.C0, 4/10/2025
+Windows Directory:             C:\WINDOWS
+System Directory:              C:\WINDOWS\system32
+Boot Device:                   \Device\HarddiskVolume1
+System Locale:                 en-us;English (United States)
+Input Locale:                  en-us;English (United States)
+Time Zone:                     (UTC+02:00) Beirut
+Total Physical Memory:         32,550 MB
+Available Physical Memory:     18,219 MB
+Virtual Memory: Max Size:      37,414 MB
+Virtual Memory: Available:     20,773 MB
+Virtual Memory: In Use:        16,641 MB
+Page File Location(s):         C:\pagefile.sys
+Domain:                        WORKGROUP
+Logon Server:                  \\DESKTOP-UTL15BQ
+Hotfix(s):                     4 Hotfix(s) Installed.
+                               [01]: KB5074828
+                               [02]: KB5066383
+                               [03]: KB5077231
+                               [04]: KB5077235
+Network Card(s):               3 NIC(s) Installed.
+                               [01]: Intel(R) Wi-Fi 6E AX211 160MHz
+                                     Connection Name: Wi-Fi
+                                     Status:          Media disconnected
+                               [02]: Realtek Gaming 2.5GbE Family Controller
+                                     Connection Name: Ethernet
+                                     DHCP Enabled:    No
+                                     IP address(es)
+                                     [01]: 80.80.80.111
+                                     [02]: fe80::c943:c465:4530:97ff
+                                     [03]: fd5b:4eb5:b8e0:0:6d12:85f:f4ef:2d61
+                                     [04]: fd5b:4eb5:b8e0:0:39ee:887a:a421:a707
+                                     [05]: fd5b:4eb5:b8e0:0:daea:5487:9c0b:3912
+                                     [06]: fd5b:4eb5:b8e0::ece
+                               [03]: Bluetooth Device (Personal Area Network)
+                                     Connection Name: Bluetooth Network Connection
+                                     Status:          Media disconnected
+Virtualization-based security: Status: Running
+                               Required Security Properties:
+                               Available Security Properties:
+                                     Base Virtualization Support
+                                     Secure Boot
+                                     DMA Protection
+                                     Secure Memory Overwrite
+                                     UEFI Code Readonly
+                                     SMM Security Mitigations 1.0
+                                     Mode Based Execution Control
+                                     APIC Virtualization
+                               Services Configured:
+                                     Hypervisor enforced Code Integrity
+                               Services Running:
+                                     Hypervisor enforced Code Integrity
+                               App Control for Business policy: Enforced
+                               App Control for Business user mode policy: Audit
+                               Security Features Enabled:
+Hyper-V Requirements:          A hypervisor has been detected. Features required for Hyper-V will not be displayed.
+
+==================== CPU/RAM/Disk Quick ====================
+
+
+
+Caption                : Microsoft Windows 11 Pro
+Version                : 10.0.26220
+BuildNumber            : 26220
+TotalVisibleMemorySize : 33330704
+FreePhysicalMemory     : 18634804
+
+Name                      : Intel(R) Core(TM) i5-14600KF
+NumberOfCores             : 14
+NumberOfLogicalProcessors : 20
+MaxClockSpeed             : 3500
+
+Name : C
+Root : C:\
+Used : 125307629568
+Free : 268906610688
+
+Name : D
+Root : D:\
+Used : 100638720
+Free : 104756957184
+
+
+
+
+==================== Node / NPM / PM2 Versions ====================
+
+node: v24.13.1
+npm : 11.8.0
+pm2 : [32m[PM2] [39mSpawning PM2 daemon with pm2_home=C:\pm2 [32m[PM2] [39mPM2 Successfully daemonized 6.0.14
+where node:
+C:\Program Files\nodejs\node.exe
+where npm :
+C:\Program Files\nodejs\npm
+C:\Program Files\nodejs\npm.cmd
+where pm2 :
+C:\Users\TheLord\AppData\Roaming\npm\pm2
+C:\Users\TheLord\AppData\Roaming\npm\pm2.cmd
+
+==================== PM2 List + Describe + Env (redacted) ====================
+
+ΓöîΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé id Γöé name      Γöé namespace   Γöé version Γöé mode    Γöé pid      Γöé uptime Γöé Γå║    Γöé status    Γöé cpu      Γöé mem      Γöé user     Γöé watching Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+
+--- pm2 describe all ---
+
+--- pm2 env (each process) ---
+
+==================== Project Snapshot + Git ====================
+
+Top files/folders:
+
+Name                        Mode   LastWriteTime         Length
+----                        ----   -------------         ------
+backend                     d----- 2/27/2026 2:04:34 PM        
+frontend                    d----- 2/27/2026 11:10:56 AM       
+frontend_old_20260227111036 d----- 2/27/2026 11:10:26 AM       
+viewer                      d----- 2/27/2026 12:16:22 PM       
+_audit                      d----- 2/27/2026 2:14:22 PM        
+.run-pids-tools-isp.txt     -a---- 2/27/2026 2:07:38 PM  14    
+RUN-ALL-tools-isp.ps1       -a---- 2/27/2026 2:07:05 PM  855   
+
+
+No .git folder found.
+
+==================== Find backend/frontend folders + package.json (if any) ====================
+
+package.json found:
+C:\apps\tools-isp\backend\node_modules\@socket.io\component-emitter\lib\cjs\package.json
+C:\apps\tools-isp\backend\node_modules\@socket.io\component-emitter\lib\esm\package.json
+C:\apps\tools-isp\backend\node_modules\@socket.io\component-emitter\package.json
+C:\apps\tools-isp\backend\node_modules\@types\cors\package.json
+C:\apps\tools-isp\backend\node_modules\@types\node\package.json
+C:\apps\tools-isp\backend\node_modules\accepts\package.json
+C:\apps\tools-isp\backend\node_modules\asn1-ber\package.json
+C:\apps\tools-isp\backend\node_modules\base64id\package.json
+C:\apps\tools-isp\backend\node_modules\body-parser\package.json
+C:\apps\tools-isp\backend\node_modules\bytes\package.json
+
+--- C:\apps\tools-isp\backend\node_modules\@socket.io\component-emitter\lib\cjs\package.json ---
+{
+  "name": "@socket.io/component-emitter",
+  "type": "commonjs"
+}
+
+
+--- C:\apps\tools-isp\backend\node_modules\@socket.io\component-emitter\lib\esm\package.json ---
+{
+  "name": "@socket.io/component-emitter",
+  "type": "module"
+}
+
+
+--- C:\apps\tools-isp\backend\node_modules\@socket.io\component-emitter\package.json ---
+{
+  "name": "@socket.io/component-emitter",
+  "description": "Event emitter",
+  "version": "3.1.2",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "component": {
+    "scripts": {
+      "emitter/index.js": "index.js"
+    }
+  },
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "types": "./lib/cjs/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/socketio/emitter.git"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "files": [
+    "lib/"
+  ]
+}
+
+
+--- C:\apps\tools-isp\backend\node_modules\@types\cors\package.json ---
+{
+    "name": "@types/cors",
+    "version": "2.8.19",
+    "description": "TypeScript definitions for cors",
+    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/cors",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Alan Plum",
+            "githubUsername": "pluma",
+            "url": "https://github.com/pluma"
+        },
+        {
+            "name": "Gaurav Sharma",
+            "githubUsername": "gtpan77",
+            "url": "https://github.com/gtpan77"
+        },
+        {
+            "name": "Sebastian Beltran",
+            "githubUsername": "bjohansebas",
+            "url": "https://github.com/bjohansebas"
+        }
+    ],
+    "main": "",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/cors"
+    },
+    "scripts": {},
+    "dependencies": {
+        "@types/node": "*"
+    },
+    "peerDependencies": {},
+    "typesPublisherContentHash": "a090e558c5f443573318c2955deecddc840bd8dfaac7cdedf31c7f6ede8d0b47",
+    "typeScriptVersion": "5.1"
+}
+
+--- C:\apps\tools-isp\backend\node_modules\@types\node\package.json ---
+{
+    "name": "@types/node",
+    "version": "25.3.2",
+    "description": "TypeScript definitions for node",
+    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Microsoft TypeScript",
+            "githubUsername": "Microsoft",
+            "url": "https://github.com/Microsoft"
+        },
+        {
+            "name": "Alberto Schiabel",
+            "githubUsername": "jkomyno",
+            "url": "https://github.com/jkomyno"
+        },
+        {
+            "name": "Andrew Makarov",
+            "githubUsername": "r3nya",
+            "url": "https://github.com/r3nya"
+        },
+        {
+            "name": "Benjamin Toueg",
+            "githubUsername": "btoueg",
+            "url": "https://github.com/btoueg"
+        },
+        {
+            "name": "David Junger",
+            "githubUsername": "touffy",
+            "url": "https://github.com/touffy"
+        },
+        {
+            "name": "Mohsen Azimi",
+            "githubUsername": "mohsen1",
+            "url": "https://github.com/mohsen1"
+        },
+        {
+            "name": "Nikita Galkin",
+            "githubUsername": "galkin",
+            "url": "https://github.com/galkin"
+        },
+        {
+            "name": "Sebastian Silbermann",
+            "githubUsername": "eps1lon",
+            "url": "https://github.com/eps1lon"
+        },
+        {
+            "name": "Wilco Bakker",
+            "githubUsername": "WilcoBakker",
+            "url": "https://github.com/WilcoBakker"
+        },
+        {
+            "name": "Marcin Kopacz",
+            "githubUsername": "chyzwar",
+            "url": "https://github.com/chyzwar"
+        },
+        {
+            "name": "Trivikram Kamat",
+            "githubUsername": "trivikr",
+            "url": "https://github.com/trivikr"
+        },
+        {
+            "name": "Junxiao Shi",
+            "githubUsername": "yoursunny",
+            "url": "https://github.com/yoursunny"
+        },
+        {
+            "name": "Ilia Baryshnikov",
+            "githubUsername": "qwelias",
+            "url": "https://github.com/qwelias"
+        },
+        {
+            "name": "ExE Boss",
+            "githubUsername": "ExE-Boss",
+            "url": "https://github.com/ExE-Boss"
+        },
+        {
+            "name": "Piotr BÅ‚aÅ¼ejewicz",
+            "githubUsername": "peterblazejewicz",
+            "url": "https://github.com/peterblazejewicz"
+        },
+        {
+            "name": "Anna Henningsen",
+            "githubUsername": "addaleax",
+            "url": "https://github.com/addaleax"
+        },
+        {
+            "name": "Victor Perin",
+            "githubUsername": "victorperin",
+            "url": "https://github.com/victorperin"
+        },
+        {
+            "name": "NodeJS Contributors",
+            "githubUsername": "NodeJS",
+            "url": "https://github.com/NodeJS"
+        },
+        {
+            "name": "Linus UnnebÃ¤ck",
+            "githubUsername": "LinusU",
+            "url": "https://github.com/LinusU"
+        },
+        {
+            "name": "wafuwafu13",
+            "githubUsername": "wafuwafu13",
+            "url": "https://github.com/wafuwafu13"
+        },
+        {
+            "name": "Matteo Collina",
+            "githubUsername": "mcollina",
+            "url": "https://github.com/mcollina"
+        },
+        {
+            "name": "Dmitry Semigradsky",
+            "githubUsername": "Semigradsky",
+            "url": "https://github.com/Semigradsky"
+        },
+        {
+            "name": "RenÃ©",
+            "githubUsername": "Renegade334",
+            "url": "https://github.com/Renegade334"
+        },
+        {
+            "name": "Yagiz Nizipli",
+            "githubUsername": "anonrig",
+            "url": "https://github.com/anonrig"
+        }
+    ],
+    "main": "",
+    "types": "index.d.ts",
+    "typesVersions": {
+        "<=5.6": {
+            "*": [
+                "ts5.6/*"
+            ]
+        },
+        "<=5.7": {
+            "*": [
+                "ts5.7/*"
+            ]
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/node"
+    },
+    "scripts": {},
+    "dependencies": {
+        "undici-types": "~7.18.0"
+    },
+    "peerDependencies": {},
+    "typesPublisherContentHash": "ae78cb05d267b2456e517bb3168b47314a35a84cd32c8fadafa3d23636307876",
+    "typeScriptVersion": "5.2"
+}
+
+--- C:\apps\tools-isp\backend\node_modules\accepts\package.json ---
+{
+  "name": "accepts",
+  "description": "Higher-level content negotiation",
+  "version": "2.0.0",
+  "contributors": [
+    "Douglas Christopher Wilson <doug@somethingdoug.com>",
+    "Jonathan Ong <me@jongleberry.com> (http://jongleberry.com)"
+  ],
+  "license": "MIT",
+  "repository": "jshttp/accepts",
+  "dependencies": {
+    "mime-types": "^3.0.0",
+    "negotiator": "^1.0.0"
+  },
+  "devDependencies": {
+    "deep-equal": "1.0.1",
+    "eslint": "7.32.0",
+    "eslint-config-standard": "14.1.1",
+    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-markdown": "2.2.1",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.3.1",
+    "eslint-plugin-standard": "4.1.0",
+    "mocha": "9.2.0",
+    "nyc": "15.1.0"
+  },
+  "files": [
+    "LICENSE",
+    "HISTORY.md",
+    "index.js"
+  ],
+  "engines": {
+    "node": ">= 0.6"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "mocha --reporter spec --check-leaks --bail test/",
+    "test-ci": "nyc --reporter=lcov --reporter=text npm test",
+    "test-cov": "nyc --reporter=html --reporter=text npm test"
+  },
+  "keywords": [
+    "content",
+    "negotiation",
+    "accept",
+    "accepts"
+  ]
+}
+
+
+--- C:\apps\tools-isp\backend\node_modules\asn1-ber\package.json ---
+{
+  "name": "asn1-ber",
+  "version": "1.2.2",
+  "description": "Generate and parse ASN1.BER objects",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "directories": {},
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^10.0.0"
+  },
+  "contributors": [
+    {
+      "name": "Stephen Vickers",
+      "email": "stephen.vickers@nospaceships.com"
+    },
+    {
+      "name": "NoSpaceships Ltd",
+      "email": "hello@nospaceships.com"
+    },
+    {
+      "name": "Mark Abrahams",
+      "email": "mark@abrahams.co.nz"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/markabrahams/node-asn1-ber.git"
+  },
+  "keywords": [
+    "asn1",
+    "asn.1",
+    "ber",
+    "asn1ber",
+    "asn1.ber",
+    "asn1-ber"
+  ],
+  "author": "Mark Abrahams <mark@abrahams.co.nz>",
+  "license": "MIT"
+}
+
+
+--- C:\apps\tools-isp\backend\node_modules\base64id\package.json ---
+{
+    "name": "base64id"
+  , "version": "2.0.0"
+  , "license": "MIT"
+  , "description": "Generates a base64 id"
+  , "author": "Kristian Faeldt <faeldt_kristian@cyberagent.co.jp>"
+  , "repository": {
+        "type": "git"
+      , "url": "https://github.com/faeldt/base64id.git"
+   }
+  , "main": "./lib/base64id.js"
+  , "engines": { "node": "^4.5.0 || >= 5.9" }
+}
+
+
+--- C:\apps\tools-isp\backend\node_modules\body-parser\package.json ---
+{
+  "name": "body-parser",
+  "description": "Node.js body parsing middleware",
+  "version": "2.2.2",
+  "contributors": [
+    "Douglas Christopher Wilson <doug@somethingdoug.com>",
+    "Jonathan Ong <me@jongleberry.com> (http://jongleberry.com)"
+  ],
+  "license": "MIT",
+  "repository": "expressjs/body-parser",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/express"
+  },
+  "dependencies": {
+    "bytes": "^3.1.2",
+    "content-type": "^1.0.5",
+    "debug": "^4.4.3",
+    "http-errors": "^2.0.0",
+    "iconv-lite": "^0.7.0",
+    "on-finished": "^2.4.1",
+    "qs": "^6.14.1",
+    "raw-body": "^3.0.1",
+    "type-is": "^2.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-markdown": "^3.0.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.6.0",
+    "eslint-plugin-standard": "^4.1.0",
+    "mocha": "^11.1.0",
+    "nyc": "^17.1.0",
+    "supertest": "^7.0.0"
+  },
+  "files": [
+    "lib/",
+    "LICENSE",
+    "index.js"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "mocha --reporter spec --check-leaks test/",
+    "test-ci": "nyc --reporter=lcovonly --reporter=text npm test",
+    "test-cov": "nyc --reporter=html --reporter=text npm test"
+  }
+}
+
+
+--- C:\apps\tools-isp\backend\node_modules\bytes\package.json ---
+{
+  "name": "bytes",
+  "description": "Utility to parse a string bytes to bytes and vice-versa",
+  "version": "3.1.2",
+  "author": "TJ Holowaychuk <tj@vision-media.ca> (http://tjholowaychuk.com)",
+  "contributors": [
+    "Jed Watson <jed.watson@me.com>",
+    "ThÃ©o FIDRY <theo.fidry@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "byte",
+    "bytes",
+    "utility",
+    "parse",
+    "parser",
+    "convert",
+    "converter"
+  ],
+  "repository": "visionmedia/bytes.js",
+  "devDependencies": {
+    "eslint": "7.32.0",
+    "eslint-plugin-markdown": "2.2.1",
+    "mocha": "9.2.0",
+    "nyc": "15.1.0"
+  },
+  "files": [
+    "History.md",
+    "LICENSE",
+    "Readme.md",
+    "index.js"
+  ],
+  "engines": {
+    "node": ">= 0.8"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "mocha --check-leaks --reporter spec",
+    "test-ci": "nyc --reporter=lcov --reporter=text npm test",
+    "test-cov": "nyc --reporter=html --reporter=text npm test"
+  }
+}
+
+
+==================== Configs + .env snapshot (REDACTED) ====================
+
+
+--- FILE: C:\apps\tools-isp\backend\.env ---
+PORT=9090
+
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\@socket.io\component-emitter\lib\cjs\index.js ---
+
+/**
+ * Expose `Emitter`.
+ */
+
+exports.Emitter = Emitter;
+
+/**
+ * Initialize a new `Emitter`.
+ *
+ * @api public
+ */
+
+function Emitter(obj) {
+  if (obj) return mixin(obj);
+}
+
+/**
+ * Mixin the emitter properties.
+ *
+ * @param {Object} obj
+ * @return {Object}
+ * @api private
+ */
+
+function mixin(obj) {
+  for (var key in Emitter.prototype) {
+    obj[key] = Emitter.prototype[key];
+  }
+  return obj;
+}
+
+/**
+ * Listen on the given `event` with `fn`.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.on =
+Emitter.prototype.addEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
+    .push(fn);
+  return this;
+};
+
+/**
+ * Adds an `event` listener that will be invoked a single
+ * time then automatically removed.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.once = function(event, fn){
+  function on() {
+    this.off(event, on);
+    fn.apply(this, arguments);
+  }
+
+  on.fn = fn;
+  this.on(event, on);
+  return this;
+};
+
+/**
+ * Remove the given callback for `event` or all
+ * registered callbacks.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.off =
+Emitter.prototype.removeListener =
+Emitter.prototype.removeAllListeners =
+Emitter.prototype.removeEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+
+  // all
+  if (0 == arguments.length) {
+    this._callbacks = {};
+    return this;
+  }
+
+  // specific event
+  var callbacks = this._callbacks['$' + event];
+  if (!callbacks) return this;
+
+  // remove all handlers
+  if (1 == arguments.length) {
+    delete this._callbacks['$' + event];
+    return this;
+  }
+
+  // remove specific handler
+  var cb;
+  for (var i = 0; i < callbacks.length; i++) {
+    cb = callbacks[i];
+    if (cb === fn || cb.fn === fn) {
+      callbacks.splice(i, 1);
+      break;
+    }
+  }
+
+  // Remove event specific arrays for event types that no
+  // one is subscribed for to avoid memory leak.
+  if (callbacks.length === 0) {
+    delete this._callbacks['$' + event];
+  }
+
+  return this;
+};
+
+/**
+ * Emit `event` with the given args.
+ *
+ * @param {String} event
+ * @param {Mixed} ...
+ * @return {Emitter}
+ */
+
+Emitter.prototype.emit = function(event){
+  this._callbacks = this._callbacks || {};
+
+  var args = new Array(arguments.length - 1)
+    , callbacks = this._callbacks['$' + event];
+
+  for (var i = 1; i < arguments.length; i++) {
+    args[i - 1] = arguments[i];
+  }
+
+  if (callbacks) {
+    callbacks = callbacks.slice(0);
+    for (var i = 0, len = callbacks.length; i < len; ++i) {
+      callbacks[i].apply(this, args);
+    }
+  }
+
+  return this;
+};
+
+// alias used for reserved events (protected method)
+Emitter.prototype.emitReserved = Emitter.prototype.emit;
+
+/**
+ * Return array of callbacks for `event`.
+ *
+ * @param {String} event
+ * @return {Array}
+ * @api public
+ */
+
+Emitter.prototype.listeners = function(event){
+  this._callbacks = this._callbacks || {};
+  return this._callbacks['$' + event] || [];
+};
+
+/**
+ * Check if this emitter has `event` handlers.
+ *
+ * @param {String} event
+ * @return {Boolean}
+ * @api public
+ */
+
+Emitter.prototype.hasListeners = function(event){
+  return !! this.listeners(event).length;
+};
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\@socket.io\component-emitter\lib\esm\index.js ---
+/**
+ * Initialize a new `Emitter`.
+ *
+ * @api public
+ */
+
+export function Emitter(obj) {
+  if (obj) return mixin(obj);
+}
+
+/**
+ * Mixin the emitter properties.
+ *
+ * @param {Object} obj
+ * @return {Object}
+ * @api private
+ */
+
+function mixin(obj) {
+  for (var key in Emitter.prototype) {
+    obj[key] = Emitter.prototype[key];
+  }
+  return obj;
+}
+
+/**
+ * Listen on the given `event` with `fn`.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.on =
+Emitter.prototype.addEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
+    .push(fn);
+  return this;
+};
+
+/**
+ * Adds an `event` listener that will be invoked a single
+ * time then automatically removed.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.once = function(event, fn){
+  function on() {
+    this.off(event, on);
+    fn.apply(this, arguments);
+  }
+
+  on.fn = fn;
+  this.on(event, on);
+  return this;
+};
+
+/**
+ * Remove the given callback for `event` or all
+ * registered callbacks.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.off =
+Emitter.prototype.removeListener =
+Emitter.prototype.removeAllListeners =
+Emitter.prototype.removeEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+
+  // all
+  if (0 == arguments.length) {
+    this._callbacks = {};
+    return this;
+  }
+
+  // specific event
+  var callbacks = this._callbacks['$' + event];
+  if (!callbacks) return this;
+
+  // remove all handlers
+  if (1 == arguments.length) {
+    delete this._callbacks['$' + event];
+    return this;
+  }
+
+  // remove specific handler
+  var cb;
+  for (var i = 0; i < callbacks.length; i++) {
+    cb = callbacks[i];
+    if (cb === fn || cb.fn === fn) {
+      callbacks.splice(i, 1);
+      break;
+    }
+  }
+
+  // Remove event specific arrays for event types that no
+  // one is subscribed for to avoid memory leak.
+  if (callbacks.length === 0) {
+    delete this._callbacks['$' + event];
+  }
+
+  return this;
+};
+
+/**
+ * Emit `event` with the given args.
+ *
+ * @param {String} event
+ * @param {Mixed} ...
+ * @return {Emitter}
+ */
+
+Emitter.prototype.emit = function(event){
+  this._callbacks = this._callbacks || {};
+
+  var args = new Array(arguments.length - 1)
+    , callbacks = this._callbacks['$' + event];
+
+  for (var i = 1; i < arguments.length; i++) {
+    args[i - 1] = arguments[i];
+  }
+
+  if (callbacks) {
+    callbacks = callbacks.slice(0);
+    for (var i = 0, len = callbacks.length; i < len; ++i) {
+      callbacks[i].apply(this, args);
+    }
+  }
+
+  return this;
+};
+
+// alias used for reserved events (protected method)
+Emitter.prototype.emitReserved = Emitter.prototype.emit;
+
+/**
+ * Return array of callbacks for `event`.
+ *
+ * @param {String} event
+ * @return {Array}
+ * @api public
+ */
+
+Emitter.prototype.listeners = function(event){
+  this._callbacks = this._callbacks || {};
+  return this._callbacks['$' + event] || [];
+};
+
+/**
+ * Check if this emitter has `event` handlers.
+ *
+ * @param {String} event
+ * @return {Boolean}
+ * @api public
+ */
+
+Emitter.prototype.hasListeners = function(event){
+  return !! this.listeners(event).length;
+};
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\accepts\index.js ---
+/*!
+ * accepts
+ * Copyright(c) 2014 Jonathan Ong
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+'use strict'
+
+/**
+ * Module dependencies.
+ * @private
+ */
+
+var Negotiator = require('negotiator')
+var mime = require('mime-types')
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = Accepts
+
+/**
+ * Create a new Accepts object for the given req.
+ *
+ * @param {object} req
+ * @public
+ */
+
+function Accepts (req) {
+  if (!(this instanceof Accepts)) {
+    return new Accepts(req)
+  }
+
+  this.headers = req.headers
+  this.negotiator = new Negotiator(req)
+}
+
+/**
+ * Check if the given `type(s)` is acceptable, returning
+ * the best match when true, otherwise `undefined`, in which
+ * case you should respond with 406 "Not Acceptable".
+ *
+ * The `type` value may be a single mime type string
+ * such as "application/json", the extension name
+ * such as "json" or an array `["json", "html", "text/plain"]`. When a list
+ * or array is given the _best_ match, if any is returned.
+ *
+ * Examples:
+ *
+ *     // Accept: text/html
+ *     this.types('html');
+ *     // => "html"
+ *
+ *     // Accept: text/*, application/json
+ *     this.types('html');
+ *     // => "html"
+ *     this.types('text/html');
+ *     // => "text/html"
+ *     this.types('json', 'text');
+ *     // => "json"
+ *     this.types('application/json');
+ *     // => "application/json"
+ *
+ *     // Accept: text/*, application/json
+ *     this.types('image/png');
+ *     this.types('png');
+ *     // => undefined
+ *
+ *     // Accept: text/*;q=.5, application/json
+ *     this.types(['html', 'json']);
+ *     this.types('html', 'json');
+ *     // => "json"
+ *
+ * @param {String|Array} types...
+ * @return {String|Array|Boolean}
+ * @public
+ */
+
+Accepts.prototype.type =
+Accepts.prototype.types = function (types_) {
+  var types = types_
+
+  // support flattened arguments
+  if (types && !Array.isArray(types)) {
+    types = new Array(arguments.length)
+    for (var i = 0; i < types.length; i++) {
+      types[i] = arguments[i]
+    }
+  }
+
+  // no types, return all requested types
+  if (!types || types.length === 0) {
+    return this.negotiator.mediaTypes()
+  }
+
+  // no accept header, return first given type
+  if (!this.headers.accept) {
+    return types[0]
+  }
+
+  var mimes = types.map(extToMime)
+  var accepts = this.negotiator.mediaTypes(mimes.filter(validMime))
+  var first = accepts[0]
+
+  return first
+    ? types[mimes.indexOf(first)]
+    : false
+}
+
+/**
+ * Return accepted encodings or best fit based on `encodings`.
+ *
+ * Given `Accept-Encoding: gzip, deflate`
+ * an array sorted by quality is returned:
+ *
+ *     ['gzip', 'deflate']
+ *
+ * @param {String|Array} encodings...
+ * @return {String|Array}
+ * @public
+ */
+
+Accepts.prototype.encoding =
+Accepts.prototype.encodings = function (encodings_) {
+  var encodings = encodings_
+
+  // support flattened arguments
+  if (encodings && !Array.isArray(encodings)) {
+    encodings = new Array(arguments.length)
+    for (var i = 0; i < encodings.length; i++) {
+      encodings[i] = arguments[i]
+    }
+  }
+
+  // no encodings, return all requested encodings
+  if (!encodings || encodings.length === 0) {
+    return this.negotiator.encodings()
+  }
+
+  return this.negotiator.encodings(encodings)[0] || false
+}
+
+/**
+ * Return accepted charsets or best fit based on `charsets`.
+ *
+ * Given `Accept-Charset: utf-8, iso-8859-1;q=0.2, utf-7;q=0.5`
+ * an array sorted by quality is returned:
+ *
+ *     ['utf-8', 'utf-7', 'iso-8859-1']
+ *
+ * @param {String|Array} charsets...
+ * @return {String|Array}
+ * @public
+ */
+
+Accepts.prototype.charset =
+Accepts.prototype.charsets = function (charsets_) {
+  var charsets = charsets_
+
+  // support flattened arguments
+  if (charsets && !Array.isArray(charsets)) {
+    charsets = new Array(arguments.length)
+    for (var i = 0; i < charsets.length; i++) {
+      charsets[i] = arguments[i]
+    }
+  }
+
+  // no charsets, return all requested charsets
+  if (!charsets || charsets.length === 0) {
+    return this.negotiator.charsets()
+  }
+
+  return this.negotiator.charsets(charsets)[0] || false
+}
+
+/**
+ * Return accepted languages or best fit based on `langs`.
+ *
+ * Given `Accept-Language: en;q=0.8, es, pt`
+ * an array sorted by quality is returned:
+ *
+ *     ['es', 'pt', 'en']
+ *
+ * @param {String|Array} langs...
+ * @return {Array|String}
+ * @public
+ */
+
+Accepts.prototype.lang =
+Accepts.prototype.langs =
+Accepts.prototype.language =
+Accepts.prototype.languages = function (languages_) {
+  var languages = languages_
+
+  // support flattened arguments
+  if (languages && !Array.isArray(languages)) {
+    languages = new Array(arguments.length)
+    for (var i = 0; i < languages.length; i++) {
+      languages[i] = arguments[i]
+    }
+  }
+
+  // no languages, return all requested languages
+  if (!languages || languages.length === 0) {
+    return this.negotiator.languages()
+  }
+
+  return this.negotiator.languages(languages)[0] || false
+}
+
+/**
+ * Convert extnames to mime.
+ *
+ * @param {String} type
+ * @return {String}
+ * @private
+ */
+
+function extToMime (type) {
+  return type.indexOf('/') === -1
+    ? mime.lookup(type)
+    : type
+}
+
+/**
+ * Check if mime is valid.
+ *
+ * @param {String} type
+ * @return {Boolean}
+ * @private
+ */
+
+function validMime (type) {
+  return typeof type === 'string'
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\asn1-ber\index.js ---
+
+var Ber = require('./lib/ber/index')
+
+exports.Ber = Ber
+exports.BerReader = Ber.Reader
+exports.BerWriter = Ber.Writer
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\asn1-ber\lib\ber\index.js ---
+
+var errors = require('./errors')
+var types = require('./types')
+
+var Reader = require('./reader')
+var Writer = require('./writer')
+
+for (var t in types)
+	if (types.hasOwnProperty(t))
+		exports[t] = types[t]
+
+for (var e in errors)
+	if (errors.hasOwnProperty(e))
+		exports[e] = errors[e]
+
+exports.Reader = Reader
+exports.Writer = Writer
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\body-parser\index.js ---
+/*!
+ * body-parser
+ * Copyright(c) 2014-2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+'use strict'
+
+/**
+ * @typedef {Object} Parsers
+ * @property {Function} json JSON parser
+ * @property {Function} raw Raw parser
+ * @property {Function} text Text parser
+ * @property {Function} urlencoded URL-encoded parser
+ */
+
+/**
+ * Module exports.
+ * @type {Function & Parsers}
+ */
+exports = module.exports = bodyParser
+
+/**
+ * JSON parser.
+ * @public
+ */
+Object.defineProperty(exports, 'json', {
+  configurable: true,
+  enumerable: true,
+  get: () => require('./lib/types/json')
+})
+
+/**
+ * Raw parser.
+ * @public
+ */
+Object.defineProperty(exports, 'raw', {
+  configurable: true,
+  enumerable: true,
+  get: () => require('./lib/types/raw')
+})
+
+/**
+ * Text parser.
+ * @public
+ */
+Object.defineProperty(exports, 'text', {
+  configurable: true,
+  enumerable: true,
+  get: () => require('./lib/types/text')
+})
+
+/**
+ * URL-encoded parser.
+ * @public
+ */
+Object.defineProperty(exports, 'urlencoded', {
+  configurable: true,
+  enumerable: true,
+  get: () => require('./lib/types/urlencoded')
+})
+
+/**
+ * Create a middleware to parse json and urlencoded bodies.
+ *
+ * @deprecated
+ * @public
+ */
+function bodyParser () {
+  throw new Error('The bodyParser() generic has been split into individual middleware to use instead.')
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\bytes\index.js ---
+/*!
+ * bytes
+ * Copyright(c) 2012-2014 TJ Holowaychuk
+ * Copyright(c) 2015 Jed Watson
+ * MIT Licensed
+ */
+
+'use strict';
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = bytes;
+module.exports.format = format;
+module.exports.parse = parse;
+
+/**
+ * Module variables.
+ * @private
+ */
+
+var formatThousandsRegExp = /\B(?=(\d{3})+(?!\d))/g;
+
+var formatDecimalsRegExp = /(?:\.0*|(\.[^0]+)0+)$/;
+
+var map = {
+  b:  1,
+  kb: 1 << 10,
+  mb: 1 << 20,
+  gb: 1 << 30,
+  tb: Math.pow(1024, 4),
+  pb: Math.pow(1024, 5),
+};
+
+var parseRegExp = /^((-|\+)?(\d+(?:\.\d+)?)) *(kb|mb|gb|tb|pb)$/i;
+
+/**
+ * Convert the given value in bytes into a string or parse to string to an integer in bytes.
+ *
+ * @param {string|number} value
+ * @param {{
+ *  case: [string],
+ *  decimalPlaces: [number]
+ *  fixedDecimals: [boolean]
+ *  thousandsSeparator: [string]
+ *  unitSeparator: [string]
+ *  }} [options] bytes options.
+ *
+ * @returns {string|number|null}
+ */
+
+function bytes(value, options) {
+  if (typeof value === 'string') {
+    return parse(value);
+  }
+
+  if (typeof value === 'number') {
+    return format(value, options);
+  }
+
+  return null;
+}
+
+/**
+ * Format the given value in bytes into a string.
+ *
+ * If the value is negative, it is kept as such. If it is a float,
+ * it is rounded.
+ *
+ * @param {number} value
+ * @param {object} [options]
+ * @param {number} [options.decimalPlaces=2]
+ * @param {number} [options.fixedDecimals=false]
+ * @param {string} [options.thousandsSeparator=]
+ * @param {string} [options.unit=]
+ * @param {string} [options.unitSeparator=]
+ *
+ * @returns {string|null}
+ * @public
+ */
+
+function format(value, options) {
+  if (!Number.isFinite(value)) {
+    return null;
+  }
+
+  var mag = Math.abs(value);
+  var thousandsSeparator = (options && options.thousandsSeparator) || '';
+  var unitSeparator = (options && options.unitSeparator) || '';
+  var decimalPlaces = (options && options.decimalPlaces !== undefined) ? options.decimalPlaces : 2;
+  var fixedDecimals = Boolean(options && options.fixedDecimals);
+  var unit = (options && options.unit) || '';
+
+  if (!unit || !map[unit.toLowerCase()]) {
+    if (mag >= map.pb) {
+      unit = 'PB';
+    } else if (mag >= map.tb) {
+      unit = 'TB';
+    } else if (mag >= map.gb) {
+      unit = 'GB';
+    } else if (mag >= map.mb) {
+      unit = 'MB';
+    } else if (mag >= map.kb) {
+      unit = 'KB';
+    } else {
+      unit = 'B';
+    }
+  }
+
+  var val = value / map[unit.toLowerCase()];
+  var str = val.toFixed(decimalPlaces);
+
+  if (!fixedDecimals) {
+    str = str.replace(formatDecimalsRegExp, '$1');
+  }
+
+  if (thousandsSeparator) {
+    str = str.split('.').map(function (s, i) {
+      return i === 0
+        ? s.replace(formatThousandsRegExp, thousandsSeparator)
+        : s
+    }).join('.');
+  }
+
+  return str + unitSeparator + unit;
+}
+
+/**
+ * Parse the string value into an integer in bytes.
+ *
+ * If no unit is given, it is assumed the value is in bytes.
+ *
+ * @param {number|string} val
+ *
+ * @returns {number|null}
+ * @public
+ */
+
+function parse(val) {
+  if (typeof val === 'number' && !isNaN(val)) {
+    return val;
+  }
+
+  if (typeof val !== 'string') {
+    return null;
+  }
+
+  // Test if the string passed is valid
+  var results = parseRegExp.exec(val);
+  var floatValue;
+  var unit = 'b';
+
+  if (!results) {
+    // Nothing could be extracted from the given string
+    floatValue = parseInt(val, 10);
+    unit = 'b'
+  } else {
+    // Retrieve the value and the unit
+    floatValue = parseFloat(results[1]);
+    unit = results[4].toLowerCase();
+  }
+
+  if (isNaN(floatValue)) {
+    return null;
+  }
+
+  return Math.floor(map[unit] * floatValue);
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\call-bind-apply-helpers\index.js ---
+'use strict';
+
+var bind = require('function-bind');
+var $TypeError = require('es-errors/type');
+
+var $call = require('./functionCall');
+var $actualApply = require('./actualApply');
+
+/** @type {(args: [Function, thisArg?: unknown, ...args: unknown[]]) => Function} TODO FIXME, find a way to use import('.') */
+module.exports = function callBindBasic(args) {
+	if (args.length < 1 || typeof args[0] !== 'function') {
+		throw new $TypeError('a function is required');
+	}
+	return $actualApply(bind, $call, args);
+};
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\call-bind-apply-helpers\test\index.js ---
+'use strict';
+
+var callBind = require('../');
+var hasStrictMode = require('has-strict-mode')();
+var forEach = require('for-each');
+var inspect = require('object-inspect');
+var v = require('es-value-fixtures');
+
+var test = require('tape');
+
+test('callBindBasic', function (t) {
+	forEach(v.nonFunctions, function (nonFunction) {
+		t['throws'](
+			// @ts-expect-error
+			function () { callBind([nonFunction]); },
+			TypeError,
+			inspect(nonFunction) + ' is not a function'
+		);
+	});
+
+	var sentinel = { sentinel: true };
+	/** @type {<T, A extends number, B extends number>(this: T, a: A, b: B) => [T | undefined, A, B]} */
+	var func = function (a, b) {
+		// eslint-disable-next-line no-invalid-this
+		return [!hasStrictMode && this === global ? undefined : this, a, b];
+	};
+	t.equal(func.length, 2, 'original function length is 2');
+
+	/** type {(thisArg: unknown, a: number, b: number) => [unknown, number, number]} */
+	var bound = callBind([func]);
+	/** type {((a: number, b: number) => [typeof sentinel, typeof a, typeof b])} */
+	var boundR = callBind([func, sentinel]);
+	/** type {((b: number) => [typeof sentinel, number, typeof b])} */
+	var boundArg = callBind([func, sentinel, /** @type {const} */ (1)]);
+
+	// @ts-expect-error
+	t.deepEqual(bound(), [undefined, undefined, undefined], 'bound func with no args');
+
+	// @ts-expect-error
+	t.deepEqual(func(), [undefined, undefined, undefined], 'unbound func with too few args');
+	// @ts-expect-error
+	t.deepEqual(bound(1, 2), [hasStrictMode ? 1 : Object(1), 2, undefined], 'bound func too few args');
+	// @ts-expect-error
+	t.deepEqual(boundR(), [sentinel, undefined, undefined], 'bound func with receiver, with too few args');
+	// @ts-expect-error
+	t.deepEqual(boundArg(), [sentinel, 1, undefined], 'bound func with receiver and arg, with too few args');
+
+	t.deepEqual(func(1, 2), [undefined, 1, 2], 'unbound func with right args');
+	t.deepEqual(bound(1, 2, 3), [hasStrictMode ? 1 : Object(1), 2, 3], 'bound func with right args');
+	t.deepEqual(boundR(1, 2), [sentinel, 1, 2], 'bound func with receiver, with right args');
+	t.deepEqual(boundArg(2), [sentinel, 1, 2], 'bound func with receiver and arg, with right arg');
+
+	// @ts-expect-error
+	t.deepEqual(func(1, 2, 3), [undefined, 1, 2], 'unbound func with too many args');
+	// @ts-expect-error
+	t.deepEqual(bound(1, 2, 3, 4), [hasStrictMode ? 1 : Object(1), 2, 3], 'bound func with too many args');
+	// @ts-expect-error
+	t.deepEqual(boundR(1, 2, 3), [sentinel, 1, 2], 'bound func with receiver, with too many args');
+	// @ts-expect-error
+	t.deepEqual(boundArg(2, 3), [sentinel, 1, 2], 'bound func with receiver and arg, with too many args');
+
+	t.end();
+});
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\call-bound\index.js ---
+'use strict';
+
+var GetIntrinsic = require('get-intrinsic');
+
+var callBindBasic = require('call-bind-apply-helpers');
+
+/** @type {(thisArg: string, searchString: string, position?: number) => number} */
+var $indexOf = callBindBasic([GetIntrinsic('%String.prototype.indexOf%')]);
+
+/** @type {import('.')} */
+module.exports = function callBoundIntrinsic(name, allowMissing) {
+	/* eslint no-extra-parens: 0 */
+
+	var intrinsic = /** @type {(this: unknown, ...args: unknown[]) => unknown} */ (GetIntrinsic(name, !!allowMissing));
+	if (typeof intrinsic === 'function' && $indexOf(name, '.prototype.') > -1) {
+		return callBindBasic(/** @type {const} */ ([intrinsic]));
+	}
+	return intrinsic;
+};
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\call-bound\test\index.js ---
+'use strict';
+
+var test = require('tape');
+
+var callBound = require('../');
+
+/** @template {true} T @template U @typedef {T extends U ? T : never} AssertType */
+
+test('callBound', function (t) {
+	// static primitive
+	t.equal(callBound('Array.length'), Array.length, 'Array.length yields itself');
+	t.equal(callBound('%Array.length%'), Array.length, '%Array.length% yields itself');
+
+	// static non-function object
+	t.equal(callBound('Array.prototype'), Array.prototype, 'Array.prototype yields itself');
+	t.equal(callBound('%Array.prototype%'), Array.prototype, '%Array.prototype% yields itself');
+	t.equal(callBound('Array.constructor'), Array.constructor, 'Array.constructor yields itself');
+	t.equal(callBound('%Array.constructor%'), Array.constructor, '%Array.constructor% yields itself');
+
+	// static function
+	t.equal(callBound('Date.parse'), Date.parse, 'Date.parse yields itself');
+	t.equal(callBound('%Date.parse%'), Date.parse, '%Date.parse% yields itself');
+
+	// prototype primitive
+	t.equal(callBound('Error.prototype.message'), Error.prototype.message, 'Error.prototype.message yields itself');
+	t.equal(callBound('%Error.prototype.message%'), Error.prototype.message, '%Error.prototype.message% yields itself');
+
+	var x = callBound('Object.prototype.toString');
+	var y = callBound('%Object.prototype.toString%');
+
+	// prototype function
+	t.notEqual(x, Object.prototype.toString, 'Object.prototype.toString does not yield itself');
+	t.notEqual(y, Object.prototype.toString, '%Object.prototype.toString% does not yield itself');
+	t.equal(x(true), Object.prototype.toString.call(true), 'call-bound Object.prototype.toString calls into the original');
+	t.equal(y(true), Object.prototype.toString.call(true), 'call-bound %Object.prototype.toString% calls into the original');
+
+	t['throws'](
+		// @ts-expect-error
+		function () { callBound('does not exist'); },
+		SyntaxError,
+		'nonexistent intrinsic throws'
+	);
+	t['throws'](
+		// @ts-expect-error
+		function () { callBound('does not exist', true); },
+		SyntaxError,
+		'allowMissing arg still throws for unknown intrinsic'
+	);
+
+	t.test('real but absent intrinsic', { skip: typeof WeakRef !== 'undefined' }, function (st) {
+		st['throws'](
+			function () { callBound('WeakRef'); },
+			TypeError,
+			'real but absent intrinsic throws'
+		);
+		st.equal(callBound('WeakRef', true), undefined, 'allowMissing arg avoids exception');
+		st.end();
+	});
+
+	t.end();
+});
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\content-disposition\index.js ---
+/*!
+ * content-disposition
+ * Copyright(c) 2014-2017 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+'use strict'
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = contentDisposition
+module.exports.parse = parse
+
+/**
+ * Module dependencies.
+ * @private
+ */
+
+var basename = require('path').basename
+
+/**
+ * RegExp to match non attr-char, *after* encodeURIComponent (i.e. not including "%")
+ * @private
+ */
+
+var ENCODE_URL_ATTR_CHAR_REGEXP = /[\x00-\x20"'()*,/:;<=>?@[\\\]{}\x7f]/g // eslint-disable-line no-control-regex
+
+/**
+ * RegExp to match percent encoding escape.
+ * @private
+ */
+
+var HEX_ESCAPE_REGEXP = /%[0-9A-Fa-f]{2}/
+var HEX_ESCAPE_REPLACE_REGEXP = /%([0-9A-Fa-f]{2})/g
+
+/**
+ * RegExp to match non-latin1 characters.
+ * @private
+ */
+
+var NON_LATIN1_REGEXP = /[^\x20-\x7e\xa0-\xff]/g
+
+/**
+ * RegExp to match quoted-pair in RFC 2616
+ *
+ * quoted-pair = "\" CHAR
+ * CHAR        = <any US-ASCII character (octets 0 - 127)>
+ * @private
+ */
+
+var QESC_REGEXP = /\\([\u0000-\u007f])/g // eslint-disable-line no-control-regex
+
+/**
+ * RegExp to match chars that must be quoted-pair in RFC 2616
+ * @private
+ */
+
+var QUOTE_REGEXP = /([\\"])/g
+
+/**
+ * RegExp for various RFC 2616 grammar
+ *
+ * parameter     = token "= [REDACTED]
+ * token         = [REDACTED]
+ * separators    = "(" | ")" | "<" | ">" | "@"
+ *               | "," | ";" | ":" | "\" | <">
+ *               | "/" | "[" | "]" | "?" | "="
+ *               | "{" | "}" | SP | HT
+ * quoted-string = ( <"> *(qdtext | quoted-pair ) <"> )
+ * qdtext        = <any TEXT except <">>
+ * quoted-pair   = "\" CHAR
+ * CHAR          = <any US-ASCII character (octets 0 - 127)>
+ * TEXT          = <any OCTET except CTLs, but including LWS>
+ * LWS           = [CRLF] 1*( SP | HT )
+ * CRLF          = CR LF
+ * CR            = <US-ASCII CR, carriage return (13)>
+ * LF            = <US-ASCII LF, linefeed (10)>
+ * SP            = <US-ASCII SP, space (32)>
+ * HT            = <US-ASCII HT, horizontal-tab (9)>
+ * CTL           = <any US-ASCII control character (octets 0 - 31) and DEL (127)>
+ * OCTET         = <any 8-bit sequence of data>
+ * @private
+ */
+
+var PARAM_REGEXP = /;[\x09\x20]*([!#$%&'*+.0-9A-Z^_`a-z|~-]+)[\x09\x20]*=[\x09\x20]*("(?:[\x20!\x23-\x5b\x5d-\x7e\x80-\xff]|\\[\x20-\x7e])*"|[!#$%&'*+.0-9A-Z^_`a-z|~-]+)[\x09\x20]*/g // eslint-disable-line no-control-regex
+var TEXT_REGEXP = /^[\x20-\x7e\x80-\xff]+$/
+var TOKEN_REGEXP = [REDACTED]
+
+/**
+ * RegExp for various RFC 5987 grammar
+ *
+ * ext-value     = charset  "'" [ language ] "'" value-chars
+ * charset       = "UTF-8" / "ISO-8859-1" / mime-charset
+ * mime-charset  = 1*mime-charsetc
+ * mime-charsetc = ALPHA / DIGIT
+ *               / "!" / "#" / "$" / "%" / "&"
+ *               / "+" / "-" / "^" / "_" / "`"
+ *               / "{" / "}" / "~"
+ * language      = ( 2*3ALPHA [ extlang ] )
+ *               / 4ALPHA
+ *               / 5*8ALPHA
+ * extlang       = *3( "-" 3ALPHA )
+ * value-chars   = *( pct-encoded / attr-char )
+ * pct-encoded   = "%" HEXDIG HEXDIG
+ * attr-char     = ALPHA / DIGIT
+ *               / "!" / "#" / "$" / "&" / "+" / "-" / "."
+ *               / "^" / "_" / "`" / "|" / "~"
+ * @private
+ */
+
+var EXT_VALUE_REGEXP = /^([A-Za-z0-9!#$%&+\-^_`{}~]+)'(?:[A-Za-z]{2,3}(?:-[A-Za-z]{3}){0,3}|[A-Za-z]{4,8}|)'((?:%[0-9A-Fa-f]{2}|[A-Za-z0-9!#$&+.^_`|~-])+)$/
+
+/**
+ * RegExp for various RFC 6266 grammar
+ *
+ * disposition-type = "inline" | "attachment" | disp-ext-type
+ * disp-ext-type    = token
+ * disposition-parm = filename-parm | disp-ext-parm
+ * filename-parm    = "filename" "=" value
+ *                  | "filename*" "=" ext-value
+ * disp-ext-parm    = token "= [REDACTED]
+ *                  | ext-token "= [REDACTED]
+ * ext-token        = [REDACTED]
+ * @private
+ */
+
+var DISPOSITION_TYPE_REGEXP = /^([!#$%&'*+.0-9A-Z^_`a-z|~-]+)[\x09\x20]*(?:$|;)/ // eslint-disable-line no-control-regex
+
+/**
+ * Create an attachment Content-Disposition header.
+ *
+ * @param {string} [filename]
+ * @param {object} [options]
+ * @param {string} [options.type=attachment]
+ * @param {string|boolean} [options.fallback=true]
+ * @return {string}
+ * @public
+ */
+
+function contentDisposition (filename, options) {
+  var opts = options || {}
+
+  // get type
+  var type = opts.type || 'attachment'
+
+  // get parameters
+  var params = createparams(filename, opts.fallback)
+
+  // format into string
+  return format(new ContentDisposition(type, params))
+}
+
+/**
+ * Create parameters object from filename and fallback.
+ *
+ * @param {string} [filename]
+ * @param {string|boolean} [fallback=true]
+ * @return {object}
+ * @private
+ */
+
+function createparams (filename, fallback) {
+  if (filename === undefined) {
+    return
+  }
+
+  var params = {}
+
+  if (typeof filename !== 'string') {
+    throw new TypeError('filename must be a string')
+  }
+
+  // fallback defaults to true
+  if (fallback === undefined) {
+    fallback = true
+  }
+
+  if (typeof fallback !== 'string' && typeof fallback !== 'boolean') {
+    throw new TypeError('fallback must be a string or boolean')
+  }
+
+  if (typeof fallback === 'string' && NON_LATIN1_REGEXP.test(fallback)) {
+    throw new TypeError('fallback must be ISO-8859-1 string')
+  }
+
+  // restrict to file base name
+  var name = basename(filename)
+
+  // determine if name is suitable for quoted string
+  var isQuotedString = TEXT_REGEXP.test(name)
+
+  // generate fallback name
+  var fallbackName = typeof fallback !== 'string'
+    ? fallback && getlatin1(name)
+    : basename(fallback)
+  var hasFallback = typeof fallbackName === 'string' && fallbackName !== name
+
+  // set extended filename parameter
+  if (hasFallback || !isQuotedString || HEX_ESCAPE_REGEXP.test(name)) {
+    params['filename*'] = name
+  }
+
+  // set filename parameter
+  if (isQuotedString || hasFallback) {
+    params.filename = hasFallback
+      ? fallbackName
+      : name
+  }
+
+  return params
+}
+
+/**
+ * Format object to Content-Disposition header.
+ *
+ * @param {object} obj
+ * @param {string} obj.type
+ * @param {object} [obj.parameters]
+ * @return {string}
+ * @private
+ */
+
+function format (obj) {
+  var parameters = obj.parameters
+  var type = obj.type
+
+  if (!type || typeof type !== 'string' || !TOKEN_REGEXP.test(type)) {
+    throw new TypeError('invalid type')
+  }
+
+  // start with normalized type
+  var string = String(type).toLowerCase()
+
+  // append parameters
+  if (parameters && typeof parameters === 'object') {
+    var param
+    var params = Object.keys(parameters).sort()
+
+    for (var i = 0; i < params.length; i++) {
+      param = params[i]
+
+      var val = param.slice(-1) === '*'
+        ? ustring(parameters[param])
+        : qstring(parameters[param])
+
+      string += '; ' + param + '=' + val
+    }
+  }
+
+  return string
+}
+
+/**
+ * Decode a RFC 5987 field value (gracefully).
+ *
+ * @param {string} str
+ * @return {string}
+ * @private
+ */
+
+function decodefield (str) {
+  var match = EXT_VALUE_REGEXP.exec(str)
+
+  if (!match) {
+    throw new TypeError('invalid extended field value')
+  }
+
+  var charset = match[1].toLowerCase()
+  var encoded = match[2]
+  var value
+
+  // to binary string
+  var binary = encoded.replace(HEX_ESCAPE_REPLACE_REGEXP, pdecode)
+
+  switch (charset) {
+    case 'iso-8859-1':
+      value = getlatin1(binary)
+      break
+    case 'utf-8':
+    case 'utf8':
+      value = Buffer.from(binary, 'binary').toString('utf8')
+      break
+    default:
+      throw new TypeError('unsupported charset in extended field')
+  }
+
+  return value
+}
+
+/**
+ * Get ISO-8859-1 version of string.
+ *
+ * @param {string} val
+ * @return {string}
+ * @private
+ */
+
+function getlatin1 (val) {
+  // simple Unicode -> ISO-8859-1 transformation
+  return String(val).replace(NON_LATIN1_REGEXP, '?')
+}
+
+/**
+ * Parse Content-Disposition header string.
+ *
+ * @param {string} string
+ * @return {object}
+ * @public
+ */
+
+function parse (string) {
+  if (!string || typeof string !== 'string') {
+    throw new TypeError('argument string is required')
+  }
+
+  var match = DISPOSITION_TYPE_REGEXP.exec(string)
+
+  if (!match) {
+    throw new TypeError('invalid type format')
+  }
+
+  // normalize type
+  var index = match[0].length
+  var type = match[1].toLowerCase()
+
+  var key
+  var names = []
+  var params = {}
+  var value
+
+  // calculate index to start at
+  index = PARAM_REGEXP.lastIndex = match[0].slice(-1) === ';'
+    ? index - 1
+    : index
+
+  // match parameters
+  while ((match = PARAM_REGEXP.exec(string))) {
+    if (match.index !== index) {
+      throw new TypeError('invalid parameter format')
+    }
+
+    index += match[0].length
+    key = match[1].toLowerCase()
+    value = match[2]
+
+    if (names.indexOf(key) !== -1) {
+      throw new TypeError('invalid duplicate parameter')
+    }
+
+    names.push(key)
+
+    if (key.indexOf('*') + 1 === key.length) {
+      // decode extended value
+      key = key.slice(0, -1)
+      value = decodefield(value)
+
+      // overwrite existing value
+      params[key] = value
+      continue
+    }
+
+    if (typeof params[key] === 'string') {
+      continue
+    }
+
+    if (value[0] === '"') {
+      // remove quotes and escapes
+      value = value
+        .slice(1, -1)
+        .replace(QESC_REGEXP, '$1')
+    }
+
+    params[key] = value
+  }
+
+  if (index !== -1 && index !== string.length) {
+    throw new TypeError('invalid parameter format')
+  }
+
+  return new ContentDisposition(type, params)
+}
+
+/**
+ * Percent decode a single character.
+ *
+ * @param {string} str
+ * @param {string} hex
+ * @return {string}
+ * @private
+ */
+
+function pdecode (str, hex) {
+  return String.fromCharCode(parseInt(hex, 16))
+}
+
+/**
+ * Percent encode a single character.
+ *
+ * @param {string} char
+ * @return {string}
+ * @private
+ */
+
+function pencode (char) {
+  return '%' + String(char)
+    .charCodeAt(0)
+    .toString(16)
+    .toUpperCase()
+}
+
+/**
+ * Quote a string for HTTP.
+ *
+ * @param {string} val
+ * @return {string}
+ * @private
+ */
+
+function qstring (val) {
+  var str = String(val)
+
+  return '"' + str.replace(QUOTE_REGEXP, '\\$1') + '"'
+}
+
+/**
+ * Encode a Unicode string for HTTP (RFC 5987).
+ *
+ * @param {string} val
+ * @return {string}
+ * @private
+ */
+
+function ustring (val) {
+  var str = String(val)
+
+  // percent encode as UTF-8
+  var encoded = encodeURIComponent(str)
+    .replace(ENCODE_URL_ATTR_CHAR_REGEXP, pencode)
+
+  return 'UTF-8\'\'' + encoded
+}
+
+/**
+ * Class for parsed Content-Disposition header for v8 optimization
+ *
+ * @public
+ * @param {string} type
+ * @param {object} parameters
+ * @constructor
+ */
+
+function ContentDisposition (type, parameters) {
+  this.type = type
+  this.parameters = parameters
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\content-type\index.js ---
+/*!
+ * content-type
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+'use strict'
+
+/**
+ * RegExp to match *( ";" parameter ) in RFC 7231 sec 3.1.1.1
+ *
+ * parameter     = token "= [REDACTED]
+ * token         = [REDACTED]
+ * tchar         = "!" / "#" / "$" / "%" / "&" / "'" / "*"
+ *               / "+" / "-" / "." / "^" / "_" / "`" / "|" / "~"
+ *               / DIGIT / ALPHA
+ *               ; any VCHAR, except delimiters
+ * quoted-string = DQUOTE *( qdtext / quoted-pair ) DQUOTE
+ * qdtext        = HTAB / SP / %x21 / %x23-5B / %x5D-7E / obs-text
+ * obs-text      = %x80-FF
+ * quoted-pair   = "\" ( HTAB / SP / VCHAR / obs-text )
+ */
+var PARAM_REGEXP = /; *([!#$%&'*+.^_`|~0-9A-Za-z-]+) *= *("(?:[\u000b\u0020\u0021\u0023-\u005b\u005d-\u007e\u0080-\u00ff]|\\[\u000b\u0020-\u00ff])*"|[!#$%&'*+.^_`|~0-9A-Za-z-]+) */g // eslint-disable-line no-control-regex
+var TEXT_REGEXP = /^[\u000b\u0020-\u007e\u0080-\u00ff]+$/ // eslint-disable-line no-control-regex
+var TOKEN_REGEXP = [REDACTED]
+
+/**
+ * RegExp to match quoted-pair in RFC 7230 sec 3.2.6
+ *
+ * quoted-pair = "\" ( HTAB / SP / VCHAR / obs-text )
+ * obs-text    = %x80-FF
+ */
+var QESC_REGEXP = /\\([\u000b\u0020-\u00ff])/g // eslint-disable-line no-control-regex
+
+/**
+ * RegExp to match chars that must be quoted-pair in RFC 7230 sec 3.2.6
+ */
+var QUOTE_REGEXP = /([\\"])/g
+
+/**
+ * RegExp to match type in RFC 7231 sec 3.1.1.1
+ *
+ * media-type = type "/" subtype
+ * type       = token
+ * subtype    = token
+ */
+var TYPE_REGEXP = /^[!#$%&'*+.^_`|~0-9A-Za-z-]+\/[!#$%&'*+.^_`|~0-9A-Za-z-]+$/
+
+/**
+ * Module exports.
+ * @public
+ */
+
+exports.format = format
+exports.parse = parse
+
+/**
+ * Format object to media type.
+ *
+ * @param {object} obj
+ * @return {string}
+ * @public
+ */
+
+function format (obj) {
+  if (!obj || typeof obj !== 'object') {
+    throw new TypeError('argument obj is required')
+  }
+
+  var parameters = obj.parameters
+  var type = obj.type
+
+  if (!type || !TYPE_REGEXP.test(type)) {
+    throw new TypeError('invalid type')
+  }
+
+  var string = type
+
+  // append parameters
+  if (parameters && typeof parameters === 'object') {
+    var param
+    var params = Object.keys(parameters).sort()
+
+    for (var i = 0; i < params.length; i++) {
+      param = params[i]
+
+      if (!TOKEN_REGEXP.test(param)) {
+        throw new TypeError('invalid parameter name')
+      }
+
+      string += '; ' + param + '=' + qstring(parameters[param])
+    }
+  }
+
+  return string
+}
+
+/**
+ * Parse media type to object.
+ *
+ * @param {string|object} string
+ * @return {Object}
+ * @public
+ */
+
+function parse (string) {
+  if (!string) {
+    throw new TypeError('argument string is required')
+  }
+
+  // support req/res-like objects as argument
+  var header = typeof string === 'object'
+    ? getcontenttype(string)
+    : string
+
+  if (typeof header !== 'string') {
+    throw new TypeError('argument string is required to be a string')
+  }
+
+  var index = header.indexOf(';')
+  var type = index !== -1
+    ? header.slice(0, index).trim()
+    : header.trim()
+
+  if (!TYPE_REGEXP.test(type)) {
+    throw new TypeError('invalid media type')
+  }
+
+  var obj = new ContentType(type.toLowerCase())
+
+  // parse parameters
+  if (index !== -1) {
+    var key
+    var match
+    var value
+
+    PARAM_REGEXP.lastIndex = index
+
+    while ((match = PARAM_REGEXP.exec(header))) {
+      if (match.index !== index) {
+        throw new TypeError('invalid parameter format')
+      }
+
+      index += match[0].length
+      key = match[1].toLowerCase()
+      value = match[2]
+
+      if (value.charCodeAt(0) === 0x22 /* " */) {
+        // remove quotes
+        value = value.slice(1, -1)
+
+        // remove escapes
+        if (value.indexOf('\\') !== -1) {
+          value = value.replace(QESC_REGEXP, '$1')
+        }
+      }
+
+      obj.parameters[key] = value
+    }
+
+    if (index !== header.length) {
+      throw new TypeError('invalid parameter format')
+    }
+  }
+
+  return obj
+}
+
+/**
+ * Get content-type from req/res objects.
+ *
+ * @param {object}
+ * @return {Object}
+ * @private
+ */
+
+function getcontenttype (obj) {
+  var header
+
+  if (typeof obj.getHeader === 'function') {
+    // res-like
+    header = obj.getHeader('content-type')
+  } else if (typeof obj.headers === 'object') {
+    // req-like
+    header = obj.headers && obj.headers['content-type']
+  }
+
+  if (typeof header !== 'string') {
+    throw new TypeError('content-type header is missing from object')
+  }
+
+  return header
+}
+
+/**
+ * Quote a string if necessary.
+ *
+ * @param {string} val
+ * @return {string}
+ * @private
+ */
+
+function qstring (val) {
+  var str = String(val)
+
+  // no need to quote tokens
+  if (TOKEN_REGEXP.test(str)) {
+    return str
+  }
+
+  if (str.length > 0 && !TEXT_REGEXP.test(str)) {
+    throw new TypeError('invalid parameter value')
+  }
+
+  return '"' + str.replace(QUOTE_REGEXP, '\\$1') + '"'
+}
+
+/**
+ * Class to represent a content type.
+ * @private
+ */
+function ContentType (type) {
+  this.parameters = Object.create(null)
+  this.type = type
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\cookie\index.js ---
+/*!
+ * cookie
+ * Copyright(c) 2012-2014 Roman Shtylman
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+'use strict';
+
+/**
+ * Module exports.
+ * @public
+ */
+
+exports.parse = parse;
+exports.serialize = serialize;
+
+/**
+ * Module variables.
+ * @private
+ */
+
+var __toString = Object.prototype.toString
+var __hasOwnProperty = Object.prototype.hasOwnProperty
+
+/**
+ * RegExp to match cookie-name in RFC 6265 sec 4.1.1
+ * This refers out to the obsoleted definition of token in RFC 2616 sec 2.2
+ * which has been replaced by the token definition in RFC 7230 appendix B.
+ *
+ * cookie-name       = token
+ * token             = [REDACTED]
+ * tchar             = "!" / "#" / "$" / "%" / "&" / "'" /
+ *                     "*" / "+" / "-" / "." / "^" / "_" /
+ *                     "`" / "|" / "~" / DIGIT / ALPHA
+ */
+
+var cookieNameRegExp = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
+
+/**
+ * RegExp to match cookie-value in RFC 6265 sec 4.1.1
+ *
+ * cookie-value      = *cookie-octet / ( DQUOTE *cookie-octet DQUOTE )
+ * cookie-octet      = %x21 / %x23-2B / %x2D-3A / %x3C-5B / %x5D-7E
+ *                     ; US-ASCII characters excluding CTLs,
+ *                     ; whitespace DQUOTE, comma, semicolon,
+ *                     ; and backslash
+ */
+
+var cookieValueRegExp = /^("?)[\u0021\u0023-\u002B\u002D-\u003A\u003C-\u005B\u005D-\u007E]*\1$/;
+
+/**
+ * RegExp to match domain-value in RFC 6265 sec 4.1.1
+ *
+ * domain-value      = <subdomain>
+ *                     ; defined in [RFC1034], Section 3.5, as
+ *                     ; enhanced by [RFC1123], Section 2.1
+ * <subdomain>       = <label> | <subdomain> "." <label>
+ * <label>           = <let-dig> [ [ <ldh-str> ] <let-dig> ]
+ *                     Labels must be 63 characters or less.
+ *                     'let-dig' not 'letter' in the first char, per RFC1123
+ * <ldh-str>         = <let-dig-hyp> | <let-dig-hyp> <ldh-str>
+ * <let-dig-hyp>     = <let-dig> | "-"
+ * <let-dig>         = <letter> | <digit>
+ * <letter>          = any one of the 52 alphabetic characters A through Z in
+ *                     upper case and a through z in lower case
+ * <digit>           = any one of the ten digits 0 through 9
+ *
+ * Keep support for leading dot: https://github.com/jshttp/cookie/issues/173
+ *
+ * > (Note that a leading %x2E ("."), if present, is ignored even though that
+ * character is not permitted, but a trailing %x2E ("."), if present, will
+ * cause the user agent to ignore the attribute.)
+ */
+
+var domainValueRegExp = /^([.]?[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i;
+
+/**
+ * RegExp to match path-value in RFC 6265 sec 4.1.1
+ *
+ * path-value        = <any CHAR except CTLs or ";">
+ * CHAR              = %x01-7F
+ *                     ; defined in RFC 5234 appendix B.1
+ */
+
+var pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
+
+/**
+ * Parse a cookie header.
+ *
+ * Parse the given cookie header string into an object
+ * The object has the various cookies as keys(names) => values
+ *
+ * @param {string} str
+ * @param {object} [opt]
+ * @return {object}
+ * @public
+ */
+
+function parse(str, opt) {
+  if (typeof str !== 'string') {
+    throw new TypeError('argument str must be a string');
+  }
+
+  var obj = {};
+  var len = str.length;
+  // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
+  if (len < 2) return obj;
+
+  var dec = (opt && opt.decode) || decode;
+  var index = 0;
+  var eqIdx = 0;
+  var endIdx = 0;
+
+  do {
+    eqIdx = str.indexOf('=', index);
+    if (eqIdx === -1) break; // No more cookie pairs.
+
+    endIdx = str.indexOf(';', index);
+
+    if (endIdx === -1) {
+      endIdx = len;
+    } else if (eqIdx > endIdx) {
+      // backtrack on prior semicolon
+      index = str.lastIndexOf(';', eqIdx - 1) + 1;
+      continue;
+    }
+
+    var keyStartIdx = startIndex(str, index, eqIdx);
+    var keyEndIdx = endIndex(str, eqIdx, keyStartIdx);
+    var key = str.slice(keyStartIdx, keyEndIdx);
+
+    // only assign once
+    if (!__hasOwnProperty.call(obj, key)) {
+      var valStartIdx = startIndex(str, eqIdx + 1, endIdx);
+      var valEndIdx = endIndex(str, endIdx, valStartIdx);
+
+      if (str.charCodeAt(valStartIdx) === 0x22 /* " */ && str.charCodeAt(valEndIdx - 1) === 0x22 /* " */) {
+        valStartIdx++;
+        valEndIdx--;
+      }
+
+      var val = str.slice(valStartIdx, valEndIdx);
+      obj[key] = tryDecode(val, dec);
+    }
+
+    index = endIdx + 1
+  } while (index < len);
+
+  return obj;
+}
+
+function startIndex(str, index, max) {
+  do {
+    var code = str.charCodeAt(index);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index;
+  } while (++index < max);
+  return max;
+}
+
+function endIndex(str, index, min) {
+  while (index > min) {
+    var code = str.charCodeAt(--index);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index + 1;
+  }
+  return min;
+}
+
+/**
+ * Serialize data into a cookie header.
+ *
+ * Serialize a name value pair into a cookie string suitable for
+ * http headers. An optional options object specifies cookie parameters.
+ *
+ * serialize('foo', 'bar', { httpOnly: true })
+ *   => "foo=bar; httpOnly"
+ *
+ * @param {string} name
+ * @param {string} val
+ * @param {object} [opt]
+ * @return {string}
+ * @public
+ */
+
+function serialize(name, val, opt) {
+  var enc = (opt && opt.encode) || encodeURIComponent;
+
+  if (typeof enc !== 'function') {
+    throw new TypeError('option encode is invalid');
+  }
+
+  if (!cookieNameRegExp.test(name)) {
+    throw new TypeError('argument name is invalid');
+  }
+
+  var value = enc(val);
+
+  if (!cookieValueRegExp.test(value)) {
+    throw new TypeError('argument val is invalid');
+  }
+
+  var str = name + '=' + value;
+  if (!opt) return str;
+
+  if (null != opt.maxAge) {
+    var maxAge = Math.floor(opt.maxAge);
+
+    if (!isFinite(maxAge)) {
+      throw new TypeError('option maxAge is invalid')
+    }
+
+    str += '; Max-Age=' + maxAge;
+  }
+
+  if (opt.domain) {
+    if (!domainValueRegExp.test(opt.domain)) {
+      throw new TypeError('option domain is invalid');
+    }
+
+    str += '; Domain=' + opt.domain;
+  }
+
+  if (opt.path) {
+    if (!pathValueRegExp.test(opt.path)) {
+      throw new TypeError('option path is invalid');
+    }
+
+    str += '; Path=' + opt.path;
+  }
+
+  if (opt.expires) {
+    var expires = opt.expires
+
+    if (!isDate(expires) || isNaN(expires.valueOf())) {
+      throw new TypeError('option expires is invalid');
+    }
+
+    str += '; Expires=' + expires.toUTCString()
+  }
+
+  if (opt.httpOnly) {
+    str += '; HttpOnly';
+  }
+
+  if (opt.secure) {
+    str += '; Secure';
+  }
+
+  if (opt.partitioned) {
+    str += '; Partitioned'
+  }
+
+  if (opt.priority) {
+    var priority = typeof opt.priority === 'string'
+      ? opt.priority.toLowerCase() : opt.priority;
+
+    switch (priority) {
+      case 'low':
+        str += '; Priority=Low'
+        break
+      case 'medium':
+        str += '; Priority=Medium'
+        break
+      case 'high':
+        str += '; Priority=High'
+        break
+      default:
+        throw new TypeError('option priority is invalid')
+    }
+  }
+
+  if (opt.sameSite) {
+    var sameSite = typeof opt.sameSite === 'string'
+      ? opt.sameSite.toLowerCase() : opt.sameSite;
+
+    switch (sameSite) {
+      case true:
+        str += '; SameSite=Strict';
+        break;
+      case 'lax':
+        str += '; SameSite=Lax';
+        break;
+      case 'strict':
+        str += '; SameSite=Strict';
+        break;
+      case 'none':
+        str += '; SameSite=None';
+        break;
+      default:
+        throw new TypeError('option sameSite is invalid');
+    }
+  }
+
+  return str;
+}
+
+/**
+ * URL-decode string value. Optimized to skip native call when no %.
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+
+function decode (str) {
+  return str.indexOf('%') !== -1
+    ? decodeURIComponent(str)
+    : str
+}
+
+/**
+ * Determine if value is a Date.
+ *
+ * @param {*} val
+ * @private
+ */
+
+function isDate (val) {
+  return __toString.call(val) === '[object Date]';
+}
+
+/**
+ * Try decoding a string using a decoding function.
+ *
+ * @param {string} str
+ * @param {function} decode
+ * @private
+ */
+
+function tryDecode(str, decode) {
+  try {
+    return decode(str);
+  } catch (e) {
+    return str;
+  }
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\cookie-signature\index.js ---
+/**
+ * Module dependencies.
+ */
+
+var crypto = require('crypto');
+
+/**
+ * Sign the given `val` with `secret`.
+ *
+ * @param {String} val
+ * @param {String|NodeJS.ArrayBufferView|crypto.KeyObject} secret
+ * @return {String}
+ * @api private
+ */
+
+exports.sign = function(val, secret){
+  if ('string' != typeof val) throw new TypeError("Cookie value must be provided as a string.");
+  if (null == secret) throw new TypeError("Secret key must be provided.");
+  return val + '.' + crypto
+    .createHmac('sha256', secret)
+    .update(val)
+    .digest('base64')
+    .replace(/\=+$/, '');
+};
+
+/**
+ * Unsign and decode the given `input` with `secret`,
+ * returning `false` if the signature is invalid.
+ *
+ * @param {String} input
+ * @param {String|NodeJS.ArrayBufferView|crypto.KeyObject} secret
+ * @return {String|Boolean}
+ * @api private
+ */
+
+exports.unsign = function(input, secret){
+  if ('string' != typeof input) throw new TypeError("Signed cookie string must be provided.");
+  if (null == secret) throw new TypeError("Secret key must be provided.");
+  var tentativeValue = input.slice(0, input.lastIndexOf('.')),
+      expectedInput = exports.sign(tentativeValue, secret),
+      expectedBuffer = Buffer.from(expectedInput),
+      inputBuffer = Buffer.from(input);
+  return (
+    expectedBuffer.length === inputBuffer.length &&
+    crypto.timingSafeEqual(expectedBuffer, inputBuffer)
+   ) ? tentativeValue : false;
+};
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\cors\lib\index.js ---
+(function () {
+
+  'use strict';
+
+  var assign = require('object-assign');
+  var vary = require('vary');
+
+  var defaults = {
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+  };
+
+  function isString(s) {
+    return typeof s === 'string' || s instanceof String;
+  }
+
+  function isOriginAllowed(origin, allowedOrigin) {
+    if (Array.isArray(allowedOrigin)) {
+      for (var i = 0; i < allowedOrigin.length; ++i) {
+        if (isOriginAllowed(origin, allowedOrigin[i])) {
+          return true;
+        }
+      }
+      return false;
+    } else if (isString(allowedOrigin)) {
+      return origin === allowedOrigin;
+    } else if (allowedOrigin instanceof RegExp) {
+      return allowedOrigin.test(origin);
+    } else {
+      return !!allowedOrigin;
+    }
+  }
+
+  function configureOrigin(options, req) {
+    var requestOrigin = req.headers.origin,
+      headers = [],
+      isAllowed;
+
+    if (!options.origin || options.origin === '*') {
+      // allow any origin
+      headers.push([{
+        key: 'Access-Control-Allow-Origin',
+        value: '*'
+      }]);
+    } else if (isString(options.origin)) {
+      // fixed origin
+      headers.push([{
+        key: 'Access-Control-Allow-Origin',
+        value: options.origin
+      }]);
+      headers.push([{
+        key: 'Vary',
+        value: 'Origin'
+      }]);
+    } else {
+      isAllowed = isOriginAllowed(requestOrigin, options.origin);
+      // reflect origin
+      headers.push([{
+        key: 'Access-Control-Allow-Origin',
+        value: isAllowed ? requestOrigin : false
+      }]);
+      headers.push([{
+        key: 'Vary',
+        value: 'Origin'
+      }]);
+    }
+
+    return headers;
+  }
+
+  function configureMethods(options) {
+    var methods = options.methods;
+    if (methods.join) {
+      methods = options.methods.join(','); // .methods is an array, so turn it into a string
+    }
+    return {
+      key: 'Access-Control-Allow-Methods',
+      value: methods
+    };
+  }
+
+  function configureCredentials(options) {
+    if (options.credentials === true) {
+      return {
+        key: 'Access-Control-Allow-Credentials',
+        value: 'true'
+      };
+    }
+    return null;
+  }
+
+  function configureAllowedHeaders(options, req) {
+    var allowedHeaders = options.allowedHeaders || options.headers;
+    var headers = [];
+
+    if (!allowedHeaders) {
+      allowedHeaders = req.headers['access-control-request-headers']; // .headers wasn't specified, so reflect the request headers
+      headers.push([{
+        key: 'Vary',
+        value: 'Access-Control-Request-Headers'
+      }]);
+    } else if (allowedHeaders.join) {
+      allowedHeaders = allowedHeaders.join(','); // .headers is an array, so turn it into a string
+    }
+    if (allowedHeaders && allowedHeaders.length) {
+      headers.push([{
+        key: 'Access-Control-Allow-Headers',
+        value: allowedHeaders
+      }]);
+    }
+
+    return headers;
+  }
+
+  function configureExposedHeaders(options) {
+    var headers = options.exposedHeaders;
+    if (!headers) {
+      return null;
+    } else if (headers.join) {
+      headers = headers.join(','); // .headers is an array, so turn it into a string
+    }
+    if (headers && headers.length) {
+      return {
+        key: 'Access-Control-Expose-Headers',
+        value: headers
+      };
+    }
+    return null;
+  }
+
+  function configureMaxAge(options) {
+    var maxAge = (typeof options.maxAge === 'number' || options.maxAge) && options.maxAge.toString()
+    if (maxAge && maxAge.length) {
+      return {
+        key: 'Access-Control-Max-Age',
+        value: maxAge
+      };
+    }
+    return null;
+  }
+
+  function applyHeaders(headers, res) {
+    for (var i = 0, n = headers.length; i < n; i++) {
+      var header = headers[i];
+      if (header) {
+        if (Array.isArray(header)) {
+          applyHeaders(header, res);
+        } else if (header.key === 'Vary' && header.value) {
+          vary(res, header.value);
+        } else if (header.value) {
+          res.setHeader(header.key, header.value);
+        }
+      }
+    }
+  }
+
+  function cors(options, req, res, next) {
+    var headers = [],
+      method = req.method && req.method.toUpperCase && req.method.toUpperCase();
+
+    if (method === 'OPTIONS') {
+      // preflight
+      headers.push(configureOrigin(options, req));
+      headers.push(configureCredentials(options))
+      headers.push(configureMethods(options))
+      headers.push(configureAllowedHeaders(options, req));
+      headers.push(configureMaxAge(options))
+      headers.push(configureExposedHeaders(options))
+      applyHeaders(headers, res);
+
+      if (options.preflightContinue) {
+        next();
+      } else {
+        // Safari (and potentially other browsers) need content-length 0,
+        //   for 204 or they just hang waiting for a body
+        res.statusCode = options.optionsSuccessStatus;
+        res.setHeader('Content-Length', '0');
+        res.end();
+      }
+    } else {
+      // actual response
+      headers.push(configureOrigin(options, req));
+      headers.push(configureCredentials(options))
+      headers.push(configureExposedHeaders(options))
+      applyHeaders(headers, res);
+      next();
+    }
+  }
+
+  function middlewareWrapper(o) {
+    // if options are static (either via defaults or custom options passed in), wrap in a function
+    var optionsCallback = null;
+    if (typeof o === 'function') {
+      optionsCallback = o;
+    } else {
+      optionsCallback = function (req, cb) {
+        cb(null, o);
+      };
+    }
+
+    return function corsMiddleware(req, res, next) {
+      optionsCallback(req, function (err, options) {
+        if (err) {
+          next(err);
+        } else {
+          var corsOptions = assign({}, defaults, options);
+          var originCallback = null;
+          if (corsOptions.origin && typeof corsOptions.origin === 'function') {
+            originCallback = corsOptions.origin;
+          } else if (corsOptions.origin) {
+            originCallback = function (origin, cb) {
+              cb(null, corsOptions.origin);
+            };
+          }
+
+          if (originCallback) {
+            originCallback(req.headers.origin, function (err2, origin) {
+              if (err2 || !origin) {
+                next(err2);
+              } else {
+                corsOptions.origin = origin;
+                cors(corsOptions, req, res, next);
+              }
+            });
+          } else {
+            next();
+          }
+        }
+      });
+    };
+  }
+
+  // can pass either an options hash, an options delegate, or nothing
+  module.exports = middlewareWrapper;
+
+}());
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\debug\src\index.js ---
+/**
+ * Detect Electron renderer / nwjs process, which is node, but we should
+ * treat as a browser.
+ */
+
+if (typeof process === 'undefined' || process.type === 'renderer' || process.browser === true || process.__nwjs) {
+	module.exports = require('./browser.js');
+} else {
+	module.exports = require('./node.js');
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\depd\index.js ---
+/*!
+ * depd
+ * Copyright(c) 2014-2018 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
+
+var relative = require('path').relative
+
+/**
+ * Module exports.
+ */
+
+module.exports = depd
+
+/**
+ * Get the path to base files on.
+ */
+
+var basePath = process.cwd()
+
+/**
+ * Determine if namespace is contained in the string.
+ */
+
+function containsNamespace (str, namespace) {
+  var vals = str.split(/[ ,]+/)
+  var ns = String(namespace).toLowerCase()
+
+  for (var i = 0; i < vals.length; i++) {
+    var val = vals[i]
+
+    // namespace contained
+    if (val && (val === '*' || val.toLowerCase() === ns)) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * Convert a data descriptor to accessor descriptor.
+ */
+
+function convertDataDescriptorToAccessor (obj, prop, message) {
+  var descriptor = Object.getOwnPropertyDescriptor(obj, prop)
+  var value = descriptor.value
+
+  descriptor.get = function getter () { return value }
+
+  if (descriptor.writable) {
+    descriptor.set = function setter (val) { return (value = val) }
+  }
+
+  delete descriptor.value
+  delete descriptor.writable
+
+  Object.defineProperty(obj, prop, descriptor)
+
+  return descriptor
+}
+
+/**
+ * Create arguments string to keep arity.
+ */
+
+function createArgumentsString (arity) {
+  var str = ''
+
+  for (var i = 0; i < arity; i++) {
+    str += ', arg' + i
+  }
+
+  return str.substr(2)
+}
+
+/**
+ * Create stack string from stack.
+ */
+
+function createStackString (stack) {
+  var str = this.name + ': ' + this.namespace
+
+  if (this.message) {
+    str += ' deprecated ' + this.message
+  }
+
+  for (var i = 0; i < stack.length; i++) {
+    str += '\n    at ' + stack[i].toString()
+  }
+
+  return str
+}
+
+/**
+ * Create deprecate for namespace in caller.
+ */
+
+function depd (namespace) {
+  if (!namespace) {
+    throw new TypeError('argument namespace is required')
+  }
+
+  var stack = getStack()
+  var site = callSiteLocation(stack[1])
+  var file = site[0]
+
+  function deprecate (message) {
+    // call to self as log
+    log.call(deprecate, message)
+  }
+
+  deprecate._file = file
+  deprecate._ignored = isignored(namespace)
+  deprecate._namespace = namespace
+  deprecate._traced = istraced(namespace)
+  deprecate._warned = Object.create(null)
+
+  deprecate.function = wrapfunction
+  deprecate.property = wrapproperty
+
+  return deprecate
+}
+
+/**
+ * Determine if event emitter has listeners of a given type.
+ *
+ * The way to do this check is done three different ways in Node.js >= 0.8
+ * so this consolidates them into a minimal set using instance methods.
+ *
+ * @param {EventEmitter} emitter
+ * @param {string} type
+ * @returns {boolean}
+ * @private
+ */
+
+function eehaslisteners (emitter, type) {
+  var count = typeof emitter.listenerCount !== 'function'
+    ? emitter.listeners(type).length
+    : emitter.listenerCount(type)
+
+  return count > 0
+}
+
+/**
+ * Determine if namespace is ignored.
+ */
+
+function isignored (namespace) {
+  if (process.noDeprecation) {
+    // --no-deprecation support
+    return true
+  }
+
+  var str = process.env.NO_DEPRECATION || ''
+
+  // namespace ignored
+  return containsNamespace(str, namespace)
+}
+
+/**
+ * Determine if namespace is traced.
+ */
+
+function istraced (namespace) {
+  if (process.traceDeprecation) {
+    // --trace-deprecation support
+    return true
+  }
+
+  var str = process.env.TRACE_DEPRECATION || ''
+
+  // namespace traced
+  return containsNamespace(str, namespace)
+}
+
+/**
+ * Display deprecation message.
+ */
+
+function log (message, site) {
+  var haslisteners = eehaslisteners(process, 'deprecation')
+
+  // abort early if no destination
+  if (!haslisteners && this._ignored) {
+    return
+  }
+
+  var caller
+  var callFile
+  var callSite
+  var depSite
+  var i = 0
+  var seen = false
+  var stack = getStack()
+  var file = this._file
+
+  if (site) {
+    // provided site
+    depSite = site
+    callSite = callSiteLocation(stack[1])
+    callSite.name = depSite.name
+    file = callSite[0]
+  } else {
+    // get call site
+    i = 2
+    depSite = callSiteLocation(stack[i])
+    callSite = depSite
+  }
+
+  // get caller of deprecated thing in relation to file
+  for (; i < stack.length; i++) {
+    caller = callSiteLocation(stack[i])
+    callFile = caller[0]
+
+    if (callFile === file) {
+      seen = true
+    } else if (callFile === this._file) {
+      file = this._file
+    } else if (seen) {
+      break
+    }
+  }
+
+  var key = caller
+    ? depSite.join(':') + '__' + caller.join(':')
+    : undefined
+
+  if (key !== undefined && key in this._warned) {
+    // already warned
+    return
+  }
+
+  this._warned[key] = true
+
+  // generate automatic message from call site
+  var msg = message
+  if (!msg) {
+    msg = callSite === depSite || !callSite.name
+      ? defaultMessage(depSite)
+      : defaultMessage(callSite)
+  }
+
+  // emit deprecation if listeners exist
+  if (haslisteners) {
+    var err = DeprecationError(this._namespace, msg, stack.slice(i))
+    process.emit('deprecation', err)
+    return
+  }
+
+  // format and write message
+  var format = process.stderr.isTTY
+    ? formatColor
+    : formatPlain
+  var output = format.call(this, msg, caller, stack.slice(i))
+  process.stderr.write(output + '\n', 'utf8')
+}
+
+/**
+ * Get call site location as array.
+ */
+
+function callSiteLocation (callSite) {
+  var file = callSite.getFileName() || '<anonymous>'
+  var line = callSite.getLineNumber()
+  var colm = callSite.getColumnNumber()
+
+  if (callSite.isEval()) {
+    file = callSite.getEvalOrigin() + ', ' + file
+  }
+
+  var site = [file, line, colm]
+
+  site.callSite = callSite
+  site.name = callSite.getFunctionName()
+
+  return site
+}
+
+/**
+ * Generate a default message from the site.
+ */
+
+function defaultMessage (site) {
+  var callSite = site.callSite
+  var funcName = site.name
+
+  // make useful anonymous name
+  if (!funcName) {
+    funcName = '<anonymous@' + formatLocation(site) + '>'
+  }
+
+  var context = callSite.getThis()
+  var typeName = context && callSite.getTypeName()
+
+  // ignore useless type name
+  if (typeName === 'Object') {
+    typeName = undefined
+  }
+
+  // make useful type name
+  if (typeName === 'Function') {
+    typeName = context.name || typeName
+  }
+
+  return typeName && callSite.getMethodName()
+    ? typeName + '.' + funcName
+    : funcName
+}
+
+/**
+ * Format deprecation message without color.
+ */
+
+function formatPlain (msg, caller, stack) {
+  var timestamp = new Date().toUTCString()
+
+  var formatted = timestamp +
+    ' ' + this._namespace +
+    ' deprecated ' + msg
+
+  // add stack trace
+  if (this._traced) {
+    for (var i = 0; i < stack.length; i++) {
+      formatted += '\n    at ' + stack[i].toString()
+    }
+
+    return formatted
+  }
+
+  if (caller) {
+    formatted += ' at ' + formatLocation(caller)
+  }
+
+  return formatted
+}
+
+/**
+ * Format deprecation message with color.
+ */
+
+function formatColor (msg, caller, stack) {
+  var formatted = '\x1b[36;1m' + this._namespace + '\x1b[22;39m' + // bold cyan
+    ' \x1b[33;1mdeprecated\x1b[22;39m' + // bold yellow
+    ' \x1b[0m' + msg + '\x1b[39m' // reset
+
+  // add stack trace
+  if (this._traced) {
+    for (var i = 0; i < stack.length; i++) {
+      formatted += '\n    \x1b[36mat ' + stack[i].toString() + '\x1b[39m' // cyan
+    }
+
+    return formatted
+  }
+
+  if (caller) {
+    formatted += ' \x1b[36m' + formatLocation(caller) + '\x1b[39m' // cyan
+  }
+
+  return formatted
+}
+
+/**
+ * Format call site location.
+ */
+
+function formatLocation (callSite) {
+  return relative(basePath, callSite[0]) +
+    ':' + callSite[1] +
+    ':' + callSite[2]
+}
+
+/**
+ * Get the stack as array of call sites.
+ */
+
+function getStack () {
+  var limit = Error.stackTraceLimit
+  var obj = {}
+  var prep = Error.prepareStackTrace
+
+  Error.prepareStackTrace = prepareObjectStackTrace
+  Error.stackTraceLimit = Math.max(10, limit)
+
+  // capture the stack
+  Error.captureStackTrace(obj)
+
+  // slice this function off the top
+  var stack = obj.stack.slice(1)
+
+  Error.prepareStackTrace = prep
+  Error.stackTraceLimit = limit
+
+  return stack
+}
+
+/**
+ * Capture call site stack from v8.
+ */
+
+function prepareObjectStackTrace (obj, stack) {
+  return stack
+}
+
+/**
+ * Return a wrapped function in a deprecation message.
+ */
+
+function wrapfunction (fn, message) {
+  if (typeof fn !== 'function') {
+    throw new TypeError('argument fn must be a function')
+  }
+
+  var args = createArgumentsString(fn.length)
+  var stack = getStack()
+  var site = callSiteLocation(stack[1])
+
+  site.name = fn.name
+
+  // eslint-disable-next-line no-new-func
+  var deprecatedfn = new Function('fn', 'log', 'deprecate', 'message', 'site',
+    '"use strict"\n' +
+    'return function (' + args + ') {' +
+    'log.call(deprecate, message, site)\n' +
+    'return fn.apply(this, arguments)\n' +
+    '}')(fn, log, this, message, site)
+
+  return deprecatedfn
+}
+
+/**
+ * Wrap property in a deprecation message.
+ */
+
+function wrapproperty (obj, prop, message) {
+  if (!obj || (typeof obj !== 'object' && typeof obj !== 'function')) {
+    throw new TypeError('argument obj must be object')
+  }
+
+  var descriptor = Object.getOwnPropertyDescriptor(obj, prop)
+
+  if (!descriptor) {
+    throw new TypeError('must call property on owner object')
+  }
+
+  if (!descriptor.configurable) {
+    throw new TypeError('property must be configurable')
+  }
+
+  var deprecate = this
+  var stack = getStack()
+  var site = callSiteLocation(stack[1])
+
+  // set site name
+  site.name = prop
+
+  // convert data descriptor
+  if ('value' in descriptor) {
+    descriptor = convertDataDescriptorToAccessor(obj, prop, message)
+  }
+
+  var get = descriptor.get
+  var set = descriptor.set
+
+  // wrap getter
+  if (typeof get === 'function') {
+    descriptor.get = function getter () {
+      log.call(deprecate, message, site)
+      return get.apply(this, arguments)
+    }
+  }
+
+  // wrap setter
+  if (typeof set === 'function') {
+    descriptor.set = function setter () {
+      log.call(deprecate, message, site)
+      return set.apply(this, arguments)
+    }
+  }
+
+  Object.defineProperty(obj, prop, descriptor)
+}
+
+/**
+ * Create DeprecationError for deprecation
+ */
+
+function DeprecationError (namespace, message, stack) {
+  var error = new Error()
+  var stackString
+
+  Object.defineProperty(error, 'constructor', {
+    value: DeprecationError
+  })
+
+  Object.defineProperty(error, 'message', {
+    configurable: true,
+    enumerable: false,
+    value: message,
+    writable: true
+  })
+
+  Object.defineProperty(error, 'name', {
+    enumerable: false,
+    configurable: true,
+    value: 'DeprecationError',
+    writable: true
+  })
+
+  Object.defineProperty(error, 'namespace', {
+    configurable: true,
+    enumerable: false,
+    value: namespace,
+    writable: true
+  })
+
+  Object.defineProperty(error, 'stack', {
+    configurable: true,
+    enumerable: false,
+    get: function () {
+      if (stackString !== undefined) {
+        return stackString
+      }
+
+      // prepare stack trace
+      return (stackString = createStackString.call(this, stack))
+    },
+    set: function setter (val) {
+      stackString = val
+    }
+  })
+
+  return error
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\depd\lib\browser\index.js ---
+/*!
+ * depd
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+'use strict'
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = depd
+
+/**
+ * Create deprecate for namespace in caller.
+ */
+
+function depd (namespace) {
+  if (!namespace) {
+    throw new TypeError('argument namespace is required')
+  }
+
+  function deprecate (message) {
+    // no-op in browser
+  }
+
+  deprecate._file = undefined
+  deprecate._ignored = true
+  deprecate._namespace = namespace
+  deprecate._traced = false
+  deprecate._warned = Object.create(null)
+
+  deprecate.function = wrapfunction
+  deprecate.property = wrapproperty
+
+  return deprecate
+}
+
+/**
+ * Return a wrapped function in a deprecation message.
+ *
+ * This is a no-op version of the wrapper, which does nothing but call
+ * validation.
+ */
+
+function wrapfunction (fn, message) {
+  if (typeof fn !== 'function') {
+    throw new TypeError('argument fn must be a function')
+  }
+
+  return fn
+}
+
+/**
+ * Wrap property in a deprecation message.
+ *
+ * This is a no-op version of the wrapper, which does nothing but call
+ * validation.
+ */
+
+function wrapproperty (obj, prop, message) {
+  if (!obj || (typeof obj !== 'object' && typeof obj !== 'function')) {
+    throw new TypeError('argument obj must be object')
+  }
+
+  var descriptor = Object.getOwnPropertyDescriptor(obj, prop)
+
+  if (!descriptor) {
+    throw new TypeError('must call property on owner object')
+  }
+
+  if (!descriptor.configurable) {
+    throw new TypeError('property must be configurable')
+  }
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\dunder-proto\test\index.js ---
+'use strict';
+
+require('./get');
+require('./set');
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\ee-first\index.js ---
+/*!
+ * ee-first
+ * Copyright(c) 2014 Jonathan Ong
+ * MIT Licensed
+ */
+
+'use strict'
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = first
+
+/**
+ * Get the first event in a set of event emitters and event pairs.
+ *
+ * @param {array} stuff
+ * @param {function} done
+ * @public
+ */
+
+function first(stuff, done) {
+  if (!Array.isArray(stuff))
+    throw new TypeError('arg must be an array of [ee, events...] arrays')
+
+  var cleanups = []
+
+  for (var i = 0; i < stuff.length; i++) {
+    var arr = stuff[i]
+
+    if (!Array.isArray(arr) || arr.length < 2)
+      throw new TypeError('each array member must be [ee, events...]')
+
+    var ee = arr[0]
+
+    for (var j = 1; j < arr.length; j++) {
+      var event = arr[j]
+      var fn = listener(event, callback)
+
+      // listen to the event
+      ee.on(event, fn)
+      // push this listener to the list of cleanups
+      cleanups.push({
+        ee: ee,
+        event: event,
+        fn: fn,
+      })
+    }
+  }
+
+  function callback() {
+    cleanup()
+    done.apply(null, arguments)
+  }
+
+  function cleanup() {
+    var x
+    for (var i = 0; i < cleanups.length; i++) {
+      x = cleanups[i]
+      x.ee.removeListener(x.event, x.fn)
+    }
+  }
+
+  function thunk(fn) {
+    done = fn
+  }
+
+  thunk.cancel = cleanup
+
+  return thunk
+}
+
+/**
+ * Create the event listener.
+ * @private
+ */
+
+function listener(event, done) {
+  return function onevent(arg1) {
+    var args = new Array(arguments.length)
+    var ee = this
+    var err = event === 'error'
+      ? arg1
+      : null
+
+    // copy args to prevent arguments escaping scope
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i]
+    }
+
+    done(err, ee, event, args)
+  }
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\encodeurl\index.js ---
+/*!
+ * encodeurl
+ * Copyright(c) 2016 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+'use strict'
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = encodeUrl
+
+/**
+ * RegExp to match non-URL code points, *after* encoding (i.e. not including "%")
+ * and including invalid escape sequences.
+ * @private
+ */
+
+var ENCODE_CHARS_REGEXP = /(?:[^\x21\x23-\x3B\x3D\x3F-\x5F\x61-\x7A\x7C\x7E]|%(?:[^0-9A-Fa-f]|[0-9A-Fa-f][^0-9A-Fa-f]|$))+/g
+
+/**
+ * RegExp to match unmatched surrogate pair.
+ * @private
+ */
+
+var UNMATCHED_SURROGATE_PAIR_REGEXP = /(^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF]([^\uDC00-\uDFFF]|$)/g
+
+/**
+ * String to replace unmatched surrogate pair with.
+ * @private
+ */
+
+var UNMATCHED_SURROGATE_PAIR_REPLACE = '$1\uFFFD$2'
+
+/**
+ * Encode a URL to a percent-encoded form, excluding already-encoded sequences.
+ *
+ * This function will take an already-encoded URL and encode all the non-URL
+ * code points. This function will not encode the "%" character unless it is
+ * not part of a valid sequence (`%20` will be left as-is, but `%foo` will
+ * be encoded as `%25foo`).
+ *
+ * This encode is meant to be "safe" and does not throw errors. It will try as
+ * hard as it can to properly encode the given URL, including replacing any raw,
+ * unpaired surrogate pairs with the Unicode replacement character prior to
+ * encoding.
+ *
+ * @param {string} url
+ * @return {string}
+ * @public
+ */
+
+function encodeUrl (url) {
+  return String(url)
+    .replace(UNMATCHED_SURROGATE_PAIR_REGEXP, UNMATCHED_SURROGATE_PAIR_REPLACE)
+    .replace(ENCODE_CHARS_REGEXP, encodeURI)
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\engine.io\build\parser-v3\index.js ---
+"use strict";
+// imported from https://github.com/socketio/engine.io-parser/tree/2.2.x
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.packets = exports.protocol = void 0;
+exports.encodePacket = encodePacket;
+exports.encodeBase64Packet = encodeBase64Packet;
+exports.decodePacket = decodePacket;
+exports.decodeBase64Packet = decodeBase64Packet;
+exports.encodePayload = encodePayload;
+exports.decodePayload = decodePayload;
+exports.encodePayloadAsBinary = encodePayloadAsBinary;
+exports.decodePayloadAsBinary = decodePayloadAsBinary;
+/**
+ * Module dependencies.
+ */
+var utf8 = require('./utf8');
+/**
+ * Current protocol version.
+ */
+exports.protocol = 3;
+const hasBinary = (packets) => {
+    for (const packet of packets) {
+        if (packet.data instanceof ArrayBuffer || ArrayBuffer.isView(packet.data)) {
+            return true;
+        }
+    }
+    return false;
+};
+/**
+ * Packet types.
+ */
+exports.packets = {
+    open: 0 // non-ws
+    ,
+    close: 1 // non-ws
+    ,
+    ping: 2,
+    pong: 3,
+    message: 4,
+    upgrade: 5,
+    noop: 6
+};
+var packetslist = Object.keys(exports.packets);
+/**
+ * Premade error packet.
+ */
+var err = { type: 'error', data: 'parser error' };
+const EMPTY_BUFFER = Buffer.concat([]);
+/**
+ * Encodes a packet.
+ *
+ *     <packet type id> [ <data> ]
+ *
+ * Example:
+ *
+ *     5hello world
+ *     3
+ *     4
+ *
+ * Binary is encoded in an identical principle
+ *
+ * @api private
+ */
+function encodePacket(packet, supportsBinary, utf8encode, callback) {
+    if (typeof supportsBinary === 'function') {
+        callback = supportsBinary;
+        supportsBinary = null;
+    }
+    if (typeof utf8encode === 'function') {
+        callback = utf8encode;
+        utf8encode = null;
+    }
+    if (Buffer.isBuffer(packet.data)) {
+        return encodeBuffer(packet, supportsBinary, callback);
+    }
+    else if (packet.data && (packet.data.buffer || packet.data) instanceof ArrayBuffer) {
+        return encodeBuffer({ type: packet.type, data: arrayBufferToBuffer(packet.data) }, supportsBinary, callback);
+    }
+    // Sending data as a utf-8 string
+    var encoded = exports.packets[packet.type];
+    // data fragment is optional
+    if (undefined !== packet.data) {
+        encoded += utf8encode ? utf8.encode(String(packet.data), { strict: false }) : String(packet.data);
+    }
+    return callback('' + encoded);
+}
+/**
+ * Encode Buffer data
+ */
+function encodeBuffer(packet, supportsBinary, callback) {
+    if (!supportsBinary) {
+        return encodeBase64Packet(packet, callback);
+    }
+    var data = packet.data;
+    var typeBuffer = Buffer.allocUnsafe(1);
+    typeBuffer[0] = exports.packets[packet.type];
+    return callback(Buffer.concat([typeBuffer, data]));
+}
+/**
+ * Encodes a packet with binary data in a base64 string
+ *
+ * @param {Object} packet, has `type` and `data`
+ * @return {String} base64 encoded message
+ */
+function encodeBase64Packet(packet, callback) {
+    var data = Buffer.isBuffer(packet.data) ? packet.data : arrayBufferToBuffer(packet.data);
+    var message = 'b' + exports.packets[packet.type];
+    message += data.toString('base64');
+    return callback(message);
+}
+;
+/**
+ * Decodes a packet. Data also available as an ArrayBuffer if requested.
+ *
+ * @return {import('engine.io-parser').Packet} with `type` and `data` (if any)
+ * @api private
+ */
+function decodePacket(data, binaryType, utf8decode) {
+    if (data === undefined) {
+        return err;
+    }
+    let type;
+    // String data
+    if (typeof data === 'string') {
+        type = data.charAt(0);
+        if (type === 'b') {
+            return decodeBase64Packet(data.slice(1), binaryType);
+        }
+        if (utf8decode) {
+            data = tryDecode(data);
+            if (data === false) {
+                return err;
+            }
+        }
+        // @ts-expect-error
+        if (Number(type) != type || !packetslist[type]) {
+            return err;
+        }
+        if (data.length > 1) {
+            return { type: packetslist[type], data: data.slice(1) };
+        }
+        else {
+            return { type: packetslist[type] };
+        }
+    }
+    // Binary data
+    if (binaryType === 'arraybuffer') {
+        // wrap Buffer/ArrayBuffer data into an Uint8Array
+        var intArray = new Uint8Array(data);
+        type = intArray[0];
+        return { type: packetslist[type], data: intArray.buffer.slice(1) };
+    }
+    if (data instanceof ArrayBuffer) {
+        data = arrayBufferToBuffer(data);
+    }
+    type = data[0];
+    return { type: packetslist[type], data: data.slice(1) };
+}
+;
+function tryDecode(data) {
+    try {
+        data = utf8.decode(data, { strict: false });
+    }
+    catch (e) {
+        return false;
+    }
+    return data;
+}
+/**
+ * Decodes a packet encoded in a base64 string.
+ *
+ * @param {String} base64 encoded message
+ * @return {Object} with `type` and `data` (if any)
+ */
+function decodeBase64Packet(msg, binaryType) {
+    var type = packetslist[msg.charAt(0)];
+    var data = Buffer.from(msg.slice(1), 'base64');
+    if (binaryType === 'arraybuffer') {
+        var abv = new Uint8Array(data.length);
+        for (var i = 0; i < abv.length; i++) {
+            abv[i] = data[i];
+        }
+        // @ts-ignore
+        data = abv.buffer;
+    }
+    return { type: type, data: data };
+}
+;
+/**
+ * Encodes multiple messages (payload).
+ *
+ *     <length>:data
+ *
+ * Example:
+ *
+ *     11:hello world2:hi
+ *
+ * If any contents are binary, they will be encoded as base64 strings. Base64
+ * encoded strings are marked with a b before the length specifier
+ *
+ * @param {Array} packets
+ * @api private
+ */
+function encodePayload(packets, supportsBinary, callback) {
+    if (typeof supportsBinary === 'function') {
+        callback = supportsBinary;
+        supportsBinary = null;
+    }
+    if (supportsBinary && hasBinary(packets)) {
+        return encodePayloadAsBinary(packets, callback);
+    }
+    if (!packets.length) {
+        return callback('0:');
+    }
+    function encodeOne(packet, doneCallback) {
+        encodePacket(packet, supportsBinary, false, function (message) {
+            doneCallback(null, setLengthHeader(message));
+        });
+    }
+    map(packets, encodeOne, function (err, results) {
+        return callback(results.join(''));
+    });
+}
+;
+function setLengthHeader(message) {
+    return message.length + ':' + message;
+}
+/**
+ * Async array map using after
+ */
+function map(ary, each, done) {
+    const results = new Array(ary.length);
+    let count = 0;
+    for (let i = 0; i < ary.length; i++) {
+        each(ary[i], (error, msg) => {
+            results[i] = msg;
+            if (++count === ary.length) {
+                done(null, results);
+            }
+        });
+    }
+}
+/*
+ * Decodes data when a payload is maybe expected. Possible binary contents are
+ * decoded from their base64 representation
+ *
+ * @param {String} data, callback method
+ * @api public
+ */
+function decodePayload(data, binaryType, callback) {
+    if (typeof data !== 'string') {
+        return decodePayloadAsBinary(data, binaryType, callback);
+    }
+    if (typeof binaryType === 'function') {
+        callback = binaryType;
+        binaryType = null;
+    }
+    if (data === '') {
+        // parser error - ignoring payload
+        return callback(err, 0, 1);
+    }
+    var length = '', n, msg, packet;
+    for (var i = 0, l = data.length; i < l; i++) {
+        var chr = data.charAt(i);
+        if (chr !== ':') {
+            length += chr;
+            continue;
+        }
+        // @ts-ignore
+        if (length === '' || (length != (n = Number(length)))) {
+            // parser error - ignoring payload
+            return callback(err, 0, 1);
+        }
+        msg = data.slice(i + 1, i + 1 + n);
+        if (length != msg.length) {
+            // parser error - ignoring payload
+            return callback(err, 0, 1);
+        }
+        if (msg.length) {
+            packet = decodePacket(msg, binaryType, false);
+            if (err.type === packet.type && err.data === packet.data) {
+                // parser error in individual packet - ignoring payload
+                return callback(err, 0, 1);
+            }
+            var more = callback(packet, i + n, l);
+            if (false === more)
+                return;
+        }
+        // advance cursor
+        i += n;
+        length = '';
+    }
+    if (length !== '') {
+        // parser error - ignoring payload
+        return callback(err, 0, 1);
+    }
+}
+;
+/**
+ *
+ * Converts a buffer to a utf8.js encoded string
+ *
+ * @api private
+ */
+function bufferToString(buffer) {
+    var str = '';
+    for (var i = 0, l = buffer.length; i < l; i++) {
+        str += String.fromCharCode(buffer[i]);
+    }
+    return str;
+}
+/**
+ *
+ * Converts a utf8.js encoded string to a buffer
+ *
+ * @api private
+ */
+function stringToBuffer(string) {
+    var buf = Buffer.allocUnsafe(string.length);
+    for (var i = 0, l = string.length; i < l; i++) {
+        buf.writeUInt8(string.charCodeAt(i), i);
+    }
+    return buf;
+}
+/**
+ *
+ * Converts an ArrayBuffer to a Buffer
+ *
+ * @api private
+ */
+function arrayBufferToBuffer(data) {
+    // data is either an ArrayBuffer or ArrayBufferView.
+    var length = data.byteLength || data.length;
+    var offset = data.byteOffset || 0;
+    return Buffer.from(data.buffer || data, offset, length);
+}
+/**
+ * Encodes multiple messages (payload) as binary.
+ *
+ * <1 = binary, 0 = string><number from 0-9><number from 0-9>[...]<number
+ * 255><data>
+ *
+ * Example:
+ * 1 3 255 1 2 3, if the binary contents are interpreted as 8 bit integers
+ *
+ * @param {Array} packets
+ * @return {Buffer} encoded payload
+ * @api private
+ */
+function encodePayloadAsBinary(packets, callback) {
+    if (!packets.length) {
+        return callback(EMPTY_BUFFER);
+    }
+    map(packets, encodeOneBinaryPacket, function (err, results) {
+        return callback(Buffer.concat(results));
+    });
+}
+;
+function encodeOneBinaryPacket(p, doneCallback) {
+    function onBinaryPacketEncode(packet) {
+        var encodingLength = '' + packet.length;
+        var sizeBuffer;
+        if (typeof packet === 'string') {
+            sizeBuffer = Buffer.allocUnsafe(encodingLength.length + 2);
+            sizeBuffer[0] = 0; // is a string (not true binary = 0)
+            for (var i = 0; i < encodingLength.length; i++) {
+                sizeBuffer[i + 1] = parseInt(encodingLength[i], 10);
+            }
+            sizeBuffer[sizeBuffer.length - 1] = 255;
+            return doneCallback(null, Buffer.concat([sizeBuffer, stringToBuffer(packet)]));
+        }
+        sizeBuffer = Buffer.allocUnsafe(encodingLength.length + 2);
+        sizeBuffer[0] = 1; // is binary (true binary = 1)
+        for (var i = 0; i < encodingLength.length; i++) {
+            sizeBuffer[i + 1] = parseInt(encodingLength[i], 10);
+        }
+        sizeBuffer[sizeBuffer.length - 1] = 255;
+        doneCallback(null, Buffer.concat([sizeBuffer, packet]));
+    }
+    encodePacket(p, true, true, onBinaryPacketEncode);
+}
+/*
+ * Decodes data when a payload is maybe expected. Strings are decoded by
+ * interpreting each byte as a key code for entries marked to start with 0. See
+ * description of encodePayloadAsBinary
+
+ * @param {Buffer} data, callback method
+ * @api public
+ */
+function decodePayloadAsBinary(data, binaryType, callback) {
+    if (typeof binaryType === 'function') {
+        callback = binaryType;
+        binaryType = null;
+    }
+    var bufferTail = data;
+    var buffers = [];
+    var i;
+    while (bufferTail.length > 0) {
+        var strLen = '';
+        var isString = bufferTail[0] === 0;
+        for (i = 1;; i++) {
+            if (bufferTail[i] === 255)
+                break;
+            // 310 = char length of Number.MAX_VALUE
+            if (strLen.length > 310) {
+                return callback(err, 0, 1);
+            }
+            strLen += '' + bufferTail[i];
+        }
+        bufferTail = bufferTail.slice(strLen.length + 1);
+        var msgLength = parseInt(strLen, 10);
+        var msg = bufferTail.slice(1, msgLength + 1);
+        if (isString)
+            msg = bufferToString(msg);
+        buffers.push(msg);
+        bufferTail = bufferTail.slice(msgLength + 1);
+    }
+    var total = buffers.length;
+    for (i = 0; i < total; i++) {
+        var buffer = buffers[i];
+        callback(decodePacket(buffer, binaryType, true), i, total);
+    }
+}
+;
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\engine.io\build\server.js ---
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Server = exports.BaseServer = void 0;
+const base64id = require("base64id");
+const transports_1 = require("./transports");
+const events_1 = require("events");
+const socket_1 = require("./socket");
+const debug_1 = require("debug");
+const cookie_1 = require("cookie");
+const ws_1 = require("ws");
+const webtransport_1 = require("./transports/webtransport");
+const engine_io_parser_1 = require("engine.io-parser");
+const debug = (0, debug_1.default)("engine");
+const kResponseHeaders = Symbol("responseHeaders");
+function parseSessionId(data) {
+    try {
+        const parsed = JSON.parse(data);
+        if (typeof parsed.sid === "string") {
+            return parsed.sid;
+        }
+    }
+    catch (e) { }
+}
+class BaseServer extends events_1.EventEmitter {
+    /**
+     * Server constructor.
+     *
+     * @param {Object} opts - options
+     */
+    constructor(opts = {}) {
+        super();
+        this.middlewares = [];
+        this.clients = {};
+        this.clientsCount = 0;
+        this.opts = Object.assign({
+            wsEngine: ws_1.Server,
+            pingTimeout: 20000,
+            pingInterval: 25000,
+            upgradeTimeout: 10000,
+            maxHttpBufferSize: 1e6,
+            transports: ["polling", "websocket"], // WebTransport is disabled by default
+            allowUpgrades: true,
+            httpCompression: {
+                threshold: 1024,
+            },
+            cors: false,
+            allowEIO3: false,
+        }, opts);
+        if (opts.cookie) {
+            this.opts.cookie = Object.assign({
+                name: "io",
+                path: "/",
+                // @ts-ignore
+                httpOnly: opts.cookie.path !== false,
+                sameSite: "lax",
+            }, opts.cookie);
+        }
+        if (this.opts.cors) {
+            this.use(require("cors")(this.opts.cors));
+        }
+        if (opts.perMessageDeflate) {
+            this.opts.perMessageDeflate = Object.assign({
+                threshold: 1024,
+            }, opts.perMessageDeflate);
+        }
+        this.init();
+    }
+    /**
+     * Compute the pathname of the requests that are handled by the server
+     * @param options
+     * @protected
+     */
+    _computePath(options) {
+        let path = (options.path || "/engine.io").replace(/\/$/, "");
+        if (options.addTrailingSlash !== false) {
+            // normalize path
+            path += "/";
+        }
+        return path;
+    }
+    /**
+     * Returns a list of available transports for upgrade given a certain transport.
+     */
+    upgrades(transport) {
+        if (!this.opts.allowUpgrades)
+            return [];
+        return transports_1.default[transport].upgradesTo || [];
+    }
+    /**
+     * Verifies a request.
+     *
+     * @param {EngineRequest} req
+     * @param upgrade - whether it's an upgrade request
+     * @param fn
+     * @protected
+     * @return whether the request is valid
+     */
+    verify(req, upgrade, fn) {
+        // transport check
+        const transport = req._query.transport;
+        // WebTransport does not go through the verify() method, see the onWebTransportSession() method
+        if (!~this.opts.transports.indexOf(transport) ||
+            transport === "webtransport") {
+            debug('unknown transport "%s"', transport);
+            return fn(Server.errors.UNKNOWN_TRANSPORT, { transport });
+        }
+        // 'Origin' header check
+        const isOriginInvalid = checkInvalidHeaderChar(req.headers.origin);
+        if (isOriginInvalid) {
+            const origin = req.headers.origin;
+            req.headers.origin = null;
+            debug("origin header invalid");
+            return fn(Server.errors.BAD_REQUEST, {
+                name: "INVALID_ORIGIN",
+                origin,
+            });
+        }
+        // sid check
+        const sid = req._query.sid;
+        if (sid) {
+            if (!this.clients.hasOwnProperty(sid)) {
+                debug('unknown sid "%s"', sid);
+                return fn(Server.errors.UNKNOWN_SID, {
+                    sid,
+                });
+            }
+            const previousTransport = this.clients[sid].transport.name;
+            if (!upgrade && previousTransport !== transport) {
+                debug("bad request: unexpected transport without upgrade");
+                return fn(Server.errors.BAD_REQUEST, {
+                    name: "TRANSPORT_MISMATCH",
+                    transport,
+                    previousTransport,
+                });
+            }
+        }
+        else {
+            // handshake is GET only
+            if ("GET" !== req.method) {
+                return fn(Server.errors.BAD_HANDSHAKE_METHOD, {
+                    method: req.method,
+                });
+            }
+            if (transport === "websocket" && !upgrade) {
+                debug("invalid transport upgrade");
+                return fn(Server.errors.BAD_REQUEST, {
+                    name: "TRANSPORT_HANDSHAKE_ERROR",
+                });
+            }
+            if (!this.opts.allowRequest)
+                return fn();
+            return this.opts.allowRequest(req, (message, success) => {
+                if (!success) {
+                    return fn(Server.errors.FORBIDDEN, {
+                        message,
+                    });
+                }
+                fn();
+            });
+        }
+        fn();
+    }
+    /**
+     * Adds a new middleware.
+     *
+     * @example
+     * import helmet from "helmet";
+     *
+     * engine.use(helmet());
+     *
+     * @param fn
+     */
+    use(fn) {
+        this.middlewares.push(fn);
+    }
+    /**
+     * Apply the middlewares to the request.
+     *
+     * @param req
+     * @param res
+     * @param callback
+     * @protected
+     */
+    _applyMiddlewares(req, res, callback) {
+        if (this.middlewares.length === 0) {
+            debug("no middleware to apply, skipping");
+            return callback();
+        }
+        const apply = (i) => {
+            debug("applying middleware nÂ°%d", i + 1);
+            this.middlewares[i](req, res, (err) => {
+                if (err) {
+                    return callback(err);
+                }
+                if (i + 1 < this.middlewares.length) {
+                    apply(i + 1);
+                }
+                else {
+                    callback();
+                }
+            });
+        };
+        apply(0);
+    }
+    /**
+     * Closes all clients.
+     */
+    close() {
+        debug("closing all open clients");
+        for (let i in this.clients) {
+            if (this.clients.hasOwnProperty(i)) {
+                this.clients[i].close(true);
+            }
+        }
+        this.cleanup();
+        return this;
+    }
+    /**
+     * generate a socket id.
+     * Overwrite this method to generate your custom socket id
+     *
+     * @param {IncomingMessage} req - the request object
+     */
+    generateId(req) {
+        return base64id.generateId();
+    }
+    /**
+     * Handshakes a new client.
+     *
+     * @param {String} transportName
+     * @param {Object} req - the request object
+     * @param {Function} closeConnection
+     *
+     * @protected
+     */
+    async handshake(transportName, req, closeConnection) {
+        const protocol = req._query.EIO === "4" ? 4 : 3; // 3rd revision by default
+        if (protocol === 3 && !this.opts.allowEIO3) {
+            debug("unsupported protocol version");
+            this.emit("connection_error", {
+                req,
+                code: Server.errors.UNSUPPORTED_PROTOCOL_VERSION,
+                message: Server.errorMessages[Server.errors.UNSUPPORTED_PROTOCOL_VERSION],
+                context: {
+                    protocol,
+                },
+            });
+            closeConnection(Server.errors.UNSUPPORTED_PROTOCOL_VERSION);
+            return;
+        }
+        let id;
+        try {
+            id = await this.generateId(req);
+        }
+        catch (e) {
+            debug("error while generating an id");
+            this.emit("connection_error", {
+                req,
+                code: Server.errors.BAD_REQUEST,
+                message: Server.errorMessages[Server.errors.BAD_REQUEST],
+                context: {
+                    name: "ID_GENERATION_ERROR",
+                    error: e,
+                },
+            });
+            closeConnection(Server.errors.BAD_REQUEST);
+            return;
+        }
+        debug('handshaking client "%s"', id);
+        try {
+            var transport = this.createTransport(transportName, req);
+            if ("polling" === transportName) {
+                transport.maxHttpBufferSize = this.opts.maxHttpBufferSize;
+                transport.httpCompression = this.opts.httpCompression;
+            }
+            else if ("websocket" === transportName) {
+                transport.perMessageDeflate = this.opts.perMessageDeflate;
+            }
+        }
+        catch (e) {
+            debug('error handshaking to transport "%s"', transportName);
+            this.emit("connection_error", {
+                req,
+                code: Server.errors.BAD_REQUEST,
+                message: Server.errorMessages[Server.errors.BAD_REQUEST],
+                context: {
+                    name: "TRANSPORT_HANDSHAKE_ERROR",
+                    error: e,
+                },
+            });
+            closeConnection(Server.errors.BAD_REQUEST);
+            return;
+        }
+        const socket = new socket_1.Socket(id, this, transport, req, protocol);
+        transport.on("headers", (headers, req) => {
+            const isInitialRequest = !req._query.sid;
+            if (isInitialRequest) {
+                if (this.opts.cookie) {
+                    headers["Set-Cookie"] = [
+                        // @ts-ignore
+                        (0, cookie_1.serialize)(this.opts.cookie.name, id, this.opts.cookie),
+                    ];
+                }
+                this.emit("initial_headers", headers, req);
+            }
+            this.emit("headers", headers, req);
+        });
+        transport.onRequest(req);
+        this.clients[id] = socket;
+        this.clientsCount++;
+        socket.once("close", () => {
+            delete this.clients[id];
+            this.clientsCount--;
+        });
+        this.emit("connection", socket);
+        return transport;
+    }
+    async onWebTransportSession(session) {
+        const timeout = setTimeout(() => {
+            debug("the client failed to establish a bidirectional stream in the given period");
+            session.close();
+        }, this.opts.upgradeTimeout);
+        const streamReader = session.incomingBidirectionalStreams.getReader();
+        const result = await streamReader.read();
+        if (result.done) {
+            debug("session is closed");
+            return;
+        }
+        const stream = result.value;
+        const transformStream = (0, engine_io_parser_1.createPacketDecoderStream)(this.opts.maxHttpBufferSize, "nodebuffer");
+        const reader = stream.readable.pipeThrough(transformStream).getReader();
+        // reading the first packet of the stream
+        const { value, done } = await reader.read();
+        if (done) {
+            debug("stream is closed");
+            return;
+        }
+        clearTimeout(timeout);
+        if (value.type !== "open") {
+            debug("invalid WebTransport handshake");
+            return session.close();
+        }
+        if (value.data === undefined) {
+            const transport = new webtransport_1.WebTransport(session, stream, reader);
+            // note: we cannot use "this.generateId()", because there is no "req" argument
+            const id = base64id.generateId();
+            debug('handshaking client "%s" (WebTransport)', id);
+            const socket = new socket_1.Socket(id, this, transport, null, 4);
+            this.clients[id] = socket;
+            this.clientsCount++;
+            socket.once("close", () => {
+                delete this.clients[id];
+                this.clientsCount--;
+            });
+            this.emit("connection", socket);
+            return;
+        }
+        const sid = parseSessionId(value.data);
+        if (!sid) {
+            debug("invalid WebTransport handshake");
+            return session.close();
+        }
+        const client = this.clients[sid];
+        if (!client) {
+            debug("upgrade attempt for closed client");
+            session.close();
+        }
+        else if (client.upgrading) {
+            debug("transport has already been trying to upgrade");
+            session.close();
+        }
+        else if (client.upgraded) {
+            debug("transport had already been upgraded");
+            session.close();
+        }
+        else {
+            debug("upgrading existing transport");
+            const transport = new webtransport_1.WebTransport(session, stream, reader);
+            client._maybeUpgrade(transport);
+        }
+    }
+}
+exports.BaseServer = BaseServer;
+/**
+ * Protocol errors mappings.
+ */
+BaseServer.errors = {
+    UNKNOWN_TRANSPORT: 0,
+    UNKNOWN_SID: 1,
+    BAD_HANDSHAKE_METHOD: 2,
+    BAD_REQUEST: 3,
+    FORBIDDEN: 4,
+    UNSUPPORTED_PROTOCOL_VERSION: 5,
+};
+BaseServer.errorMessages = {
+    0: "Transport unknown",
+    1: "Session ID unknown",
+    2: "Bad handshake method",
+    3: "Bad request",
+    4: "Forbidden",
+    5: "Unsupported protocol version",
+};
+/**
+ * Exposes a subset of the http.ServerResponse interface, in order to be able to apply the middlewares to an upgrade
+ * request.
+ *
+ * @see https://nodejs.org/api/http.html#class-httpserverresponse
+ */
+class WebSocketResponse {
+    constructor(req, socket) {
+        this.req = req;
+        this.socket = socket;
+        // temporarily store the response headers on the req object (see the "headers" event)
+        req[kResponseHeaders] = {};
+    }
+    setHeader(name, value) {
+        this.req[kResponseHeaders][name] = value;
+    }
+    getHeader(name) {
+        return this.req[kResponseHeaders][name];
+    }
+    removeHeader(name) {
+        delete this.req[kResponseHeaders][name];
+    }
+    write() { }
+    writeHead() { }
+    end() {
+        // we could return a proper error code, but the WebSocket client will emit an "error" event anyway.
+        this.socket.destroy();
+    }
+}
+/**
+ * An Engine.IO server based on Node.js built-in HTTP server and the `ws` package for WebSocket connections.
+ */
+class Server extends BaseServer {
+    /**
+     * Initialize websocket server
+     *
+     * @protected
+     */
+    init() {
+        if (!~this.opts.transports.indexOf("websocket"))
+            return;
+        if (this.ws)
+            this.ws.close();
+        this.ws = new this.opts.wsEngine({
+            noServer: true,
+            clientTracking: false,
+            perMessageDeflate: this.opts.perMessageDeflate,
+            maxPayload: this.opts.maxHttpBufferSize,
+        });
+        if (typeof this.ws.on === "function") {
+            this.ws.on("headers", (headersArray, req) => {
+                // note: 'ws' uses an array of headers, while Engine.IO uses an object (response.writeHead() accepts both formats)
+                // we could also try to parse the array and then sync the values, but that will be error-prone
+                const additionalHeaders = req[kResponseHeaders] || {};
+                delete req[kResponseHeaders];
+                const isInitialRequest = !req._query.sid;
+                if (isInitialRequest) {
+                    this.emit("initial_headers", additionalHeaders, req);
+                }
+                this.emit("headers", additionalHeaders, req);
+                debug("writing headers: %j", additionalHeaders);
+                Object.keys(additionalHeaders).forEach((key) => {
+                    headersArray.push(`${key}: ${additionalHeaders[key]}`);
+                });
+            });
+        }
+    }
+    cleanup() {
+        if (this.ws) {
+            debug("closing webSocketServer");
+            this.ws.close();
+            // don't delete this.ws because it can be used again if the http server starts listening again
+        }
+    }
+    /**
+     * Prepares a request by processing the query string.
+     *
+     * @private
+     */
+    prepare(req) {
+        // try to leverage pre-existing `req._query` (e.g: from connect)
+        if (!req._query) {
+            const url = new URL(req.url, "https://socket.io");
+            req._query = Object.fromEntries(url.searchParams.entries());
+        }
+    }
+    createTransport(transportName, req) {
+        // @ts-expect-error 'polling' is a plain function used as constructor
+        return new transports_1.default[transportName](req);
+    }
+    /**
+     * Handles an Engine.IO HTTP request.
+     *
+     * @param {EngineRequest} req
+     * @param {ServerResponse} res
+     */
+    handleRequest(req, res) {
+        debug('handling "%s" http request "%s"', req.method, req.url);
+        this.prepare(req);
+        req.res = res;
+        const callback = (errorCode, errorContext) => {
+            if (errorCode !== undefined) {
+                this.emit("connection_error", {
+                    req,
+                    code: errorCode,
+                    message: Server.errorMessages[errorCode],
+                    context: errorContext,
+                });
+                abortRequest(res, errorCode, errorContext);
+                return;
+            }
+            if (req._query.sid) {
+                debug("setting new request for existing client");
+                this.clients[req._query.sid].transport.onRequest(req);
+            }
+            else {
+                const closeConnection = (errorCode, errorContext) => abortRequest(res, errorCode, errorContext);
+                this.handshake(req._query.transport, req, closeConnection);
+            }
+        };
+        this._applyMiddlewares(req, res, (err) => {
+            if (err) {
+                callback(Server.errors.BAD_REQUEST, { name: "MIDDLEWARE_FAILURE" });
+            }
+            else {
+                this.verify(req, false, callback);
+            }
+        });
+    }
+    /**
+     * Handles an Engine.IO HTTP Upgrade.
+     */
+    handleUpgrade(req, socket, upgradeHead) {
+        this.prepare(req);
+        const res = new WebSocketResponse(req, socket);
+        const callback = (errorCode, errorContext) => {
+            if (errorCode !== undefined) {
+                this.emit("connection_error", {
+                    req,
+                    code: errorCode,
+                    message: Server.errorMessages[errorCode],
+                    context: errorContext,
+                });
+                abortUpgrade(socket, errorCode, errorContext);
+                return;
+            }
+            const head = Buffer.from(upgradeHead);
+            upgradeHead = null;
+            // some middlewares (like express-session) wait for the writeHead() call to flush their headers
+            // see https://github.com/expressjs/session/blob/1010fadc2f071ddf2add94235d72224cf65159c6/index.js#L220-L244
+            res.writeHead();
+            // delegate to ws
+            this.ws.handleUpgrade(req, socket, head, (websocket) => {
+                this.onWebSocket(req, socket, websocket);
+            });
+        };
+        this._applyMiddlewares(req, res, (err) => {
+            if (err) {
+                callback(Server.errors.BAD_REQUEST, { name: "MIDDLEWARE_FAILURE" });
+            }
+            else {
+                this.verify(req, true, callback);
+            }
+        });
+    }
+    /**
+     * Called upon a ws.io connection.
+     * @param req
+     * @param socket
+     * @param websocket
+     * @private
+     */
+    onWebSocket(req, socket, websocket) {
+        websocket.on("error", onUpgradeError);
+        if (transports_1.default[req._query.transport] !== undefined &&
+            !transports_1.default[req._query.transport].prototype.handlesUpgrades) {
+            debug("transport doesnt handle upgraded requests");
+            websocket.close();
+            return;
+        }
+        // get client id
+        const id = req._query.sid;
+        // keep a reference to the ws.Socket
+        req.websocket = websocket;
+        if (id) {
+            const client = this.clients[id];
+            if (!client) {
+                debug("upgrade attempt for closed client");
+                websocket.close();
+            }
+            else if (client.upgrading) {
+                debug("transport has already been trying to upgrade");
+                websocket.close();
+            }
+            else if (client.upgraded) {
+                debug("transport had already been upgraded");
+                websocket.close();
+            }
+            else {
+                debug("upgrading existing transport");
+                // transport error handling takes over
+                websocket.removeListener("error", onUpgradeError);
+                const transport = this.createTransport(req._query.transport, req);
+                // @ts-expect-error this option is only for WebSocket impl
+                transport.perMessageDeflate = this.opts.perMessageDeflate;
+                client._maybeUpgrade(transport);
+            }
+        }
+        else {
+            const closeConnection = (errorCode, errorContext) => abortUpgrade(socket, errorCode, errorContext);
+            this.handshake(req._query.transport, req, closeConnection);
+        }
+        function onUpgradeError() {
+            debug("websocket error before upgrade");
+            // websocket.close() not needed
+        }
+    }
+    /**
+     * Captures upgrade requests for a http.Server.
+     *
+     * @param {http.Server} server
+     * @param {Object} options
+     */
+    attach(server, options = {}) {
+        const path = this._computePath(options);
+        const destroyUpgradeTimeout = options.destroyUpgradeTimeout || 1000;
+        function check(req) {
+            // TODO use `path === new URL(...).pathname` in the next major release (ref: https://nodejs.org/api/url.html)
+            return path === req.url.slice(0, path.length);
+        }
+        // cache and clean up listeners
+        const listeners = server.listeners("request").slice(0);
+        server.removeAllListeners("request");
+        server.on("close", this.close.bind(this));
+        server.on("listening", this.init.bind(this));
+        // add request handler
+        server.on("request", (req, res) => {
+            if (check(req)) {
+                debug('intercepting request for path "%s"', path);
+                this.handleRequest(req, res);
+            }
+            else {
+                let i = 0;
+                const l = listeners.length;
+                for (; i < l; i++) {
+                    listeners[i].call(server, req, res);
+                }
+            }
+        });
+        if (~this.opts.transports.indexOf("websocket")) {
+            server.on("upgrade", (req, socket, head) => {
+                if (check(req)) {
+                    this.handleUpgrade(req, socket, head);
+                }
+                else if (false !== options.destroyUpgrade) {
+                    // default node behavior is to disconnect when no handlers
+                    // but by adding a handler, we prevent that
+                    // and if no eio thing handles the upgrade
+                    // then the socket needs to die!
+                    setTimeout(function () {
+                        // @ts-ignore
+                        if (socket.writable && socket.bytesWritten <= 0) {
+                            socket.on("error", (e) => {
+                                debug("error while destroying upgrade: %s", e.message);
+                            });
+                            return socket.end();
+                        }
+                    }, destroyUpgradeTimeout);
+                }
+            });
+        }
+    }
+}
+exports.Server = Server;
+/**
+ * Close the HTTP long-polling request
+ *
+ * @param res - the response object
+ * @param errorCode - the error code
+ * @param errorContext - additional error context
+ *
+ * @private
+ */
+function abortRequest(res, errorCode, errorContext) {
+    const statusCode = errorCode === Server.errors.FORBIDDEN ? 403 : 400;
+    const message = errorContext && errorContext.message
+        ? errorContext.message
+        : Server.errorMessages[errorCode];
+    res.writeHead(statusCode, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({
+        code: errorCode,
+        message,
+    }));
+}
+/**
+ * Close the WebSocket connection
+ *
+ * @param {net.Socket} socket
+ * @param {string} errorCode - the error code
+ * @param {object} errorContext - additional error context
+ */
+function abortUpgrade(socket, errorCode, errorContext = {}) {
+    socket.on("error", () => {
+        debug("ignoring error from closed connection");
+    });
+    if (socket.writable) {
+        const message = errorContext.message || Server.errorMessages[errorCode];
+        const length = Buffer.byteLength(message);
+        socket.write("HTTP/1.1 400 Bad Request\r\n" +
+            "Connection: close\r\n" +
+            "Content-type: text/html\r\n" +
+            "Content-Length: " +
+            length +
+            "\r\n" +
+            "\r\n" +
+            message);
+    }
+    socket.destroy();
+}
+/* eslint-disable */
+/**
+ * From https://github.com/nodejs/node/blob/v8.4.0/lib/_http_common.js#L303-L354
+ *
+ * True if val contains an invalid field-vchar
+ *  field-value    = *( field-content / obs-fold )
+ *  field-content  = field-vchar [ 1*( SP / HTAB ) field-vchar ]
+ *  field-vchar    = VCHAR / obs-text
+ *
+ * checkInvalidHeaderChar() is currently designed to be inlinable by v8,
+ * so take care when making changes to the implementation so that the source
+ * code size does not exceed v8's default max_inlined_source_size setting.
+ **/
+// prettier-ignore
+const validHdrChars = [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, // 0 - 15
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 16 - 31
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // 32 - 47
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // 48 - 63
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // 64 - 79
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // 80 - 95
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // 96 - 111
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, // 112 - 127
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // 128 ...
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 // ... 255
+];
+function checkInvalidHeaderChar(val) {
+    val += "";
+    if (val.length < 1)
+        return false;
+    if (!validHdrChars[val.charCodeAt(0)]) {
+        debug('invalid header, index 0, char "%s"', val.charCodeAt(0));
+        return true;
+    }
+    if (val.length < 2)
+        return false;
+    if (!validHdrChars[val.charCodeAt(1)]) {
+        debug('invalid header, index 1, char "%s"', val.charCodeAt(1));
+        return true;
+    }
+    if (val.length < 3)
+        return false;
+    if (!validHdrChars[val.charCodeAt(2)]) {
+        debug('invalid header, index 2, char "%s"', val.charCodeAt(2));
+        return true;
+    }
+    if (val.length < 4)
+        return false;
+    if (!validHdrChars[val.charCodeAt(3)]) {
+        debug('invalid header, index 3, char "%s"', val.charCodeAt(3));
+        return true;
+    }
+    for (let i = 4; i < val.length; ++i) {
+        if (!validHdrChars[val.charCodeAt(i)]) {
+            debug('invalid header, index "%i", char "%s"', i, val.charCodeAt(i));
+            return true;
+        }
+    }
+    return false;
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\engine.io\build\transports\index.js ---
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const polling_1 = require("./polling");
+const polling_jsonp_1 = require("./polling-jsonp");
+const websocket_1 = require("./websocket");
+const webtransport_1 = require("./webtransport");
+exports.default = {
+    polling,
+    websocket: websocket_1.WebSocket,
+    webtransport: webtransport_1.WebTransport,
+};
+/**
+ * Polling polymorphic constructor.
+ */
+function polling(req) {
+    if ("string" === typeof req._query.j) {
+        return new polling_jsonp_1.JSONP(req);
+    }
+    else {
+        return new polling_1.Polling(req);
+    }
+}
+polling.upgradesTo = ["websocket", "webtransport"];
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\engine.io\build\transports-uws\index.js ---
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const polling_1 = require("./polling");
+const websocket_1 = require("./websocket");
+exports.default = {
+    polling: polling_1.Polling,
+    websocket: websocket_1.WebSocket,
+};
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\engine.io\build\userver.js ---
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.uServer = void 0;
+const debug_1 = require("debug");
+const server_1 = require("./server");
+const transports_uws_1 = require("./transports-uws");
+const debug = (0, debug_1.default)("engine:uws");
+/**
+ * An Engine.IO server based on the `uWebSockets.js` package.
+ */
+// TODO export it into its own package
+class uServer extends server_1.BaseServer {
+    init() { }
+    cleanup() { }
+    /**
+     * Prepares a request by processing the query string.
+     *
+     * @private
+     */
+    prepare(req, res) {
+        req.method = req.getMethod().toUpperCase();
+        req.url = req.getUrl();
+        const params = new URLSearchParams(req.getQuery());
+        req._query = Object.fromEntries(params.entries());
+        req.headers = {};
+        req.forEach((key, value) => {
+            req.headers[key] = value;
+        });
+        // @ts-expect-error
+        req.connection = {
+            remoteAddress: Buffer.from(res.getRemoteAddressAsText()).toString(),
+        };
+        res.onAborted(() => {
+            debug("response has been aborted");
+        });
+    }
+    createTransport(transportName, req) {
+        return new transports_uws_1.default[transportName](req);
+    }
+    /**
+     * Attach the engine to a ÂµWebSockets.js server
+     * @param app
+     * @param options
+     */
+    attach(app /* : TemplatedApp */, options = {}) {
+        const path = this._computePath(options);
+        app
+            .any(path, this.handleRequest.bind(this))
+            //
+            .ws(path, {
+            compression: options.compression,
+            idleTimeout: options.idleTimeout,
+            maxBackpressure: options.maxBackpressure,
+            maxPayloadLength: this.opts.maxHttpBufferSize,
+            upgrade: this.handleUpgrade.bind(this),
+            open: (ws) => {
+                const transport = ws.getUserData().transport;
+                transport.socket = ws;
+                transport.writable = true;
+                transport.emit("ready");
+            },
+            message: (ws, message, isBinary) => {
+                ws.getUserData().transport.onData(isBinary ? message : Buffer.from(message).toString());
+            },
+            close: (ws, code, message) => {
+                ws.getUserData().transport.onClose(code, message);
+            },
+        });
+    }
+    _applyMiddlewares(req, res, callback) {
+        if (this.middlewares.length === 0) {
+            return callback();
+        }
+        // needed to buffer headers until the status is computed
+        req.res = new ResponseWrapper(res);
+        super._applyMiddlewares(req, req.res, (err) => {
+            // some middlewares (like express-session) wait for the writeHead() call to flush their headers
+            // see https://github.com/expressjs/session/blob/1010fadc2f071ddf2add94235d72224cf65159c6/index.js#L220-L244
+            req.res.writeHead();
+            callback(err);
+        });
+    }
+    handleRequest(res, req) {
+        debug('handling "%s" http request "%s"', req.getMethod(), req.getUrl());
+        this.prepare(req, res);
+        req.res = res;
+        const callback = (errorCode, errorContext) => {
+            if (errorCode !== undefined) {
+                this.emit("connection_error", {
+                    req,
+                    code: errorCode,
+                    message: server_1.Server.errorMessages[errorCode],
+                    context: errorContext,
+                });
+                this.abortRequest(req.res, errorCode, errorContext);
+                return;
+            }
+            if (req._query.sid) {
+                debug("setting new request for existing client");
+                // @ts-ignore
+                this.clients[req._query.sid].transport.onRequest(req);
+            }
+            else {
+                const closeConnection = (errorCode, errorContext) => this.abortRequest(res, errorCode, errorContext);
+                this.handshake(req._query.transport, req, closeConnection);
+            }
+        };
+        this._applyMiddlewares(req, res, (err) => {
+            if (err) {
+                callback(server_1.Server.errors.BAD_REQUEST, { name: "MIDDLEWARE_FAILURE" });
+            }
+            else {
+                this.verify(req, false, callback);
+            }
+        });
+    }
+    handleUpgrade(res, req, context) {
+        debug("on upgrade");
+        this.prepare(req, res);
+        req.res = res;
+        const callback = async (errorCode, errorContext) => {
+            if (errorCode !== undefined) {
+                this.emit("connection_error", {
+                    req,
+                    code: errorCode,
+                    message: server_1.Server.errorMessages[errorCode],
+                    context: errorContext,
+                });
+                this.abortRequest(res, errorCode, errorContext);
+                return;
+            }
+            const id = req._query.sid;
+            let transport;
+            if (id) {
+                const client = this.clients[id];
+                if (!client) {
+                    debug("upgrade attempt for closed client");
+                    return res.close();
+                }
+                else if (client.upgrading) {
+                    debug("transport has already been trying to upgrade");
+                    return res.close();
+                }
+                else if (client.upgraded) {
+                    debug("transport had already been upgraded");
+                    return res.close();
+                }
+                else {
+                    debug("upgrading existing transport");
+                    transport = this.createTransport(req._query.transport, req);
+                    client._maybeUpgrade(transport);
+                }
+            }
+            else {
+                transport = await this.handshake(req._query.transport, req, (errorCode, errorContext) => this.abortRequest(res, errorCode, errorContext));
+                if (!transport) {
+                    return;
+                }
+            }
+            // calling writeStatus() triggers the flushing of any header added in a middleware
+            req.res.writeStatus("101 Switching Protocols");
+            res.upgrade({
+                transport,
+            }, req.getHeader("sec-websocket-key"), req.getHeader("sec-websocket-protocol"), req.getHeader("sec-websocket-extensions"), context);
+        };
+        this._applyMiddlewares(req, res, (err) => {
+            if (err) {
+                callback(server_1.Server.errors.BAD_REQUEST, { name: "MIDDLEWARE_FAILURE" });
+            }
+            else {
+                this.verify(req, true, callback);
+            }
+        });
+    }
+    abortRequest(res, errorCode, errorContext) {
+        const statusCode = errorCode === server_1.Server.errors.FORBIDDEN
+            ? "403 Forbidden"
+            : "400 Bad Request";
+        const message = errorContext && errorContext.message
+            ? errorContext.message
+            : server_1.Server.errorMessages[errorCode];
+        res.writeStatus(statusCode);
+        res.writeHeader("Content-Type", "application/json");
+        res.end(JSON.stringify({
+            code: errorCode,
+            message,
+        }));
+    }
+}
+exports.uServer = uServer;
+class ResponseWrapper {
+    constructor(res) {
+        this.res = res;
+        this.statusWritten = false;
+        this.headers = [];
+        this.isAborted = false;
+    }
+    set statusCode(status) {
+        if (!status) {
+            return;
+        }
+        // FIXME: handle all status codes?
+        this.writeStatus(status === 200 ? "200 OK" : "204 No Content");
+    }
+    writeHead(status) {
+        this.statusCode = status;
+    }
+    setHeader(key, value) {
+        if (Array.isArray(value)) {
+            value.forEach((val) => {
+                this.writeHeader(key, val);
+            });
+        }
+        else {
+            this.writeHeader(key, value);
+        }
+    }
+    removeHeader() {
+        // FIXME: not implemented
+    }
+    // needed by vary: https://github.com/jshttp/vary/blob/5d725d059b3871025cf753e9dfa08924d0bcfa8f/index.js#L134
+    getHeader() { }
+    writeStatus(status) {
+        if (this.isAborted)
+            return;
+        this.res.writeStatus(status);
+        this.statusWritten = true;
+        this.writeBufferedHeaders();
+        return this;
+    }
+    writeHeader(key, value) {
+        if (this.isAborted)
+            return;
+        if (key === "Content-Length") {
+            // the content length is automatically added by uWebSockets.js
+            return;
+        }
+        if (this.statusWritten) {
+            this.res.writeHeader(key, value);
+        }
+        else {
+            this.headers.push([key, value]);
+        }
+    }
+    writeBufferedHeaders() {
+        this.headers.forEach(([key, value]) => {
+            this.res.writeHeader(key, value);
+        });
+    }
+    end(data) {
+        if (this.isAborted)
+            return;
+        this.res.cork(() => {
+            if (!this.statusWritten) {
+                // status will be inferred as "200 OK"
+                this.writeBufferedHeaders();
+            }
+            this.res.end(data);
+        });
+    }
+    onData(fn) {
+        if (this.isAborted)
+            return;
+        this.res.onData(fn);
+    }
+    onAborted(fn) {
+        if (this.isAborted)
+            return;
+        this.res.onAborted(() => {
+            // Any attempt to use the UWS response object after abort will throw!
+            this.isAborted = true;
+            fn();
+        });
+    }
+    cork(fn) {
+        if (this.isAborted)
+            return;
+        this.res.cork(fn);
+    }
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\engine.io\node_modules\accepts\index.js ---
+/*!
+ * accepts
+ * Copyright(c) 2014 Jonathan Ong
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+'use strict'
+
+/**
+ * Module dependencies.
+ * @private
+ */
+
+var Negotiator = require('negotiator')
+var mime = require('mime-types')
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = Accepts
+
+/**
+ * Create a new Accepts object for the given req.
+ *
+ * @param {object} req
+ * @public
+ */
+
+function Accepts (req) {
+  if (!(this instanceof Accepts)) {
+    return new Accepts(req)
+  }
+
+  this.headers = req.headers
+  this.negotiator = new Negotiator(req)
+}
+
+/**
+ * Check if the given `type(s)` is acceptable, returning
+ * the best match when true, otherwise `undefined`, in which
+ * case you should respond with 406 "Not Acceptable".
+ *
+ * The `type` value may be a single mime type string
+ * such as "application/json", the extension name
+ * such as "json" or an array `["json", "html", "text/plain"]`. When a list
+ * or array is given the _best_ match, if any is returned.
+ *
+ * Examples:
+ *
+ *     // Accept: text/html
+ *     this.types('html');
+ *     // => "html"
+ *
+ *     // Accept: text/*, application/json
+ *     this.types('html');
+ *     // => "html"
+ *     this.types('text/html');
+ *     // => "text/html"
+ *     this.types('json', 'text');
+ *     // => "json"
+ *     this.types('application/json');
+ *     // => "application/json"
+ *
+ *     // Accept: text/*, application/json
+ *     this.types('image/png');
+ *     this.types('png');
+ *     // => undefined
+ *
+ *     // Accept: text/*;q=.5, application/json
+ *     this.types(['html', 'json']);
+ *     this.types('html', 'json');
+ *     // => "json"
+ *
+ * @param {String|Array} types...
+ * @return {String|Array|Boolean}
+ * @public
+ */
+
+Accepts.prototype.type =
+Accepts.prototype.types = function (types_) {
+  var types = types_
+
+  // support flattened arguments
+  if (types && !Array.isArray(types)) {
+    types = new Array(arguments.length)
+    for (var i = 0; i < types.length; i++) {
+      types[i] = arguments[i]
+    }
+  }
+
+  // no types, return all requested types
+  if (!types || types.length === 0) {
+    return this.negotiator.mediaTypes()
+  }
+
+  // no accept header, return first given type
+  if (!this.headers.accept) {
+    return types[0]
+  }
+
+  var mimes = types.map(extToMime)
+  var accepts = this.negotiator.mediaTypes(mimes.filter(validMime))
+  var first = accepts[0]
+
+  return first
+    ? types[mimes.indexOf(first)]
+    : false
+}
+
+/**
+ * Return accepted encodings or best fit based on `encodings`.
+ *
+ * Given `Accept-Encoding: gzip, deflate`
+ * an array sorted by quality is returned:
+ *
+ *     ['gzip', 'deflate']
+ *
+ * @param {String|Array} encodings...
+ * @return {String|Array}
+ * @public
+ */
+
+Accepts.prototype.encoding =
+Accepts.prototype.encodings = function (encodings_) {
+  var encodings = encodings_
+
+  // support flattened arguments
+  if (encodings && !Array.isArray(encodings)) {
+    encodings = new Array(arguments.length)
+    for (var i = 0; i < encodings.length; i++) {
+      encodings[i] = arguments[i]
+    }
+  }
+
+  // no encodings, return all requested encodings
+  if (!encodings || encodings.length === 0) {
+    return this.negotiator.encodings()
+  }
+
+  return this.negotiator.encodings(encodings)[0] || false
+}
+
+/**
+ * Return accepted charsets or best fit based on `charsets`.
+ *
+ * Given `Accept-Charset: utf-8, iso-8859-1;q=0.2, utf-7;q=0.5`
+ * an array sorted by quality is returned:
+ *
+ *     ['utf-8', 'utf-7', 'iso-8859-1']
+ *
+ * @param {String|Array} charsets...
+ * @return {String|Array}
+ * @public
+ */
+
+Accepts.prototype.charset =
+Accepts.prototype.charsets = function (charsets_) {
+  var charsets = charsets_
+
+  // support flattened arguments
+  if (charsets && !Array.isArray(charsets)) {
+    charsets = new Array(arguments.length)
+    for (var i = 0; i < charsets.length; i++) {
+      charsets[i] = arguments[i]
+    }
+  }
+
+  // no charsets, return all requested charsets
+  if (!charsets || charsets.length === 0) {
+    return this.negotiator.charsets()
+  }
+
+  return this.negotiator.charsets(charsets)[0] || false
+}
+
+/**
+ * Return accepted languages or best fit based on `langs`.
+ *
+ * Given `Accept-Language: en;q=0.8, es, pt`
+ * an array sorted by quality is returned:
+ *
+ *     ['es', 'pt', 'en']
+ *
+ * @param {String|Array} langs...
+ * @return {Array|String}
+ * @public
+ */
+
+Accepts.prototype.lang =
+Accepts.prototype.langs =
+Accepts.prototype.language =
+Accepts.prototype.languages = function (languages_) {
+  var languages = languages_
+
+  // support flattened arguments
+  if (languages && !Array.isArray(languages)) {
+    languages = new Array(arguments.length)
+    for (var i = 0; i < languages.length; i++) {
+      languages[i] = arguments[i]
+    }
+  }
+
+  // no languages, return all requested languages
+  if (!languages || languages.length === 0) {
+    return this.negotiator.languages()
+  }
+
+  return this.negotiator.languages(languages)[0] || false
+}
+
+/**
+ * Convert extnames to mime.
+ *
+ * @param {String} type
+ * @return {String}
+ * @private
+ */
+
+function extToMime (type) {
+  return type.indexOf('/') === -1
+    ? mime.lookup(type)
+    : type
+}
+
+/**
+ * Check if mime is valid.
+ *
+ * @param {String} type
+ * @return {String}
+ * @private
+ */
+
+function validMime (type) {
+  return typeof type === 'string'
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\engine.io\node_modules\mime-db\index.js ---
+/*!
+ * mime-db
+ * Copyright(c) 2014 Jonathan Ong
+ * Copyright(c) 2015-2022 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+/**
+ * Module exports.
+ */
+
+module.exports = require('./db.json')
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\engine.io\node_modules\mime-types\index.js ---
+/*!
+ * mime-types
+ * Copyright(c) 2014 Jonathan Ong
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+'use strict'
+
+/**
+ * Module dependencies.
+ * @private
+ */
+
+var db = require('mime-db')
+var extname = require('path').extname
+
+/**
+ * Module variables.
+ * @private
+ */
+
+var EXTRACT_TYPE_REGEXP = /^\s*([^;\s]*)(?:;|\s|$)/
+var TEXT_TYPE_REGEXP = /^text\//i
+
+/**
+ * Module exports.
+ * @public
+ */
+
+exports.charset = charset
+exports.charsets = { lookup: charset }
+exports.contentType = contentType
+exports.extension = extension
+exports.extensions = Object.create(null)
+exports.lookup = lookup
+exports.types = Object.create(null)
+
+// Populate the extensions/types maps
+populateMaps(exports.extensions, exports.types)
+
+/**
+ * Get the default charset for a MIME type.
+ *
+ * @param {string} type
+ * @return {boolean|string}
+ */
+
+function charset (type) {
+  if (!type || typeof type !== 'string') {
+    return false
+  }
+
+  // TODO: use media-typer
+  var match = EXTRACT_TYPE_REGEXP.exec(type)
+  var mime = match && db[match[1].toLowerCase()]
+
+  if (mime && mime.charset) {
+    return mime.charset
+  }
+
+  // default text/* to utf-8
+  if (match && TEXT_TYPE_REGEXP.test(match[1])) {
+    return 'UTF-8'
+  }
+
+  return false
+}
+
+/**
+ * Create a full Content-Type header given a MIME type or extension.
+ *
+ * @param {string} str
+ * @return {boolean|string}
+ */
+
+function contentType (str) {
+  // TODO: should this even be in this module?
+  if (!str || typeof str !== 'string') {
+    return false
+  }
+
+  var mime = str.indexOf('/') === -1
+    ? exports.lookup(str)
+    : str
+
+  if (!mime) {
+    return false
+  }
+
+  // TODO: use content-type or other module
+  if (mime.indexOf('charset') === -1) {
+    var charset = exports.charset(mime)
+    if (charset) mime += '; charset=' + charset.toLowerCase()
+  }
+
+  return mime
+}
+
+/**
+ * Get the default extension for a MIME type.
+ *
+ * @param {string} type
+ * @return {boolean|string}
+ */
+
+function extension (type) {
+  if (!type || typeof type !== 'string') {
+    return false
+  }
+
+  // TODO: use media-typer
+  var match = EXTRACT_TYPE_REGEXP.exec(type)
+
+  // get extensions
+  var exts = match && exports.extensions[match[1].toLowerCase()]
+
+  if (!exts || !exts.length) {
+    return false
+  }
+
+  return exts[0]
+}
+
+/**
+ * Lookup the MIME type for a file path/extension.
+ *
+ * @param {string} path
+ * @return {boolean|string}
+ */
+
+function lookup (path) {
+  if (!path || typeof path !== 'string') {
+    return false
+  }
+
+  // get the extension ("ext" or ".ext" or full path)
+  var extension = extname('x.' + path)
+    .toLowerCase()
+    .substr(1)
+
+  if (!extension) {
+    return false
+  }
+
+  return exports.types[extension] || false
+}
+
+/**
+ * Populate the extensions and types maps.
+ * @private
+ */
+
+function populateMaps (extensions, types) {
+  // source preference (least -> most)
+  var preference = ['nginx', 'apache', undefined, 'iana']
+
+  Object.keys(db).forEach(function forEachMimeType (type) {
+    var mime = db[type]
+    var exts = mime.extensions
+
+    if (!exts || !exts.length) {
+      return
+    }
+
+    // mime -> extensions
+    extensions[type] = exts
+
+    // extension -> mime
+    for (var i = 0; i < exts.length; i++) {
+      var extension = exts[i]
+
+      if (types[extension]) {
+        var from = preference.indexOf(db[types[extension]].source)
+        var to = preference.indexOf(mime.source)
+
+        if (types[extension] !== 'application/octet-stream' &&
+          (from > to || (from === to && types[extension].substr(0, 12) === 'application/'))) {
+          // skip the remapping
+          continue
+        }
+      }
+
+      // set the extension -> mime
+      types[extension] = type
+    }
+  })
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\engine.io\node_modules\negotiator\index.js ---
+/*!
+ * negotiator
+ * Copyright(c) 2012 Federico Romero
+ * Copyright(c) 2012-2014 Isaac Z. Schlueter
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+'use strict';
+
+var preferredCharsets = require('./lib/charset')
+var preferredEncodings = require('./lib/encoding')
+var preferredLanguages = require('./lib/language')
+var preferredMediaTypes = require('./lib/mediaType')
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = Negotiator;
+module.exports.Negotiator = Negotiator;
+
+/**
+ * Create a Negotiator instance from a request.
+ * @param {object} request
+ * @public
+ */
+
+function Negotiator(request) {
+  if (!(this instanceof Negotiator)) {
+    return new Negotiator(request);
+  }
+
+  this.request = request;
+}
+
+Negotiator.prototype.charset = function charset(available) {
+  var set = this.charsets(available);
+  return set && set[0];
+};
+
+Negotiator.prototype.charsets = function charsets(available) {
+  return preferredCharsets(this.request.headers['accept-charset'], available);
+};
+
+Negotiator.prototype.encoding = function encoding(available) {
+  var set = this.encodings(available);
+  return set && set[0];
+};
+
+Negotiator.prototype.encodings = function encodings(available) {
+  return preferredEncodings(this.request.headers['accept-encoding'], available);
+};
+
+Negotiator.prototype.language = function language(available) {
+  var set = this.languages(available);
+  return set && set[0];
+};
+
+Negotiator.prototype.languages = function languages(available) {
+  return preferredLanguages(this.request.headers['accept-language'], available);
+};
+
+Negotiator.prototype.mediaType = function mediaType(available) {
+  var set = this.mediaTypes(available);
+  return set && set[0];
+};
+
+Negotiator.prototype.mediaTypes = function mediaTypes(available) {
+  return preferredMediaTypes(this.request.headers.accept, available);
+};
+
+// Backwards compatibility
+Negotiator.prototype.preferredCharset = Negotiator.prototype.charset;
+Negotiator.prototype.preferredCharsets = Negotiator.prototype.charsets;
+Negotiator.prototype.preferredEncoding = Negotiator.prototype.encoding;
+Negotiator.prototype.preferredEncodings = Negotiator.prototype.encodings;
+Negotiator.prototype.preferredLanguage = Negotiator.prototype.language;
+Negotiator.prototype.preferredLanguages = Negotiator.prototype.languages;
+Negotiator.prototype.preferredMediaType = Negotiator.prototype.mediaType;
+Negotiator.prototype.preferredMediaTypes = Negotiator.prototype.mediaTypes;
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\engine.io-parser\build\cjs\index.js ---
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.decodePayload = exports.decodePacket = exports.encodePayload = exports.encodePacket = exports.protocol = void 0;
+exports.createPacketEncoderStream = createPacketEncoderStream;
+exports.createPacketDecoderStream = createPacketDecoderStream;
+const encodePacket_js_1 = require("./encodePacket.js");
+Object.defineProperty(exports, "encodePacket", { enumerable: true, get: function () { return encodePacket_js_1.encodePacket; } });
+const decodePacket_js_1 = require("./decodePacket.js");
+Object.defineProperty(exports, "decodePacket", { enumerable: true, get: function () { return decodePacket_js_1.decodePacket; } });
+const commons_js_1 = require("./commons.js");
+const SEPARATOR = String.fromCharCode(30); // see https://en.wikipedia.org/wiki/Delimiter#ASCII_delimited_text
+const encodePayload = (packets, callback) => {
+    // some packets may be added to the array while encoding, so the initial length must be saved
+    const length = packets.length;
+    const encodedPackets = new Array(length);
+    let count = 0;
+    packets.forEach((packet, i) => {
+        // force base64 encoding for binary packets
+        (0, encodePacket_js_1.encodePacket)(packet, false, (encodedPacket) => {
+            encodedPackets[i] = encodedPacket;
+            if (++count === length) {
+                callback(encodedPackets.join(SEPARATOR));
+            }
+        });
+    });
+};
+exports.encodePayload = encodePayload;
+const decodePayload = (encodedPayload, binaryType) => {
+    const encodedPackets = encodedPayload.split(SEPARATOR);
+    const packets = [];
+    for (let i = 0; i < encodedPackets.length; i++) {
+        const decodedPacket = (0, decodePacket_js_1.decodePacket)(encodedPackets[i], binaryType);
+        packets.push(decodedPacket);
+        if (decodedPacket.type === "error") {
+            break;
+        }
+    }
+    return packets;
+};
+exports.decodePayload = decodePayload;
+function createPacketEncoderStream() {
+    return new TransformStream({
+        transform(packet, controller) {
+            (0, encodePacket_js_1.encodePacketToBinary)(packet, (encodedPacket) => {
+                const payloadLength = encodedPacket.length;
+                let header;
+                // inspired by the WebSocket format: https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers#decoding_payload_length
+                if (payloadLength < 126) {
+                    header = new Uint8Array(1);
+                    new DataView(header.buffer).setUint8(0, payloadLength);
+                }
+                else if (payloadLength < 65536) {
+                    header = new Uint8Array(3);
+                    const view = new DataView(header.buffer);
+                    view.setUint8(0, 126);
+                    view.setUint16(1, payloadLength);
+                }
+                else {
+                    header = new Uint8Array(9);
+                    const view = new DataView(header.buffer);
+                    view.setUint8(0, 127);
+                    view.setBigUint64(1, BigInt(payloadLength));
+                }
+                // first bit indicates whether the payload is plain text (0) or binary (1)
+                if (packet.data && typeof packet.data !== "string") {
+                    header[0] |= 0x80;
+                }
+                controller.enqueue(header);
+                controller.enqueue(encodedPacket);
+            });
+        },
+    });
+}
+let TEXT_DECODER;
+function totalLength(chunks) {
+    return chunks.reduce((acc, chunk) => acc + chunk.length, 0);
+}
+function concatChunks(chunks, size) {
+    if (chunks[0].length === size) {
+        return chunks.shift();
+    }
+    const buffer = new Uint8Array(size);
+    let j = 0;
+    for (let i = 0; i < size; i++) {
+        buffer[i] = chunks[0][j++];
+        if (j === chunks[0].length) {
+            chunks.shift();
+            j = 0;
+        }
+    }
+    if (chunks.length && j < chunks[0].length) {
+        chunks[0] = chunks[0].slice(j);
+    }
+    return buffer;
+}
+function createPacketDecoderStream(maxPayload, binaryType) {
+    if (!TEXT_DECODER) {
+        TEXT_DECODER = new TextDecoder();
+    }
+    const chunks = [];
+    let state = 0 /* State.READ_HEADER */;
+    let expectedLength = -1;
+    let isBinary = false;
+    return new TransformStream({
+        transform(chunk, controller) {
+            chunks.push(chunk);
+            while (true) {
+                if (state === 0 /* State.READ_HEADER */) {
+                    if (totalLength(chunks) < 1) {
+                        break;
+                    }
+                    const header = concatChunks(chunks, 1);
+                    isBinary = (header[0] & 0x80) === 0x80;
+                    expectedLength = header[0] & 0x7f;
+                    if (expectedLength < 126) {
+                        state = 3 /* State.READ_PAYLOAD */;
+                    }
+                    else if (expectedLength === 126) {
+                        state = 1 /* State.READ_EXTENDED_LENGTH_16 */;
+                    }
+                    else {
+                        state = 2 /* State.READ_EXTENDED_LENGTH_64 */;
+                    }
+                }
+                else if (state === 1 /* State.READ_EXTENDED_LENGTH_16 */) {
+                    if (totalLength(chunks) < 2) {
+                        break;
+                    }
+                    const headerArray = concatChunks(chunks, 2);
+                    expectedLength = new DataView(headerArray.buffer, headerArray.byteOffset, headerArray.length).getUint16(0);
+                    state = 3 /* State.READ_PAYLOAD */;
+                }
+                else if (state === 2 /* State.READ_EXTENDED_LENGTH_64 */) {
+                    if (totalLength(chunks) < 8) {
+                        break;
+                    }
+                    const headerArray = concatChunks(chunks, 8);
+                    const view = new DataView(headerArray.buffer, headerArray.byteOffset, headerArray.length);
+                    const n = view.getUint32(0);
+                    if (n > Math.pow(2, 53 - 32) - 1) {
+                        // the maximum safe integer in JavaScript is 2^53 - 1
+                        controller.enqueue(commons_js_1.ERROR_PACKET);
+                        break;
+                    }
+                    expectedLength = n * Math.pow(2, 32) + view.getUint32(4);
+                    state = 3 /* State.READ_PAYLOAD */;
+                }
+                else {
+                    if (totalLength(chunks) < expectedLength) {
+                        break;
+                    }
+                    const data = concatChunks(chunks, expectedLength);
+                    controller.enqueue((0, decodePacket_js_1.decodePacket)(isBinary ? data : TEXT_DECODER.decode(data), binaryType));
+                    state = 0 /* State.READ_HEADER */;
+                }
+                if (expectedLength === 0 || expectedLength > maxPayload) {
+                    controller.enqueue(commons_js_1.ERROR_PACKET);
+                    break;
+                }
+            }
+        },
+    });
+}
+exports.protocol = 4;
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\engine.io-parser\build\esm\index.js ---
+import { encodePacket, encodePacketToBinary } from "./encodePacket.js";
+import { decodePacket } from "./decodePacket.js";
+import { ERROR_PACKET, } from "./commons.js";
+const SEPARATOR = String.fromCharCode(30); // see https://en.wikipedia.org/wiki/Delimiter#ASCII_delimited_text
+const encodePayload = (packets, callback) => {
+    // some packets may be added to the array while encoding, so the initial length must be saved
+    const length = packets.length;
+    const encodedPackets = new Array(length);
+    let count = 0;
+    packets.forEach((packet, i) => {
+        // force base64 encoding for binary packets
+        encodePacket(packet, false, (encodedPacket) => {
+            encodedPackets[i] = encodedPacket;
+            if (++count === length) {
+                callback(encodedPackets.join(SEPARATOR));
+            }
+        });
+    });
+};
+const decodePayload = (encodedPayload, binaryType) => {
+    const encodedPackets = encodedPayload.split(SEPARATOR);
+    const packets = [];
+    for (let i = 0; i < encodedPackets.length; i++) {
+        const decodedPacket = decodePacket(encodedPackets[i], binaryType);
+        packets.push(decodedPacket);
+        if (decodedPacket.type === "error") {
+            break;
+        }
+    }
+    return packets;
+};
+export function createPacketEncoderStream() {
+    return new TransformStream({
+        transform(packet, controller) {
+            encodePacketToBinary(packet, (encodedPacket) => {
+                const payloadLength = encodedPacket.length;
+                let header;
+                // inspired by the WebSocket format: https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers#decoding_payload_length
+                if (payloadLength < 126) {
+                    header = new Uint8Array(1);
+                    new DataView(header.buffer).setUint8(0, payloadLength);
+                }
+                else if (payloadLength < 65536) {
+                    header = new Uint8Array(3);
+                    const view = new DataView(header.buffer);
+                    view.setUint8(0, 126);
+                    view.setUint16(1, payloadLength);
+                }
+                else {
+                    header = new Uint8Array(9);
+                    const view = new DataView(header.buffer);
+                    view.setUint8(0, 127);
+                    view.setBigUint64(1, BigInt(payloadLength));
+                }
+                // first bit indicates whether the payload is plain text (0) or binary (1)
+                if (packet.data && typeof packet.data !== "string") {
+                    header[0] |= 0x80;
+                }
+                controller.enqueue(header);
+                controller.enqueue(encodedPacket);
+            });
+        },
+    });
+}
+let TEXT_DECODER;
+function totalLength(chunks) {
+    return chunks.reduce((acc, chunk) => acc + chunk.length, 0);
+}
+function concatChunks(chunks, size) {
+    if (chunks[0].length === size) {
+        return chunks.shift();
+    }
+    const buffer = new Uint8Array(size);
+    let j = 0;
+    for (let i = 0; i < size; i++) {
+        buffer[i] = chunks[0][j++];
+        if (j === chunks[0].length) {
+            chunks.shift();
+            j = 0;
+        }
+    }
+    if (chunks.length && j < chunks[0].length) {
+        chunks[0] = chunks[0].slice(j);
+    }
+    return buffer;
+}
+export function createPacketDecoderStream(maxPayload, binaryType) {
+    if (!TEXT_DECODER) {
+        TEXT_DECODER = new TextDecoder();
+    }
+    const chunks = [];
+    let state = 0 /* State.READ_HEADER */;
+    let expectedLength = -1;
+    let isBinary = false;
+    return new TransformStream({
+        transform(chunk, controller) {
+            chunks.push(chunk);
+            while (true) {
+                if (state === 0 /* State.READ_HEADER */) {
+                    if (totalLength(chunks) < 1) {
+                        break;
+                    }
+                    const header = concatChunks(chunks, 1);
+                    isBinary = (header[0] & 0x80) === 0x80;
+                    expectedLength = header[0] & 0x7f;
+                    if (expectedLength < 126) {
+                        state = 3 /* State.READ_PAYLOAD */;
+                    }
+                    else if (expectedLength === 126) {
+                        state = 1 /* State.READ_EXTENDED_LENGTH_16 */;
+                    }
+                    else {
+                        state = 2 /* State.READ_EXTENDED_LENGTH_64 */;
+                    }
+                }
+                else if (state === 1 /* State.READ_EXTENDED_LENGTH_16 */) {
+                    if (totalLength(chunks) < 2) {
+                        break;
+                    }
+                    const headerArray = concatChunks(chunks, 2);
+                    expectedLength = new DataView(headerArray.buffer, headerArray.byteOffset, headerArray.length).getUint16(0);
+                    state = 3 /* State.READ_PAYLOAD */;
+                }
+                else if (state === 2 /* State.READ_EXTENDED_LENGTH_64 */) {
+                    if (totalLength(chunks) < 8) {
+                        break;
+                    }
+                    const headerArray = concatChunks(chunks, 8);
+                    const view = new DataView(headerArray.buffer, headerArray.byteOffset, headerArray.length);
+                    const n = view.getUint32(0);
+                    if (n > Math.pow(2, 53 - 32) - 1) {
+                        // the maximum safe integer in JavaScript is 2^53 - 1
+                        controller.enqueue(ERROR_PACKET);
+                        break;
+                    }
+                    expectedLength = n * Math.pow(2, 32) + view.getUint32(4);
+                    state = 3 /* State.READ_PAYLOAD */;
+                }
+                else {
+                    if (totalLength(chunks) < expectedLength) {
+                        break;
+                    }
+                    const data = concatChunks(chunks, expectedLength);
+                    controller.enqueue(decodePacket(isBinary ? data : TEXT_DECODER.decode(data), binaryType));
+                    state = 0 /* State.READ_HEADER */;
+                }
+                if (expectedLength === 0 || expectedLength > maxPayload) {
+                    controller.enqueue(ERROR_PACKET);
+                    break;
+                }
+            }
+        },
+    });
+}
+export const protocol = 4;
+export { encodePacket, encodePayload, decodePacket, decodePayload, };
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\escape-html\index.js ---
+/*!
+ * escape-html
+ * Copyright(c) 2012-2013 TJ Holowaychuk
+ * Copyright(c) 2015 Andreas Lubbe
+ * Copyright(c) 2015 Tiancheng "Timothy" Gu
+ * MIT Licensed
+ */
+
+'use strict';
+
+/**
+ * Module variables.
+ * @private
+ */
+
+var matchHtmlRegExp = /["'&<>]/;
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = escapeHtml;
+
+/**
+ * Escape special characters in the given string of html.
+ *
+ * @param  {string} string The string to escape for inserting into HTML
+ * @return {string}
+ * @public
+ */
+
+function escapeHtml(string) {
+  var str = '' + string;
+  var match = matchHtmlRegExp.exec(str);
+
+  if (!match) {
+    return str;
+  }
+
+  var escape;
+  var html = '';
+  var index = 0;
+  var lastIndex = 0;
+
+  for (index = match.index; index < str.length; index++) {
+    switch (str.charCodeAt(index)) {
+      case 34: // "
+        escape = '&quot;';
+        break;
+      case 38: // &
+        escape = '&amp;';
+        break;
+      case 39: // '
+        escape = '&#39;';
+        break;
+      case 60: // <
+        escape = '&lt;';
+        break;
+      case 62: // >
+        escape = '&gt;';
+        break;
+      default:
+        continue;
+    }
+
+    if (lastIndex !== index) {
+      html += str.substring(lastIndex, index);
+    }
+
+    lastIndex = index + 1;
+    html += escape;
+  }
+
+  return lastIndex !== index
+    ? html + str.substring(lastIndex, index)
+    : html;
+}
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\es-define-property\index.js ---
+'use strict';
+
+/** @type {import('.')} */
+var $defineProperty = Object.defineProperty || false;
+if ($defineProperty) {
+	try {
+		$defineProperty({}, 'a', { value: 1 });
+	} catch (e) {
+		// IE 8 has a broken defineProperty
+		$defineProperty = false;
+	}
+}
+
+module.exports = $defineProperty;
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\es-define-property\test\index.js ---
+'use strict';
+
+var $defineProperty = require('../');
+
+var test = require('tape');
+var gOPD = require('gopd');
+
+test('defineProperty: supported', { skip: !$defineProperty }, function (t) {
+	t.plan(4);
+
+	t.equal(typeof $defineProperty, 'function', 'defineProperty is supported');
+	if ($defineProperty && gOPD) { // this `if` check is just to shut TS up
+		/** @type {{ a: number, b?: number, c?: number }} */
+		var o = { a: 1 };
+
+		$defineProperty(o, 'b', { enumerable: true, value: 2 });
+		t.deepEqual(
+			gOPD(o, 'b'),
+			{
+				configurable: false,
+				enumerable: true,
+				value: 2,
+				writable: false
+			},
+			'property descriptor is as expected'
+		);
+
+		$defineProperty(o, 'c', { enumerable: false, value: 3, writable: true });
+		t.deepEqual(
+			gOPD(o, 'c'),
+			{
+				configurable: false,
+				enumerable: false,
+				value: 3,
+				writable: true
+			},
+			'property descriptor is as expected'
+		);
+	}
+
+	t.equal($defineProperty, Object.defineProperty, 'defineProperty is Object.defineProperty');
+
+	t.end();
+});
+
+test('defineProperty: not supported', { skip: !!$defineProperty }, function (t) {
+	t.notOk($defineProperty, 'defineProperty is not supported');
+
+	t.match(
+		typeof $defineProperty,
+		/^(?:undefined|boolean)$/,
+		'`typeof defineProperty` is `undefined` or `boolean`'
+	);
+
+	t.end();
+});
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\es-errors\index.js ---
+'use strict';
+
+/** @type {import('.')} */
+module.exports = Error;
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\es-errors\test\index.js ---
+'use strict';
+
+var test = require('tape');
+
+var E = require('../');
+var R = require('../range');
+var Ref = require('../ref');
+var S = require('../syntax');
+var T = require('../type');
+
+test('errors', function (t) {
+	t.equal(E, Error);
+	t.equal(R, RangeError);
+	t.equal(Ref, ReferenceError);
+	t.equal(S, SyntaxError);
+	t.equal(T, TypeError);
+
+	t.end();
+});
+
+
+--- FILE: C:\apps\tools-isp\backend\node_modules\es-object-atoms\index.js ---
+'use strict';
+
+/** @type {import('.')} */
+module.exports = Object;
+
+
+==================== Listening Ports + Owners ====================
+
+### LISTENING (netstat) ###
+  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING       1664
+  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING       4
+  TCP    0.0.0.0:3389           0.0.0.0:0              LISTENING       1900
+  TCP    0.0.0.0:5040           0.0.0.0:0              LISTENING       8732
+  TCP    0.0.0.0:5173           0.0.0.0:0              LISTENING       16020
+  TCP    0.0.0.0:7070           0.0.0.0:0              LISTENING       4664
+  TCP    0.0.0.0:7680           0.0.0.0:0              LISTENING       19236
+  TCP    0.0.0.0:9090           0.0.0.0:0              LISTENING       2248
+  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING       1316
+  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING       1216
+  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING       2140
+  TCP    0.0.0.0:49667          0.0.0.0:0              LISTENING       3108
+  TCP    0.0.0.0:49668          0.0.0.0:0              LISTENING       3332
+  TCP    0.0.0.0:49669          0.0.0.0:0              LISTENING       4280
+  TCP    0.0.0.0:49673          0.0.0.0:0              LISTENING       1288
+  TCP    80.80.80.111:139       0.0.0.0:0              LISTENING       4
+  TCP    127.0.0.1:26822        0.0.0.0:0              LISTENING       11228
+  TCP    127.0.0.1:32683        0.0.0.0:0              LISTENING       2036
+  TCP    127.0.0.1:33683        0.0.0.0:0              LISTENING       2036
+  TCP    [::]:135               [::]:0                 LISTENING       1664
+  TCP    [::]:445               [::]:0                 LISTENING       4
+  TCP    [::]:3389              [::]:0                 LISTENING       1900
+  TCP    [::]:5173              [::]:0                 LISTENING       16020
+  TCP    [::]:7070              [::]:0                 LISTENING       4664
+  TCP    [::]:7680              [::]:0                 LISTENING       19236
+  TCP    [::]:49664             [::]:0                 LISTENING       1316
+  TCP    [::]:49665             [::]:0                 LISTENING       1216
+  TCP    [::]:49666             [::]:0                 LISTENING       2140
+  TCP    [::]:49667             [::]:0                 LISTENING       3108
+  TCP    [::]:49668             [::]:0                 LISTENING       3332
+  TCP    [::]:49669             [::]:0                 LISTENING       4280
+  TCP    [::]:49673             [::]:0                 LISTENING       1288
+  TCP    [::1]:49670            [::]:0                 LISTENING       4812
+
+### LISTEN (Get-NetTCPConnection) ###
+
+LocalAddress LocalPort OwningProcess
+------------ --------- -------------
+::                 135          1664
+0.0.0.0            135          1664
+80.80.80.111       139             4
+::                 445             4
+0.0.0.0           3389          1900
+::                3389          1900
+0.0.0.0           5040          8732
+::                5173         16020
+::                7070          4664
+0.0.0.0           7070          4664
+::                7680         19236
+0.0.0.0           9090          2248
+127.0.0.1        26822         11228
+127.0.0.1        32683          2036
+127.0.0.1        33683          2036
+0.0.0.0          49664          1316
+::               49664          1316
+0.0.0.0          49665          1216
+::               49665          1216
+::               49666          2140
+0.0.0.0          49666          2140
+::               49667          3108
+0.0.0.0          49667          3108
+::               49668          3332
+0.0.0.0          49668          3332
+::               49669          4280
+0.0.0.0          49669          4280
+::1              49670          4812
+::               49673          1288
+0.0.0.0          49673          1288
+
+
+
+### Process map for LISTEN PIDs ###
+ERROR: Cannot overwrite variable PID because it is read-only or constant.
+
+==================== Firewall Profiles + Allow rules (80/443/3000/8080) ====================
+
+
+Name    Enabled DefaultInboundAction DefaultOutboundAction AllowInboundRules AllowLocalFirewallRules AllowLocalIPsecRul
+                                                                                                     es                
+----    ------- -------------------- --------------------- ----------------- ----------------------- ------------------
+Domain  True    NotConfigured        NotConfigured         NotConfigured     NotConfigured           NotConfigured     
+Private True    NotConfigured        NotConfigured         NotConfigured     NotConfigured           NotConfigured     
+Public  True    NotConfigured        NotConfigured         NotConfigured     NotConfigured           NotConfigured     
+
+
+
+### Port 80 allow inbound ###
+
+### Port 443 allow inbound ###
+
+### Port 3000 allow inbound ###
+
+### Port 8080 allow inbound ###
+
+==================== IIS Sites + Bindings (if installed) ====================
+
+ERROR: The term 'Get-WindowsFeature' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+==================== Logs Snapshot (pm2 + project logs) ====================
+
+
+--- pm2 logs (last 200 lines) ---

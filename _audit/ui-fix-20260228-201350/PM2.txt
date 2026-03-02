@@ -1,0 +1,114 @@
+﻿ΓöîΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé id Γöé name                  Γöé namespace   Γöé version Γöé mode    Γöé pid      Γöé uptime Γöé Γå║    Γöé status    Γöé cpu      Γöé mem      Γöé user     Γöé watching Γöé
+Γö£ΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöñ
+Γöé [1m[36m8[39m[22m  Γöé tools-isp-backend     Γöé default     Γöé 1.0.0   Γöé [7m[1mfork[22m[27m    Γöé 8376     Γöé 3h     Γöé 1    Γöé [32m[1monline[22m[39m    Γöé 0%       Γöé 36.7mb   Γöé [1mTheLord[22m  Γöé [90mdisabled[39m Γöé
+Γöé [1m[36m5[39m[22m  Γöé tools-isp-frontend    Γöé default     Γöé 7.3.1   Γöé [7m[1mfork[22m[27m    Γöé 23440    Γöé 2m     Γöé 134  Γöé [32m[1monline[22m[39m    Γöé 0%       Γöé 81.1mb   Γöé [1mTheLord[22m  Γöé [90mdisabled[39m Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+
+[1m[7m Describing process with id 5 - name tools-isp-frontend [27m[22m
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé status            Γöé [32m[1monline[22m[39m                                                   Γöé
+Γöé name              Γöé tools-isp-frontend                                       Γöé
+Γöé namespace         Γöé default                                                  Γöé
+Γöé version           Γöé 7.3.1                                                    Γöé
+Γöé restarts          Γöé 134                                                      Γöé
+Γöé uptime            Γöé 2m                                                       Γöé
+Γöé script path       Γöé C:\apps\tools-isp\frontend\node_modules\vite\bin\vite.js Γöé
+Γöé script args       Γöé --host 0.0.0.0 --port 5177 --strictPort                  Γöé
+Γöé error log path    Γöé C:\pm2\logs\tools-isp-frontend-error.log                 Γöé
+Γöé out log path      Γöé C:\pm2\logs\tools-isp-frontend-out.log                   Γöé
+Γöé pid path          Γöé C:\pm2\pids\tools-isp-frontend-5.pid                     Γöé
+Γöé interpreter       Γöé node                                                     Γöé
+Γöé interpreter args  Γöé N/A                                                      Γöé
+Γöé script id         Γöé 5                                                        Γöé
+Γöé exec cwd          Γöé C:\apps\tools-isp\frontend                               Γöé
+Γöé exec mode         Γöé fork_mode                                                Γöé
+Γöé node.js version   Γöé 24.13.1                                                  Γöé
+Γöé node env          Γöé N/A                                                      Γöé
+Γöé watch & reload    Γöé Γ£ÿ                                                        Γöé
+Γöé unstable restarts Γöé 0                                                        Γöé
+Γöé created at        Γöé 2026-02-28T18:11:39.369Z                                 Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+[7m[1m Actions available [22m[27m
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé km:heapdump            Γöé
+Γöé km:cpu:profiling:start Γöé
+Γöé km:cpu:profiling:stop  Γöé
+Γöé km:heap:sampling:start Γöé
+Γöé km:heap:sampling:stop  Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+[37m[3m Trigger via: pm2 trigger tools-isp-frontend <action_name>[23m[39m
+[37m[3m[23m[39m
+[7m[1m Code metrics value [22m[27m
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé Used Heap Size         Γöé 15.62 MiB Γöé
+Γöé Heap Usage             Γöé 91.99 %   Γöé
+Γöé Heap Size              Γöé 16.98 MiB Γöé
+Γöé Event Loop Latency p95 Γöé 14.33 ms  Γöé
+Γöé Event Loop Latency     Γöé 0.83 ms   Γöé
+Γöé Active handles         Γöé 204       Γöé
+Γöé Active requests        Γöé 1         Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+[7m[1m Divergent env variables from local env [22m[27m
+
+
+[37m[3m Add your own code metrics: http://bit.ly/code-metrics[23m[39m
+[37m[3m Use `pm2 logs tools-isp-frontend [--lines 1000]` to display logs[23m[39m
+[37m[3m Use `pm2 env 5` to display environment variables[23m[39m
+[37m[3m Use `pm2 monit` to monitor CPU and Memory usage[23m[39m tools-isp-frontend
+
+[1m[7m Describing process with id 8 - name tools-isp-backend [27m[22m
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé status            Γöé [32m[1monline[22m[39m                                  Γöé
+Γöé name              Γöé tools-isp-backend                       Γöé
+Γöé namespace         Γöé default                                 Γöé
+Γöé version           Γöé 1.0.0                                   Γöé
+Γöé restarts          Γöé 1                                       Γöé
+Γöé uptime            Γöé 3h                                      Γöé
+Γöé script path       Γöé C:\apps\tools-isp\backend\server.js     Γöé
+Γöé script args       Γöé N/A                                     Γöé
+Γöé error log path    Γöé C:\pm2\logs\tools-isp-backend-error.log Γöé
+Γöé out log path      Γöé C:\pm2\logs\tools-isp-backend-out.log   Γöé
+Γöé pid path          Γöé C:\pm2\pids\tools-isp-backend-8.pid     Γöé
+Γöé interpreter       Γöé node                                    Γöé
+Γöé interpreter args  Γöé N/A                                     Γöé
+Γöé script id         Γöé 8                                       Γöé
+Γöé exec cwd          Γöé C:\WINDOWS\system32                     Γöé
+Γöé exec mode         Γöé fork_mode                               Γöé
+Γöé node.js version   Γöé 24.13.1                                 Γöé
+Γöé node env          Γöé N/A                                     Γöé
+Γöé watch & reload    Γöé Γ£ÿ                                       Γöé
+Γöé unstable restarts Γöé 0                                       Γöé
+Γöé created at        Γöé 2026-02-28T14:51:26.858Z                Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+[7m[1m Actions available [22m[27m
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé km:heapdump            Γöé
+Γöé km:cpu:profiling:start Γöé
+Γöé km:cpu:profiling:stop  Γöé
+Γöé km:heap:sampling:start Γöé
+Γöé km:heap:sampling:stop  Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+[37m[3m Trigger via: pm2 trigger tools-isp-backend <action_name>[23m[39m
+[37m[3m[23m[39m
+[7m[1m Code metrics value [22m[27m
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé Used Heap Size         Γöé 15.57 MiB    Γöé
+Γöé Heap Usage             Γöé 72.34 %      Γöé
+Γöé Heap Size              Γöé 21.52 MiB    Γöé
+Γöé HTTP                   Γöé 0.08 req/min Γöé
+Γöé HTTP P95 Latency       Γöé 415.5 ms     Γöé
+Γöé HTTP Mean Latency      Γöé 1 ms         Γöé
+Γöé Event Loop Latency p95 Γöé 14.95 ms     Γöé
+Γöé Event Loop Latency     Γöé 5.85 ms      Γöé
+Γöé Active handles         Γöé 6            Γöé
+Γöé Active requests        Γöé 0            Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+[7m[1m Divergent env variables from local env [22m[27m
+
+
+[37m[3m Add your own code metrics: http://bit.ly/code-metrics[23m[39m
+[37m[3m Use `pm2 logs tools-isp-backend [--lines 1000]` to display logs[23m[39m
+[37m[3m Use `pm2 env 8` to display environment variables[23m[39m
+[37m[3m Use `pm2 monit` to monitor CPU and Memory usage[23m[39m tools-isp-backend
+
