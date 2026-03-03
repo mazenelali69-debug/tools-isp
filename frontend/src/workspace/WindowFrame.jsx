@@ -2,7 +2,7 @@
 
 /**
  * Stable draggable + resizable window frame.
- * - Drag from header only
+ * - Drag from anywhere (except controls)
  * - Resize from bottom-right only
  * - Uses window listeners created on demand (no re-render breakage)
  */
@@ -34,7 +34,13 @@ export default function WindowFrame({ win, onFocus, onClose, onChange, children 
     window.removeEventListener("mouseup", onUpResize, true);
   }
 
-  function onDownHeader(e){
+  function onDownDrag(e){
+    if(e.button !== 0) return;
+
+    // don't start dragging from interactive controls
+    const tag = (e.target && e.target.tagName ? String(e.target.tagName).toLowerCase() : "");
+    if(tag === "input" || tag === "textarea" || tag === "select" || tag === "button") return;
+    if(e.target && e.target.closest && e.target.closest("[data-nodrag='1']")) return;
     if(e.button !== 0) return;
     onFocus?.();
     e.preventDefault();
@@ -63,8 +69,9 @@ export default function WindowFrame({ win, onFocus, onClose, onChange, children 
     const dx = e.clientX - d.startX;
     const dy = e.clientY - d.startY;
 
-    const nx = clamp(d.baseX + dx, 0, window.innerWidth - 80);
-    const ny = clamp(d.baseY + dy, 0, window.innerHeight - 60);
+    const vw = document.documentElement.clientWidth; const vh = document.documentElement.clientHeight;
+    const nx = clamp(d.baseX + dx, 0, vw - 80);
+    const ny = clamp(d.baseY + dy, 0, vh - 60);
 
     onChange?.({ x: Math.round(nx), y: Math.round(ny) });
   }
@@ -119,9 +126,8 @@ export default function WindowFrame({ win, onFocus, onClose, onChange, children 
       ref={ref}
       className="wsWin"
       style={style}
-      onMouseDown={() => onFocus?.()}
-    >
-      <div className="wsWinHead" onMouseDown={onDownHeader}>
+      onMouseDown={onDownDrag}
+    >      <div className="wsWinHead">
         <div className="wsWinTitle">{win.title ?? win.type ?? "Window"}</div>
         <div className="wsWinBtns">
           <button
@@ -142,3 +148,4 @@ export default function WindowFrame({ win, onFocus, onClose, onChange, children 
     </div>
   );
 }
+
