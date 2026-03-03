@@ -2,7 +2,8 @@
 import AppShell from "./layout/AppShell";
 import Workspace from "./workspace/Workspace";
 import LegacyApp from "./App.legacy";
-
+
+import NeighborsPanel from "./NeighborsPanel";
 const STORAGE_KEY = "toolsisp_windows_v1";
 
 function uid(){
@@ -83,9 +84,13 @@ export default function App(){
   }, [windows]);
   return (
     <AppShell active={active} setActive={setActive} actions={actions}>
-      <Workspace windows={windows} setWindows={setWindows}>
-        <LegacyApp />
-      </Workspace>
+      {active === "neighbors" ? (
+        <NeighborsPanel />
+      ) : (
+        <Workspace windows={windows} setWindows={setWindows}>
+          <LegacyApp />
+        </Workspace>
+      )}
     </AppShell>
   );
 }
