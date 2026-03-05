@@ -4,6 +4,8 @@ import Workspace from "./workspace/Workspace";
 import LegacyApp from "./App.legacy";
 
 import NeighborsPanel from "./NeighborsPanel";
+
+import LivePingPage from "\./pages/LivePingPage";
 const STORAGE_KEY = "toolsisp_windows_v1";
 
 function uid(){
@@ -86,6 +88,8 @@ export default function App(){
     <AppShell active={active} setActive={setActive} actions={actions}>
       {active === "neighbors" ? (
         <NeighborsPanel />
+      ) : active === "liveping" ? (
+        <LivePingPage />
       ) : (
         <Workspace windows={windows} setWindows={setWindows}>
           <LegacyApp />
@@ -94,5 +98,6 @@ export default function App(){
     </AppShell>
   );
 }
+
 
 

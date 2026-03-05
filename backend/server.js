@@ -50,6 +50,37 @@ const OID_ifOut   = "1.3.6.1.2.1.2.2.1.16";
 // ---------- Routes ----------
 app.get("/health", (req, res) => res.json({ ok: true, service: "tools-isp-backend" }));
 
+/* LIVEPING-API-START */
+function pingOnceWindows(ip){
+  return new Promise((resolve) => {
+    // Windows ping: -n 1 (one echo), -w 1000 (timeout ms)
+    execFile("ping", ["-n","1","-w","1000", ip], { windowsHide: true }, (err, stdout, stderr) => {
+      const out = String(stdout || "") + "\n" + String(stderr || "");
+      // alive if we see TTL= or time=
+      const alive = /TTL=|time[=<]\s*\d+/i.test(out);
+      let timeMs = null;
+      const m = out.match(/time[=<]\s*([0-9]+)\s*ms/i);
+      if(m) timeMs = Number(m[1]);
+      resolve({ ok:true, ip, alive, timeMs, raw: out });
+    });
+  });
+}
+
+// GET /api/ping/once?ip=1.2.3.4
+app.get("/api/ping/once", async (req, res) => {
+  const ip = String(req.query?.ip || "").trim();
+  if(!ip) return res.status(400).json({ ok:false, error:"ip required" });
+
+  try{
+    const r = await pingOnceWindows(ip);
+    // don't return raw by default (too big); keep for debugging only if needed
+    return res.json({ ok:true, ip:r.ip, alive:r.alive, timeMs:r.timeMs });
+  } catch(e){
+    return res.status(502).json({ ok:false, error:String(e?.message || e) });
+  }
+});
+/* LIVEPING-API-END */
+
 // SNMP basic test (sysDescr.0)
 app.post("/api/snmp/test", async (req, res) => {
   const { ip, community } = req.body || {};
@@ -935,6 +966,7 @@ app.get("/api/tcp-ping-sse", (req, res) => {
 
   req.on("close", cleanup);
 });
+
 
 
 

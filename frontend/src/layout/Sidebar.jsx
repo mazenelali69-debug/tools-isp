@@ -5,7 +5,8 @@ const NAV = [
   { id: "monitors",  label: "Monitors",  icon: "📈" },
   { id: "neighbors", label: "Neighbors", icon: "🧭" },
   { id: "ping",      label: "Ping",      icon: "📡" },
-  { id: "tools",     label: "Tools",     icon: "🧰" },
+    { id: "liveping", label: "Live Ping", icon: "??" },
+{ id: "tools",     label: "Tools",     icon: "🧰" },
   { id: "settings",  label: "Settings",  icon: "⚙️" },
 ];
 
@@ -46,3 +47,4 @@ export default function Sidebar({ active, setActive }) {
     </aside>
   );
 }
+
