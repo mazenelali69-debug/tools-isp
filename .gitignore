@@ -57,3 +57,5 @@ TOOLS_ISP_FULL_EXPORT.txt
 tools-isp-export.zip
 .run-pids-tools-isp.txt
 _backup-frontend-*.zip
+
+*.zip
