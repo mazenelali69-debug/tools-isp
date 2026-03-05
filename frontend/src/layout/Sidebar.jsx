@@ -2,13 +2,10 @@
 
 const NAV = [
   { id: "dashboard", label: "Dashboard", icon: "🏠" },
-  { id: "monitors",  label: "Monitors",  icon: "📈" },
   { id: "neighbors", label: "Neighbors", icon: "🧭" },
-  { id: "ping",      label: "Ping",      icon: "📡" },
-    { id: "liveping", label: "Live Ping", icon: "??" },
-{ id: "tools",     label: "Tools",     icon: "🧰" },
-  { id: "settings",  label: "Settings",  icon: "⚙️" },
-];
+  { id: "liveping", label: "Live Ping", icon: "??" },
+  { id: "ethernet", label: "Ethernet Speed+Traffic", icon: "↔" },
+{ id: "settings",  label: "Settings",  icon: "⚙️" }];
 
 export default function Sidebar({ active, setActive }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -47,4 +44,6 @@ export default function Sidebar({ active, setActive }) {
     </aside>
   );
 }
+
+
 

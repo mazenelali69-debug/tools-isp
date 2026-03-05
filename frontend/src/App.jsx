@@ -1,21 +1,16 @@
 ﻿import React, { useMemo, useState, useEffect } from "react";
+import EthernetTrafficPage from "./pages/EthernetTrafficPage";
 import AppShell from "./layout/AppShell";
 import Workspace from "./workspace/Workspace";
 import LegacyApp from "./App.legacy";
-
 import NeighborsPanel from "./NeighborsPanel";
-
 import LivePingPage from "\./pages/LivePingPage";
 const STORAGE_KEY = "toolsisp_windows_v1";
-
 function uid(){
   return "w_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
 }
-
 export default function App(){
-
   const [active, setActive] = useState("dashboard");
-
   const [windows, setWindows] = useState(() => {
     try{
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -24,16 +19,13 @@ export default function App(){
       return [];
     }
   });
-
   useEffect(() => {
     try{
       localStorage.setItem(STORAGE_KEY, JSON.stringify(windows));
     }catch{}
   }, [windows]);
-
   function openWin(type){
     const id = uid();
-
     const base = {
       id,
       type,
@@ -47,16 +39,13 @@ export default function App(){
       h: type === "note" ? 320 : 340,
       z: 10 + windows.length
     };
-
     setWindows(prev => [...prev, base]);
   }
-
   const actions = useMemo(() => ({
     onNewPing: () => openWin("ping"),
     onNewMonitor: () => openWin("monitor"),
     onNewNote: () => openWin("note"),
   }), [windows]);
-
     useEffect(() => {
     function onKey(e){
       if(e.ctrlKey && e.key.toLowerCase() === "p"){
@@ -80,7 +69,6 @@ export default function App(){
         });
       }
     }
-
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [windows]);
@@ -90,6 +78,8 @@ export default function App(){
         <NeighborsPanel />
       ) : active === "liveping" ? (
         <LivePingPage />
+      ) : active === "ethernet" ? (
+        <EthernetTrafficPage />
       ) : (
         <Workspace windows={windows} setWindows={setWindows}>
           <LegacyApp />
@@ -98,6 +88,5 @@ export default function App(){
     </AppShell>
   );
 }
-
 
 

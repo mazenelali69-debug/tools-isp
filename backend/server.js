@@ -81,6 +81,230 @@ app.get("/api/ping/once", async (req, res) => {
 });
 /* LIVEPING-API-END */
 
+
+
+/* ETH-API-START */
+const fs = require("fs");
+const path = require("path");
+
+const ETH_CFG_PATH = path.join(__dirname, "ethTargets.json");
+
+// In-memory rate cache: key = ip#ifIndex, value = { rx, tx, t }
+const _ethRate = new Map();
+
+function snmpGetRaw(ip, community, oid){
+  return new Promise((resolve, reject) => {
+    execFile("snmpget.exe", ["-v2c","-c", community, "-Oqv", ip, oid], { windowsHide:true }, (err, stdout, stderr) => {
+      const out = String(stdout || "").trim();
+      const errOut = String(stderr || "").trim();
+      if(err || !out){
+        return reject(new Error(errOut || "snmpget failed"));
+      }
+      // strip type prefixes like "Counter64: "
+      resolve(out.replace(/^[A-Z\-]+:\s*/,"").trim());
+    });
+  });
+}
+
+function toNum(x){
+  if(x == null) return null;
+  const m = String(x).match(/-?\d+(\.\d+)?/);
+  if(!m) return null;
+  const n = Number(m[0]);
+  return Number.isFinite(n) ? n : null;
+}
+/* SNAPSHOT-THROUGHPUT-HELPER-START */
+async function measureIfThroughput(ip, community, ifIndex, ms=900){
+  ms = Math.max(200, Math.min(5000, Number(ms)||900));
+  const session = makeSession(ip, community);
+
+  const OID_ifInOctets    = `1.3.6.1.2.1.2.2.1.10.${ifIndex}`;
+  const OID_ifOutOctets   = `1.3.6.1.2.1.2.2.1.16.${ifIndex}`;
+  const OID_ifHCInOctets  = `1.3.6.1.2.1.31.1.1.1.6.${ifIndex}`;
+  const OID_ifHCOutOctets = `1.3.6.1.2.1.31.1.1.1.10.${ifIndex}`;
+
+  const sleep = (n)=>new Promise(r=>setTimeout(r,n));
+  const vbOk = (vb)=>vb && vb.oid && !snmp.isVarbindError(vb);
+
+  const vbToBigInt = (vb)=>{
+    if(!vbOk(vb)) return null;
+    const v = vb.value;
+    try{
+      if(typeof v === "bigint") return v;
+      if(typeof v === "number") return BigInt(Math.trunc(v));
+      if(Buffer.isBuffer(v)){
+        const hex = v.toString("hex") || "0";
+        return BigInt("0x" + hex);
+      }
+      if(v && typeof v.toString === "function"){
+        const s = v.toString();
+        if(/^\d+$/.test(s)) return BigInt(s);
+        const n = Number(s);
+        if(Number.isFinite(n)) return BigInt(Math.trunc(n));
+      }
+      return null;
+    } catch { return null; }
+  };
+
+  const read = async ()=>{
+    const vbs = await snmpGet(session, [
+      OID_ifHCInOctets, OID_ifHCOutOctets,
+      OID_ifInOctets, OID_ifOutOctets
+    ]);
+    const byOid = {};
+    for(const vb of (vbs||[])){ if(vb && vb.oid) byOid[vb.oid]=vb; }
+
+    const hcIn  = vbToBigInt(byOid[OID_ifHCInOctets]);
+    const hcOut = vbToBigInt(byOid[OID_ifHCOutOctets]);
+
+    let used = "32";
+    let inB  = vbToBigInt(byOid[OID_ifInOctets]);
+    let outB = vbToBigInt(byOid[OID_ifOutOctets]);
+
+    if(hcIn != null && hcOut != null){
+      used = "hc";
+      inB = hcIn; outB = hcOut;
+    }
+    return { used, inB, outB };
+  };
+
+  const deltaWrap = (newV, oldV, mod)=>{
+    if(newV==null || oldV==null) return null;
+    let d = newV - oldV;
+    if(d < 0n) d = d + mod;
+    return d;
+  };
+
+  try{
+    const a = await read();
+    const t0 = Date.now();
+    await sleep(ms);
+    const b = await read();
+    const t1 = Date.now();
+    const deltaMs = Math.max(1, t1 - t0);
+
+    const mod = (a.used === "hc") ? (1n<<64n) : (1n<<32n);
+
+    const dIn  = deltaWrap(b.inB,  a.inB,  mod);
+    const dOut = deltaWrap(b.outB, a.outB, mod);
+    if(dIn==null || dOut==null) return { ok:false, used:a.used, deltaMs };
+    let rxMbps = (Number(dIn)  * 8 * 1000 / deltaMs) / 1_000_000;
+    let txMbps = (Number(dOut) * 8 * 1000 / deltaMs) / 1_000_000;
+
+    return { ok:true, used:a.used, deltaMs, rxMbps, txMbps };
+  } catch(e){
+    return { ok:false, error:String(e?.message||e) };
+  } finally {
+    try{ session.close(); }catch{}
+  }
+}
+/* SNAPSHOT-THROUGHPUT-HELPER-END */
+
+async function ethSnapshotOne(t){
+  const name = t.name || t.id;
+  const ip = String(t.ip || "").trim();
+  const comm = String(t.community || "public").trim();
+  const idx = Number(t.uplinkIfIndex || t.ifIndex || 0);
+
+  if(!ip || !idx){
+    return { id:t.id, name, ok:false, error:"CONFIG_MISSING", ip, ifIndex:idx };
+  }
+
+  const rxOid = `1.3.6.1.2.1.31.1.1.1.6.${idx}`;   // ifHCInOctets
+  const txOid = `1.3.6.1.2.1.31.1.1.1.10.${idx}`;  // ifHCOutOctets
+  const spOid = `1.3.6.1.2.1.31.1.1.1.15.${idx}`;  // ifHighSpeed (Mbps)
+  const opOid = `1.3.6.1.2.1.2.2.1.8.${idx}`;       // ifOperStatus
+  const adOid = `1.3.6.1.2.1.2.2.1.7.${idx}`;       // ifAdminStatus
+
+  const key = `${ip}#${idx}`;
+
+  try{
+    const [rxS, txS, spS, opS, adS] = await Promise.all([
+      snmpGetRaw(ip, comm, rxOid),
+      snmpGetRaw(ip, comm, txOid),
+      snmpGetRaw(ip, comm, spOid),
+      snmpGetRaw(ip, comm, opOid),
+      snmpGetRaw(ip, comm, adOid),
+    ]);
+
+    const rx = toNum(rxS);
+    const tx = toNum(txS);
+    const speedMb = toNum(spS);
+const oper = String(opS).trim();
+    const admin = String(adS).trim();
+
+    // rate calc: Mbps from byte delta
+    const now = Date.now();
+    const prev = _ethRate.get(key);
+    let rxMbps = null, txMbps = null;
+
+    
+    /* SNAPSHOT-THROUGHPUT-INJECT-V2 */
+    // Best-effort: sample throughput using helper (overrides rxMbps/txMbps if ok)
+    try{
+      const th = await measureIfThroughput(ip, comm, idx, 900);
+      if(th && th.ok){
+        rxMbps = Math.round(th.rxMbps * 100) / 100;
+        txMbps = Math.round(th.txMbps * 100) / 100;
+      }
+    } catch {}
+    /* SNAPSHOT-THROUGHPUT-INJECT-V2-END */
+if(prev && rx != null && tx != null){
+      const dt = Math.max(0.25, (now - prev.t) / 1000); // seconds
+      const dRx = Math.max(0, rx - prev.rx);
+      const dTx = Math.max(0, tx - prev.tx);
+      rxMbps = Math.round(((dRx * 8) / 1e6) / dt * 100) / 100;
+      txMbps = Math.round(((dTx * 8) / 1e6) / dt * 100) / 100;
+    }
+
+    if(rx != null && tx != null){
+      _ethRate.set(key, { rx, tx, t: now });
+    }
+
+    const status = (oper === "1" || /^up$/i.test(oper)) ? "up"
+                : (oper === "2" || /^down$/i.test(oper)) ? "down"
+                : "unk";
+
+    const adminS = (admin === "1" || /^up$/i.test(admin)) ? "up"
+                 : (admin === "2" || /^down$/i.test(admin)) ? "down"
+                 : "unk";
+
+    return {
+      id: t.id,
+      name,
+      ip,
+      ifIndex: idx,
+      ifName: (t.ifName || t.uplinkIfName || ""),
+      ok: true,
+      status,
+      admin: adminS,
+      speedMb,
+      rxMbps,
+      txMbps,
+      ts: now
+    };
+  } catch(e){
+    return { id:t.id, name, ip, ifIndex:idx, ifName: (t.ifName || t.uplinkIfName || ""), ok:false, error:String(e?.message||e) };
+  }
+}
+
+// GET /api/eth/snapshot  -> returns all 6
+app.get("/api/eth/snapshot", async (req, res) => {
+  try{
+    const raw = fs.readFileSync(ETH_CFG_PATH, "utf8");
+    const targets = JSON.parse(raw);
+
+    const out = [];
+    // sequential to avoid SNMP flood
+    for(const t of targets){
+      out.push(await ethSnapshotOne(t));
+    }
+    res.json({ ok:true, data: out });
+  } catch(e){
+    res.status(500).json({ ok:false, error:String(e?.message||e) });
+  }
+});
+/* ETH-API-END */
 // SNMP basic test (sysDescr.0)
 app.post("/api/snmp/test", async (req, res) => {
   const { ip, community } = req.body || {};
@@ -102,7 +326,7 @@ app.post("/api/snmp/test", async (req, res) => {
 // Interfaces (robust):
 // 1) Try tableColumns (fast)
 // 2) If 0 rows, fallback to by-index using ifNumber + GET per index (works when walk/table blocked)
-app.post("/api/interfaces", async (req, res) => {
+async function handleInterfaces(req, res){
   const { ip, community } = req.body || {};
   if (!ip || !community) return res.status(400).json({ ok: false, error: "ip+community required" });
 
@@ -209,9 +433,319 @@ app.post("/api/interfaces", async (req, res) => {
   } finally {
     try { session.close(); } catch {}
   }
+
+  }
+
+app.post("/api/interfaces", handleInterfaces);
+
+app.get("/api/interfaces", async (req, res) => {
+  req.body = { ip: req.query.ip, community: req.query.community };
+  return handleInterfaces(req, res);
 });
 
 
+
+/* ETH-TRAFFIC-API-START */
+// GET /api/eth/traffic?ip=...&community=...&ifIndex=...
+// Returns raw counters + status for a single interface index (with debug fields)
+app.get("/api/eth/traffic", async (req, res) => {
+  const ip = String(req.query.ip || "").trim();
+  const community = String(req.query.community || "").trim();
+  const ifIndex = parseInt(String(req.query.ifIndex || ""), 10);
+
+  if (!ip || !community || !Number.isFinite(ifIndex)) {
+    return res.status(400).json({ ok:false, error:"ip+community+ifIndex required" });
+  }
+
+  const session = makeSession(ip, community);
+
+  const OID_ifInOctets    = `1.3.6.1.2.1.2.2.1.10.${ifIndex}`;
+  const OID_ifOutOctets   = `1.3.6.1.2.1.2.2.1.16.${ifIndex}`;
+  const OID_ifInErrors    = `1.3.6.1.2.1.2.2.1.14.${ifIndex}`;
+  const OID_ifOutErrors   = `1.3.6.1.2.1.2.2.1.20.${ifIndex}`;
+  const OID_ifOperStatus  = `1.3.6.1.2.1.2.2.1.8.${ifIndex}`;
+  const OID_ifAdminStatus = `1.3.6.1.2.1.2.2.1.7.${ifIndex}`;
+  const OID_ifSpeed       = `1.3.6.1.2.1.2.2.1.5.${ifIndex}`;
+
+  const OID_ifHCInOctets  = `1.3.6.1.2.1.31.1.1.1.6.${ifIndex}`;
+  const OID_ifHCOutOctets = `1.3.6.1.2.1.31.1.1.1.10.${ifIndex}`;
+
+  try {
+    const oids = [
+      OID_ifHCInOctets, OID_ifHCOutOctets,
+      OID_ifInOctets, OID_ifOutOctets,
+      OID_ifInErrors, OID_ifOutErrors,
+      OID_ifOperStatus, OID_ifAdminStatus,
+      OID_ifSpeed
+    ];
+
+    const vbs = await snmpGet(session, oids);
+
+    const byOid = {};
+    for(const vb of (vbs||[])){
+      if(vb && vb.oid) byOid[vb.oid] = vb;
+    }
+
+    const vbInfo = (oid) => {
+      const vb = byOid[oid];
+      if(!vb) return { oid, ok:false, err:"missing-varbind" };
+      if(snmp.isVarbindError(vb)){
+        return { oid, ok:false, err:String(snmp.varbindError(vb) || "varbind-error") };
+      }
+      const v = vb.value;
+      if(typeof v === "bigint") return { oid, ok:true, type:"bigint", value:Number(v) };
+      if(typeof v === "number") return { oid, ok:true, type:"number", value:v };
+      if(Buffer.isBuffer(v)) return { oid, ok:true, type:"buffer", value:v.toString("hex") };
+      if(v && typeof v.toString === "function"){
+        const s = v.toString();
+        const n = Number(s);
+        return { oid, ok:true, type: typeof v, value: (Number.isFinite(n) ? n : s) };
+      }
+      return { oid, ok:true, type: typeof v, value: v };
+    };
+
+    const toNum = (oid) => {
+      const vb = byOid[oid];
+      if(!vb || snmp.isVarbindError(vb)) return null;
+      const v = vb.value;
+      if(typeof v === "bigint") return Number(v);
+if(Buffer.isBuffer(v)){
+  try{
+    // SNMP libs sometimes return Counter64 as Buffer (big-endian)
+    const hex = v.toString("hex") || "0";
+    const bi = BigInt("0x" + hex);
+    return Number(bi);
+  } catch {
+    return null;
+  }
+}
+      const n = Number(v);
+      return Number.isFinite(n) ? n : null;
+    };
+
+    const hcIn  = toNum(OID_ifHCInOctets);
+    const hcOut = toNum(OID_ifHCOutOctets);
+    const in32  = toNum(OID_ifInOctets);
+    const out32 = toNum(OID_ifOutOctets);
+
+    const inOctets  = (hcIn  != null ? hcIn  : in32);
+    const outOctets = (hcOut != null ? hcOut : out32);
+
+    return res.json({
+      ok:true,
+      ip,
+      ifIndex,
+      ts: Date.now(),
+      inOctets,
+      outOctets,
+      inOctets32: in32,
+      outOctets32: out32,
+      hcInOctets: hcIn,
+      hcOutOctets: hcOut,
+      inErrors: toNum(OID_ifInErrors),
+      outErrors: toNum(OID_ifOutErrors),
+      operStatus: toNum(OID_ifOperStatus),
+      adminStatus: toNum(OID_ifAdminStatus),
+      speed: toNum(OID_ifSpeed),
+      debug: {
+        ifHCInOctets: vbInfo(OID_ifHCInOctets),
+        ifHCOutOctets: vbInfo(OID_ifHCOutOctets),
+        ifInOctets: vbInfo(OID_ifInOctets),
+        ifOutOctets: vbInfo(OID_ifOutOctets)
+      }
+    });
+
+  } catch (e) {
+    return res.status(502).json({ ok:false, error:String(e?.message||e) });
+  } finally {
+    try { session.close(); } catch {}
+  }
+});
+/* ETH-TRAFFIC-API-END */
+
+
+/* ETH-THROUGHPUT-API-START */
+// GET /api/eth/throughput?ip=...&community=...&ifIndex=...&ms=1000
+// Measures throughput by sampling counters twice with delay.
+// Returns { rxMbps, txMbps, used:"hc"|"32", deltaMs, counters... }
+app.get("/api/eth/throughput", async (req, res) => {
+  const ip = String(req.query.ip || "").trim();
+  const community = String(req.query.community || "").trim();
+  const ifIndex = parseInt(String(req.query.ifIndex || ""), 10);
+
+  let ms = parseInt(String(req.query.ms || "1000"), 10);
+  if(!Number.isFinite(ms)) ms = 1000;
+  ms = Math.max(200, Math.min(5000, ms));
+
+  if (!ip || !community || !Number.isFinite(ifIndex)) {
+    return res.status(400).json({ ok:false, error:"ip+community+ifIndex required" });
+  }
+
+  const session = makeSession(ip, community);
+
+  const OID_ifInOctets    = `1.3.6.1.2.1.2.2.1.10.${ifIndex}`;
+  const OID_ifOutOctets   = `1.3.6.1.2.1.2.2.1.16.${ifIndex}`;
+  const OID_ifHCInOctets  = `1.3.6.1.2.1.31.1.1.1.6.${ifIndex}`;
+  const OID_ifHCOutOctets = `1.3.6.1.2.1.31.1.1.1.10.${ifIndex}`;
+  const OID_ifOperStatus  = `1.3.6.1.2.1.2.2.1.8.${ifIndex}`;
+  const OID_ifAdminStatus = `1.3.6.1.2.1.2.2.1.7.${ifIndex}`;
+  const OID_ifSpeed       = `1.3.6.1.2.1.2.2.1.5.${ifIndex}`;
+
+  const sleep = (n) => new Promise(r => setTimeout(r, n));
+
+  const vbOk = (vb) => vb && vb.oid && !snmp.isVarbindError(vb);
+
+  const vbToBigInt = (vb) => {
+    if(!vbOk(vb)) return null;
+    const v = vb.value;
+    try{
+      if(typeof v === "bigint") return v;
+      if(typeof v === "number") return BigInt(Math.trunc(v));
+      if(Buffer.isBuffer(v)){
+        const hex = v.toString("hex") || "0";
+        return BigInt("0x" + hex);
+      }
+      if(v && typeof v.toString === "function"){
+        const s = v.toString();
+        // If it's numeric string, BigInt can parse if integer
+        if(/^\d+$/.test(s)) return BigInt(s);
+        const n = Number(s);
+        if(Number.isFinite(n)) return BigInt(Math.trunc(n));
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
+  const vbToNum = (vb) => {
+    if(!vbOk(vb)) return null;
+    const v = vb.value;
+    if(typeof v === "bigint") return Number(v);
+    if(typeof v === "number") return Number.isFinite(v) ? v : null;
+    if(Buffer.isBuffer(v)){
+      try{
+        const hex = v.toString("hex") || "0";
+        const bi = BigInt("0x" + hex);
+        return Number(bi);
+      } catch { return null; }
+    }
+    if(v && typeof v.toString === "function"){
+      const n = Number(v.toString());
+      return Number.isFinite(n) ? n : null;
+    }
+    return null;
+  };
+
+  const readCounters = async () => {
+    const oids = [
+      OID_ifHCInOctets, OID_ifHCOutOctets,
+      OID_ifInOctets, OID_ifOutOctets,
+      OID_ifOperStatus, OID_ifAdminStatus, OID_ifSpeed
+    ];
+
+    const vbs = await snmpGet(session, oids);
+    const byOid = {};
+    for(const vb of (vbs||[])){
+      if(vb && vb.oid) byOid[vb.oid] = vb;
+    }
+
+    const hcIn  = vbToBigInt(byOid[OID_ifHCInOctets]);
+    const hcOut = vbToBigInt(byOid[OID_ifHCOutOctets]);
+
+    let used = "32";
+    let inB  = vbToBigInt(byOid[OID_ifInOctets]);
+    let outB = vbToBigInt(byOid[OID_ifOutOctets]);
+
+    if(hcIn != null && hcOut != null){
+      used = "hc";
+      inB  = hcIn;
+      outB = hcOut;
+    }
+
+    return {
+      used,
+      inB, outB,
+      in32: vbToBigInt(byOid[OID_ifInOctets]),
+      out32: vbToBigInt(byOid[OID_ifOutOctets]),
+      hcIn, hcOut,
+      operStatus: vbToNum(byOid[OID_ifOperStatus]),
+      adminStatus: vbToNum(byOid[OID_ifAdminStatus]),
+      speed: vbToNum(byOid[OID_ifSpeed])
+    };
+  };
+
+  const deltaWithWrap = (newV, oldV, mod) => {
+    if(newV == null || oldV == null) return null;
+    let d = newV - oldV;
+    if(d < 0n) d = d + mod;
+    return d;
+  };
+
+  try {
+    const a = await readCounters();
+    const t0 = Date.now();
+    await sleep(ms);
+    const b = await readCounters();
+    const t1 = Date.now();
+    const deltaMs = Math.max(1, (t1 - t0));
+
+    const mod = (a.used === "hc") ? (1n << 64n) : (1n << 32n);
+
+    const dIn  = deltaWithWrap(b.inB,  a.inB,  mod);
+    const dOut = deltaWithWrap(b.outB, a.outB, mod);
+
+    if(dIn == null || dOut == null){
+      return res.status(502).json({
+        ok:false,
+        error:"Could not read octet counters (SNMP blocked or missing OIDs).",
+        used: a.used,
+        a, b
+      });
+    }
+
+    // Throughput: bytes -> bits, per second
+    // Use Number safely: deltas over 0.2-5s are usually small enough to be safe.
+    let rxMbps = (Number(dIn)  * 8 * 1000 / deltaMs) / 1_000_000;
+    let txMbps = (Number(dOut) * 8 * 1000 / deltaMs) / 1_000_000;
+
+    return res.json({
+      ok:true,
+      ip,
+      ifIndex,
+      used: a.used,
+      deltaMs,
+      rxMbps,
+      txMbps,
+      operStatus: b.operStatus ?? a.operStatus ?? null,
+      adminStatus: b.adminStatus ?? a.adminStatus ?? null,
+      speed: b.speed ?? a.speed ?? null,
+      // Counters (string) to avoid precision issues when large:
+      counters: {
+        aIn:  a.inB  != null ? a.inB.toString()  : null,
+        aOut: a.outB != null ? a.outB.toString() : null,
+        bIn:  b.inB  != null ? b.inB.toString()  : null,
+        bOut: b.outB != null ? b.outB.toString() : null,
+        dIn:  dIn.toString(),
+        dOut: dOut.toString(),
+        aIn32:  a.in32  != null ? a.in32.toString()  : null,
+        aOut32: a.out32 != null ? a.out32.toString() : null,
+        bIn32:  b.in32  != null ? b.in32.toString()  : null,
+        bOut32: b.out32 != null ? b.out32.toString() : null,
+        aHcIn:  a.hcIn  != null ? a.hcIn.toString()  : null,
+        aHcOut: a.hcOut != null ? a.hcOut.toString() : null,
+        bHcIn:  b.hcIn  != null ? b.hcIn.toString()  : null,
+        bHcOut: b.hcOut != null ? b.hcOut.toString() : null
+      }
+    });
+
+  } catch (e) {
+    return res.status(502).json({ ok:false, error:String(e?.message||e) });
+  } finally {
+    try { session.close(); } catch {}
+  }
+});
+/* ETH-THROUGHPUT-API-END */
 function parseCounter(vb) {
   if (!vb || snmp.isVarbindError(vb)) return null;
 
@@ -341,6 +875,17 @@ app.post("/api/debug/walk-ifdescr", async (req, res) => {
 // POST /api/interfaces-cli  { ip, community }
 // returns: { ok:true, count, interfaces:[{ifIndex, ifName}] }
 //
+/* ===== ALIASES for EthernetTrafficPage (GET -> POST body) ===== */
+app.post("/api/interfaces", (req,res)=> handleInterfaces(req,res));
+app.get("/api/et/interfaces", (req,res)=>{
+  req.body = { ip: req.query.ip, community: req.query.community };
+  return handleInterfaces(req,res);
+});
+app.get("/api/eth/interfaces", (req,res)=>{
+  req.body = { ip: req.query.ip, community: req.query.community };
+  return handleInterfaces(req,res);
+});
+/* ===== ALIASES END ===== */
 app.post("/api/interfaces-cli",(req,res)=>{
   const { ip, community } = req.body || {};
   if(!ip || !community) return res.status(400).json({ ok:false, error:"ip+community required" });
@@ -966,6 +1511,24 @@ app.get("/api/tcp-ping-sse", (req, res) => {
 
   req.on("close", cleanup);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

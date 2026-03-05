@@ -1,0 +1,62 @@
+[
+    {
+        "id":  "redwan",
+        "name":  "RBE50UG-One Redwan",
+        "ip":  "88.88.88.4",
+        "ifIndex":  2,
+        "ifName":  "ether2",
+        "community":  "public",
+        "uplinkIfIndex":  2,
+        "uplinkIfName":  "ether1"
+    },
+    {
+        "id":  "akkari",
+        "name":  "RB750Gr3To Akkari*Center",
+        "ip":  "88.88.88.5",
+        "ifIndex":  4,
+        "ifName":  "ether3",
+        "community":  "public",
+        "uplinkIfIndex":  4,
+        "uplinkIfName":  "ether3"
+    },
+    {
+        "id":  "pharmacy",
+        "name":  "RB750Gr3 TO Pharmacy",
+        "ip":  "88.88.88.9",
+        "ifIndex":  5,
+        "ifName":  "ether4",
+        "community":  "public",
+        "uplinkIfIndex":  5,
+        "uplinkIfName":  "ether4"
+    },
+    {
+        "id":  "office",
+        "name":  "RB750Gr3-To-OFFICE DAVO-NEW*",
+        "ip":  "88.88.88.15",
+        "ifIndex":  5,
+        "ifName":  "ether4",
+        "community":  "public",
+        "uplinkIfIndex":  5,
+        "uplinkIfName":  "ether4"
+    },
+    {
+        "id":  "mimosa",
+        "name":  "Mimosa C5C-JABAL",
+        "ip":  "88.88.88.10",
+        "ifIndex":  5,
+        "ifName":  "ether4",
+        "community":  "public",
+        "uplinkIfIndex":  5,
+        "uplinkIfName":  "ether4"
+    },
+    {
+        "id":  "jabal",
+        "name":  "RB750Gr3-Switsh Jabal Finished",
+        "ip":  "88.88.88.13",
+        "ifIndex":  5,
+        "ifName":  "ether4",
+        "community":  "public",
+        "uplinkIfIndex":  5,
+        "uplinkIfName":  "ether4"
+    }
+]

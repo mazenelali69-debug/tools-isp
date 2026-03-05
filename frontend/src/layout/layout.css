@@ -456,3 +456,110 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
 -webkit-text-fill-color:transparent;
 }
 
+/* ETH-UI-START */
+.ethWrap{
+  padding: 18px 18px 26px 18px;
+  background:
+    radial-gradient(900px 420px at 12% 8%, rgba(64,220,255,.10), rgba(0,0,0,0) 60%),
+    radial-gradient(800px 380px at 82% 18%, rgba(120,255,160,.08), rgba(0,0,0,0) 55%),
+    radial-gradient(900px 480px at 50% 92%, rgba(255,90,120,.06), rgba(0,0,0,0) 60%);
+}
+.ethTop{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+.ethTitle{
+  font-size: 22px; font-weight: 1000; letter-spacing:.3px;
+  background: linear-gradient(90deg, rgba(160,240,255,1), rgba(120,255,190,1));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.ethGrid{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:14px; }
+@media (max-width: 1400px){ .ethGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 980px){ .ethGrid{ grid-template-columns: 1fr; } }
+
+.ethCard{
+  position:relative;
+  border-radius:18px;
+  padding:12px;
+  overflow:hidden;
+  min-height: 260px;
+
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.09);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 22px 55px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.10);
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+.ethCard:before{
+  content:"";
+  position:absolute; inset:-2px;
+  border-radius:20px;
+  background: conic-gradient(
+    from 180deg,
+    rgba(120,200,255,.00),
+    rgba(120,200,255,.55),
+    rgba(80,255,170,.50),
+    rgba(255,90,120,.55),
+    rgba(120,200,255,.00)
+  );
+  opacity:.36;
+  filter: blur(12px);
+  pointer-events:none;
+}
+.ethCard:hover{
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.14);
+  box-shadow: 0 30px 80px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.12);
+}
+.ethCard.ok{ outline:1px solid rgba(120,255,190,.18); }
+.ethCard.down{ outline:1px solid rgba(255,110,130,.18); }
+
+.ethHead{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:10px; }
+.ethName{ font-weight:1000; font-size:14px; line-height:1.1; }
+.ethSub{ font-size:12px; opacity:.72; margin-top:3px; }
+
+.ethPill{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 11px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+  font-weight:1000; font-size:12px;
+}
+.ethDot{ width:8px; height:8px; border-radius:999px; }
+.ethCard.ok .ethDot{ background: rgba(120,255,190,.95); box-shadow: 0 0 18px rgba(120,255,190,.42); }
+.ethCard.down .ethDot{ background: rgba(255,110,130,.95); box-shadow: 0 0 18px rgba(255,110,130,.42); }
+
+.ethMeta{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:10px; margin-bottom:10px; }
+.ethStat{
+  padding:10px; border-radius:14px;
+  border:1px solid rgba(255,255,255,.085);
+  background: rgba(255,255,255,.028);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07);
+}
+.ethLbl{ font-size:11px; opacity:.70; letter-spacing:.25px; }
+.ethVal{ margin-top:2px; font-size:14px; font-weight:1000; }
+
+.ethCharts{ display:grid; grid-template-columns: 1fr; gap:10px; }
+.ethChartBox{
+  padding:10px 10px 8px 10px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+}
+.ethChartLbl{ font-size:11px; opacity:.74; margin-bottom:8px; }
+
+.ethSpark{ width:100%; height:58px; opacity:.98; }
+.ethLine{
+  stroke: rgba(150,245,255,.98);
+  filter: drop-shadow(0 0 10px rgba(120,220,255,.35)) drop-shadow(0 10px 22px rgba(0,0,0,.35));
+}
+.ethArea{ opacity:.58; }
+
+.ethErr{
+  margin-top:9px; font-size:12px; opacity:.95;
+  padding:8px 10px; border-radius:14px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+}
+/* ETH-UI-END */
+
