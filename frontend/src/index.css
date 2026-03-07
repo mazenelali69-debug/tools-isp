@@ -2169,3 +2169,40 @@ html, body { overflow: hidden !important; height: 100% !important; }
 }
 /* NEI-BADGES-END */
 
+
+/* ===== LIVE PING LOSS BAR ===== */
+
+.lpLossBar{
+  height:8px;
+  border-radius:999px;
+  overflow:hidden;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.lpLossFill{
+  height:100%;
+  transition:width .3s ease, background .3s ease;
+}
+
+.lpLossFill.ok{
+  background:rgba(0,245,212,.75);
+}
+
+.lpLossFill.warn{
+  background:rgba(255,209,102,.9);
+  box-shadow:0 0 8px rgba(255,209,102,.6);
+}
+
+.lpLossFill.bad{
+  background:rgba(255,90,90,.95);
+  box-shadow:0 0 10px rgba(255,90,90,.8);
+  animation:lossPulse 1s infinite;
+}
+
+@keyframes lossPulse{
+  0%{opacity:1}
+  50%{opacity:.45}
+  100%{opacity:1}
+}
+

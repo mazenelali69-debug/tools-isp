@@ -4,12 +4,11 @@ const API_BASE = import.meta.env?.VITE_API_BASE || "";
 
 function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
 
-function Sparkline({ points, height=58 }){
-  // points: array of numbers or null (null = loss)
-  const w = 260;
+function Sparkline({ points, height = 78 }){
+  const w = 320;
   const h = height;
 
-  const [hover, setHover] = useState(null); // { idx, x, y, val }
+  const [hover, setHover] = useState(null);
 
   const vals = points.filter(v => typeof v === "number" && isFinite(v));
   const minV = vals.length ? Math.min(...vals) : 0;
@@ -21,12 +20,11 @@ function Sparkline({ points, height=58 }){
   const pts = points.map((v,i) => {
     const x = i * step;
     const y = (v == null)
-      ? (h - 2)
-      : (h - 2) - (((v - minV) / span) * (h - 10));
+      ? (h - 4)
+      : (h - 4) - (((v - minV) / span) * (h - 14));
     return { x, y, v };
   });
 
-  // Smooth path (quadratic)
   const linePath = (() => {
     if(pts.length === 0) return "";
     let d = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
@@ -45,16 +43,11 @@ function Sparkline({ points, height=58 }){
   const areaPath = linePath ? `${linePath} L ${w} ${h} L 0 ${h} Z` : "";
   const gid = useMemo(() => `lpGrad_${Math.random().toString(16).slice(2)}`, []);
 
-  function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
-
   function onMove(e){
     if(points.length === 0) return;
     const rect = e.currentTarget.getBoundingClientRect();
-
-    // convert mouse X (px) to SVG viewBox X (0..w)
     const xPx = e.clientX - rect.left;
     const xSvg = clamp((xPx / rect.width) * w, 0, w);
-
     const idx = clamp(Math.round(xSvg / step), 0, points.length - 1);
     const p = pts[idx];
 
@@ -73,6 +66,11 @@ function Sparkline({ points, height=58 }){
       preserveAspectRatio="none"
       onMouseMove={onMove}
       onMouseLeave={() => setHover(null)}
+      style={{
+        width: "100%",
+        height,
+        display: "block"
+      }}
     >
       <defs>
         <linearGradient id={gid} x1="0" x2="0" y1="0" y2="1">
@@ -82,8 +80,8 @@ function Sparkline({ points, height=58 }){
         </linearGradient>
       </defs>
 
-      {areaPath ? <path className="lpArea" d={areaPath} fill={`url(#${gid})`} /> : null}
-      {linePath ? <path className="lpLine" d={linePath} fill="none" strokeWidth="2.2" /> : null}
+      {areaPath ? <path d={areaPath} fill={`url(#${gid})`} /> : null}
+      {linePath ? <path d={linePath} fill="none" stroke="rgba(140,210,255,.95)" strokeWidth="2.2" /> : null}
 
       {hover ? (
         <g>
@@ -97,8 +95,8 @@ function Sparkline({ points, height=58 }){
           <circle cx={hover.x} cy={hover.y} r="7" fill="rgba(140,210,255,.18)" />
 
           {hover.val != null ? (
-            <g transform={`translate(${Math.min(hover.x + 8, w - 56)}, ${Math.max(hover.y - 18, 12)})`}>
-              <rect x="0" y="-12" rx="6" ry="6" width="52" height="18" fill="rgba(0,0,0,.45)" stroke="rgba(255,255,255,.10)" />
+            <g transform={`translate(${Math.min(hover.x + 8, w - 66)}, ${Math.max(hover.y - 18, 14)})`}>
+              <rect x="0" y="-12" rx="6" ry="6" width="60" height="18" fill="rgba(0,0,0,.45)" stroke="rgba(255,255,255,.10)" />
               <text x="8" y="1" fill="rgba(255,255,255,.95)" fontSize="11" fontWeight="800">
                 {hover.val} ms
               </text>
@@ -109,11 +107,12 @@ function Sparkline({ points, height=58 }){
     </svg>
   );
 }
+
 function pctLoss(points){
   if(!points.length) return 0;
   const total = points.length;
   const lost = points.filter(v => v == null).length;
-  return Math.round((lost/total)*100);
+  return Math.round((lost / total) * 100);
 }
 
 async function pingOnce(ip){
@@ -121,7 +120,6 @@ async function pingOnce(ip){
   const r = await fetch(url, { cache: "no-store" });
   const j = await r.json();
   if(!j || !j.ok) throw new Error(j?.error || "Ping failed");
-  // j: { ok:true, ip, alive:boolean, timeMs:number|null }
   return j;
 }
 
@@ -135,19 +133,27 @@ function useInterval(cb, ms){
   }, [ms]);
 }
 
+function statusTone(up){
+  return up ? "#00f5d4" : "#ff8a80";
+}
+
+function cardBorder(up){
+  return up
+    ? "1px solid rgba(255,255,255,.10)"
+    : "1px solid rgba(255,120,120,.16)";
+}
+
 export default function LivePingPage(){
   const TARGETS = useMemo(() => ([
     { ip: "10.0.25.10",    name: "DNS-THGV" },
     { ip: "192.168.99.1",  name: "GETWAY-THGV" },
     { ip: "155.15.59.1",   name: "VLAN-CCR1036-12G-4S-THGV" },
     { ip: "155.15.59.4",   name: "AviatWTM4200-nocomment" },
-
-    // إذا بدك يصيرو 6 boxes: شيل التعليق عن هول
     { ip: "112.24.30.1",   name: "VLAN-2-CCR1036-12G-4S-THGV" },
     { ip: "88.88.88.254",  name: "JetStream managed Switch" },
   ]), []);
 
-  const WINDOW = 60; // last 60 seconds
+  const WINDOW = 60;
   const [state, setState] = useState(() => {
     const obj = {};
     for(const t of TARGETS){
@@ -161,7 +167,6 @@ export default function LivePingPage(){
   useInterval(async () => {
     if(!running) return;
 
-    // run sequentially to avoid spamming too hard
     for(const t of TARGETS){
       try{
         const res = await pingOnce(t.ip);
@@ -178,7 +183,7 @@ export default function LivePingPage(){
       } catch(e){
         setState(prev => {
           const cur = prev[t.ip] || { points: [], last: null, err: null };
-          const nextPts = [...cur.points, null].slice(-WINDOW); // count as loss
+          const nextPts = [...cur.points, null].slice(-WINDOW);
           return {
             ...prev,
             [t.ip]: { points: nextPts, last: null, err: String(e?.message || e) }
@@ -189,17 +194,76 @@ export default function LivePingPage(){
   }, 1000);
 
   return (
-    <div className="lpWrap">
-      <div className="lpTop">
-        <div className="lpTitle">Live Ping</div>
-        <div className="lpControls">
-          <button className="lpBtn" onClick={() => setRunning(v => !v)}>
-            {running ? "Pause" : "Resume"}
-          </button>
+    <div style={{ padding: 20 }}>
+      <div style={{ marginBottom: 18 }}>
+        <div style={{ fontSize: 34, fontWeight: 900, marginBottom: 4 }}>
+          Live Ping
+        </div>
+        <div style={{ opacity: 0.68, fontSize: 14 }}>
+          Real-time latency and packet loss for selected targets
         </div>
       </div>
 
-      <div className="lpGrid">
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 12,
+          marginBottom: 18,
+          maxWidth: 1400,
+          flexWrap: "wrap"
+        }}
+      >
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 10,
+            padding: "8px 12px",
+            borderRadius: 999,
+            background: "rgba(255,255,255,.04)",
+            border: "1px solid rgba(255,255,255,.10)"
+          }}
+        >
+          <div
+            style={{
+              width: 9,
+              height: 9,
+              borderRadius: 999,
+              background: running ? "#00f5d4" : "#ffd166",
+              boxShadow: running ? "0 0 10px rgba(0,245,212,.6)" : "0 0 10px rgba(255,209,102,.45)"
+            }}
+          />
+          <div style={{ fontSize: 13, fontWeight: 800 }}>
+            {running ? "LIVE RUNNING" : "PAUSED"}
+          </div>
+        </div>
+
+        <button
+          onClick={() => setRunning(v => !v)}
+          style={{
+            padding: "10px 14px",
+            borderRadius: 12,
+            border: "1px solid rgba(255,255,255,.14)",
+            background: "rgba(255,255,255,.04)",
+            color: "white",
+            cursor: "pointer",
+            fontWeight: 800
+          }}
+        >
+          {running ? "Pause" : "Resume"}
+        </button>
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+          gap: 18,
+          maxWidth: 1400
+        }}
+      >
         {TARGETS.map(t => {
           const s = state[t.ip] || { points: [], last: null, err: null };
           const lastAlive = s.last?.alive === true;
@@ -207,42 +271,177 @@ export default function LivePingPage(){
           const loss = pctLoss(s.points);
 
           return (
-            <div key={t.ip} className={"lpCard" + (lastAlive ? " ok" : " down")}>
-              <div className="lpCardHead">
-                <div className="lpName">{t.name}</div>
-                <div className="lpIp">{t.ip}</div>
-              </div>
+            <div
+              key={t.ip}
+              style={{
+                position: "relative",
+                overflow: "hidden",
+                borderRadius: 18,
+                padding: 18,
+                background: "linear-gradient(180deg, rgba(12,16,26,.95), rgba(8,11,18,.92))",
+                border: cardBorder(lastAlive),
+                boxShadow: "0 18px 40px rgba(0,0,0,.22)",
+                minHeight: 290
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  pointerEvents: "none",
+                  background: "radial-gradient(circle at top right, rgba(0,255,220,.10), transparent 35%), radial-gradient(circle at bottom left, rgba(90,110,255,.10), transparent 35%)"
+                }}
+              />
 
-              <div className="lpMeta">
-                <div className="lpStat">
-                  <div className="lpLbl">Status</div>
-                  <div className="lpVal">
-                    <span className="lpPill">
-                      <span className="lpDot"></span>
-                      {lastAlive ? "UP" : "DOWN"}
-                    </span>
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ fontSize: 22, fontWeight: 900, marginBottom: 4 }}>
+                    {t.name}
+                  </div>
+                  <div style={{ opacity: 0.7, fontSize: 13 }}>
+                    {t.ip}
                   </div>
                 </div>
-                <div className="lpStat">
-                  <div className="lpLbl">Latency</div>
-                  <div className="lpVal">{lastMs != null ? `${Math.round(lastMs)} ms` : "—"}</div>
+
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 8,
+                      padding: "7px 10px",
+                      borderRadius: 999,
+                      background: "rgba(255,255,255,.04)",
+                      border: "1px solid rgba(255,255,255,.08)",
+                      fontSize: 12
+                    }}
+                  >
+                    <span style={{ opacity: 0.75 }}>Status</span>
+                    <strong style={{ color: statusTone(lastAlive) }}>
+                      {lastAlive ? "UP" : "DOWN"}
+                    </strong>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 8,
+                      padding: "7px 10px",
+                      borderRadius: 999,
+                      background: "rgba(255,255,255,.04)",
+                      border: "1px solid rgba(255,255,255,.08)",
+                      fontSize: 12
+                    }}
+                  >
+                    <span style={{ opacity: 0.75 }}>Packet Loss</span>
+                    <strong style={{ color: loss > 0 ? "#ffb84d" : "#00f5d4" }}>
+                      {loss}%
+                    </strong>
+                  </div>
                 </div>
-                <div className="lpStat">
-                  <div className="lpLbl">Packet Loss</div>
-                  <div className="lpVal">{loss}%</div>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "140px 1fr",
+                    gap: 14,
+                    alignItems: "stretch"
+                  }}
+                >
+                  <div>
+                    <div
+                      style={{
+                        padding: "8px 10px",
+                        borderRadius: 12,
+                        background: "rgba(255,255,255,.03)",
+                        border: "1px solid rgba(255,255,255,.06)",
+                        marginBottom: 10
+                      }}
+                    >
+                      <div style={{ opacity: 0.78, fontSize: 12, marginBottom: 4 }}>Latency</div>
+                      <div style={{ fontSize: 18, fontWeight: 900, color: "#8cd2ff" }}>
+                        {lastMs != null ? `${Math.round(lastMs)} ms` : "—"}
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        padding: "8px 10px",
+                        borderRadius: 12,
+                        background: "rgba(255,255,255,.03)",
+                        border: "1px solid rgba(255,255,255,.06)"
+                      }}
+                    >
+                      <div style={{ opacity: 0.78, fontSize: 12, marginBottom: 4 }}>Window</div>
+                      <div style={{ fontSize: 18, fontWeight: 900, color: "#ffffff" }}>
+                        {WINDOW}s
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div
+                      style={{
+                        fontSize: 12,
+                        opacity: 0.74,
+                        marginBottom: 8,
+                        fontWeight: 700
+                      }}
+                    >
+                      Latency Timeline
+                    </div>
+
+                    <div
+                      style={{
+                        borderRadius: 14,
+                        overflow: "hidden",
+                        background: "rgba(255,255,255,.03)",
+                        border: "1px solid rgba(255,255,255,.07)",
+                        padding: 8
+                      }}
+                    >
+                      <Sparkline points={s.points} />
+                    </div>
+
+                    <div
+                      style={{
+                        marginTop: 10,
+                        height: 8,
+                        borderRadius: 999,
+                        overflow: "hidden",
+                        background: "rgba(255,255,255,.05)",
+                        border: "1px solid rgba(255,255,255,.06)"
+                      }}
+                    >
+                      <div
+                        className={
+                          "lpLossFill " +
+                          (loss === 0 ? "ok" : loss <= 10 ? "warn" : "bad")
+                        }
+                        style={{ width: `${loss}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              <div className="lpChartRow">
-                <div className="lpChartLabel">Latency (last {WINDOW}s)</div>
-                <Sparkline points={s.points} />
+                {s.err ? (
+                  <div
+                    style={{
+                      marginTop: 12,
+                      color: "#ff7272",
+                      background: "rgba(255,90,90,.08)",
+                      border: "1px solid rgba(255,90,90,.18)",
+                      borderRadius: 12,
+                      padding: 10,
+                      whiteSpace: "pre-wrap",
+                      fontSize: 12
+                    }}
+                  >
+                    ⚠ {s.err}
+                  </div>
+                ) : null}
               </div>
-
-              <div className="lpLossBar">
-                <div className="lpLossFill" style={{ width: `${loss}%` }} />
-              </div>
-
-              {s.err ? <div className="lpErr">⚠ {s.err}</div> : null}
             </div>
           );
         })}
@@ -250,10 +449,5 @@ export default function LivePingPage(){
     </div>
   );
 }
-
-
-
-
-
 
 
