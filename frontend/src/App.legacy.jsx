@@ -489,198 +489,6 @@ async function fetchInterfaces() {
     <div style={{ fontFamily: "Arial", padding: 20 }}>
       <h2>tools-isp Dashboard</h2>
       <div style={{ marginBottom: 10 }}>{status}</div>
-
-      
-      {showPing ? (
-        <div>
-          {pings.map(p => (
-            <div
-              key={p.id}
-              style={{
-                position: "fixed",
-                left: (p.x ?? 40),
-                top: (p.y ?? 160),
-                width: (p.w ?? 360),
-                height: (p.h ?? 320),
-                boxSizing: "border-box",
-                minWidth: 300,
-                minHeight: 220,
-                resize: "both",
-                overflow: "auto",
-                background: "rgba(10, 14, 20, 0.78)",
-                border: "1px solid rgba(255,255,255,0.14)",
-                borderRadius: 10,
-                
-                paddingBottom: 24,boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
-                padding: 10,
-                cursor: "move",
-                zIndex: 9999
-              }}
-            >
-              <div onMouseDown={(e) => onPingMouseDown(e, p.id)}  style={{ display: "flex",
-                flexDirection: "column", justifyContent: "space-between", cursor: "move", userSelect: "none", alignItems: "center", marginBottom: 8 }}>
-                <div style={{ fontWeight: 700, fontSize: 12 }}>Packet loss</div>
-                <button type="button" onClick={() => removePing(p.id)} style={{ cursor: "pointer" }}>✕</button>
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
-                <input
-                  value={p.ip}
-                  onChange={(e) => setPingField(p.id, { ip: e.target.value })}
-                  placeholder="IP / Host (8.8.8.8)"
-                  style={{ cursor: "text" }}
-                  onMouseDown={(e) => e.stopPropagation()}
-                />
-                <button
-                  type="button"
-                  onClick={() => startPingId(p.id)}
-                  disabled={p.running}
-                  onMouseDown={(e) => e.stopPropagation()}
-                >
-                  Run
-                </button>
-                <button
-                  type="button"
-                  onClick={() => stopPingId(p.id)}
-                  disabled={!p.running}
-                  onMouseDown={(e) => e.stopPropagation()}
-                >
-                  Stop
-                </button>
-              </div>
-
-              {(() => {
-  const loss = getPacketLossPct(p.out);
-  const pct = (loss === null) ? 0 : Math.max(0, Math.min(100, loss));
-  const lossText = (loss === null) ? "—" : (pct + "%");
-
-  // Sparkline from real ping times: time=23ms / time<1ms / time=23.5ms
-  const times = (p.out || "")
-    .split(/\r?\n/)
-    .map((l) => {
-      const m = l.match(/time\s*[=<]\s*([0-9.]+)\s*ms/i);
-      return m ? Number(m[1]) : null;
-    })
-    .filter((v) => v !== null && !Number.isNaN(v))
-    .slice(-40);
-
-  const maxT = times.length ? Math.max(...times) : null;
-  const minT = times.length ? Math.min(...times) : null;
-
-  const sparkPoints = (() => {
-    if (!times.length) return "";
-    const w = 100, h = 14;
-    const span = Math.max(1, (maxT - minT));
-    const n = times.length;
-    return times.map((t, i) => {
-      const x = (n === 1) ? 0 : (i * (w / (n - 1)));
-      const y = h - ((t - minT) / span) * h;
-      return `${x.toFixed(2)},${y.toFixed(2)}`;
-    }).join(" ");
-  })();
-
-  const sparkColor =
-    maxT === null ? "rgba(0,0,0,0)" :
-    (maxT >= 150 ? "rgba(255,80,80,0.98)" :
-     maxT >= 80  ? "rgba(255,200,0,0.98)" :
-                   "rgba(0,255,200,0.98)");
-
-  const pingLabel =
-    maxT === null ? "—" :
-    (Math.round(maxT) + "ms");
-
-  return (
-    <div className="pingMetaWrap">
-      <div className="pingMetaRow">
-        <div className="pingMetaLeft">
-          <div className="pingMetaLabel">Packet loss</div>
-          <div className="pingMetaValue">{lossText}</div>
-        </div>
-        <div className={"pingDotBox " + (p.running ? "on" : "")}>
-          <span className="pingDot" />
-        </div>
-      </div>
-
-      <div
-        className="plBar"
-        style={{ position: "relative", overflow: "hidden" }}
-        title={"Ping: " + pingLabel + " | Packet loss: " + lossText}
-      >
-        <div className="plFill" style={{ width: pct + "%", position:"absolute", left:0, top:0, bottom:0, zIndex:1, opacity:0.22 }} />
-
-        {/* Real-time ping sparkline */}
-        <svg className="plSpark" viewBox="0 0 100 14" width="100%" height="14"
-          preserveAspectRatio="none"
-          style={{ position:"absolute", left:0, top:0, width:"100%", height:"100%", zIndex:3, pointerEvents:"none" }}
-        >
-          <polyline
-  points={sparkPoints}
-  style={(() => {
-    const ms = (() => {
-      const m = String(pingLabel || "").match(/(\d+)\s*ms/);
-      return m ? parseInt(m[1], 10) : null;
-    })();
-    const stroke =
-      ms === null ? "rgba(120,200,255,0.9)" :
-      ms >= 200 ? "rgba(255,90,90,0.95)" :
-      ms >= 80  ? "rgba(255,210,70,0.95)" :
-                  "rgba(60,255,190,0.95)";
-    return {
-      fill: "none",
-      stroke,
-      strokeWidth: 2,
-      strokeLinejoin: "round",
-      strokeLinecap: "round",
-      filter: "drop-shadow(0 0 6px rgba(120,220,255,0.35))"
-    };
-  })()}
-/>
-        </svg>
-      </div>
-
-      <div className={"pingNeonLine " + (p.running ? "on" : "")} />
-    </div>
-  );
-})()}
-<pre data-ping-out={p.id} className="pingOut">{cleanPingText(p.out)}</pre>
-            
-              {/* PING_RESIZE_GRIP */}
-              <div
-                onMouseDown={(e) => onPingResizeDown(e, p.id)}
-                style={{
-                  position: "absolute",
-                  right: 6,
-                  bottom: 6,
-                  width: 14,
-                  height: 14,
-                  cursor: "nwse-resize",
-                  borderRadius: 3,
-                  background: "rgba(0,0,0,0.25)",
-                  border: "1px solid rgba(255,255,255,0.25)"
-                }}
-              /></div>
-          ))}
-        </div>
-      ) : null}
-<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10 }}>
-        <input value={ip} onChange={e => setIp(e.target.value)} placeholder="IP" />
-        <input value={community} onChange={e => setCommunity(e.target.value)} placeholder="Community" />
-                <button
-          type="button"
-          onClick={() => setShowPing(v => !v)}
-          title="Ping any IP"
-        >
-          Ping
-        </button>
-        <button onClick={fetchInterfaces}>Fetch Interfaces</button>
-      </div>
-      {showPing ? (
-        <div style={{ marginTop: 10, display: "flex",
-                flexDirection: "column", gap: 10, alignItems: "center" }}>
-          <button type="button" onClick={addPing}>+ New Ping</button>
-          <span style={{ fontSize: 12, opacity: 0.7 }}>Drag boxes, run multiple pings</span>
-        </div>
-      ) : null}
 <div className="dd" style={{ marginTop: 10 }}>
   <button
     type="button"
@@ -722,10 +530,6 @@ async function fetchInterfaces() {
   ) : null}
 </div>
 
-      <button onClick={startMonitor} style={{ marginLeft: 10 }}>+ Add</button>
-
-      <hr />
-
       {monitors.map(m => {
         const L = live[m.id] || {};
         const down = (L.down ?? 0);
@@ -744,6 +548,8 @@ async function fetchInterfaces() {
     </div>
   );
 }
+
+
 
 
 

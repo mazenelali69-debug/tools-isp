@@ -6,7 +6,8 @@ import AppShell from "./layout/AppShell";
 import Workspace from "./workspace/Workspace";
 import LegacyApp from "./App.legacy";
 import NeighborsPanel from "./NeighborsPanel";
-import LivePingPage from "\./pages/LivePingPage";
+import LivePingPage from "./pages/LivePingPage";
+import DashboardPage from "./pages/DashboardPage";
 const STORAGE_KEY = "toolsisp_windows_v1";
 function uid(){
   return "w_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
@@ -86,14 +87,17 @@ export default function App(){
         <CombinedTrafficPage />
       ) : active === "ethernet" ? (
         <EthernetTrafficPage />
+      ) : active === "dashboard" ? (
+        <DashboardPage windows={windows} setWindows={setWindows} />
       ) : (
-        <Workspace windows={windows} setWindows={setWindows}>
-          <LegacyApp />
-        </Workspace>
-      )}
+        <DashboardPage windows={windows} setWindows={setWindows} />
+      )
+    }
     </AppShell>
   );
 }
+
+
 
 
 
