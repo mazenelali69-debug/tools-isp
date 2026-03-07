@@ -58,5 +58,21 @@
         "community":  "public",
         "uplinkIfIndex":  5,
         "uplinkIfName":  "ether4"
+    },
+    {
+        "id":  "e60iugs",
+        "name":  "E60iUGS",
+        "ip":  "10.88.88.111",
+        "community":  "public",
+        "ifIndex":  7,
+        "ifName":  "sfp1"
+    },
+    {
+        "id":  "ethernet-to-daraj-el-3arid",
+        "name":  "Ethernet-TO Daraj El 3arid",
+        "ip":  "88.88.88.251",
+        "community":  "public",
+        "ifIndex":  49155,
+        "ifName":  "gigabitEthernet 1/0/3"
     }
 ]

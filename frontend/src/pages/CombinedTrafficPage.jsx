@@ -31,6 +31,33 @@ function fmtTime(ts, range){
   return d.toLocaleTimeString();
 }
 
+
+function TrafficBar({ value, max = 1500, color = "#00f5d4" }){
+  const pct = Math.max(0, Math.min(100, (Number(value || 0) / max) * 100));
+  return (
+    <div
+      style={{
+        marginTop: 6,
+        height: 6,
+        borderRadius: 999,
+        overflow: "hidden",
+        background: "rgba(255,255,255,.05)",
+        border: "1px solid rgba(255,255,255,.06)"
+      }}
+    >
+      <div
+        style={{
+          width: `${pct}%`,
+          height: "100%",
+          background: color,
+          boxShadow: `0 0 8px ${color}`,
+          transition: "width .35s ease"
+        }}
+      />
+    </div>
+  );
+}
+
 function Metric({ label, value, accent }){
   return (
     <div
@@ -47,7 +74,7 @@ function Metric({ label, value, accent }){
     >
       <div style={{ opacity: 0.82, fontSize: 14 }}>{label}</div>
       <div style={{ fontSize: 18, fontWeight: 800, color: accent || "white" }}>
-        {fmtMbps(value)}
+        {fmtMbps(value)}<TrafficBar value={value} color={accent} />
       </div>
     </div>
   );
@@ -302,3 +329,4 @@ export default function CombinedTrafficPage(){
     </div>
   );
 }
+

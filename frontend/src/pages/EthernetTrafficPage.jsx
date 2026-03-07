@@ -30,7 +30,7 @@ function Metric({ label, value, accent }){
   return (
     <div
       style={{
-        display: "flex",
+        display: "grid",
         justifyContent: "space-between",
         alignItems: "center",
         padding: "6px 8px",
@@ -180,12 +180,11 @@ function GlobalCard({ totals, hist }){
         position: "relative",
         overflow: "hidden",
         borderRadius: 18,
-        padding: 12,
+        padding: 16,
         background: "linear-gradient(180deg, rgba(12,16,26,.95), rgba(8,11,18,.92))",
         border: "1px solid rgba(255,255,255,.10)",
         boxShadow: "0 18px 40px rgba(0,0,0,.22)",
-        minHeight: 170,
-        gridColumn: "span 2"
+        minHeight: 170
       }}
     >
       <div
@@ -202,10 +201,10 @@ function GlobalCard({ totals, hist }){
           position: "relative",
           zIndex: 1,
           display: "grid",
-          gridTemplateColumns: "160px 1fr",
+          gridTemplateColumns: "1fr 150px",
           gap: 12,
           alignItems: "stretch",
-          minHeight: 146
+          minHeight: 125
         }}
       >
         <div>
@@ -217,7 +216,7 @@ function GlobalCard({ totals, hist }){
         <MiniSpark
           rxValues={hist?.rx || []}
           txValues={hist?.tx || []}
-          height={110}
+          height={125}
         />
       </div>
     </div>
@@ -380,10 +379,7 @@ export default function EthernetTrafficPage(){
           gap: 14,
           maxWidth: 1400
         }}
-      >
-        <GlobalCard totals={totals} hist={hist.__global || { rx: [], tx: [], total: [] }} />
-
-        {data.map((it, idx) => {
+      >{data.map((it, idx) => {
           const id = String(it?.id || it?.name || it?.ip || idx);
           return (
             <EthernetCard
@@ -397,4 +393,12 @@ export default function EthernetTrafficPage(){
     </div>
   );
 }
+
+
+
+
+
+
+
+
 
