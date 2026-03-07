@@ -12,9 +12,11 @@ export default function DashboardPage({ windows, setWindows }){
         </div>
         <div style={{ opacity: 0.68, fontSize: 14 }}>
           Legacy workspace inside polished shell
-
-<PingStatusBoxes />
         </div>
+      </div>
+
+      <div style={{ marginBottom: 14 }}>
+        <PingStatusBoxes />
       </div>
 
       <div
@@ -26,7 +28,7 @@ export default function DashboardPage({ windows, setWindows }){
           background: "linear-gradient(180deg, rgba(12,16,26,.95), rgba(8,11,18,.92))",
           border: "1px solid rgba(255,255,255,.10)",
           boxShadow: "0 18px 40px rgba(0,0,0,.22)",
-          minHeight:"0"
+          minHeight: "0"
         }}
       >
         <div
@@ -59,6 +61,3 @@ export default function DashboardPage({ windows, setWindows }){
     </div>
   );
 }
-
-
-
