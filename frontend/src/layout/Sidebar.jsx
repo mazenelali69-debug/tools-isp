@@ -5,6 +5,7 @@ const NAV = [
   { id: "neighbors", label: "Neighbors", icon: "🧭" },
   { id: "liveping", label: "Live Ping", icon: "??" },
   { id: "ethernet", label: "Ethernet Speed+Traffic", icon: "↔" },
+{ id: "combined", label: "Combined Traffic", icon: "📡" },
 { id: "settings",  label: "Settings",  icon: "⚙️" }];
 
 export default function Sidebar({ active, setActive }) {
@@ -44,6 +45,7 @@ export default function Sidebar({ active, setActive }) {
     </aside>
   );
 }
+
 
 
 

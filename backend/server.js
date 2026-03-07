@@ -1551,3 +1551,374 @@ app.get("/api/tcp-ping-sse", (req, res) => {
 
 
 
+
+
+
+
+
+/* ===== COMBINED TRAFFIC API ===== */
+
+const _combinedTrafficCache = new Map();
+
+function ctToBig(v){
+  try{
+    if (v === null || v === undefined) return null;
+
+    if (typeof v === "bigint") return v;
+    if (typeof v === "number") {
+      if (!Number.isFinite(v)) return null;
+      return BigInt(Math.trunc(v));
+    }
+
+    if (typeof v === "string") {
+      const s = v.trim();
+      if (!s) return null;
+      if (/^\d+$/.test(s)) return BigInt(s);
+      return null;
+    }
+
+    if (Buffer.isBuffer(v)) {
+      let n = 0n;
+      for (const b of v.values()) {
+        n = (n << 8n) + BigInt(b);
+      }
+      return n;
+    }
+
+    if (typeof v === "object" && v && typeof v.toString === "function") {
+      const s = String(v).trim();
+      if (/^\d+$/.test(s)) return BigInt(s);
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function ctRound2(n){
+  const x = Number(n);
+  return Number.isFinite(x) ? Math.round(x * 100) / 100 : 0;
+}
+
+app.get("/api/combined-traffic/live", async (req, res) => {
+  const targets = [
+    { key: "sw1", ip: "10.88.88.254", community: "public", ifIndex: 49162 },
+    { key: "sw2", ip: "88.88.88.254", community: "public", ifIndex: 49179 }
+  ];
+
+  async function readCounters(t){
+    const session = makeSession(t.ip, t.community);
+
+    const OID_IN  = `1.3.6.1.2.1.31.1.1.1.6.${t.ifIndex}`;
+    const OID_OUT = `1.3.6.1.2.1.31.1.1.1.10.${t.ifIndex}`;
+
+    try{
+      const vbs = await snmpGet(session, [OID_IN, OID_OUT]);
+
+      const inV  = vbs?.[0] && !snmp.isVarbindError(vbs[0]) ? vbs[0].value : null;
+      const outV = vbs?.[1] && !snmp.isVarbindError(vbs[1]) ? vbs[1].value : null;
+
+      return {
+        ok: true,
+        inOctets: ctToBig(inV),
+        outOctets: ctToBig(outV)
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: String(e?.message || e || "SNMP read failed"),
+        inOctets: null,
+        outOctets: null
+      };
+    } finally {
+      try { session.close(); } catch {}
+    }
+  }
+
+  try{
+    const now = Date.now();
+    const parts = [];
+
+    for (const t of targets) {
+      const cur = await readCounters(t);
+      const prev = _combinedTrafficCache.get(t.key);
+
+      let rxMbps = 0;
+      let txMbps = 0;
+
+      if (
+        cur.ok &&
+        prev &&
+        cur.inOctets !== null &&
+        cur.outOctets !== null &&
+        prev.inOctets !== null &&
+        prev.outOctets !== null
+      ) {
+        const dtMs = Math.max(250, now - prev.t);
+        const dIn  = cur.inOctets  >= prev.inOctets  ? (cur.inOctets  - prev.inOctets)  : 0n;
+        const dOut = cur.outOctets >= prev.outOctets ? (cur.outOctets - prev.outOctets) : 0n;
+
+        rxMbps = Number(dIn)  * 8 / dtMs / 1000;
+        txMbps = Number(dOut) * 8 / dtMs / 1000;
+
+        if (!Number.isFinite(rxMbps)) rxMbps = 0;
+        if (!Number.isFinite(txMbps)) txMbps = 0;
+      }
+
+      if (cur.ok) {
+        _combinedTrafficCache.set(t.key, {
+          t: now,
+          inOctets: cur.inOctets,
+          outOctets: cur.outOctets
+        });
+      }
+
+      parts.push({
+        key: t.key,
+        ip: t.ip,
+        ifIndex: t.ifIndex,
+        ok: cur.ok,
+        rxMbps: ctRound2(rxMbps),
+        txMbps: ctRound2(txMbps),
+        error: cur.ok ? null : cur.error
+      });
+    }
+
+    const totalRx = parts.reduce((s, p) => s + (Number.isFinite(p.rxMbps) ? p.rxMbps : 0), 0);
+    const totalTx = parts.reduce((s, p) => s + (Number.isFinite(p.txMbps) ? p.txMbps : 0), 0);
+
+    return res.json({
+      ok: true,
+      rxMbps: ctRound2(totalRx),
+      txMbps: ctRound2(totalTx),
+      parts,
+      ts: now
+    });
+  } catch (e) {
+    return res.status(500).json({
+      ok: false,
+      error: String(e?.message || e || "combined traffic failed")
+    });
+  }
+});
+
+/* ===== END COMBINED TRAFFIC ===== */
+
+
+
+
+/* ===== COMBINED TRAFFIC HISTORY ENGINE ===== */
+const CT_HISTORY_DIR  = path.join(__dirname, "..", "data");
+const CT_HISTORY_FILE = path.join(CT_HISTORY_DIR, "combined-traffic-history.json");
+const CT_HISTORY_MAX  = 30 * 24 * 60 * 6 + 1000; // 30 days @ 10s + buffer
+
+function ctEnsureDir(){
+  try { fs.mkdirSync(CT_HISTORY_DIR, { recursive: true }); } catch {}
+}
+
+function ctReadHistoryFile(){
+  try{
+    ctEnsureDir();
+    if(!fs.existsSync(CT_HISTORY_FILE)) return [];
+    const raw = fs.readFileSync(CT_HISTORY_FILE, "utf8");
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+
+function ctWriteHistoryFile(arr){
+  try{
+    ctEnsureDir();
+    fs.writeFileSync(CT_HISTORY_FILE, JSON.stringify(arr), "utf8");
+  } catch {}
+}
+
+function ctAddHistoryPoint(point){
+  const arr = ctReadHistoryFile();
+  arr.push(point);
+
+  const cutoff = Date.now() - (30 * 24 * 60 * 60 * 1000);
+  const kept = arr.filter(x => x && Number.isFinite(Number(x.ts)) && Number(x.ts) >= cutoff);
+
+  while(kept.length > CT_HISTORY_MAX){
+    kept.shift();
+  }
+
+  ctWriteHistoryFile(kept);
+}
+
+function ctBucketMsForRange(range){
+  switch(String(range || "").trim()){
+    case "5m":  return 10 * 1000;
+    case "30m": return 30 * 1000;
+    case "1h":  return 60 * 1000;
+    case "1d":  return 10 * 60 * 1000;
+    case "30d": return 6 * 60 * 60 * 1000;
+    default:    return 10 * 1000;
+  }
+}
+
+function ctRangeWindowMs(range){
+  switch(String(range || "").trim()){
+    case "5m":  return 5  * 60 * 1000;
+    case "30m": return 30 * 60 * 1000;
+    case "1h":  return 60 * 60 * 1000;
+    case "1d":  return 24 * 60 * 60 * 1000;
+    case "30d": return 30 * 24 * 60 * 60 * 1000;
+    default:    return 5 * 60 * 1000;
+  }
+}
+
+function ctAggregate(points, range){
+  const bucketMs = ctBucketMsForRange(range);
+  const now = Date.now();
+  const cutoff = now - ctRangeWindowMs(range);
+
+  const src = (Array.isArray(points) ? points : [])
+    .filter(p => p && Number.isFinite(Number(p.ts)) && Number(p.ts) >= cutoff)
+    .sort((a,b) => Number(a.ts) - Number(b.ts));
+
+  const buckets = new Map();
+
+  for(const p of src){
+    const ts = Number(p.ts);
+    const key = Math.floor(ts / bucketMs) * bucketMs;
+
+    if(!buckets.has(key)){
+      buckets.set(key, { ts: key, rxSum: 0, txSum: 0, totalSum: 0, count: 0 });
+    }
+
+    const b = buckets.get(key);
+    const rx = Number.isFinite(Number(p.rxMbps)) ? Number(p.rxMbps) : 0;
+    const tx = Number.isFinite(Number(p.txMbps)) ? Number(p.txMbps) : 0;
+    const total = Number.isFinite(Number(p.totalMbps)) ? Number(p.totalMbps) : (rx + tx);
+
+    b.rxSum += rx;
+    b.txSum += tx;
+    b.totalSum += total;
+    b.count += 1;
+  }
+
+  return Array.from(buckets.values())
+    .sort((a,b) => a.ts - b.ts)
+    .map(b => ({
+      ts: b.ts,
+      rxMbps: Math.round((b.rxSum / Math.max(1, b.count)) * 100) / 100,
+      txMbps: Math.round((b.txSum / Math.max(1, b.count)) * 100) / 100,
+      totalMbps: Math.round((b.totalSum / Math.max(1, b.count)) * 100) / 100
+    }));
+}
+
+let _combinedRecorderStarted = false;
+function startCombinedTrafficRecorder(){
+  if(_combinedRecorderStarted) return;
+  _combinedRecorderStarted = true;
+
+  ctEnsureDir();
+
+  setInterval(async () => {
+    try{
+      const targets = [
+        { key: "sw1", ip: "10.88.88.254", community: "public", ifIndex: 49162 },
+        { key: "sw2", ip: "88.88.88.254", community: "public", ifIndex: 49179 }
+      ];
+
+      const now = Date.now();
+      const parts = [];
+
+      async function readCounters(t){
+        const session = makeSession(t.ip, t.community);
+
+        const OID_IN  = `1.3.6.1.2.1.31.1.1.1.6.${t.ifIndex}`;
+        const OID_OUT = `1.3.6.1.2.1.31.1.1.1.10.${t.ifIndex}`;
+
+        try{
+          const vbs = await snmpGet(session, [OID_IN, OID_OUT]);
+
+          const inV  = vbs?.[0] && !snmp.isVarbindError(vbs[0]) ? vbs[0].value : null;
+          const outV = vbs?.[1] && !snmp.isVarbindError(vbs[1]) ? vbs[1].value : null;
+
+          return {
+            ok: true,
+            inOctets: ctToBig(inV),
+            outOctets: ctToBig(outV)
+          };
+        } catch {
+          return { ok:false, inOctets:null, outOctets:null };
+        } finally {
+          try { session.close(); } catch {}
+        }
+      }
+
+      for (const t of targets) {
+        const cur = await readCounters(t);
+        const prev = _combinedTrafficCache.get(t.key);
+
+        let rxMbps = 0;
+        let txMbps = 0;
+
+        if (
+          cur.ok &&
+          prev &&
+          cur.inOctets !== null &&
+          cur.outOctets !== null &&
+          prev.inOctets !== null &&
+          prev.outOctets !== null
+        ) {
+          const dtMs = Math.max(250, now - prev.t);
+          const dIn  = cur.inOctets  >= prev.inOctets  ? (cur.inOctets  - prev.inOctets)  : 0n;
+          const dOut = cur.outOctets >= prev.outOctets ? (cur.outOctets - prev.outOctets) : 0n;
+
+          rxMbps = Number(dIn)  * 8 / dtMs / 1000;
+          txMbps = Number(dOut) * 8 / dtMs / 1000;
+
+          if (!Number.isFinite(rxMbps)) rxMbps = 0;
+          if (!Number.isFinite(txMbps)) txMbps = 0;
+        }
+
+        if (cur.ok) {
+          _combinedTrafficCache.set(t.key, {
+            t: now,
+            inOctets: cur.inOctets,
+            outOctets: cur.outOctets
+          });
+        }
+
+        parts.push({
+          key: t.key,
+          rxMbps: ctRound2(rxMbps),
+          txMbps: ctRound2(txMbps)
+        });
+      }
+
+      const totalRx = parts.reduce((s, p) => s + (Number.isFinite(p.rxMbps) ? p.rxMbps : 0), 0);
+      const totalTx = parts.reduce((s, p) => s + (Number.isFinite(p.txMbps) ? p.txMbps : 0), 0);
+
+      ctAddHistoryPoint({
+        ts: now,
+        rxMbps: ctRound2(totalRx),
+        txMbps: ctRound2(totalTx),
+        totalMbps: ctRound2(totalRx + totalTx)
+      });
+    } catch {}
+  }, 10000);
+}
+
+app.get("/api/combined-traffic/history", async (req, res) => {
+  try{
+    const range = String(req.query.range || "5m").trim();
+    const raw = ctReadHistoryFile();
+    const data = ctAggregate(raw, range);
+    return res.json({ ok:true, range, data });
+  } catch (e) {
+    return res.status(500).json({ ok:false, error:String(e?.message || e || "history failed") });
+  }
+});
+
+startCombinedTrafficRecorder();
+/* ===== END COMBINED TRAFFIC HISTORY ENGINE ===== */
+
+
