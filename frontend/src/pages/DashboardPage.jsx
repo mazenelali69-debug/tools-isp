@@ -2,6 +2,8 @@
 import Workspace from "../workspace/Workspace";
 import LegacyApp from "../App.legacy";
 import PingStatusBoxes from "../components/PingStatusBoxes";
+import InternetHealthBox from "../components/InternetHealthBox";
+import InternetFeedbackBox from "../components/InternetFeedbackBox";
 
 export default function DashboardPage({ windows, setWindows }){
   return (
@@ -15,8 +17,21 @@ export default function DashboardPage({ windows, setWindows }){
         </div>
       </div>
 
-      <div style={{ marginBottom: 14 }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "minmax(420px, 760px) minmax(320px, 1fr)",
+          gap: 14,
+          alignItems: "start",
+          marginBottom: 14
+        }}
+      >
         <PingStatusBoxes />
+        <InternetHealthBox />
+      </div>
+
+      <div style={{ marginBottom: 14 }}>
+        <InternetFeedbackBox />
       </div>
 
       <div

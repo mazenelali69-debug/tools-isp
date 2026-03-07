@@ -156,7 +156,7 @@ export default function PingStatusBoxes(){
                     key={i}
                     title={v == null ? "No data" : `${v} ms`}
                     style={{
-                      height: 14,
+                      height:22,
                       borderRadius: 2,
                       background: latencyColor(v),
                       boxShadow: v == null ? "none" : "inset 0 0 0 1px rgba(255,255,255,.05)"
@@ -183,4 +183,9 @@ export default function PingStatusBoxes(){
     </div>
   );
 }
+
+
+
+
+
 

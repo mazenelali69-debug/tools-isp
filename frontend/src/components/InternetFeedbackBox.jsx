@@ -8,66 +8,96 @@ const TARGETS = [
   { name: "PUBG Mobile", host: "www.pubgmobile.com" }
 ];
 
-const HISTORY_LEN = 20;
+const HISTORY_LEN = 18;
 
-function num(v){
+function asNum(v){
   return typeof v === "number" && Number.isFinite(v) ? v : null;
 }
 
-function lineColor(ms){
-  if(ms == null) return "rgba(255,255,255,.22)";
-  if(ms < 70) return "#19ff9c";
-  if(ms < 140) return "#ffd166";
-  return "#ff6b6b";
+function tone(ms){
+  if(ms == null) return {
+    label: "Timeout",
+    color: "rgba(190,200,215,.70)",
+    glow: "rgba(190,200,215,.10)"
+  };
+  if(ms < 70) return {
+    label: "Healthy",
+    color: "#19ff9c",
+    glow: "rgba(25,255,156,.16)"
+  };
+  if(ms < 140) return {
+    label: "Moderate",
+    color: "#ffd166",
+    glow: "rgba(255,209,102,.14)"
+  };
+  return {
+    label: "Slow",
+    color: "#ff6b6b",
+    glow: "rgba(255,107,107,.14)"
+  };
 }
 
-function toneText(ms){
-  if(ms == null) return "Timeout";
-  if(ms < 70) return "Healthy";
-  if(ms < 140) return "Moderate";
-  return "Slow";
+function trendText(values){
+  const clean = (values || []).map(asNum).filter(v => v != null);
+  if(clean.length < 2) return "—";
+  const a = clean[clean.length - 2];
+  const b = clean[clean.length - 1];
+  const d = b - a;
+  if(Math.abs(d) < 3) return "stable";
+  return d < 0 ? "improving" : "rising";
 }
 
-function Sparkline({ values = [] }){
-  const pts = values.map(v => num(v));
+function MiniLine({ values = [] }){
+  const pts = (values || []).map(asNum);
   const clean = pts.filter(v => v != null);
-  const w = 220;
-  const h = 34;
-  const pad = 4;
+
+  const w = 240;
+  const h = 26;
+  const px = 4;
+  const py = 4;
 
   if(!clean.length){
     return (
-      <div style={{ height: h, opacity: .45, fontSize: 11, display: "flex", alignItems: "center" }}>
-        No data yet
+      <div style={{ height: h, opacity: .22, display: "flex", alignItems: "center" }}>
+        <div style={{ width: "100%", height: 1, background: "rgba(255,255,255,.08)" }} />
       </div>
     );
   }
 
   const minV = Math.min(...clean);
   const maxV = Math.max(...clean);
-  const span = Math.max(1, maxV - minV);
+  const span = Math.max(10, maxV - minV);
 
   const coords = pts.map((v, i) => {
-    const x = pts.length <= 1 ? pad : pad + (i * (w - pad * 2)) / Math.max(1, pts.length - 1);
+    const x = pts.length <= 1 ? px : px + (i * (w - px * 2)) / Math.max(1, pts.length - 1);
     const vv = v == null ? maxV : v;
-    const y = h - pad - (((vv - minV) / span) * (h - pad * 2));
+    const y = h - py - (((vv - minV) / span) * (h - py * 2));
     return { x, y, v };
   });
 
-  const line = coords.map(p => `${p.x},${p.y}`).join(" ");
+  const d = coords.map(p => `${p.x},${p.y}`).join(" ");
   const last = coords[coords.length - 1];
-  const color = lineColor(last?.v ?? null);
+  const info = tone(last?.v ?? null);
 
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" style={{ width: "100%", height: h }}>
+    <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" style={{ width: "100%", height: h, overflow: "visible" }}>
+      <line
+        x1="0" y1={h - 3}
+        x2={w} y2={h - 3}
+        stroke="rgba(255,255,255,.06)"
+        strokeWidth="1"
+      />
       <polyline
-        points={line}
+        points={d}
         fill="none"
-        stroke={color}
-        strokeWidth="2.4"
+        stroke={info.color}
+        strokeWidth="1.7"
         strokeLinecap="round"
         strokeLinejoin="round"
+        style={{ filter: `drop-shadow(0 0 3px ${info.glow})` }}
       />
+      <circle cx={last.x} cy={last.y} r="2.1" fill={info.color} />
+      <circle cx={last.x} cy={last.y} r="4.5" fill={info.glow} />
     </svg>
   );
 }
@@ -75,9 +105,9 @@ function Sparkline({ values = [] }){
 export default function InternetFeedbackBox(){
   const [latest, setLatest] = useState({});
   const [history, setHistory] = useState(() => {
-    const obj = {};
-    for(const t of TARGETS) obj[t.host] = [];
-    return obj;
+    const o = {};
+    for(const t of TARGETS) o[t.host] = [];
+    return o;
   });
 
   async function ping(host){
@@ -85,7 +115,7 @@ export default function InternetFeedbackBox(){
       const r = await fetch("/api/ping?ip=" + encodeURIComponent(host), { cache: "no-store" });
       const j = await r.json();
       if(!j || j.ok === false) return null;
-      return num(j.timeMs ?? j.ms);
+      return asNum(j.timeMs ?? j.ms);
     }catch{
       return null;
     }
@@ -117,7 +147,7 @@ export default function InternetFeedbackBox(){
   }, []);
 
   const avg = useMemo(() => {
-    const vals = Object.values(latest).filter(v => typeof v === "number");
+    const vals = Object.values(latest).map(asNum).filter(v => v != null);
     if(!vals.length) return null;
     return Math.round(vals.reduce((a,b) => a + b, 0) / vals.length);
   }, [latest]);
@@ -125,44 +155,58 @@ export default function InternetFeedbackBox(){
   return (
     <div
       style={{
-        borderRadius: 16,
-        padding: 12,
-        background: "linear-gradient(180deg, rgba(12,16,26,.92), rgba(8,11,18,.88))",
-        border: "1px solid rgba(255,255,255,.08)",
-        boxShadow: "0 10px 28px rgba(0,0,0,.20)"
+        borderRadius: 14,
+        padding: 10,
+        background: "linear-gradient(180deg, rgba(9,13,22,.94), rgba(7,10,18,.90))",
+        border: "1px solid rgba(255,255,255,.06)",
+        boxShadow: "0 10px 24px rgba(0,0,0,.20)"
       }}
     >
-      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10, gap:10 }}>
-        <div style={{ fontWeight: 900, fontSize: 16 }}>Internet Feedback</div>
-        <div style={{ fontSize: 12, opacity: .74 }}>
-          Avg: {avg == null ? "--" : `${avg} ms`}
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+        <div>
+          <div style={{ fontWeight:900, fontSize:14 }}>Internet Feedback</div>
+          <div style={{ fontSize:10, opacity:.50, marginTop:2 }}>Live network feel</div>
+        </div>
+        <div style={{ fontSize:11, opacity:.68 }}>
+          Avg: <span style={{ color:"#8cd2ff", fontWeight:800 }}>{avg == null ? "--" : `${avg} ms`}</span>
         </div>
       </div>
 
-      <div style={{ display:"grid", gap:8 }}>
+      <div style={{ display:"grid", gap:4 }}>
         {TARGETS.map((t) => {
           const ms = latest[t.host] ?? null;
+          const values = history[t.host] || [];
+          const info = tone(ms);
+
           return (
             <div
               key={t.host}
               style={{
                 display:"grid",
-                gridTemplateColumns:"120px 1fr 74px",
+                gridTemplateColumns:"94px 1fr 88px",
                 gap:10,
                 alignItems:"center",
-                padding:"6px 0",
-                borderTop:"1px solid rgba(255,255,255,.05)"
+                minHeight: 34,
+                padding:"5px 6px",
+                borderRadius:10,
+                background:"rgba(255,255,255,.015)",
+                border:"1px solid rgba(255,255,255,.035)"
               }}
             >
               <div>
-                <div style={{ fontSize: 12, fontWeight: 800 }}>{t.name}</div>
-                <div style={{ fontSize: 10, opacity: .55 }}>{toneText(ms)}</div>
+                <div style={{ fontSize:11, fontWeight:800, lineHeight:1.1 }}>{t.name}</div>
+                <div style={{ fontSize:9, color:info.color, opacity:.88, marginTop:2 }}>{info.label}</div>
               </div>
 
-              <Sparkline values={history[t.host] || []} />
+              <MiniLine values={values} />
 
-              <div style={{ textAlign:"right", fontSize:12, fontWeight:900, color: lineColor(ms) }}>
-                {ms == null ? "--" : `${ms} ms`}
+              <div style={{ textAlign:"right" }}>
+                <div style={{ fontSize:14, fontWeight:900, color:info.color, lineHeight:1 }}>
+                  {ms == null ? "--" : `${ms}ms`}
+                </div>
+                <div style={{ fontSize:9, opacity:.48, marginTop:3 }}>
+                  {trendText(values)}
+                </div>
               </div>
             </div>
           );
