@@ -1922,3 +1922,121 @@ startCombinedTrafficRecorder();
 /* ===== END COMBINED TRAFFIC HISTORY ENGINE ===== */
 
 
+
+
+/* ===== AVIAT WTM4200 LIVE API ===== */
+const _aviatWtm4200Cache = new Map();
+
+app.get("/api/aviatwtm4200/live", async (req, res) => {
+  const targets = [
+    { key: "swA", name: "Switch A", ip: "10.88.88.254", community: "public", ifIndex: 49162 },
+    { key: "swB", name: "Switch B", ip: "88.88.88.254", community: "public", ifIndex: 49179 }
+  ];
+
+  async function readCounters(t){
+    const session = makeSession(t.ip, t.community);
+
+    const OID_IN  = `1.3.6.1.2.1.31.1.1.1.6.${t.ifIndex}`;
+    const OID_OUT = `1.3.6.1.2.1.31.1.1.1.10.${t.ifIndex}`;
+
+    try{
+      const vbs = await snmpGet(session, [OID_IN, OID_OUT]);
+
+      const inV  = vbs?.[0] && !snmp.isVarbindError(vbs[0]) ? vbs[0].value : null;
+      const outV = vbs?.[1] && !snmp.isVarbindError(vbs[1]) ? vbs[1].value : null;
+
+      return {
+        ok: true,
+        inOctets: ctToBig(inV),
+        outOctets: ctToBig(outV)
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: String(e?.message || e || "SNMP read failed"),
+        inOctets: null,
+        outOctets: null
+      };
+    } finally {
+      try { session.close(); } catch {}
+    }
+  }
+
+  try{
+    const now = Date.now();
+    const parts = [];
+
+    for (const t of targets) {
+      const cur = await readCounters(t);
+      const prev = _aviatWtm4200Cache.get(t.key);
+
+      let rxMbps = 0;
+      let txMbps = 0;
+
+      if (
+        cur.ok &&
+        prev &&
+        cur.inOctets !== null &&
+        cur.outOctets !== null &&
+        prev.inOctets !== null &&
+        prev.outOctets !== null
+      ) {
+        const dtMs = Math.max(250, now - prev.t);
+        const dIn  = cur.inOctets  >= prev.inOctets  ? (cur.inOctets  - prev.inOctets)  : 0n;
+        const dOut = cur.outOctets >= prev.outOctets ? (cur.outOctets - prev.outOctets) : 0n;
+
+        rxMbps = Number(dIn)  * 8 / dtMs / 1000;
+        txMbps = Number(dOut) * 8 / dtMs / 1000;
+
+        if (!Number.isFinite(rxMbps)) rxMbps = 0;
+        if (!Number.isFinite(txMbps)) txMbps = 0;
+      }
+
+      if (cur.ok) {
+        _aviatWtm4200Cache.set(t.key, {
+          t: now,
+          inOctets: cur.inOctets,
+          outOctets: cur.outOctets
+        });
+      }
+
+      parts.push({
+        key: t.key,
+        name: t.name,
+        ip: t.ip,
+        ifIndex: t.ifIndex,
+        ok: cur.ok,
+        rxMbps: ctRound2(rxMbps),
+        txMbps: ctRound2(txMbps),
+        totalMbps: ctRound2(rxMbps + txMbps),
+        error: cur.ok ? null : cur.error
+      });
+    }
+
+    const partA = parts.find(p => p.key === "swA") || { rxMbps:0, txMbps:0, totalMbps:0 };
+    const partB = parts.find(p => p.key === "swB") || { rxMbps:0, txMbps:0, totalMbps:0 };
+
+    const combinedRx = ctRound2((partA.rxMbps || 0) + (partB.rxMbps || 0));
+    const combinedTx = ctRound2((partA.txMbps || 0) + (partB.txMbps || 0));
+    const combinedTotal = ctRound2(combinedRx + combinedTx);
+
+    return res.json({
+      ok: true,
+      ts: now,
+      combined: {
+        rxMbps: combinedRx,
+        txMbps: combinedTx,
+        totalMbps: combinedTotal
+      },
+      switchA: partA,
+      switchB: partB
+    });
+  } catch (e) {
+    return res.status(500).json({
+      ok: false,
+      error: String(e?.message || e || "aviat live failed")
+    });
+  }
+});
+
+/* ===== END AVIAT WTM4200 LIVE API ===== */

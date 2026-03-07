@@ -1,6 +1,7 @@
 ﻿import React, { useMemo, useState, useEffect } from "react";
 import EthernetTrafficPage from "./pages/EthernetTrafficPage";
 import CombinedTrafficPage from "./pages/CombinedTrafficPage";
+import AviatWTM4200Page from "./pages/AviatWTM4200Page";
 import AppShell from "./layout/AppShell";
 import Workspace from "./workspace/Workspace";
 import LegacyApp from "./App.legacy";
@@ -79,6 +80,8 @@ export default function App(){
         <NeighborsPanel />
       ) : active === "liveping" ? (
         <LivePingPage />
+      ) : active === "aviatwtm4200" ? (
+        <AviatWTM4200Page />
       ) : active === "combined" ? (
         <CombinedTrafficPage />
       ) : active === "ethernet" ? (
@@ -91,6 +94,8 @@ export default function App(){
     </AppShell>
   );
 }
+
+
 
 
 
