@@ -86,15 +86,15 @@ function Metric({ label, value, accent }){
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "8px 10px",
+        padding: "6px 8px",
         borderRadius: 12,
         background: "rgba(255,255,255,.03)",
         border: "1px solid rgba(255,255,255,.06)",
         marginBottom: 10
       }}
     >
-      <div style={{ opacity: 0.82, fontSize: 12 }}>{label}</div>
-      <div style={{ fontSize: 15, fontWeight: 800, color: accent || "white" }}>
+      <div style={{ opacity: 0.82, fontSize: 11 }}>{label}</div>
+      <div style={{ fontSize: 13, fontWeight: 800, color: accent || "white" }}>
         {value}
       </div>
     </div>
@@ -134,11 +134,11 @@ function EthernetCard({ item, hist }){
         position: "relative",
         overflow: "hidden",
         borderRadius: 18,
-        padding: 16,
+        padding: 12,
         background: "linear-gradient(180deg, rgba(12,16,26,.95), rgba(8,11,18,.92))",
         border: "1px solid rgba(255,255,255,.10)",
         boxShadow: "0 18px 40px rgba(0,0,0,.22)",
-        minHeight: 235
+        minHeight: 170
       }}
     >
       <div
@@ -151,11 +151,11 @@ function EthernetCard({ item, hist }){
       />
 
       <div style={{ position: "relative", zIndex: 1 }}>
-        <div style={{ fontSize: 15, fontWeight: 900, marginBottom: 6 }}>
+        <div style={{ fontSize: 13, fontWeight: 900, marginBottom: 6 }}>
           {item?.name || item?.id || "Ethernet"}
         </div>
 
-        <div style={{ opacity: 0.68, marginBottom: 14, fontSize: 12 }}>
+        <div style={{ opacity: 0.68, marginBottom: 14, fontSize: 11 }}>
           {item?.ip || "—"} {item?.ifName ? `• ${item.ifName}` : ""} {item?.ifIndex ? `• ifIndex ${item.ifIndex}` : ""}
         </div>
 
@@ -226,7 +226,7 @@ export default function EthernetTrafficPage(){
     }
 
     load();
-    const t = setInterval(load, 7000);
+    const t = setInterval(load, 2000);
 
     return () => {
       alive = false;
@@ -251,7 +251,7 @@ export default function EthernetTrafficPage(){
           border: "1px solid rgba(255,255,255,.10)",
           boxShadow: "0 18px 40px rgba(0,0,0,.22)",
           marginBottom: 14,
-          maxWidth: 560
+          maxWidth: 220
         }}
       >
         <div
@@ -265,11 +265,11 @@ export default function EthernetTrafficPage(){
 
         <div style={{ position: "relative", zIndex: 1 }}>
           <div style={{ fontSize: 20, fontWeight: 900, marginBottom: 6 }}>
-            Global Ethernet Overview
+            
           </div>
 
-          <div style={{ opacity: 0.68, marginBottom: 14, fontSize: 12 }}>
-            Aggregated live values across all targets
+          <div style={{ opacity: 0.68, marginBottom: 14, fontSize: 11 }}>
+            
           </div>
 
           <Metric label="RX" value={fmtMbps(totals.rx)} accent="#00f5d4" />
@@ -316,6 +316,7 @@ export default function EthernetTrafficPage(){
     </div>
   );
 }
+
 
 
 
