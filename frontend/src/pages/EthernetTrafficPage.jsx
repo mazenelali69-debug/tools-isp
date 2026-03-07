@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+﻿import React, { useEffect, useMemo, useRef, useState } from "react";
 
 
 import { ResponsiveContainer, AreaChart, Area, YAxis, Tooltip } from "recharts";
@@ -268,7 +268,7 @@ export default function EthernetTrafficPage(){
     } catch(e){
       // keep last data; show errors inside cards (from backend)
     }
-  }, 1000);
+  }, 7000);
 
   return (
     <div className="ethWrap">
@@ -335,3 +335,4 @@ export default function EthernetTrafficPage(){
     </div>
   );
 }
+

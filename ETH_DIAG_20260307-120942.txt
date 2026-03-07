@@ -1,0 +1,18 @@
+
+==============================================================================================================
+ENV / PM2 STATUS
+==============================================================================================================
+
+PWD: C:\apps\tools-isp
+DATE: 03/07/2026 12:09:42
+
+PM2 STATUS:
+GצמGצÇGצÇGצÇGצÇGצ¼GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¼GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¼GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¼GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¼GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¼GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¼GצÇGצÇGצÇGצÇGצÇGצÇGצ¼GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¼GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¼GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¼GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¼GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÉ
+Gצי id Gצי name                  Gצי namespace   Gצי version Gצי mode    Gצי pid      Gצי uptime Gצי Gו¦    Gצי status    Gצי cpu      Gצי mem      Gצי user     Gצי watching Gצי
+Gצ£GצÇGצÇGצÇGצÇGצ+GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ+GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ+GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ+GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ+GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ+GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ+GצÇGצÇGצÇGצÇGצÇGצÇGצ+GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ+GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ+GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ+GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ+GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצס
+Gצי [1m[36m0[39m[22m  Gצי tools-isp-backend     Gצי default     Gצי 1.0.0   Gצי [7m[1mfork[22m[27m    Gצי 1908     Gצי 3m     Gצי 2    Gצי [32m[1monline[22m[39m    Gצי 0%       Gצי 93.1mb   Gצי [1mTheLord[22m  Gצי [90mdisabled[39m Gצי
+Gצי [1m[36m1[39m[22m  Gצי tools-isp-frontend    Gצי default     Gצי 7.3.1   Gצי [7m[1mfork[22m[27m    Gצי 9020     Gצי 23m    Gצי 0    Gצי [32m[1monline[22m[39m    Gצי 0%       Gצי 53.6mb   Gצי [1mTheLord[22m  Gצי [90mdisabled[39m Gצי
+GצצGצÇGצÇGצÇGצÇGצ¦GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¦GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¦GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¦GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¦GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¦GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¦GצÇGצÇGצÇGצÇGצÇGצÇGצ¦GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¦GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¦GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¦GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצ¦GצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÇGצÿ
+
+
+PM2 BACKEND LAST 40 LOGS:

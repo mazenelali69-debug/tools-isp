@@ -1,0 +1,2698 @@
+
+==============================================================================================================
+ENV / PM2 STATUS
+==============================================================================================================
+
+PWD: C:\apps\tools-isp
+DATE: 03/07/2026 12:11:36
+
+PM2 STATUS:
+GöîGöÇGöÇGöÇGöÇGö¼GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¼GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¼GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¼GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¼GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¼GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¼GöÇGöÇGöÇGöÇGöÇGöÇGö¼GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¼GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¼GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¼GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¼GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÉ
+Göé id Göé name                  Göé namespace   Göé version Göé mode    Göé pid      Göé uptime Göé Gå¦    Göé status    Göé cpu      Göé mem      Göé user     Göé watching Göé
+Gö£GöÇGöÇGöÇGöÇGö+GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö+GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö+GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö+GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö+GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö+GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö+GöÇGöÇGöÇGöÇGöÇGöÇGö+GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö+GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö+GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö+GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö+GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöñ
+Göé [1m[36m0[39m[22m  Göé tools-isp-backend     Göé default     Göé 1.0.0   Göé [7m[1mfork[22m[27m    Göé 1908     Göé 5m     Göé 2    Göé [32m[1monline[22m[39m    Göé 0%       Göé 116.6mb  Göé [1mTheLord[22m  Göé [90mdisabled[39m Göé
+Göé [1m[36m1[39m[22m  Göé tools-isp-frontend    Göé default     Göé 7.3.1   Göé [7m[1mfork[22m[27m    Göé 9020     Göé 25m    Göé 0    Göé [32m[1monline[22m[39m    Göé 0%       Göé 46.1mb   Göé [1mTheLord[22m  Göé [90mdisabled[39m Göé
+GööGöÇGöÇGöÇGöÇGö¦GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¦GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¦GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¦GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¦GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¦GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¦GöÇGöÇGöÇGöÇGöÇGöÇGö¦GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¦GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¦GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¦GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGö¦GöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÇGöÿ
+
+
+==============================================================================================================
+PM2 LOG FILE TAILS (NO LIVE TAIL)
+==============================================================================================================
+
+BACKEND OUT LOG:
+[dotenv@17.3.1] injecting env (0) from .env -- tip: âš™ï¸  enable debug logging with { debug: true }
+âœ… tools-isp backend listening on 9090
+
+
+BACKEND ERROR LOG:
+
+
+==============================================================================================================
+BACKEND ROUTES (/api)
+==============================================================================================================
+
+   51: app.get("/health", (req, res) => res.json({ ok: true, service: "tools-isp-backend" }));
+   70: app.get("/api/ping/once", async (req, res) => {
+  292: app.get("/api/eth/snapshot", async (req, res) => {
+  309: app.post("/api/snmp/test", async (req, res) => {
+  439: app.post("/api/interfaces", handleInterfaces);
+  441: app.get("/api/interfaces", async (req, res) => {
+  451: app.get("/api/eth/traffic", async (req, res) => {
+  571: app.get("/api/eth/throughput", async (req, res) => {
+  773: app.post("/api/monitors", (req, res) => {
+  823: app.delete("/api/monitors/:id", (req, res) => {
+  837: app.get("/api/monitors", (req, res) => {
+  843: app.post("/api/debug/walk-ifdescr", async (req, res) => {
+  879: app.post("/api/interfaces", (req,res)=> handleInterfaces(req,res));
+  880: app.get("/api/et/interfaces", (req,res)=>{
+  884: app.get("/api/eth/interfaces", (req,res)=>{
+  889: app.post("/api/interfaces-cli",(req,res)=>{
+  940: app.post("/api/monitors-universal",(req,res)=>{
+ 1283: app.get("/api/neighbors", async (req, res) => {
+ 1307: app.get("/api/ping-scan", async (req, res) => {
+ 1376: app.get("/api/ping-sse", (req, res) => {
+ 1428: app.get("/api/ping", (req, res) => {
+ 1457: app.get("/api/tcp-ping-sse", (req, res) => {
+
+==============================================================================================================
+BACKEND KEYWORDS
+==============================================================================================================
+
+    9: const snmp = require("net-snmp");
+   25: function snmpGet(session, oids) {
+   35:   const session = snmp.createSession(ip, community, {
+   38:     version: snmp.Version2c,
+   40:   session.on("error", (err) => console.error("SNMP session error:", ip, err?.message || err));
+   44: // Traffic OIDs (HC counters)
+   69: // GET /api/ping/once?ip=1.2.3.4
+   70: app.get("/api/ping/once", async (req, res) => {
+   95: function snmpGetRaw(ip, community, oid){
+   97:     execFile("snmpget.exe", ["-v2c","-c", community, "-Oqv", ip, oid], { windowsHide:true }, (err, stdout, stderr) => {
+  101:         return reject(new Error(errOut || "snmpget failed"));
+  116: /* SNAPSHOT-THROUGHPUT-HELPER-START */
+  117: async function measureIfThroughput(ip, community, ifIndex, ms=900){
+  127:   const vbOk = (vb)=>vb && vb.oid && !snmp.isVarbindError(vb);
+  150:     const vbs = await snmpGet(session, [
+  201: /* SNAPSHOT-THROUGHPUT-HELPER-END */
+  203: async function ethSnapshotOne(t){
+  207:   const idx = Number(t.uplinkIfIndex || t.ifIndex || 0);
+  215:   const spOid = `1.3.6.1.2.1.31.1.1.1.15.${idx}`;  // ifHighSpeed (Mbps)
+  223:       snmpGetRaw(ip, comm, rxOid),
+  224:       snmpGetRaw(ip, comm, txOid),
+  225:       snmpGetRaw(ip, comm, spOid),
+  226:       snmpGetRaw(ip, comm, opOid),
+  227:       snmpGetRaw(ip, comm, adOid),
+  232:     const speedMb = toNum(spS);
+  242:     /* SNAPSHOT-THROUGHPUT-INJECT-V2 */
+  243:     // Best-effort: sample throughput using helper (overrides rxMbps/txMbps if ok)
+  245:       const th = await measureIfThroughput(ip, comm, idx, 900);
+  251:     /* SNAPSHOT-THROUGHPUT-INJECT-V2-END */
+  277:       ifName: (t.ifName || t.uplinkIfName || ""),
+  281:       speedMb,
+  287:     return { id:t.id, name, ip, ifIndex:idx, ifName: (t.ifName || t.uplinkIfName || ""), ok:false, error:String(e?.message||e) };
+  291: // GET /api/eth/snapshot  -> returns all 6
+  292: app.get("/api/eth/snapshot", async (req, res) => {
+  298:     // sequential to avoid SNMP flood
+  300:       out.push(await ethSnapshotOne(t));
+  308: // SNMP basic test (sysDescr.0)
+  309: app.post("/api/snmp/test", async (req, res) => {
+  315:     const vb = (await snmpGet(session, ["1.3.6.1.2.1.1.1.0"]))[0];
+  317:     if (snmp.isVarbindError(vb)) return res.status(502).json({ ok: false, error: String(snmp.varbindError(vb)) });
+  326: // Interfaces (robust):
+  329: async function handleInterfaces(req, res){
+  335:   const IFENTRY_BASE  = "1.3.6.1.2.1.2.2.1";      // 2=ifDescr, 5=ifSpeed
+  340:   const OID_ifSpeed  = "1.3.6.1.2.1.2.2.1.5";
+  366:       const ifSpeedV = ifTable?.[k]?.[5];
+  370:       const ifSpeed = ifSpeedV != null ? Number(ifSpeedV) : null;
+  373:       if (ifName || ifDescr) rows.push({ ifIndex, ifName, ifDescr, ifSpeed: Number.isFinite(ifSpeed) ? ifSpeed : null });
+  381:     const vbN = (await snmpGet(session, [OID_ifNumber]))[0];
+  383:     if (snmp.isVarbindError(vbN)) throw new Error(String(snmp.varbindError(vbN)));
+  391:         const oids = [`${OID_ifName}.${i}`, `${OID_ifDescr}.${i}`, `${OID_ifSpeed}.${i}`];
+  392:         const vbs = await snmpGet(session, oids);
+  396:         const vbSpeed = vbs[2];
+  398:         const ifName  = (vbName  && !snmp.isVarbindError(vbName))  ? String(vbName.value)  : null;
+  399:         const ifDescr = (vbDescr && !snmp.isVarbindError(vbDescr)) ? String(vbDescr.value) : null;
+  400:         const ifSpeed = (vbSpeed && !snmp.isVarbindError(vbSpeed)) ? Number(vbSpeed.value) : null;
+  407:             ifSpeed: Number.isFinite(ifSpeed) ? ifSpeed : null
+  426:         error: "SNMP reachable (sysDescr works) but interfaces not accessible. RouterOS SNMP view/permissions likely block IF-MIB."
+  430:     return res.json({ ok: true, interfaces: rows });
+  439: app.post("/api/interfaces", handleInterfaces);
+  441: app.get("/api/interfaces", async (req, res) => {
+  443:   return handleInterfaces(req, res);
+  448: /* ETH-TRAFFIC-API-START */
+  449: // GET /api/eth/traffic?ip=...&community=...&ifIndex=...
+  451: app.get("/api/eth/traffic", async (req, res) => {
+  468:   const OID_ifSpeed       = `1.3.6.1.2.1.2.2.1.5.${ifIndex}`;
+  479:       OID_ifSpeed
+  482:     const vbs = await snmpGet(session, oids);
+  492:       if(snmp.isVarbindError(vb)){
+  493:         return { oid, ok:false, err:String(snmp.varbindError(vb) || "varbind-error") };
+  509:       if(!vb || snmp.isVarbindError(vb)) return null;
+  514:     // SNMP libs sometimes return Counter64 as Buffer (big-endian)
+  549:       speed: toNum(OID_ifSpeed),
+  564: /* ETH-TRAFFIC-API-END */
+  567: /* ETH-THROUGHPUT-API-START */
+  568: // GET /api/eth/throughput?ip=...&community=...&ifIndex=...&ms=1000
+  569: // Measures throughput by sampling counters twice with delay.
+  571: app.get("/api/eth/throughput", async (req, res) => {
+  592:   const OID_ifSpeed       = `1.3.6.1.2.1.2.2.1.5.${ifIndex}`;
+  596:   const vbOk = (vb) => vb && vb.oid && !snmp.isVarbindError(vb);
+  644:       OID_ifOperStatus, OID_ifAdminStatus, OID_ifSpeed
+  647:     const vbs = await snmpGet(session, oids);
+  674:       speed: vbToNum(byOid[OID_ifSpeed])
+  701:         error:"Could not read octet counters (SNMP blocked or missing OIDs).",
+  707:     // Throughput: bytes -> bits, per second
+  722:       speed: b.speed ?? a.speed ?? null,
+  748: /* ETH-THROUGHPUT-API-END */
+  750:   if (!vb || snmp.isVarbindError(vb)) return null;
+  772: // Start monitor (SNMP traffic) - pushes updates over Socket.IO
+  773: app.post("/api/monitors", (req, res) => {
+  787:       const vbs = await snmpGet(session, oids);
+  823: app.delete("/api/monitors/:id", (req, res) => {
+  837: app.get("/api/monitors", (req, res) => {
+  843: app.post("/api/debug/walk-ifdescr", async (req, res) => {
+  855:         if (!snmp.isVarbindError(vb)) {
+  874: // API: Universal interfaces via SNMP CLI (snmpwalk) — works across vendors
+  875: // POST /api/interfaces-cli  { ip, community }
+  876: // returns: { ok:true, count, interfaces:[{ifIndex, ifName}] }
+  878: /* ===== ALIASES for EthernetTrafficPage (GET -> POST body) ===== */
+  879: app.post("/api/interfaces", (req,res)=> handleInterfaces(req,res));
+  880: app.get("/api/et/interfaces", (req,res)=>{
+  882:   return handleInterfaces(req,res);
+  884: app.get("/api/eth/interfaces", (req,res)=>{
+  886:   return handleInterfaces(req,res);
+  889: app.post("/api/interfaces-cli",(req,res)=>{
+  903:     return res.status(504).json({ ok:false, error:"snmpwalk timed out" });
+  906:   execFile("snmpwalk", args, { timeout: 9500, windowsHide: true }, (err, stdout, stderr) => {
+  921:       // Example: IF-MIB::ifDescr.49153 = STRING: gigabitEthernet 1/0/1
+  930:     return res.json({ ok:true, count: rows.length, interfaces: rows });
+  937: // POST /api/monitors-universal { ip, community, ifIndex, label, intervalMs }
+  940: app.post("/api/monitors-universal",(req,res)=>{
+  963:     return vb && !snmp.isVarbindError(vb) && vb.value !== null && vb.value !== undefined;
+  967:       // net-snmp may give Buffer / string / number / bigint
+  982:         const vbs = await snmpGet(session, [`${HC_IN}.${idx}`, `${HC_OUT}.${idx}`]);
+  995:     const vbs = await snmpGet(session, [`${C32_IN}.${idx}`, `${C32_OUT}.${idx}`]);
+ 1283: app.get("/api/neighbors", async (req, res) => {
+ 1307: app.get("/api/ping-scan", async (req, res) => {
+ 1369: // GET /api/ping?ip=8.8.8.8
+ 1373:  * GET /api/ping-sse?ip=1.1.1.1
+ 1376: app.get("/api/ping-sse", (req, res) => {
+ 1428: app.get("/api/ping", (req, res) => {
+ 1454:  * GET /api/tcp-ping-sse?host=8.8.8.8&port=443&interval=1000&timeout=1200
+ 1457: app.get("/api/tcp-ping-sse", (req, res) => {
+
+==============================================================================================================
+BACKEND SLICES
+==============================================================================================================
+
+
+----- FILE SLICE: C:\apps\tools-isp\backend\server.js [280..620] -----
+  280:       admin: adminS,
+  281:       speedMb,
+  282:       rxMbps,
+  283:       txMbps,
+  284:       ts: now
+  285:     };
+  286:   } catch(e){
+  287:     return { id:t.id, name, ip, ifIndex:idx, ifName: (t.ifName || t.uplinkIfName || ""), ok:false, error:String(e?.message||e) };
+  288:   }
+  289: }
+  290: 
+  291: // GET /api/eth/snapshot  -> returns all 6
+  292: app.get("/api/eth/snapshot", async (req, res) => {
+  293:   try{
+  294:     const raw = fs.readFileSync(ETH_CFG_PATH, "utf8");
+  295:     const targets = JSON.parse(raw);
+  296: 
+  297:     const out = [];
+  298:     // sequential to avoid SNMP flood
+  299:     for(const t of targets){
+  300:       out.push(await ethSnapshotOne(t));
+  301:     }
+  302:     res.json({ ok:true, data: out });
+  303:   } catch(e){
+  304:     res.status(500).json({ ok:false, error:String(e?.message||e) });
+  305:   }
+  306: });
+  307: /* ETH-API-END */
+  308: // SNMP basic test (sysDescr.0)
+  309: app.post("/api/snmp/test", async (req, res) => {
+  310:   const { ip, community } = req.body || {};
+  311:   if (!ip || !community) return res.status(400).json({ ok: false, error: "ip+community required" });
+  312: 
+  313:   const session = makeSession(ip, community);
+  314:   try {
+  315:     const vb = (await snmpGet(session, ["1.3.6.1.2.1.1.1.0"]))[0];
+  316:     if (!vb) return res.status(502).json({ ok: false, error: "No varbind returned" });
+  317:     if (snmp.isVarbindError(vb)) return res.status(502).json({ ok: false, error: String(snmp.varbindError(vb)) });
+  318:     return res.json({ ok: true, sysDescr: String(vb.value) });
+  319:   } catch (e) {
+  320:     return res.status(502).json({ ok: false, error: String(e.message || e) });
+  321:   } finally {
+  322:     try { session.close(); } catch {}
+  323:   }
+  324: });
+  325: 
+  326: // Interfaces (robust):
+  327: // 1) Try tableColumns (fast)
+  328: // 2) If 0 rows, fallback to by-index using ifNumber + GET per index (works when walk/table blocked)
+  329: async function handleInterfaces(req, res){
+  330:   const { ip, community } = req.body || {};
+  331:   if (!ip || !community) return res.status(400).json({ ok: false, error: "ip+community required" });
+  332: 
+  333:   const session = makeSession(ip, community);
+  334: 
+  335:   const IFENTRY_BASE  = "1.3.6.1.2.1.2.2.1";      // 2=ifDescr, 5=ifSpeed
+  336:   const IFXENTRY_BASE = "1.3.6.1.2.1.31.1.1.1";   // 1=ifName
+  337: 
+  338:   const OID_ifNumber = "1.3.6.1.2.1.2.1.0";
+  339:   const OID_ifDescr  = "1.3.6.1.2.1.2.2.1.2";
+  340:   const OID_ifSpeed  = "1.3.6.1.2.1.2.2.1.5";
+  341:   const OID_ifName   = "1.3.6.1.2.1.31.1.1.1.1";
+  342: 
+  343:   function tableColumns(baseOid, columns) {
+  344:     return new Promise((resolve, reject) => {
+  345:       session.tableColumns(baseOid, columns, (err, table) => {
+  346:         if (err) return reject(err);
+  347:         resolve(table || {});
+  348:       });
+  349:     });
+  350:   }
+  351: 
+  352:   async function tryTable() {
+  353:     let ifTable = {};
+  354:     let ifXTable = {};
+  355:     try { ifTable = await tableColumns(IFENTRY_BASE, [2, 5]); } catch { ifTable = {}; }
+  356:     try { ifXTable = await tableColumns(IFXENTRY_BASE, [1]); } catch { ifXTable = {}; }
+  357: 
+  358:     const idxSet = new Set([...Object.keys(ifTable || {}), ...Object.keys(ifXTable || {})]);
+  359:     const rows = [];
+  360: 
+  361:     for (const k of idxSet) {
+  362:       const ifIndex = parseInt(k, 10);
+  363:       if (!Number.isFinite(ifIndex)) continue;
+  364: 
+  365:       const ifDescrV = ifTable?.[k]?.[2];
+  366:       const ifSpeedV = ifTable?.[k]?.[5];
+  367:       const ifNameV  = ifXTable?.[k]?.[1];
+  368: 
+  369:       const ifDescr = ifDescrV != null ? String(ifDescrV) : null;
+  370:       const ifSpeed = ifSpeedV != null ? Number(ifSpeedV) : null;
+  371:       const ifName  = ifNameV  != null ? String(ifNameV)  : (ifDescr || null);
+  372: 
+  373:       if (ifName || ifDescr) rows.push({ ifIndex, ifName, ifDescr, ifSpeed: Number.isFinite(ifSpeed) ? ifSpeed : null });
+  374:     }
+  375: 
+  376:     rows.sort((a,b)=>a.ifIndex-b.ifIndex);
+  377:     return rows;
+  378:   }
+  379: 
+  380:   async function tryByIndex() {
+  381:     const vbN = (await snmpGet(session, [OID_ifNumber]))[0];
+  382:     if (!vbN) throw new Error("No response for ifNumber.0");
+  383:     if (snmp.isVarbindError(vbN)) throw new Error(String(snmp.varbindError(vbN)));
+  384: 
+  385:     const n = Number(vbN.value);
+  386:     if (!Number.isFinite(n) || n <= 0 || n > 2048) throw new Error(`Invalid ifNumber value: ${vbN.value}`);
+  387: 
+  388:     const rows = [];
+  389:     for (let i = 1; i <= n; i++) {
+  390:       try {
+  391:         const oids = [`${OID_ifName}.${i}`, `${OID_ifDescr}.${i}`, `${OID_ifSpeed}.${i}`];
+  392:         const vbs = await snmpGet(session, oids);
+  393: 
+  394:         const vbName  = vbs[0];
+  395:         const vbDescr = vbs[1];
+  396:         const vbSpeed = vbs[2];
+  397: 
+  398:         const ifName  = (vbName  && !snmp.isVarbindError(vbName))  ? String(vbName.value)  : null;
+  399:         const ifDescr = (vbDescr && !snmp.isVarbindError(vbDescr)) ? String(vbDescr.value) : null;
+  400:         const ifSpeed = (vbSpeed && !snmp.isVarbindError(vbSpeed)) ? Number(vbSpeed.value) : null;
+  401: 
+  402:         if (ifName || ifDescr) {
+  403:           rows.push({
+  404:             ifIndex: i,
+  405:             ifName: ifName || ifDescr,
+  406:             ifDescr: ifDescr || ifName,
+  407:             ifSpeed: Number.isFinite(ifSpeed) ? ifSpeed : null
+  408:           });
+  409:         }
+  410:       } catch {
+  411:         // ignore missing indices
+  412:       }
+  413:     }
+  414: 
+  415:     rows.sort((a,b)=>a.ifIndex-b.ifIndex);
+  416:     return rows;
+  417:   }
+  418: 
+  419:   try {
+  420:     let rows = await tryTable();
+  421:     if (rows.length === 0) rows = await tryByIndex();
+  422: 
+  423:     if (rows.length === 0) {
+  424:       return res.status(502).json({
+  425:         ok: false,
+  426:         error: "SNMP reachable (sysDescr works) but interfaces not accessible. RouterOS SNMP view/permissions likely block IF-MIB."
+  427:       });
+  428:     }
+  429: 
+  430:     return res.json({ ok: true, interfaces: rows });
+  431:   } catch (e) {
+  432:     return res.status(502).json({ ok: false, error: String(e.message || e) });
+  433:   } finally {
+  434:     try { session.close(); } catch {}
+  435:   }
+  436: 
+  437:   }
+  438: 
+  439: app.post("/api/interfaces", handleInterfaces);
+  440: 
+  441: app.get("/api/interfaces", async (req, res) => {
+  442:   req.body = { ip: req.query.ip, community: req.query.community };
+  443:   return handleInterfaces(req, res);
+  444: });
+  445: 
+  446: 
+  447: 
+  448: /* ETH-TRAFFIC-API-START */
+  449: // GET /api/eth/traffic?ip=...&community=...&ifIndex=...
+  450: // Returns raw counters + status for a single interface index (with debug fields)
+  451: app.get("/api/eth/traffic", async (req, res) => {
+  452:   const ip = String(req.query.ip || "").trim();
+  453:   const community = String(req.query.community || "").trim();
+  454:   const ifIndex = parseInt(String(req.query.ifIndex || ""), 10);
+  455: 
+  456:   if (!ip || !community || !Number.isFinite(ifIndex)) {
+  457:     return res.status(400).json({ ok:false, error:"ip+community+ifIndex required" });
+  458:   }
+  459: 
+  460:   const session = makeSession(ip, community);
+  461: 
+  462:   const OID_ifInOctets    = `1.3.6.1.2.1.2.2.1.10.${ifIndex}`;
+  463:   const OID_ifOutOctets   = `1.3.6.1.2.1.2.2.1.16.${ifIndex}`;
+  464:   const OID_ifInErrors    = `1.3.6.1.2.1.2.2.1.14.${ifIndex}`;
+  465:   const OID_ifOutErrors   = `1.3.6.1.2.1.2.2.1.20.${ifIndex}`;
+  466:   const OID_ifOperStatus  = `1.3.6.1.2.1.2.2.1.8.${ifIndex}`;
+  467:   const OID_ifAdminStatus = `1.3.6.1.2.1.2.2.1.7.${ifIndex}`;
+  468:   const OID_ifSpeed       = `1.3.6.1.2.1.2.2.1.5.${ifIndex}`;
+  469: 
+  470:   const OID_ifHCInOctets  = `1.3.6.1.2.1.31.1.1.1.6.${ifIndex}`;
+  471:   const OID_ifHCOutOctets = `1.3.6.1.2.1.31.1.1.1.10.${ifIndex}`;
+  472: 
+  473:   try {
+  474:     const oids = [
+  475:       OID_ifHCInOctets, OID_ifHCOutOctets,
+  476:       OID_ifInOctets, OID_ifOutOctets,
+  477:       OID_ifInErrors, OID_ifOutErrors,
+  478:       OID_ifOperStatus, OID_ifAdminStatus,
+  479:       OID_ifSpeed
+  480:     ];
+  481: 
+  482:     const vbs = await snmpGet(session, oids);
+  483: 
+  484:     const byOid = {};
+  485:     for(const vb of (vbs||[])){
+  486:       if(vb && vb.oid) byOid[vb.oid] = vb;
+  487:     }
+  488: 
+  489:     const vbInfo = (oid) => {
+  490:       const vb = byOid[oid];
+  491:       if(!vb) return { oid, ok:false, err:"missing-varbind" };
+  492:       if(snmp.isVarbindError(vb)){
+  493:         return { oid, ok:false, err:String(snmp.varbindError(vb) || "varbind-error") };
+  494:       }
+  495:       const v = vb.value;
+  496:       if(typeof v === "bigint") return { oid, ok:true, type:"bigint", value:Number(v) };
+  497:       if(typeof v === "number") return { oid, ok:true, type:"number", value:v };
+  498:       if(Buffer.isBuffer(v)) return { oid, ok:true, type:"buffer", value:v.toString("hex") };
+  499:       if(v && typeof v.toString === "function"){
+  500:         const s = v.toString();
+  501:         const n = Number(s);
+  502:         return { oid, ok:true, type: typeof v, value: (Number.isFinite(n) ? n : s) };
+  503:       }
+  504:       return { oid, ok:true, type: typeof v, value: v };
+  505:     };
+  506: 
+  507:     const toNum = (oid) => {
+  508:       const vb = byOid[oid];
+  509:       if(!vb || snmp.isVarbindError(vb)) return null;
+  510:       const v = vb.value;
+  511:       if(typeof v === "bigint") return Number(v);
+  512: if(Buffer.isBuffer(v)){
+  513:   try{
+  514:     // SNMP libs sometimes return Counter64 as Buffer (big-endian)
+  515:     const hex = v.toString("hex") || "0";
+  516:     const bi = BigInt("0x" + hex);
+  517:     return Number(bi);
+  518:   } catch {
+  519:     return null;
+  520:   }
+  521: }
+  522:       const n = Number(v);
+  523:       return Number.isFinite(n) ? n : null;
+  524:     };
+  525: 
+  526:     const hcIn  = toNum(OID_ifHCInOctets);
+  527:     const hcOut = toNum(OID_ifHCOutOctets);
+  528:     const in32  = toNum(OID_ifInOctets);
+  529:     const out32 = toNum(OID_ifOutOctets);
+  530: 
+  531:     const inOctets  = (hcIn  != null ? hcIn  : in32);
+  532:     const outOctets = (hcOut != null ? hcOut : out32);
+  533: 
+  534:     return res.json({
+  535:       ok:true,
+  536:       ip,
+  537:       ifIndex,
+  538:       ts: Date.now(),
+  539:       inOctets,
+  540:       outOctets,
+  541:       inOctets32: in32,
+  542:       outOctets32: out32,
+  543:       hcInOctets: hcIn,
+  544:       hcOutOctets: hcOut,
+  545:       inErrors: toNum(OID_ifInErrors),
+  546:       outErrors: toNum(OID_ifOutErrors),
+  547:       operStatus: toNum(OID_ifOperStatus),
+  548:       adminStatus: toNum(OID_ifAdminStatus),
+  549:       speed: toNum(OID_ifSpeed),
+  550:       debug: {
+  551:         ifHCInOctets: vbInfo(OID_ifHCInOctets),
+  552:         ifHCOutOctets: vbInfo(OID_ifHCOutOctets),
+  553:         ifInOctets: vbInfo(OID_ifInOctets),
+  554:         ifOutOctets: vbInfo(OID_ifOutOctets)
+  555:       }
+  556:     });
+  557: 
+  558:   } catch (e) {
+  559:     return res.status(502).json({ ok:false, error:String(e?.message||e) });
+  560:   } finally {
+  561:     try { session.close(); } catch {}
+  562:   }
+  563: });
+  564: /* ETH-TRAFFIC-API-END */
+  565: 
+  566: 
+  567: /* ETH-THROUGHPUT-API-START */
+  568: // GET /api/eth/throughput?ip=...&community=...&ifIndex=...&ms=1000
+  569: // Measures throughput by sampling counters twice with delay.
+  570: // Returns { rxMbps, txMbps, used:"hc"|"32", deltaMs, counters... }
+  571: app.get("/api/eth/throughput", async (req, res) => {
+  572:   const ip = String(req.query.ip || "").trim();
+  573:   const community = String(req.query.community || "").trim();
+  574:   const ifIndex = parseInt(String(req.query.ifIndex || ""), 10);
+  575: 
+  576:   let ms = parseInt(String(req.query.ms || "1000"), 10);
+  577:   if(!Number.isFinite(ms)) ms = 1000;
+  578:   ms = Math.max(200, Math.min(5000, ms));
+  579: 
+  580:   if (!ip || !community || !Number.isFinite(ifIndex)) {
+  581:     return res.status(400).json({ ok:false, error:"ip+community+ifIndex required" });
+  582:   }
+  583: 
+  584:   const session = makeSession(ip, community);
+  585: 
+  586:   const OID_ifInOctets    = `1.3.6.1.2.1.2.2.1.10.${ifIndex}`;
+  587:   const OID_ifOutOctets   = `1.3.6.1.2.1.2.2.1.16.${ifIndex}`;
+  588:   const OID_ifHCInOctets  = `1.3.6.1.2.1.31.1.1.1.6.${ifIndex}`;
+  589:   const OID_ifHCOutOctets = `1.3.6.1.2.1.31.1.1.1.10.${ifIndex}`;
+  590:   const OID_ifOperStatus  = `1.3.6.1.2.1.2.2.1.8.${ifIndex}`;
+  591:   const OID_ifAdminStatus = `1.3.6.1.2.1.2.2.1.7.${ifIndex}`;
+  592:   const OID_ifSpeed       = `1.3.6.1.2.1.2.2.1.5.${ifIndex}`;
+  593: 
+  594:   const sleep = (n) => new Promise(r => setTimeout(r, n));
+  595: 
+  596:   const vbOk = (vb) => vb && vb.oid && !snmp.isVarbindError(vb);
+  597: 
+  598:   const vbToBigInt = (vb) => {
+  599:     if(!vbOk(vb)) return null;
+  600:     const v = vb.value;
+  601:     try{
+  602:       if(typeof v === "bigint") return v;
+  603:       if(typeof v === "number") return BigInt(Math.trunc(v));
+  604:       if(Buffer.isBuffer(v)){
+  605:         const hex = v.toString("hex") || "0";
+  606:         return BigInt("0x" + hex);
+  607:       }
+  608:       if(v && typeof v.toString === "function"){
+  609:         const s = v.toString();
+  610:         // If it's numeric string, BigInt can parse if integer
+  611:         if(/^\d+$/.test(s)) return BigInt(s);
+  612:         const n = Number(s);
+  613:         if(Number.isFinite(n)) return BigInt(Math.trunc(n));
+  614:       }
+  615:       return null;
+  616:     } catch {
+  617:       return null;
+  618:     }
+  619:   };
+  620: 
+
+----- FILE SLICE: C:\apps\tools-isp\backend\server.js [830..910] -----
+  830:   monitors.delete(id);
+  831: 
+  832:   io.emit("monitor:stopped", { id });
+  833:   res.json({ ok: true });
+  834: });
+  835: 
+  836: // List monitors
+  837: app.get("/api/monitors", (req, res) => {
+  838:   const list = [...monitors.values()].map(m => ({ id: m.id, ip: m.ip, label: m.label, ifIndex: m.ifIndex, poll: m.poll }));
+  839:   res.json({ ok: true, monitors: list });
+  840: });
+  841: 
+  842: 
+  843: app.post("/api/debug/walk-ifdescr", async (req, res) => {
+  844:   const { ip, community } = req.body || {};
+  845:   if (!ip || !community) return res.status(400).json({ ok:false });
+  846: 
+  847:   const session = makeSession(ip, community);
+  848:   const OID = "1.3.6.1.2.1.2.2.1.2";
+  849: 
+  850:   const rows = [];
+  851: 
+  852:   try {
+  853:     await new Promise((resolve, reject) => {
+  854:       session.subtree(OID, (vb) => {
+  855:         if (!snmp.isVarbindError(vb)) {
+  856:           rows.push({
+  857:             oid: vb.oid,
+  858:             value: vb.value.toString()
+  859:           });
+  860:         }
+  861:       }, (err)=> err?reject(err):resolve());
+  862:     });
+  863: 
+  864:     res.json({ ok:true, rows });
+  865: 
+  866:   } catch(e) {
+  867:     res.status(500).json({ ok:false, error:String(e) });
+  868:   } finally {
+  869:     try { session.close(); } catch {}
+  870:   }
+  871: });
+  872: 
+  873: //
+  874: // API: Universal interfaces via SNMP CLI (snmpwalk) — works across vendors
+  875: // POST /api/interfaces-cli  { ip, community }
+  876: // returns: { ok:true, count, interfaces:[{ifIndex, ifName}] }
+  877: //
+  878: /* ===== ALIASES for EthernetTrafficPage (GET -> POST body) ===== */
+  879: app.post("/api/interfaces", (req,res)=> handleInterfaces(req,res));
+  880: app.get("/api/et/interfaces", (req,res)=>{
+  881:   req.body = { ip: req.query.ip, community: req.query.community };
+  882:   return handleInterfaces(req,res);
+  883: });
+  884: app.get("/api/eth/interfaces", (req,res)=>{
+  885:   req.body = { ip: req.query.ip, community: req.query.community };
+  886:   return handleInterfaces(req,res);
+  887: });
+  888: /* ===== ALIASES END ===== */
+  889: app.post("/api/interfaces-cli",(req,res)=>{
+  890:   const { ip, community } = req.body || {};
+  891:   if(!ip || !community) return res.status(400).json({ ok:false, error:"ip+community required" });
+  892: 
+  893:   // walk ifDescr table (IF-MIB::ifDescr)
+  894:   const oid = "1.3.6.1.2.1.2.2.1.2";
+  895: 
+  896:   const args = ["-v2c","-c", String(community), String(ip), oid];
+  897: 
+  898:   // hard timeout: 10s
+  899:   let done = false;
+  900:   const killer = setTimeout(()=>{
+  901:     if(done) return;
+  902:     done = true;
+  903:     return res.status(504).json({ ok:false, error:"snmpwalk timed out" });
+  904:   }, 10000);
+  905: 
+  906:   execFile("snmpwalk", args, { timeout: 9500, windowsHide: true }, (err, stdout, stderr) => {
+  907:     if(done) return;
+  908:     clearTimeout(killer);
+  909:     done = true;
+  910: 
+
+==============================================================================================================
+FRONTEND API USAGE
+==============================================================================================================
+
+C:\apps\tools-isp\frontend\src\layout\Sidebar.jsx:7:   { id: "ethernet", label: "Ethernet Speed+Traffic", icon: "?" },
+C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx:6: /* MINI-THROUGHPUT-CHART-V4-START */
+C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx:7: const MiniThroughputChart = ({ series, height=84, maxMbps=null, kind="RX" }) => {
+C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx:156: /* MINI-THROUGHPUT-CHART-V4-END */
+C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx:240: export default function EthernetTrafficPage(){
+C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx:247:       const r = await fetch(`${API_BASE}/api/eth/snapshot`, { cache:"no-store" });
+C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx:249:       if(!j?.ok) throw new Error(j?.error || "snapshot failed");
+C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx:276:         <div className="ethTitle">Ethernet Speed + Traffic</div>
+C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx:284:           const speed = (typeof it.speedMb === "number" && it.speedMb>0) ? `${it.speedMb} Mbps` : "—";
+C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx:305:                   <div className="ethVal">{speed}</div>
+C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx:320:                   <MiniThroughputChart series={h.rx} kind={"RX"} />
+C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx:324:                   <MiniThroughputChart series={h.tx} kind={"TX"} />
+C:\apps\tools-isp\frontend\src\pages\LivePingPage.jsx:121:   const r = await fetch(url, { cache: "no-store" });
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:68:       let r = await fetch(API + "/api/interfaces-cli", {
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:74:       if(!j?.ok || !Array.isArray(j.interfaces)){
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:75:         // fallback to /api/interfaces
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:76:         r = await fetch(API + "/api/interfaces", {
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:84:       const list = (j?.interfaces || j?.rows || j?.data || j?.ifaces || j?.result || j?.monitors || []);
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:85:       const normalized = Array.isArray(j?.interfaces) ? j.interfaces : (Array.isArray(j?.interfaces) ? j.interfaces : (Array.isArray(j?.interfaces) ? j.interfaces : []));
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:86:       const useList = Array.isArray(j?.interfaces) ? j.interfaces : (Array.isArray(j?.interfaces) ? j.interfaces : null);
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:88:       const ifList = Array.isArray(j?.interfaces)
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:89:         ? j.interfaces.map(x => ({ ifIndex: x.ifIndex, ifName: x.ifName || x.ifDescr || x.name || String(x.ifIndex) }))
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:90:         : (Array.isArray(j?.interfaces) ? j.interfaces : []);
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:92:       // If fallback /api/interfaces returns {interfaces:[{ifIndex,ifName,ifDescr,speed}]}
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:93:       if(ifList.length === 0 && Array.isArray(j?.interfaces)){
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:98:       if(final.length === 0 && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:99:         // try common shape: {interfaces:[...]}
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:100:         if(Array.isArray(j?.interfaces)){
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:101:           final = j.interfaces.map(x => ({ ifIndex: x.ifIndex, ifName: x.ifName || x.ifDescr || x.name || String(x.ifIndex) }));
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:103:         if(Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:108:       // last fallback if /api/interfaces used
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:109:       if(final.length === 0 && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:110:         if(Array.isArray(j?.interfaces)) final = j.interfaces;
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:113:       if(final.length === 0 && Array.isArray(j?.interfaces) === false){
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:114:         // /api/interfaces likely returns {ok:true, interfaces:[...]}
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:115:         if(Array.isArray(j?.interfaces)) final = j.interfaces;
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:116:         if(Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:117:           if(Array.isArray(j?.interfaces)) final = j.interfaces;
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:121:       // best-effort: if /api/interfaces returns {interfaces:[...]}
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:122:       if(final.length === 0 && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:123:         if(Array.isArray(j?.interfaces)) final = j.interfaces;
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:127:       // /api/interfaces-cli => { ok:true, interfaces:[{ifIndex, ifName}] }
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:128:       // /api/interfaces     => { ok:true, interfaces:[{ifIndex, ifName, ifDescr, speed}] }
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:129:       if(final.length === 0 && Array.isArray(j?.interfaces) === false){
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:130:         if(Array.isArray(j?.interfaces)) final = j.interfaces;
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:134:       if(Array.isArray(j?.interfaces)){
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:135:         final = j.interfaces.map(x => ({ ifIndex: x.ifIndex, ifName: x.ifName || x.ifDescr || x.name || String(x.ifIndex) }));
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:139:         setErr("No interfaces returned");
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:178:     const r = await fetch(API + "/api/monitors", {
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:223:       await fetch(API + "/api/monitors/" + encodeURIComponent(id), { method:"DELETE" });
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:238:         fetch(API + "/api/monitors/" + encodeURIComponent(id), { method:"DELETE" }).catch(()=>{});
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:266:             {(ifs.length ? ifs : [{ifIndex:"", ifName:"(load interfaces)"}]).map((x,idx)=>(
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx:307:           Tip: ???? interfaces? ????? ifIndex? ????? Start. ????? live Mbps.
+C:\apps\tools-isp\frontend\src\App.jsx:2: import EthernetTrafficPage from "./pages/EthernetTrafficPage";
+C:\apps\tools-isp\frontend\src\App.jsx:81:       ) : active === "ethernet" ? (
+C:\apps\tools-isp\frontend\src\App.jsx:82:         <EthernetTrafficPage />
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:36: import TrafficGraph from "./TrafficGraph.jsx";
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:77:   const [interfaces, setInterfaces] = useState([]);
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:220:     const r = await fetch(API + "/api/monitors");
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:325: async function fetchInterfaces() {
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:326:     setStatus("Loading interfaces...");
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:327:     const r = await fetch(API + "/api/interfaces-cli", {
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:334:     setInterfaces(j.interfaces);
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:335:     setStatus("Interfaces loaded");
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:339:     const r = await fetch(API + "/api/monitors", {
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:349:     await fetch(API + "/api/monitors/" + id, { method: "DELETE" });
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:675:         <button onClick={fetchInterfaces}>Fetch Interfaces</button>
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:690:     title={(interfaces.find(i => String(i.ifIndex) === String(ifIndex))?.ifName) || ""}
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:694:         const sel = interfaces.find(i => String(i.ifIndex) === String(ifIndex));
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:703:       {interfaces.map(i => {
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:716:       {interfaces.length === 0 ? (
+C:\apps\tools-isp\frontend\src\App.legacy.jsx:718:           No interfaces loaded
+C:\apps\tools-isp\frontend\src\MonitorBox.jsx:2: import TrafficGraph from "./TrafficGraph.jsx";
+C:\apps\tools-isp\frontend\src\MonitorBox.jsx:50:           <TrafficGraph points={points || []} height={160} />
+C:\apps\tools-isp\frontend\src\MonitorCanvas.jsx:3: import TrafficGraph from "./TrafficGraph.jsx";
+C:\apps\tools-isp\frontend\src\MonitorCanvas.jsx:106:                 <TrafficGraph points={(history[m.id] || [])} height={140} />
+C:\apps\tools-isp\frontend\src\MonitorCanvasPure.jsx:3: import TrafficGraph from "./TrafficGraph.jsx";
+C:\apps\tools-isp\frontend\src\MonitorCanvasPure.jsx:43:             <TrafficGraph points={(history[m.id] || [])} height={140} />
+C:\apps\tools-isp\frontend\src\NeighborsPanel.jsx:30:       const r = await fetch("/api/neighbors", { cache: "no-store" });
+C:\apps\tools-isp\frontend\src\NeighborsPanel.jsx:55:       const r = await fetch(url, { cache: "no-store" });
+C:\apps\tools-isp\frontend\src\TrafficGraph.jsx:6: export default function TrafficGraph({ points = [], height = 120 }) {
+
+==============================================================================================================
+FRONTEND LIKELY FILES
+==============================================================================================================
+
+C:\apps\tools-isp\frontend\src\layout\Sidebar.jsx
+C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx
+C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx
+C:\apps\tools-isp\frontend\src\App.jsx
+C:\apps\tools-isp\frontend\src\App.legacy.jsx
+C:\apps\tools-isp\frontend\src\MonitorBox.jsx
+C:\apps\tools-isp\frontend\src\MonitorCanvas.jsx
+C:\apps\tools-isp\frontend\src\MonitorCanvasPure.jsx
+C:\apps\tools-isp\frontend\src\TrafficGraph.jsx
+
+==============================================================================================================
+FRONTEND FULL FILE: C:\apps\tools-isp\frontend\src\layout\Sidebar.jsx
+==============================================================================================================
+
+import React, { useMemo, useState } from "react";
+
+const NAV = [
+  { id: "dashboard", label: "Dashboard", icon: "??" },
+  { id: "neighbors", label: "Neighbors", icon: "??" },
+  { id: "liveping", label: "Live Ping", icon: "??" },
+  { id: "ethernet", label: "Ethernet Speed+Traffic", icon: "?" },
+{ id: "settings",  label: "Settings",  icon: "??" }];
+
+export default function Sidebar({ active, setActive }) {
+  const [collapsed, setCollapsed] = useState(false);
+  const items = useMemo(() => NAV, []);
+
+  return (
+    <aside className={"side" + (collapsed ? " side--collapsed" : "")}>
+      <div className="sideHead">
+        <div className="sideBrand" title="tools-isp">
+          <span className="sideLogo">???</span>
+          {!collapsed && <span className="sideTitle">tools-isp</span>}
+        </div>
+
+        <button className="sideBtn" onClick={() => setCollapsed(v => !v)} title="Toggle">
+          {collapsed ? "»" : "«"}
+        </button>
+      </div>
+
+      <nav className="sideNav">
+        {items.map(it => (
+          <button
+            key={it.id}
+            className={"sideItem" + (active === it.id ? " isActive" : "")}
+            onClick={() => setActive(it.id)}
+            title={it.label}
+          >
+            <span className="sideIcon">{it.icon}</span>
+            {!collapsed && <span className="sideLabel">{it.label}</span>}
+          </button>
+        ))}
+      </nav>
+
+      <div className="sideFoot">
+        {!collapsed && <div className="sideHint">Layout ? Workspace ? Polish</div>}
+      </div>
+    </aside>
+  );
+}
+
+
+
+
+
+==============================================================================================================
+FRONTEND FULL FILE: C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx
+==============================================================================================================
+
+import React, { useEffect, useMemo, useRef, useState } from "react";
+
+
+import { ResponsiveContainer, AreaChart, Area, YAxis, Tooltip } from "recharts";
+
+/* MINI-THROUGHPUT-CHART-V4-START */
+const MiniThroughputChart = ({ series, height=84, maxMbps=null, kind="RX" }) => {
+  const arr = Array.isArray(series) ? series : [];
+  const vals = arr.map(v => (Number.isFinite(Number(v)) ? Number(v) : null));
+  const finite = vals.filter(v => typeof v === "number" && isFinite(v));
+
+  const localMax = finite.length ? Math.max(...finite) : 0;
+  const localAvg = finite.length ? (finite.reduce((a,b)=>a+b,0) / finite.length) : 0;
+  const m = Math.max(1, Number(maxMbps) || Math.max(10, localMax));
+
+  const rows = vals.map((v, i) => ({
+    i,
+    mbps: (typeof v === "number") ? v : null,
+    p: (typeof v === "number") ? Math.max(0, Math.min(100, (v / m) * 100)) : null,
+  }));
+
+  // last finite value
+  let last = null;
+  for(let i=rows.length-1;i>=0;i--){
+    if(typeof rows[i].mbps === "number"){ last = rows[i].mbps; break; }
+  }
+
+  const Tip = ({ active, payload }) => {
+    if (!active || !payload || !payload.length) return null;
+    const mb = payload[0] && payload[0].payload ? payload[0].payload.mbps : null;
+    const shown = (typeof mb === "number") ? mb.toFixed(2) : "-";
+    return (
+      <div style={{
+        padding:"8px 10px",
+        borderRadius:12,
+        background:"rgba(12,16,26,.78)",
+        border:"1px solid rgba(255,255,255,.10)",
+        boxShadow:"0 10px 30px rgba(0,0,0,.35)",
+        backdropFilter:"blur(10px)",
+        fontSize:12,
+        color:"rgba(255,255,255,.94)"
+      }}>
+        <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:12}}>
+          <div style={{opacity:.9, fontWeight:950, letterSpacing:.3}}>{kind}</div>
+          <div style={{
+            fontSize:11,
+            fontWeight:900,
+            padding:"2px 8px",
+            borderRadius:999,
+            background:"rgba(120,200,255,.14)",
+            border:"1px solid rgba(120,200,255,.20)",
+            color:"rgba(200,245,255,.92)"
+          }}>
+            {m ? ("max " + Math.round(m) + " Mb") : "max"}
+          </div>
+        </div>
+        <div style={{marginTop:4, fontWeight:950, fontSize:14}}>{shown} Mbps</div>
+      </div>
+    );
+  };
+
+  const gid = React.useMemo(() => "g_" + kind + "_" + Math.random().toString(16).slice(2), []);
+  const fid = React.useMemo(() => "f_" + kind + "_" + Math.random().toString(16).slice(2), []);
+  const bgid = React.useMemo(() => "bg_" + kind + "_" + Math.random().toString(16).slice(2), []);
+
+  const lastText = (typeof last === "number") ? (last.toFixed(1) + " Mbps") : "--";
+  const avgP = (localAvg && m) ? Math.max(0, Math.min(100, (localAvg / m) * 100)) : null;
+
+  return (
+    <div style={{
+      position:"relative",
+      height,
+      borderRadius:18,
+      overflow:"hidden",
+      background:"radial-gradient(900px 220px at 20% 0%, rgba(120,200,255,.18), rgba(0,0,0,0)), linear-gradient(180deg, rgba(22,30,48,.62), rgba(10,14,22,.38))",
+      border:"1px solid rgba(255,255,255,.07)",
+      boxShadow:"0 18px 40px rgba(0,0,0,.35), inset 0 0 0 1px rgba(0,0,0,.25)"
+    }}>
+      {/* top glow line */}
+      <div style={{
+        position:"absolute", left:0, right:0, top:0, height:1,
+        background:"linear-gradient(90deg, rgba(120,200,255,0), rgba(120,200,255,.55), rgba(120,200,255,0))",
+        opacity:.55
+      }} />
+
+      {/* last badge */}
+      <div style={{
+        position:"absolute",
+        top:10,
+        right:10,
+        zIndex:5,
+        padding:"6px 10px",
+        borderRadius:999,
+        background:"rgba(12,16,26,.55)",
+        border:"1px solid rgba(255,255,255,.10)",
+        backdropFilter:"blur(10px)",
+        color:"rgba(255,255,255,.92)",
+        fontSize:12,
+        fontWeight:950,
+        letterSpacing:.2
+      }}>
+        {kind}: {lastText}
+      </div>
+
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={rows} margin={{ top: 12, right: 12, bottom: 6, left: 12 }}>
+          <defs>
+            <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(140,220,255,.85)" />
+              <stop offset="55%" stopColor="rgba(140,220,255,.18)" />
+              <stop offset="100%" stopColor="rgba(140,220,255,0)" />
+            </linearGradient>
+
+            <linearGradient id={bgid} x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="rgba(255,255,255,.06)" />
+              <stop offset="50%" stopColor="rgba(255,255,255,.02)" />
+              <stop offset="100%" stopColor="rgba(255,255,255,.06)" />
+            </linearGradient>
+
+            <filter id={fid} x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2.4" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <YAxis hide domain={[0, 100]} />
+          <Tooltip content={<Tip />} cursor={{ stroke:"rgba(255,255,255,.12)", strokeWidth:1 }} />
+
+          {/* subtle grid feel (fake via background rect using defs) */}
+          <rect x="0" y="0" width="100%" height="100%" fill={"url(#" + bgid + ")"} opacity="0.25" />
+
+          {/* average reference line (very subtle) */}
+          {typeof avgP === "number" ? (
+            <line x1="0" x2="100%" y1={avgP} y2={avgP} />
+          ) : null}
+
+          <Area
+            type="monotone"
+            dataKey="p"
+            connectNulls={false}
+            stroke="rgba(175,240,255,.98)"
+            strokeWidth={2.4}
+            fill={"url(#" + gid + ")"}
+            dot={false}
+            isAnimationActive={false}
+            filter={"url(#" + fid + ")"}
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+/* MINI-THROUGHPUT-CHART-V4-END */
+const API_BASE = import.meta.env?.VITE_API_BASE || "";
+
+function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
+
+function MiniChart({ series, height=48 }){
+  const w=260, h=height;
+  const vals = series.filter(v => typeof v === "number" && isFinite(v));
+  const minV = vals.length ? Math.min(...vals) : 0;
+  const maxV = vals.length ? Math.max(...vals) : 100;
+  const span = Math.max(1, maxV-minV);
+  const step = series.length>1 ? (w/(series.length-1)) : w;
+
+  const pts = series.map((v,i) => {
+    const x=i*step;
+    const y = (v==null) ? (h-2) : (h-2) - (((v-minV)/span)*(h-10));
+    return {x,y,v};
+  });
+
+  const d = (() => {
+    if(!pts.length) return "";
+    let p = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
+    for(let i=1;i<pts.length;i++){
+      const a=pts[i-1], b=pts[i];
+      const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2;
+      p += ` Q ${a.x.toFixed(1)} ${a.y.toFixed(1)} ${cx.toFixed(1)} ${cy.toFixed(1)}`;
+    }
+    const last=pts[pts.length-1];
+    p += ` T ${last.x.toFixed(1)} ${last.y.toFixed(1)}`;
+    return p;
+  })();
+
+  const area = d ? `${d} L ${w} ${h} L 0 ${h} Z` : "";
+  const [hover, setHover] = useState(null);
+  const gid = useMemo(()=>`ethGrad_${Math.random().toString(16).slice(2)}`,[]);
+
+  function onMove(e){
+    if(series.length===0) return;
+    const rect=e.currentTarget.getBoundingClientRect();
+    const xPx = e.clientX-rect.left;
+    const xSvg = clamp((xPx/rect.width)*w,0,w);
+    const idx = clamp(Math.round(xSvg/step),0,series.length-1);
+    const p = pts[idx];
+    setHover({x:p.x,y:p.y,val:(typeof p.v==="number"?p.v:null)});
+  }
+
+  return (
+    <svg className="ethSpark" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none"
+      onMouseMove={onMove} onMouseLeave={()=>setHover(null)}>
+      <defs>
+        <linearGradient id={gid} x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stopColor="rgba(150,245,255,.55)" />
+          <stop offset="70%" stopColor="rgba(150,245,255,.10)" />
+          <stop offset="100%" stopColor="rgba(150,245,255,0)" />
+        </linearGradient>
+      </defs>
+      {area ? <path className="ethArea" d={area} fill={`url(#${gid})`} /> : null}
+      {d ? <path className="ethLine" d={d} fill="none" strokeWidth="2.2" /> : null}
+      {hover && hover.val!=null ? (
+        <g>
+          <line x1={hover.x} x2={hover.x} y1="0" y2={h} stroke="rgba(255,255,255,.18)" strokeDasharray="4 4" />
+          <circle cx={hover.x} cy={hover.y} r="3.6" fill="rgba(150,245,255,.95)" />
+          <g transform={`translate(${Math.min(hover.x + 8, w - 70)}, ${Math.max(hover.y - 18, 12)})`}>
+            <rect x="0" y="-12" rx="6" ry="6" width="66" height="18" fill="rgba(0,0,0,.45)" stroke="rgba(255,255,255,.10)" />
+            <text x="8" y="1" fill="rgba(255,255,255,.95)" fontSize="11" fontWeight="800">
+              {Math.round(hover.val)} Mbps
+            </text>
+          </g>
+        </g>
+      ) : null}
+    </svg>
+  );
+}
+
+function useInterval(cb, ms){
+  const ref = useRef(cb);
+  useEffect(()=>{ ref.current = cb; },[cb]);
+  useEffect(()=>{
+    if(ms==null) return;
+    const t=setInterval(()=>ref.current(), ms);
+    return ()=>clearInterval(t);
+  },[ms]);
+}
+
+export default function EthernetTrafficPage(){
+  const WINDOW = 60;
+  const [data, setData] = useState([]);
+  const [hist, setHist] = useState({}); // id -> {rx:[], tx:[]}
+
+  useInterval(async ()=>{
+    try{
+      const r = await fetch(`${API_BASE}/api/eth/snapshot`, { cache:"no-store" });
+      const j = await r.json();
+      if(!j?.ok) throw new Error(j?.error || "snapshot failed");
+      const arr = j.data || [];
+      setData(arr);
+
+      setHist(prev=>{
+        const next = { ...prev };
+        for(const it of arr){
+          const id = it.id || it.name;
+          if(!next[id]) next[id] = { rx:[], tx:[] };
+          const rx = (typeof it.rxMbps === "number") ? it.rxMbps : null;
+          const tx = (typeof it.txMbps === "number") ? it.txMbps : null;
+          next[id] = {
+            rx: [...next[id].rx, rx].slice(-WINDOW),
+            tx: [...next[id].tx, tx].slice(-WINDOW),
+          };
+        }
+        return next;
+      });
+
+    } catch(e){
+      // keep last data; show errors inside cards (from backend)
+    }
+  }, 1000);
+
+  return (
+    <div className="ethWrap">
+      <div className="ethTop">
+        <div className="ethTitle">Ethernet Speed + Traffic</div>
+      </div>
+
+      <div className="ethGrid">
+        {data.map(it=>{
+          const id = it.id || it.name;
+          const h = hist[id] || { rx:[], tx:[] };
+          const up = it.ok && it.status === "up" && it.admin === "up";
+          const speed = (typeof it.speedMb === "number" && it.speedMb>0) ? `${it.speedMb} Mbps` : "—";
+          const rx = (typeof it.rxMbps === "number") ? it.rxMbps.toFixed(2) : "—";
+          const tx = (typeof it.txMbps === "number") ? it.txMbps.toFixed(2) : "—";
+
+          return (
+            <div key={id} className={"ethCard " + (up ? "ok" : "down")}>
+              <div className="ethHead">
+                <div>
+                  <div className="ethName">{it.name}</div>
+                  <div className="ethSub">{it.ip ? it.ip : "IP: (missing)"} {it.ifName ? `• ${it.ifName}` : ""}</div>
+                </div>
+
+                <div className="ethPill">
+                  <span className="ethDot"></span>
+                  {up ? "UP" : (it.error === "CONFIG_MISSING" ? "CONFIG" : "DOWN")}
+                </div>
+              </div>
+
+              <div className="ethMeta">
+                <div className="ethStat">
+                  <div className="ethLbl">Link</div>
+                  <div className="ethVal">{speed}</div>
+                </div>
+                <div className="ethStat">
+                  <div className="ethLbl">RX</div>
+                  <div className="ethVal">{rx} Mbps</div>
+                </div>
+                <div className="ethStat">
+                  <div className="ethLbl">TX</div>
+                  <div className="ethVal">{tx} Mbps</div>
+                </div>
+              </div>
+
+              <div className="ethCharts">
+                <div className="ethChartBox">
+                  <div className="ethChartLbl">RX (hover)</div>
+                  <MiniThroughputChart series={h.rx} kind={"RX"} />
+                </div>
+                <div className="ethChartBox">
+                  <div className="ethChartLbl">TX (hover)</div>
+                  <MiniThroughputChart series={h.tx} kind={"TX"} />
+                </div>
+              </div>
+
+              {!it.ok && it.error && it.error !== "CONFIG_MISSING" ? (
+                <div className="ethErr">? {it.error}</div>
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+
+==============================================================================================================
+FRONTEND FULL FILE: C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx
+==============================================================================================================
+
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { io as ioClient } from "socket.io-client";
+
+const API = window.location.origin.replace(/:\d+$/, ":9090");
+
+function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+function fmtMbps(x){
+  if(x == null || Number.isNaN(Number(x))) return "—";
+  const n = Number(x);
+  if(n >= 1000) return (n/1000).toFixed(2) + " Gbps";
+  return n.toFixed(n >= 100 ? 1 : 2) + " Mbps";
+}
+
+function Spark({ data, height=34 }){
+  const w = 220;
+  const h = height;
+  const pad = 2;
+  const max = Math.max(1, ...data.map(x => Number(x)||0));
+  const pts = data.map((v,i)=>{
+    const x = pad + (i/(Math.max(1,data.length-1))) * (w - pad*2);
+    const y = h - pad - (clamp((Number(v)||0)/max,0,1)) * (h - pad*2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(" ");
+  return (
+    <svg width={w} height={h} className="wsMonSpark" viewBox={`0 0 ${w} ${h}`}>
+      <polyline fill="none" stroke="rgba(120,200,255,.90)" strokeWidth="2" points={pts} />
+    </svg>
+  );
+}
+
+export default function MonitorTool({ win, onChange }) {
+  const [ip, setIp] = useState(win.ip ?? "");
+  const [community, setCommunity] = useState(win.community ?? "");
+  const [ifIndex, setIfIndex] = useState(win.ifIndex ?? "");
+  const [ifName, setIfName] = useState(win.ifName ?? "");
+  const [loadingIfs, setLoadingIfs] = useState(false);
+  const [ifs, setIfs] = useState([]);
+  const [running, setRunning] = useState(!!win.monitorId);
+  const [err, setErr] = useState("");
+
+  const [down, setDown] = useState(null);
+  const [up, setUp] = useState(null);
+  const [histDown, setHistDown] = useState([]);
+  const [histUp, setHistUp] = useState([]);
+
+  const socketRef = useRef(null);
+  const monIdRef = useRef(win.monitorId ?? null);
+
+  // keep window state synced
+  useEffect(() => { onChange?.({ ip }); }, [ip]);
+  useEffect(() => { onChange?.({ community }); }, [community]);
+  useEffect(() => { onChange?.({ ifIndex }); }, [ifIndex]);
+  useEffect(() => { onChange?.({ ifName }); }, [ifName]);
+
+  const canStart = useMemo(() => {
+    return String(ip||"").trim() && String(community||"").trim() && String(ifIndex||"").trim();
+  }, [ip,community,ifIndex]);
+
+  async function loadIfs(){
+    const tip = String(ip||"").trim();
+    const tcom = String(community||"").trim();
+    if(!tip || !tcom){ setErr("Enter IP + Community first"); return; }
+
+    setErr("");
+    setLoadingIfs(true);
+    try{
+      // robust endpoint (snmpwalk)
+      let r = await fetch(API + "/api/interfaces-cli", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ ip: tip, community: tcom })
+      });
+      let j = await r.json();
+      if(!j?.ok || !Array.isArray(j.interfaces)){
+        // fallback to /api/interfaces
+        r = await fetch(API + "/api/interfaces", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ ip: tip, community: tcom })
+        });
+        j = await r.json();
+      }
+
+      const list = (j?.interfaces || j?.rows || j?.data || j?.ifaces || j?.result || j?.monitors || []);
+      const normalized = Array.isArray(j?.interfaces) ? j.interfaces : (Array.isArray(j?.interfaces) ? j.interfaces : (Array.isArray(j?.interfaces) ? j.interfaces : []));
+      const useList = Array.isArray(j?.interfaces) ? j.interfaces : (Array.isArray(j?.interfaces) ? j.interfaces : null);
+
+      const ifList = Array.isArray(j?.interfaces)
+        ? j.interfaces.map(x => ({ ifIndex: x.ifIndex, ifName: x.ifName || x.ifDescr || x.name || String(x.ifIndex) }))
+        : (Array.isArray(j?.interfaces) ? j.interfaces : []);
+
+      // If fallback /api/interfaces returns {interfaces:[{ifIndex,ifName,ifDescr,speed}]}
+      if(ifList.length === 0 && Array.isArray(j?.interfaces)){
+        // already handled
+      }
+
+      let final = ifList;
+      if(final.length === 0 && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+        // try common shape: {interfaces:[...]}
+        if(Array.isArray(j?.interfaces)){
+          final = j.interfaces.map(x => ({ ifIndex: x.ifIndex, ifName: x.ifName || x.ifDescr || x.name || String(x.ifIndex) }));
+        }
+        if(Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+          // ignore
+        }
+      }
+
+      // last fallback if /api/interfaces used
+      if(final.length === 0 && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+        if(Array.isArray(j?.interfaces)) final = j.interfaces;
+      }
+
+      if(final.length === 0 && Array.isArray(j?.interfaces) === false){
+        // /api/interfaces likely returns {ok:true, interfaces:[...]}
+        if(Array.isArray(j?.interfaces)) final = j.interfaces;
+        if(Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+          if(Array.isArray(j?.interfaces)) final = j.interfaces;
+        }
+      }
+
+      // best-effort: if /api/interfaces returns {interfaces:[...]}
+      if(final.length === 0 && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+        if(Array.isArray(j?.interfaces)) final = j.interfaces;
+      }
+
+      // actual shapes:
+      // /api/interfaces-cli => { ok:true, interfaces:[{ifIndex, ifName}] }
+      // /api/interfaces     => { ok:true, interfaces:[{ifIndex, ifName, ifDescr, speed}] }
+      if(final.length === 0 && Array.isArray(j?.interfaces) === false){
+        if(Array.isArray(j?.interfaces)) final = j.interfaces;
+      }
+
+      // handle correct real shapes explicitly
+      if(Array.isArray(j?.interfaces)){
+        final = j.interfaces.map(x => ({ ifIndex: x.ifIndex, ifName: x.ifName || x.ifDescr || x.name || String(x.ifIndex) }));
+      }
+
+      if(final.length === 0){
+        setErr("No interfaces returned");
+        setIfs([]);
+        return;
+      }
+
+      setIfs(final);
+
+      // auto-select current ifIndex or first
+      const current = String(ifIndex||"").trim();
+      const pick = current ? final.find(x => String(x.ifIndex) === current) : final[0];
+      if(pick){
+        setIfIndex(String(pick.ifIndex));
+        setIfName(String(pick.ifName || ("if"+pick.ifIndex)));
+      }
+    }catch(e){
+      setErr(String(e?.message || e));
+    }finally{
+      setLoadingIfs(false);
+    }
+  }
+
+  function ensureSocket(){
+    if(socketRef.current) return socketRef.current;
+    const s = ioClient(API, { transports: ["websocket","polling"] });
+    socketRef.current = s;
+    return s;
+  }
+
+  async function start(){
+    const tip = String(ip||"").trim();
+    const tcom = String(community||"").trim();
+    const tif  = String(ifIndex||"").trim();
+    if(!tip || !tcom || !tif){ setErr("ip + community + ifIndex required"); return; }
+
+    setErr("");
+    setDown(null); setUp(null);
+    setHistDown([]); setHistUp([]);
+
+    // create monitor on backend
+    const r = await fetch(API + "/api/monitors", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ ip: tip, community: tcom, ifIndex: Number(tif), label: tip, intervalMs: 1000 })
+    });
+    const j = await r.json();
+    if(!j?.ok || !j?.id){ setErr(j?.error || "Failed to start monitor"); return; }
+
+    monIdRef.current = j.id;
+    onChange?.({ monitorId: j.id, title: "Monitor — " + tip + (ifName?(" ("+ifName+")"):"") });
+
+    const s = ensureSocket();
+    setRunning(true);
+
+    s.off("monitor:update");
+    s.on("monitor:update", (msg) => {
+      if(!msg || msg.id !== monIdRef.current) return;
+      if(msg.ok === false){
+        setErr(msg.error || "Monitor error");
+        return;
+      }
+      setErr("");
+      const d = Number(msg.down_mbps);
+      const u = Number(msg.up_mbps);
+      setDown(d); setUp(u);
+      setHistDown(prev => [...prev, d].slice(-80));
+      setHistUp(prev => [...prev, u].slice(-80));
+    });
+
+    s.off("monitor:stopped");
+    s.on("monitor:stopped", (msg) => {
+      if(!msg || msg.id !== monIdRef.current) return;
+      monIdRef.current = null;
+      onChange?.({ monitorId: null });
+      setRunning(false);
+    });
+  }
+
+  async function stop(){
+    const id = monIdRef.current;
+    if(!id){
+      setRunning(false);
+      return;
+    }
+    try{
+      await fetch(API + "/api/monitors/" + encodeURIComponent(id), { method:"DELETE" });
+    }catch{}
+    monIdRef.current = null;
+    onChange?.({ monitorId: null });
+    setRunning(false);
+  }
+
+  // cleanup on unmount
+  useEffect(() => {
+    return () => {
+      try{ socketRef.current?.close(); }catch{}
+      socketRef.current = null;
+      // stop backend monitor if still running
+      const id = monIdRef.current;
+      if(id){
+        fetch(API + "/api/monitors/" + encodeURIComponent(id), { method:"DELETE" }).catch(()=>{});
+      }
+      monIdRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div className="wsMonRoot">
+      <div className="wsMonTop">
+        <div className="wsMonField">
+          <div className="wsMonLbl">IP</div>
+          <input className="wsMonIn" value={ip} onChange={(e)=>setIp(e.target.value)} placeholder="192.168.1.1" />
+        </div>
+
+        <div className="wsMonField">
+          <div className="wsMonLbl">Community</div>
+          <input className="wsMonIn" value={community} onChange={(e)=>setCommunity(e.target.value)} placeholder="public" />
+        </div>
+
+        <div className="wsMonField">
+          <div className="wsMonLbl">Interface</div>
+          <select className="wsMonSel" value={String(ifIndex||"")} onChange={(e)=> {
+            const v = e.target.value;
+            setIfIndex(v);
+            const pick = ifs.find(x => String(x.ifIndex) === String(v));
+            setIfName(pick ? String(pick.ifName) : "");
+          }}>
+            {(ifs.length ? ifs : [{ifIndex:"", ifName:"(load interfaces)"}]).map((x,idx)=>(
+              <option key={idx} value={String(x.ifIndex)}>{String(x.ifName)} (#{String(x.ifIndex)})</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="wsMonBtns">
+          <button className="wsMonBtn ghost" onClick={loadIfs} disabled={loadingIfs}>
+            {loadingIfs ? "Loading..." : "Load IFs"}
+          </button>
+
+          {!running ? (
+            <button className="wsMonBtn" onClick={start} disabled={!canStart}>Start</button>
+          ) : (
+            <button className="wsMonBtn danger" onClick={stop}>Stop</button>
+          )}
+        </div>
+      </div>
+
+      {err ? <div className="wsMonErr">? {err}</div> : null}
+
+      <div className="wsMonCards">
+        <div className="wsMonCard">
+          <div className="wsMonCardTop">
+            <div className="wsMonCardTitle">Download</div>
+            <div className="wsMonCardVal">{fmtMbps(down)}</div>
+          </div>
+          <Spark data={histDown} />
+        </div>
+
+        <div className="wsMonCard">
+          <div className="wsMonCardTop">
+            <div className="wsMonCardTitle">Upload</div>
+            <div className="wsMonCardVal">{fmtMbps(up)}</div>
+          </div>
+          <Spark data={histUp} />
+        </div>
+      </div>
+
+      <div className="wsMonFoot">
+        <div className="wsMonHint">
+          Tip: ???? interfaces? ????? ifIndex? ????? Start. ????? live Mbps.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+==============================================================================================================
+FRONTEND FULL FILE: C:\apps\tools-isp\frontend\src\App.jsx
+==============================================================================================================
+
+import React, { useMemo, useState, useEffect } from "react";
+import EthernetTrafficPage from "./pages/EthernetTrafficPage";
+import AppShell from "./layout/AppShell";
+import Workspace from "./workspace/Workspace";
+import LegacyApp from "./App.legacy";
+import NeighborsPanel from "./NeighborsPanel";
+import LivePingPage from "\./pages/LivePingPage";
+const STORAGE_KEY = "toolsisp_windows_v1";
+function uid(){
+  return "w_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+}
+export default function App(){
+  const [active, setActive] = useState("dashboard");
+  const [windows, setWindows] = useState(() => {
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch{
+      return [];
+    }
+  });
+  useEffect(() => {
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(windows));
+    }catch{}
+  }, [windows]);
+  function openWin(type){
+    const id = uid();
+    const base = {
+      id,
+      type,
+      ip: (type === "ping" ? "88.88.88.10" : undefined),
+      community: (type === "monitor" ? "public" : undefined),
+      title: type === "ping" ? "Ping — 88.88.88.10" :
+             type === "monitor" ? "Monitor" : "Note",
+      x: 140 + (windows.length * 18),
+      y: 120 + (windows.length * 14),
+      w: type === "note" ? 420 : 560,
+      h: type === "note" ? 320 : 340,
+      z: 10 + windows.length
+    };
+    setWindows(prev => [...prev, base]);
+  }
+  const actions = useMemo(() => ({
+    onNewPing: () => openWin("ping"),
+    onNewMonitor: () => openWin("monitor"),
+    onNewNote: () => openWin("note"),
+  }), [windows]);
+    useEffect(() => {
+    function onKey(e){
+      if(e.ctrlKey && e.key.toLowerCase() === "p"){
+        e.preventDefault();
+        openWin("ping");
+      }
+      if(e.ctrlKey && e.key.toLowerCase() === "m"){
+        e.preventDefault();
+        openWin("monitor");
+      }
+      if(e.ctrlKey && e.key.toLowerCase() === "n"){
+        e.preventDefault();
+        openWin("note");
+      }
+      if(e.key === "Escape"){
+        setWindows(prev => {
+          if(!prev.length) return prev;
+          const sorted = [...prev].sort((a,b)=>(b.z??0)-(a.z??0));
+          const top = sorted[0];
+          return prev.filter(w => w.id !== top.id);
+        });
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [windows]);
+  return (
+    <AppShell active={active} setActive={setActive} actions={actions}>
+      {active === "neighbors" ? (
+        <NeighborsPanel />
+      ) : active === "liveping" ? (
+        <LivePingPage />
+      ) : active === "ethernet" ? (
+        <EthernetTrafficPage />
+      ) : (
+        <Workspace windows={windows} setWindows={setWindows}>
+          <LegacyApp />
+        </Workspace>
+      )}
+    </AppShell>
+  );
+}
+
+
+
+
+==============================================================================================================
+FRONTEND FULL FILE: C:\apps\tools-isp\frontend\src\App.legacy.jsx
+==============================================================================================================
+
+import { useEffect, useRef, useState } from "react";
+
+const STORAGE_KEY = "tools-isp:pings:v1";
+const STORAGE_UI_KEY = "tools-isp:ui:v1";
+
+function safeParse(json, fallback) {
+  try { return JSON.parse(json); } catch { return fallback; }
+}
+function loadSavedPings() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  const arr = safeParse(raw, null);
+  if (!Array.isArray(arr)) return null;
+  // minimal validation + defaults
+  return arr.map(p => ({
+    id: String(p.id || (crypto?.randomUUID ? crypto.randomUUID() : Date.now())),
+    ip: String(p.ip || ""),
+    out: String(p.out || ""),
+    running: false,            // never restore running
+    x: Number.isFinite(p.x) ? p.x : 40,
+    y: Number.isFinite(p.y) ? p.y : 160,
+    w: Number.isFinite(p.w) ? p.w : (p.w ?? undefined),
+    h: Number.isFinite(p.h) ? p.h : (p.h ?? undefined),
+  }));
+}
+function savePingsNow(pings) {
+  try {
+    const toSave = (pings || []).map(p => ({
+      id: p.id, ip: p.ip, out: p.out,
+      x: p.x, y: p.y, w: p.w, h: p.h
+    }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+  } catch {}
+}
+import { io } from "socket.io-client";
+import MonitorBox from "./MonitorBox.jsx";
+import TrafficGraph from "./TrafficGraph.jsx";
+import "./packet-loss.css";
+import "./ping-modern.css";
+
+const API = window.location.origin.replace(/:\d+$/, ":9090");
+function getPacketLossPct(out) {
+  if (!out) return null;
+  const s = String(out);
+  const lines = s.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+  const tail = lines.slice(-50); // ??? 50 ?????
+  let sent = 0;
+  let lost = 0;
+  for (const l of tail) {
+    // ????
+    if (/^reply from/i.test(l) || /bytes=\d+/i.test(l)) {
+      sent++;
+      continue;
+    }
+    // ??? (?????? + ????? ?????)
+    if (/request timed out/i.test(l) || /destination host unreachable/i.test(l) || /general failure/i.test(l) || /transmit failed/i.test(l) || /unreachable/i.test(l)) {
+      sent++;
+      lost++;
+      continue;
+    }
+  }
+  if (sent === 0) return null;
+  const pct = (lost / sent) * 100;
+  return Math.round(pct * 10) / 10; // 1 decimal
+}
+function cleanPingText(out){
+  if(!out) return "";
+  return String(out)
+    .split(/\r?\n/)
+    .filter(line => !/^Pinging\s+/i.test(line))  // remove "Pinging x.x.x.x ..."
+    .filter(line => line.trim() !== "")         // remove empty lines
+    .join("\n");
+}
+
+export default function App() {
+  const [ip, setIp] = useState("88.88.88.10");
+  const [community, setCommunity] = useState("public");
+  const [interfaces, setInterfaces] = useState([]);
+  const [ifIndex, setIfIndex] = useState(2);
+  const [ifOpen, setIfOpen] = useState(false);
+  const [label, setLabel] = useState("WAN-ether1");
+  // Ping UI (multi boxes)
+  const [showPing, setShowPing] = useState(false);
+  const [pings, setPings] = useState([]); 
+useEffect(() => {
+  // Restore pings positions + last IPs
+  const saved = loadSavedPings();
+  if (saved && saved.length) {
+    setPings(saved);
+  }
+
+  // (Optional) restore simple UI state (interface/group) if you want later:
+  // const ui = safeParse(localStorage.getItem(STORAGE_UI_KEY), null);
+  // if (ui && typeof ui === "object") {
+  //   if (ui.iface != null) setSelectedInterface(String(ui.iface));
+  // }
+}, []);
+
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+// [{id, ip, out, running, x, y}]
+  const pingSrcRef = useRef({});          // { [id]: EventSource }
+  const dragRef = useRef({ active:false, id:null, dx:0, dy:0 });
+
+  const resizeRef = useRef({ active:false, id:null, sx:0, sy:0, sw:0, sh:0 });
+const [pingSrc, setPingSrc] = useState(null);
+const [monitors, setMonitors] = useState([]);
+  const [live, setLive] = useState({});
+  const [history, setHistory] = useState({}); // { [id]: [{t,down,up}, ...] }
+  const [status, setStatus] = useState("");
+  const socketRef = useRef(null);
+
+  useEffect(() => {
+    const s = io(API);
+    socketRef.current = s;
+
+    s.on("monitor:update", (msg) => {
+      setLive(prev => ({
+        ...prev,
+        [msg.id]: {
+          down: msg.down_mbps ?? 0,
+          up: msg.up_mbps ?? 0,
+          ok: msg.ok,
+          err: msg.error
+        }
+      }));
+
+      setHistory(prev => {
+        const id = msg.id;
+        const prevArr = prev[id] || [];
+        const next = prevArr.concat([{
+          t: Date.now(),
+          down: msg.down_mbps ?? 0,
+          up: msg.up_mbps ?? 0
+        }]);
+        const sliced = next.length > 120 ? next.slice(next.length - 120) : next;
+        return { ...prev, [id]: sliced };
+      });
+    });
+
+    s.on("monitor:stopped", ({ id }) => {
+      setLive(prev => {
+        const copy = { ...prev };
+        delete copy[id];
+        return copy;
+      });
+
+      setHistory(prevH => {
+        const copyH = { ...prevH };
+        delete copyH[id];
+        return copyH;
+      });
+    loadMonitors();
+  });
+
+    return () => s.close();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+
+  
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+// PING_RESIZE_ENGINE_START
+  useEffect(() => {
+    function onMove(e) {
+      const r = resizeRef.current;
+      if (!r || !r.active || !r.id) return;
+
+      const dx = e.clientX - r.sx;
+      const dy = e.clientY - r.sy;
+
+      const nw = Math.max(280, r.sw + dx);
+      const nh = Math.max(220, r.sh + dy);
+
+      setPings(prev => prev.map(pp => (pp.id === r.id ? { ...pp, w: nw, h: nh } : pp)));
+    }
+
+    function onUp() {
+      const r = resizeRef.current;
+      if (!r) return;
+      resizeRef.current = { active:false, id:null, sx:0, sy:0, sw:0, sh:0 };
+    }
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, []);
+  
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+// PING_RESIZE_ENGINE_END
+  async function loadMonitors() {
+    const r = await fetch(API + "/api/monitors");
+    const j = await r.json();
+    setMonitors(j.monitors || []);
+  }
+
+  useEffect(() => { loadMonitors(); }, []);
+
+  
+
+  
+
+  
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+// cleanup pings on unmount
+  useEffect(() => {
+    return () => {
+      try {
+        const m = pingSrcRef.current || {};
+        Object.keys(m).forEach(k => { try { m[k].close(); } catch {} });
+      } catch {}
+    };
+  }, []);
+
+  
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+// PING_RESIZE_ENGINE_START
+  useEffect(() => {
+    function onMove(e) {
+      const r = resizeRef.current;
+      if (!r || !r.active || !r.id) return;
+
+      const dx = e.clientX - r.sx;
+      const dy = e.clientY - r.sy;
+
+      const nw = Math.max(280, r.sw + dx);
+      const nh = Math.max(220, r.sh + dy);
+
+      setPings(prev => prev.map(pp => (pp.id === r.id ? { ...pp, w: nw, h: nh } : pp)));
+    }
+
+    function onUp() {
+      const r = resizeRef.current;
+      if (!r) return;
+      resizeRef.current = { active:false, id:null, sx:0, sy:0, sw:0, sh:0 };
+    }
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, []);
+  
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+// PING_RESIZE_ENGINE_END
+// close interface dropdown on outside click
+  useEffect(() => {
+    function onDoc(e){
+      const el = e.target;
+      if (!el) return;
+      // if click is inside dropdown, ignore
+      if (el.closest && el.closest(".dd")) return;
+      setIfOpen(false);
+    }
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
+useEffect(() => {
+  // Debounced save to localStorage
+  let saveTimer = setTimeout(() => {
+    savePingsNow(pings);
+  }, 150);
+
+  return () => {
+    try { clearTimeout(saveTimer); } catch {}
+  };
+}, [pings]);
+async function fetchInterfaces() {
+    setStatus("Loading interfaces...");
+    const r = await fetch(API + "/api/interfaces-cli", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ip, community })
+    });
+    const j = await r.json();
+    if (!j.ok) { setStatus(j.error); return; }
+    setInterfaces(j.interfaces);
+    setStatus("Interfaces loaded");
+  }
+
+  async function startMonitor() {
+    const r = await fetch(API + "/api/monitors", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ip, community, ifIndex: Number(ifIndex), label })
+    });
+    const j = await r.json();
+    if (!j.ok) { setStatus(j.error); return; }
+    loadMonitors();
+  }
+  async function stopMonitor(id) {
+    await fetch(API + "/api/monitors/" + id, { method: "DELETE" });
+    loadMonitors();
+  }
+
+  function addPing() {
+    const id = (crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random().toString(16).slice(2));
+    const baseX = 40 + (pings.length * 30);
+    const baseY = 160 + (pings.length * 30);
+    setPings(prev => prev.concat([{ id, ip: "", out: "", running: false, x: baseX, y: baseY }]));
+  }
+
+  function removePing(id) {
+    stopPingId(id);
+    setPings(prev => prev.filter(p => p.id !== id));
+  }
+
+  function setPingField(id, patch) {
+    setPings(prev => prev.map(p => (p.id === id ? { ...p, ...patch } : p)));
+  }
+
+  function stopPingId(id) {
+    try {
+      const es = pingSrcRef.current?.[id];
+      if (es) { try { es.close(); } catch {} }
+      if (pingSrcRef.current) delete pingSrcRef.current[id];
+    } catch {}
+    setPingField(id, { running: false });
+  }
+
+  function startPingId(id) {
+    const p = pings.find(x => x.id === id);
+    const target = String((p?.ip || "")).trim();
+    if (!target) { setPingField(id, { out: "Enter IP first" }); return; }
+
+    // stop previous if any
+    stopPingId(id);
+
+    // show header + keep running
+    setPingField(id, { out: "Pinging " + target + " ...\n", running: true });
+
+    // ? SSE live stream
+    const url = API + "/api/ping-sse?ip=" + encodeURIComponent(target);
+    const es = new EventSource(url);
+    pingSrcRef.current[id] = es;
+
+    let startedAt = Date.now();
+    let lineCount = 0;
+
+    const append = (line) => {
+      lineCount++;
+      // Append + force react re-render/scroll using a tiny changing suffix
+      setPings(prev => prev.map(pp => {
+        if (pp.id !== id) return pp;
+        const base = (pp.out || "");
+        const next = base + String(line || "") + "\n";
+        return { ...pp, out: next, _scroll: Date.now() };
+      }));
+
+      // ? Auto-scroll output to bottom (after DOM updates)
+      setTimeout(() => {
+        try {
+          const el = document.querySelector(`[data-ping-out="${id}"]`);
+          if (el) { el.scrollTop = el.scrollHeight; }
+        } catch {}
+      }, 0);
+    };
+
+    es.addEventListener("line", (ev) => {
+      try {
+        const obj = JSON.parse(ev.data || "{}");
+        append(obj.line ?? String(ev.data ?? ""));
+      } catch {
+        append(String(ev.data ?? ""));
+      }
+    });
+
+    es.addEventListener("end", () => {
+      try { es.close(); } catch {}
+      try { delete pingSrcRef.current[id]; } catch {}
+      const ms = Date.now() - startedAt;
+      append("[done] " + ms + "ms");
+      setPingField(id, { running: false });
+    });
+
+    es.onerror = () => {
+      // NOTE: EventSource auto-reconnects, but backend closes when client closes.
+      // We will show error and stop to avoid endless loop.
+      try { es.close(); } catch {}
+      try { delete pingSrcRef.current[id]; } catch {}
+      append("[error] stream disconnected");
+      setPingField(id, { running: false });
+    };
+}
+
+  function onPingMouseDown(e, id) {
+    const p = pings.find(x => x.id === id);
+    if (!p) return;
+    dragRef.current = {
+      active: true,
+      id,
+      dx: e.clientX - (p.x || 0),
+      dy: e.clientY - (p.y || 0)
+    };
+    e.preventDefault();
+  }
+  function onPingResizeDown(e, id) {
+    if (e.button !== 0) return;
+    const p = pings.find(x => x.id === id);
+    if (!p) return;
+
+    const sw = (p.w ?? 360);
+    const sh = (p.h ?? 320);
+
+    resizeRef.current = { active:true, id, sx:e.clientX, sy:e.clientY, sw, sh };
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  useEffect(() => {
+    function onMove(e) {
+      const d = dragRef.current;
+      if (!d?.active || !d.id) return;
+      const x = Math.max(0, e.clientX - d.dx);
+      const y = Math.max(0, e.clientY - d.dy);
+      setPingField(d.id, { x, y });
+    }
+    function onUp() {
+      const d = dragRef.current;
+      if (!d) return;
+      dragRef.current = { active:false, id:null, dx:0, dy:0 };
+    }
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, [pings]);
+
+  return (
+    <div style={{ fontFamily: "Arial", padding: 20 }}>
+      <h2>tools-isp Dashboard</h2>
+      <div style={{ marginBottom: 10 }}>{status}</div>
+
+      
+      {showPing ? (
+        <div>
+          {pings.map(p => (
+            <div
+              key={p.id}
+              style={{
+                position: "fixed",
+                left: (p.x ?? 40),
+                top: (p.y ?? 160),
+                width: (p.w ?? 360),
+                height: (p.h ?? 320),
+                boxSizing: "border-box",
+                minWidth: 300,
+                minHeight: 220,
+                resize: "both",
+                overflow: "auto",
+                background: "rgba(10, 14, 20, 0.78)",
+                border: "1px solid rgba(255,255,255,0.14)",
+                borderRadius: 10,
+                
+                paddingBottom: 24,boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
+                padding: 10,
+                cursor: "move",
+                zIndex: 9999
+              }}
+            >
+              <div onMouseDown={(e) => onPingMouseDown(e, p.id)}  style={{ display: "flex",
+                flexDirection: "column", justifyContent: "space-between", cursor: "move", userSelect: "none", alignItems: "center", marginBottom: 8 }}>
+                <div style={{ fontWeight: 700, fontSize: 12 }}>Packet loss</div>
+                <button type="button" onClick={() => removePing(p.id)} style={{ cursor: "pointer" }}>?</button>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
+                <input
+                  value={p.ip}
+                  onChange={(e) => setPingField(p.id, { ip: e.target.value })}
+                  placeholder="IP / Host (8.8.8.8)"
+                  style={{ cursor: "text" }}
+                  onMouseDown={(e) => e.stopPropagation()}
+                />
+                <button
+                  type="button"
+                  onClick={() => startPingId(p.id)}
+                  disabled={p.running}
+                  onMouseDown={(e) => e.stopPropagation()}
+                >
+                  Run
+                </button>
+                <button
+                  type="button"
+                  onClick={() => stopPingId(p.id)}
+                  disabled={!p.running}
+                  onMouseDown={(e) => e.stopPropagation()}
+                >
+                  Stop
+                </button>
+              </div>
+
+              {(() => {
+  const loss = getPacketLossPct(p.out);
+  const pct = (loss === null) ? 0 : Math.max(0, Math.min(100, loss));
+  const lossText = (loss === null) ? "—" : (pct + "%");
+
+  // Sparkline from real ping times: time=23ms / time<1ms / time=23.5ms
+  const times = (p.out || "")
+    .split(/\r?\n/)
+    .map((l) => {
+      const m = l.match(/time\s*[=<]\s*([0-9.]+)\s*ms/i);
+      return m ? Number(m[1]) : null;
+    })
+    .filter((v) => v !== null && !Number.isNaN(v))
+    .slice(-40);
+
+  const maxT = times.length ? Math.max(...times) : null;
+  const minT = times.length ? Math.min(...times) : null;
+
+  const sparkPoints = (() => {
+    if (!times.length) return "";
+    const w = 100, h = 14;
+    const span = Math.max(1, (maxT - minT));
+    const n = times.length;
+    return times.map((t, i) => {
+      const x = (n === 1) ? 0 : (i * (w / (n - 1)));
+      const y = h - ((t - minT) / span) * h;
+      return `${x.toFixed(2)},${y.toFixed(2)}`;
+    }).join(" ");
+  })();
+
+  const sparkColor =
+    maxT === null ? "rgba(0,0,0,0)" :
+    (maxT >= 150 ? "rgba(255,80,80,0.98)" :
+     maxT >= 80  ? "rgba(255,200,0,0.98)" :
+                   "rgba(0,255,200,0.98)");
+
+  const pingLabel =
+    maxT === null ? "—" :
+    (Math.round(maxT) + "ms");
+
+  return (
+    <div className="pingMetaWrap">
+      <div className="pingMetaRow">
+        <div className="pingMetaLeft">
+          <div className="pingMetaLabel">Packet loss</div>
+          <div className="pingMetaValue">{lossText}</div>
+        </div>
+        <div className={"pingDotBox " + (p.running ? "on" : "")}>
+          <span className="pingDot" />
+        </div>
+      </div>
+
+      <div
+        className="plBar"
+        style={{ position: "relative", overflow: "hidden" }}
+        title={"Ping: " + pingLabel + " | Packet loss: " + lossText}
+      >
+        <div className="plFill" style={{ width: pct + "%", position:"absolute", left:0, top:0, bottom:0, zIndex:1, opacity:0.22 }} />
+
+        {/* Real-time ping sparkline */}
+        <svg className="plSpark" viewBox="0 0 100 14" width="100%" height="14"
+          preserveAspectRatio="none"
+          style={{ position:"absolute", left:0, top:0, width:"100%", height:"100%", zIndex:3, pointerEvents:"none" }}
+        >
+          <polyline
+  points={sparkPoints}
+  style={(() => {
+    const ms = (() => {
+      const m = String(pingLabel || "").match(/(\d+)\s*ms/);
+      return m ? parseInt(m[1], 10) : null;
+    })();
+    const stroke =
+      ms === null ? "rgba(120,200,255,0.9)" :
+      ms >= 200 ? "rgba(255,90,90,0.95)" :
+      ms >= 80  ? "rgba(255,210,70,0.95)" :
+                  "rgba(60,255,190,0.95)";
+    return {
+      fill: "none",
+      stroke,
+      strokeWidth: 2,
+      strokeLinejoin: "round",
+      strokeLinecap: "round",
+      filter: "drop-shadow(0 0 6px rgba(120,220,255,0.35))"
+    };
+  })()}
+/>
+        </svg>
+      </div>
+
+      <div className={"pingNeonLine " + (p.running ? "on" : "")} />
+    </div>
+  );
+})()}
+<pre data-ping-out={p.id} className="pingOut">{cleanPingText(p.out)}</pre>
+            
+              {/* PING_RESIZE_GRIP */}
+              <div
+                onMouseDown={(e) => onPingResizeDown(e, p.id)}
+                style={{
+                  position: "absolute",
+                  right: 6,
+                  bottom: 6,
+                  width: 14,
+                  height: 14,
+                  cursor: "nwse-resize",
+                  borderRadius: 3,
+                  background: "rgba(0,0,0,0.25)",
+                  border: "1px solid rgba(255,255,255,0.25)"
+                }}
+              /></div>
+          ))}
+        </div>
+      ) : null}
+<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10 }}>
+        <input value={ip} onChange={e => setIp(e.target.value)} placeholder="IP" />
+        <input value={community} onChange={e => setCommunity(e.target.value)} placeholder="Community" />
+                <button
+          type="button"
+          onClick={() => setShowPing(v => !v)}
+          title="Ping any IP"
+        >
+          Ping
+        </button>
+        <button onClick={fetchInterfaces}>Fetch Interfaces</button>
+      </div>
+      {showPing ? (
+        <div style={{ marginTop: 10, display: "flex",
+                flexDirection: "column", gap: 10, alignItems: "center" }}>
+          <button type="button" onClick={addPing}>+ New Ping</button>
+          <span style={{ fontSize: 12, opacity: 0.7 }}>Drag boxes, run multiple pings</span>
+        </div>
+      ) : null}
+<div className="dd" style={{ marginTop: 10 }}>
+  <button
+    type="button"
+    className="ddBtn"
+    onClick={() => setIfOpen(v => !v)}
+    aria-expanded={ifOpen ? "true" : "false"}
+    title={(interfaces.find(i => String(i.ifIndex) === String(ifIndex))?.ifName) || ""}
+  >
+    <span>
+      {(() => {
+        const sel = interfaces.find(i => String(i.ifIndex) === String(ifIndex));
+        return sel ? `#${sel.ifIndex} - ${sel.ifName}` : `#${ifIndex}`;
+      })()}
+    </span>
+    <span className="ddCaret">?</span>
+  </button>
+
+  {ifOpen ? (
+    <div className="ddMenu">
+      {interfaces.map(i => {
+        const active = String(i.ifIndex) === String(ifIndex);
+        return (
+          <button
+            key={i.ifIndex}
+            type="button"
+            className={"ddItem" + (active ? " ddItemActive" : "")}
+            onClick={() => { setIfIndex(i.ifIndex); setIfOpen(false); }}
+          >
+            #{i.ifIndex} - {i.ifName}
+          </button>
+        );
+      })}
+      {interfaces.length === 0 ? (
+        <div style={{ padding: 10, color: "rgba(255,255,255,.7)" }}>
+          No interfaces loaded
+        </div>
+      ) : null}
+    </div>
+  ) : null}
+</div>
+
+      <button onClick={startMonitor} style={{ marginLeft: 10 }}>+ Add</button>
+
+      <hr />
+
+      {monitors.map(m => {
+        const L = live[m.id] || {};
+        const down = (L.down ?? 0);
+        const up = (L.up ?? 0);
+
+        return (
+          <MonitorBox
+            key={m.id}
+            monitor={m}
+            live={L}
+            points={(history[m.id] || [])}
+            onClose={() => stopMonitor(m.id)}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==============================================================================================================
+FRONTEND FULL FILE: C:\apps\tools-isp\frontend\src\MonitorBox.jsx
+==============================================================================================================
+
+import DragResizeWindow from "./DragResizeWindow.jsx";
+import TrafficGraph from "./TrafficGraph.jsx";
+
+export default function MonitorBox({ monitor, live, points, onClose }) {
+  /* TOOLS_MONITORBOX_NEON_OK_v1 */
+  const bwClass = (v) => (v > 400 ? "bw-insane" : v > 150 ? "bw-high" : v > 50 ? "bw-mid" : "bw-low");
+
+  const down = Number(live?.down ?? 0);
+  const up   = Number(live?.up ?? 0);
+
+  const ipText = monitor?.ip ? String(monitor.ip) : "";
+  const id = monitor?.id;
+
+  return (
+    <DragResizeWindow
+      id={id}
+      title="Drag / Resize"
+      ipText={ipText}
+      defaultRect={{ x: 80, y: 150, w: 520, h: 240 }}
+      minW={360}
+      minH={200}
+      onClose={onClose}
+    >
+      <div style={{ display: "grid", gap: 6, height: "100%", alignContent: "start" }}>
+
+        {/* Neon BW pills */}
+        <div className="bwRow" data-bw="1" style={{ marginTop: -4 }}>
+          <span className={"bwPill " + bwClass(down)} title={"Download: " + down.toFixed(3) + " Mbps"}>
+            <span className="bwLabel">Download</span>
+            <span className="bwVal">{(down).toFixed?.(3) ?? "0"} Mbps</span>
+          </span>
+
+          <span className={"bwPill " + bwClass(up)} title={"Upload: " + up.toFixed(3) + " Mbps"}>
+            <span className="bwLabel">Upload</span>
+            <span className="bwVal">{(up).toFixed?.(3) ?? "0"} Mbps</span>
+          </span>
+        </div>
+
+        {/* Graph */}
+        <div
+          style={{
+            flex: 1,
+            minHeight: 120,
+            borderRadius: 14,
+            border: "1px solid rgba(255,255,255,0.08)",
+            background: "rgba(0,0,0,0.12)",
+            overflow: "hidden"
+          }}
+        >
+          <TrafficGraph points={points || []} height={160} />
+        </div>
+
+        {!live?.ok && live?.err ? (
+          <div style={{ color: "#ff6b6b", fontSize: 12, fontWeight: 800 }}>
+            {live.err}
+          </div>
+        ) : null}
+      </div>
+    </DragResizeWindow>
+  );
+}
+
+/* TOOLS_TIGHT_BW_MB_v1 */
+
+
+
+==============================================================================================================
+FRONTEND FULL FILE: C:\apps\tools-isp\frontend\src\MonitorCanvas.jsx
+==============================================================================================================
+
+import { useEffect, useMemo, useState } from "react";
+import { Rnd } from "react-rnd";
+import TrafficGraph from "./TrafficGraph.jsx";
+
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+function defaultLayout(index){
+  // Cascade layout (nice first open)
+  const x = 20 + (index % 3) * 60;
+  const y = 20 + (index % 4) * 50;
+  return { x, y, w: 820, h: 300 };
+}
+
+export default function MonitorCanvas({ monitors, live, history, stopMonitor }) {
+  const key = "tisp.canvas.layout.v1";
+
+  const [layout, setLayout] = useState({}); // { [id]: {x,y,w,h} }
+  const ids = useMemo(() => (monitors || []).map(m => m.id), [monitors]);
+
+  // load saved layout once
+  useEffect(() => {
+    try{
+      const raw = localStorage.getItem(key);
+      if(raw){
+        const j = JSON.parse(raw);
+        if(j && typeof j === "object") setLayout(j);
+      }
+    } catch {}
+  }, []);
+
+  // ensure new monitors get default layout
+  useEffect(() => {
+    setLayout(prev => {
+      let changed = false;
+      const next = { ...prev };
+      ids.forEach((id, idx) => {
+        if(!next[id]){
+          next[id] = defaultLayout(idx);
+          changed = true;
+        }
+      });
+      // remove layouts for deleted monitors
+      Object.keys(next).forEach(id => {
+        if(!ids.includes(id)){
+          delete next[id];
+          changed = true;
+        }
+      });
+      if(changed){
+        try{ localStorage.setItem(key, JSON.stringify(next)); } catch {}
+        return next;
+      }
+      return prev;
+    });
+  }, [ids]);
+
+  function save(id, patch){
+    setLayout(prev => {
+      const cur = prev[id] || defaultLayout(0);
+      const next = { ...prev, [id]: { ...cur, ...patch } };
+      try{ localStorage.setItem(key, JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }
+
+  return (
+    <div className="tisp-canvas">
+      {monitors.map((m, idx) => {
+        const st = layout[m.id] || defaultLayout(idx);
+        const L = live[m.id] || {};
+        const down = (L.down ?? 0);
+        const up = (L.up ?? 0);
+
+        return (
+          <Rnd
+            key={m.id}
+            bounds="parent"
+            size={{ width: st.w, height: st.h }}
+            position={{ x: st.x, y: st.y }}
+            minWidth={520}
+            minHeight={240}
+            
+            onDragStop={(e, d) => save(m.id, { x: d.x, y: d.y })}
+            onResizeStop={(e, dir, ref, delta, pos) => {
+              const w = clamp(ref.offsetWidth, 520, 2400);
+              const h = clamp(ref.offsetHeight, 240, 1600);
+              save(m.id, { x: pos.x, y: pos.y, w, h });
+            }}
+            enableResizing={{
+              top:true, right:true, bottom:true, left:true,
+              topRight:true, bottomRight:true, bottomLeft:true, topLeft:true
+            }}
+          >
+            <div className="tisp-cardWin">
+              <div className="tisp-drag">
+                <div className="tisp-dragTitle">
+                  <strong>{m.label}</strong> ({m.ip}) — ifIndex {m.ifIndex}
+                </div>
+                <div className="tisp-dragHint">drag</div>
+              </div>
+
+              <div className="tisp-cardBody">
+                <div>Download: {(down).toFixed?.(3) ?? "0"} Mbps</div>
+                <div>Upload: {(up).toFixed?.(3) ?? "0"} Mbps</div>
+
+                <TrafficGraph points={(history[m.id] || [])} height={140} />
+
+                {!L.ok && L.err ? <div style={{ color: "red", marginTop: 8 }}>{L.err}</div> : null}
+
+                <div style={{ marginTop: 10 }}>
+                  <button onClick={() => stopMonitor(m.id)}>Close</button>
+                </div>
+              </div>
+            </div>
+          </Rnd>
+        );
+      })}
+    </div>
+  );
+}
+
+
+
+==============================================================================================================
+FRONTEND FULL FILE: C:\apps\tools-isp\frontend\src\MonitorCanvasPure.jsx
+==============================================================================================================
+
+import { useRef } from "react";
+import DragResizeWindow from "./DragResizeWindow.jsx";
+import TrafficGraph from "./TrafficGraph.jsx";
+
+function defaultRect(i){
+  return { x: 20 + (i % 3) * 70, y: 20 + (i % 4) * 60, w: 860, h: 320 };
+}
+
+export default function MonitorCanvasPure({ monitors, live, history, stopMonitor }) {
+  const boundsRef = useRef(null);
+
+  return (
+    <div
+      ref={boundsRef}
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "72vh",
+        minHeight: 520,
+        marginTop: 12,
+        border: "1px solid rgba(255,255,255,.10)",
+        borderRadius: 16,
+        background: "rgba(0,0,0,.10)",
+        overflow: "hidden"
+      }}
+    >
+      {(monitors || []).map((m, i) => {
+        const L = live[m.id] || {};
+        const down = (L.down ?? 0);
+        const up = (L.up ?? 0);
+
+        return (
+          <DragResizeWindow
+            key={m.id}
+            id={m.id}
+            boundsRef={boundsRef}
+            title={`${m.label} (${m.ip}) — ifIndex ${m.ifIndex}`}
+            defaultRect={defaultRect(i)}
+          >
+            <div>Download: {(down).toFixed?.(3) ?? "0"} Mbps</div>
+            <div>Upload: {(up).toFixed?.(3) ?? "0"} Mbps</div>
+
+            <TrafficGraph points={(history[m.id] || [])} height={140} />
+
+            {!L.ok && L.err ? (
+              <div style={{ color: "red", marginTop: 8 }}>{L.err}</div>
+            ) : null}
+
+            <div style={{ marginTop: 10 }}>
+              <button onClick={() => stopMonitor(m.id)}>Close</button>
+            </div>
+          </DragResizeWindow>
+        );
+      })}
+    </div>
+  );
+}
+
+
+==============================================================================================================
+FRONTEND FULL FILE: C:\apps\tools-isp\frontend\src\TrafficGraph.jsx
+==============================================================================================================
+
+import { useMemo } from "react";
+import {
+  AreaChart, Area, Line, XAxis, YAxis, Tooltip, ResponsiveContainer
+} from "recharts";
+
+export default function TrafficGraph({ points = [], height = 120 }) {
+  const data = useMemo(() => {
+    return points.map(p => ({
+      t: p.t,
+      down: Number(p.down || 0),
+      up: Number(p.up || 0),
+    }));
+  }, [points]);
+
+  const fmt = (v) => `${Number(v || 0).toFixed(0)} Mbps`;
+
+  return (
+    <div style={{
+      height,
+      minHeight: height,
+      width: "100%",
+      minWidth: 0,
+      marginTop: 8,
+      borderRadius: 12,
+      border: "1px solid rgba(255,255,255,.10)",
+      background: "rgba(255,255,255,.03)",
+      overflow: "hidden"
+    }}>
+      
+        <AreaChart width="100%" height={height} data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          <defs>
+            <linearGradient id="downFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(0,255,200,.35)" />
+              <stop offset="100%" stopColor="rgba(0,255,200,0)" />
+            </linearGradient>
+          </defs>
+
+          <XAxis dataKey="t" hide />
+          <YAxis hide domain={["auto", "auto"]} />
+
+          <Tooltip
+            formatter={(value, name) => [fmt(value), name === "down" ? "Download" : "Upload"]}
+            labelFormatter={() => ""}
+            contentStyle={{
+              background: "rgba(10,12,18,.92)",
+              border: "1px solid rgba(255,255,255,.16)",
+              borderRadius: 12,
+              color: "rgba(255,255,255,.92)"
+            }}
+          />
+
+          <Area
+            type="monotone"
+            dataKey="down"
+            stroke="rgba(0,255,200,.95)"
+            fill="url(#downFill)"
+            strokeWidth={2}
+            dot={false}
+            isAnimationActive={false}
+          />
+
+          <Line
+            type="monotone"
+            dataKey="up"
+            stroke="rgba(120,160,255,.95)"
+            strokeWidth={2}
+            dot={false}
+            isAnimationActive={false}
+          />
+        </AreaChart>
+      
+    </div>
+  );
+}
+
+
+
+
+
+==============================================================================================================
+LOCAL ENDPOINT TESTS
+==============================================================================================================
+
+URL: http://localhost:9090/health
+STATUS: 200
+MS: 2086
+BODY: {"ok":true,"service":"tools-isp-backend"}
+
+URL: http://localhost:9090/api/eth/snapshot
+STATUS: 200
+MS: 5961
+BODY: {"ok":true,"data":[{"id":"redwan","name":"RBE50UG-One Redwan","ip":"88.88.88.4","ifIndex":2,"ifName":"ether2","ok":true,"status":"up","admin":"up","speedMb":1000,"rxMbps":3.83,"txMbps":82.01,"ts":1772878301499},{"id":"akkari","name":"RB750Gr3To Akkari*Center","ip":"88.88.88.5","ifIndex":4,"ifName":"ether3","ok":true,"status":"up","admin":"up","speedMb":1000,"rxMbps":60.54,"txMbps":3.18,"ts":1772878302488},{"id":"pharmacy","name":"RB750Gr3 TO Pharmacy","ip":"88.88.88.9","ifIndex":5,"ifName":"ether4","ok":true,"status":"up","admin":"up","speedMb":1000,"rxMbps":11.54,"txMbps":148.71,"ts":1772878303495},{"id":"office","name":"RB750Gr3-To-OFFICE DAVO-NEW*","ip":"88.88.88.15","ifIndex":5,"ifName":
+
+URL: http://localhost:9090/api/eth/traffic
+ERROR-MS: 4
+ERROR: The remote server returned an error: (400) Bad Request.
+ERROR-BODY: 
+
+URL: http://localhost:9090/api/interfaces
+ERROR-MS: 0
+ERROR: The remote server returned an error: (400) Bad Request.
+ERROR-BODY: 
+
+URL: http://localhost:9090/api/eth/interfaces
+ERROR-MS: 0
+ERROR: The remote server returned an error: (400) Bad Request.
+ERROR-BODY: 
+
+URL: http://localhost:9090/api/et/interfaces
+ERROR-MS: 1
+ERROR: The remote server returned an error: (400) Bad Request.
+ERROR-BODY: 
+
+URL: http://localhost:9090/api/ethernet
+ERROR-MS: 26
+ERROR: The remote server returned an error: (404) Not Found.
+ERROR-BODY: 
+
+URL: http://localhost:9090/api/traffic
+ERROR-MS: 0
+ERROR: The remote server returned an error: (404) Not Found.
+ERROR-BODY: 
+

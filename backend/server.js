@@ -240,14 +240,17 @@ const oper = String(opS).trim();
 
     
     /* SNAPSHOT-THROUGHPUT-INJECT-V2 */
-    // Best-effort: sample throughput using helper (overrides rxMbps/txMbps if ok)
-    try{
-      const th = await measureIfThroughput(ip, comm, idx, 900);
-      if(th && th.ok){
-        rxMbps = Math.round(th.rxMbps * 100) / 100;
-        txMbps = Math.round(th.txMbps * 100) / 100;
-      }
-    } catch {}
+    // Faster path:
+    // only sample on first pass when we have no previous counters yet
+    if(!prev){
+      try{
+        const th = await measureIfThroughput(ip, comm, idx, 250);
+        if(th && th.ok){
+          rxMbps = Math.round(th.rxMbps * 100) / 100;
+          txMbps = Math.round(th.txMbps * 100) / 100;
+        }
+      } catch {}
+    }
     /* SNAPSHOT-THROUGHPUT-INJECT-V2-END */
 if(prev && rx != null && tx != null){
       const dt = Math.max(0.25, (now - prev.t) / 1000); // seconds
@@ -1511,6 +1514,7 @@ app.get("/api/tcp-ping-sse", (req, res) => {
 
   req.on("close", cleanup);
 });
+
 
 
 
