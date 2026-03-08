@@ -74,5 +74,69 @@
         "community":  "public",
         "ifIndex":  49155,
         "ifName":  "gigabitEthernet 1/0/3"
+    },
+    {
+        "id":  "uplink_dragon_club",
+        "name":  "To Dragon Club",
+        "ip":  "88.88.88.254",
+        "community":  "public",
+        "ifIndex":  49164,
+        "ifName":  "gigabitEthernet 1/0/12"
+    },
+    {
+        "id":  "uplink_c5c_jabal",
+        "name":  "C5C Jabal",
+        "ip":  "88.88.88.254",
+        "community":  "public",
+        "ifIndex":  49158,
+        "ifName":  "gigabitEthernet 1/0/6"
+    },
+    {
+        "id":  "uplink_to_office",
+        "name":  "To Office",
+        "ip":  "88.88.88.254",
+        "community":  "public",
+        "ifIndex":  49160,
+        "ifName":  "gigabitEthernet 1/0/8"
+    },
+    {
+        "id":  "uplink_pharmacy",
+        "name":  "To Pharmacy Wahib",
+        "ip":  "88.88.88.253",
+        "community":  "public",
+        "ifIndex":  49156,
+        "ifName":  "gigabitEthernet 1/0/4"
+    },
+    {
+        "id":  "uplink_abou_taher",
+        "name":  "To Abou Taher",
+        "ip":  "88.88.88.253",
+        "community":  "public",
+        "ifIndex":  49158,
+        "ifName":  "gigabitEthernet 1/0/6"
+    },
+    {
+        "id":  "uplink_fast_web",
+        "name":  "To Office Fast Web",
+        "ip":  "88.88.88.252",
+        "community":  "public",
+        "ifIndex":  49162,
+        "ifName":  "gigabitEthernet 1/0/10"
+    },
+    {
+        "id":  "uplink_daraj_arid",
+        "name":  "To Daraj El 3arid",
+        "ip":  "88.88.88.251",
+        "community":  "public",
+        "ifIndex":  49155,
+        "ifName":  "gigabitEthernet 1/0/3"
+    },
+    {
+        "id":  "uplink_rawda",
+        "name":  "To Rawda",
+        "ip":  "10.88.88.111",
+        "community":  "public",
+        "ifIndex":  4,
+        "ifName":  "ether4"
     }
 ]

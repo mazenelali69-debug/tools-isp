@@ -1,10 +1,11 @@
-﻿import React, { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 const NAV = [
   { id: "dashboard", label: "Dashboard", icon: "🏠" },
   { id: "neighbors", label: "Neighbors", icon: "🧭" },
   { id: "liveping", label: "🛰️ Latency LIVE", icon: "??" },
   { id: "ethernet", label: "Bandwidth LIVE", icon: "↔" },
+    { key: "uplink", id: "uplink", label: "UPLINK Traffic", title: "UPLINK Traffic" },
 { id: "combined", label: "Combined Traffic", icon: "📡" },
   { id: "aviatwtm4200", label: "AviatWTM4200", icon: "📶" },
 { id: "settings",  label: "Settings",  icon: "⚙️" }];
