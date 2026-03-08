@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const API_BASE = "";
 const WINDOW = 24;
@@ -379,7 +379,7 @@ export default function EthernetTrafficPage(){
           gap: 14,
           maxWidth: 1400
         }}
-      >{data.map((it, idx) => {
+      >{data.filter(x => !String(x?.id || "").startsWith("uplink_")).map((it, idx) => {
           const id = String(it?.id || it?.name || it?.ip || idx);
           return (
             <EthernetCard

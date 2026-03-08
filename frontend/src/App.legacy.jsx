@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const STORAGE_KEY = "tools-isp:pings:v1";
 const STORAGE_UI_KEY = "tools-isp:ui:v1";
@@ -38,6 +38,7 @@ import "./packet-loss.css";
 import "./ping-modern.css";
 
 const API = window.location.origin.replace(/:\d+$/, ":9090");
+const ENABLE_LEGACY_MONITORS = false;
 function getPacketLossPct(out) {
   if (!out) return null;
   const s = String(out);
@@ -222,7 +223,10 @@ useEffect(() => {
     setMonitors(j.monitors || []);
   }
 
-  useEffect(() => { loadMonitors(); }, []);
+  useEffect(() => {
+    if (!ENABLE_LEGACY_MONITORS) return;
+    loadMonitors();
+  }, []);
 
   
 
