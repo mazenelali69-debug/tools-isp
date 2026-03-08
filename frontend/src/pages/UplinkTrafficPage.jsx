@@ -27,23 +27,31 @@ function fmtMbps(v){
 
 function lineTone(v){
   const n = num(v);
-  if(n < 20) return "#19ff9c";
-  if(n < 80) return "#ffd166";
-  return "#ff6b6b";
+  if(n < 20) return "#7dff7a";
+  if(n < 80) return "#ffb347";
+  return "#ff5f6d";
 }
 
-function gaugeTone(v){
-  const n = num(v);
-  if(n < 20) return "#19ff9c";
-  if(n < 80) return "#ffd166";
-  return "#ff6b6b";
+function gaugeColorByRatio(r){
+  if(r < 0.30) return "#7dff7a";
+  if(r < 0.55) return "#b8d84e";
+  if(r < 0.75) return "#ffb347";
+  return "#ff5f6d";
+}
+
+function polar(cx, cy, r, angleDeg){
+  const a = (angleDeg - 90) * Math.PI / 180;
+  return {
+    x: cx + r * Math.cos(a),
+    y: cy + r * Math.sin(a)
+  };
 }
 
 function Sparkline({ values = [], label = "" }){
   const pts = (Array.isArray(values) ? values : []).map(x => num(x));
   const len = Math.max(pts.length, 2);
-  const w = 230;
-  const h = 34;
+  const w = 240;
+  const h = 28;
   const pad = 4;
   const max = Math.max(1, ...pts, 1);
 
@@ -56,10 +64,6 @@ function Sparkline({ values = [], label = "" }){
     return { x, y, v };
   });
 
-  function pathLine(list){
-    return list.map(p => `${p.x},${p.y}`).join(" ");
-  }
-
   function onMove(e){
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -67,7 +71,7 @@ function Sparkline({ values = [], label = "" }){
     setHover(idx);
   }
 
-  const line = pathLine(coords);
+  const line = coords.map(p => `${p.x},${p.y}`).join(" ");
   const last = coords[coords.length - 1];
   const tone = lineTone(last?.v ?? 0);
 
@@ -89,31 +93,13 @@ function Sparkline({ values = [], label = "" }){
           points={line}
           fill="none"
           stroke={tone}
-          strokeWidth="1.8"
+          strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          style={{ filter:`drop-shadow(0 0 3px ${tone})` }}
+          style={{ filter:`drop-shadow(0 0 4px ${tone})` }}
         />
         <circle cx={last.x} cy={last.y} r="2.1" fill={tone} />
       </svg>
-
-      <div
-        style={{
-          position:"absolute",
-          left:"50%",
-          top:"50%",
-          width:"74%",
-          height:"2px",
-          transform:"translate(-50%, -50%) scaleX(0.08)",
-          transformOrigin:"center center",
-          borderRadius:"999px",
-          background:`linear-gradient(90deg, transparent 0%, ${tone}33 18%, ${tone} 50%, ${tone}33 82%, transparent 100%)`,
-          filter:`blur(1px) drop-shadow(0 0 14px ${tone})`,
-          animation:"uplinkPulse 3.2s ease-in-out infinite",
-          pointerEvents:"none",
-          opacity:.78
-        }}
-      />
 
       {hover !== null ? (
         <div
@@ -121,9 +107,9 @@ function Sparkline({ values = [], label = "" }){
             position:"absolute",
             right:0,
             top:-18,
-            fontSize:11,
-            fontWeight:800,
-            padding:"3px 7px",
+            fontSize:10,
+            fontWeight:700,
+            padding:"2px 6px",
             borderRadius:8,
             background:"rgba(8,10,18,.92)",
             border:"1px solid rgba(255,255,255,.10)",
@@ -138,51 +124,150 @@ function Sparkline({ values = [], label = "" }){
   );
 }
 
-function Gauge({ item, hist }){
+function SegmentedGauge({ valueMbps, name, totalText }){
+  const total = num(valueMbps);
+  const maxGaugeMbps = 300;
+  const ratio = Math.max(0, Math.min(1, total / maxGaugeMbps));
+
+  const width = 314;
+  const height = 232;
+  const cx = 157;
+  const cy = 176;
+  const rOuter = 116;
+  const rInner = 87;
+
+  const start = -118;
+  const end = 118;
+  const segments = 34;
+  const step = (end - start) / segments;
+  const activeCount = Math.round(segments * ratio);
+
+  const labels = [
+    { text: "0",   angle: -118, r: 132, dx: -3, dy:  6 },
+    { text: "30",  angle: -88,  r: 132, dx: -6, dy: -2 },
+    { text: "60",  angle: -58,  r: 132, dx: -5, dy: -4 },
+    { text: "90",  angle: -28,  r: 134, dx:  0, dy: -5 },
+    { text: "120", angle: 2,    r: 136, dx:  0, dy: -2 },
+    { text: "160", angle: 32,   r: 136, dx:  3, dy: -1 },
+    { text: "200", angle: 62,   r: 136, dx:  4, dy:  0 },
+    { text: "260", angle: 92,   r: 134, dx:  6, dy:  4 },
+    { text: "300", angle: 118,  r: 132, dx:  5, dy:  8 }
+  ];
+
+  const mainColor = gaugeColorByRatio(ratio);
+
+  return (
+    <div style={{ display:"flex", justifyContent:"center" }}>
+      <div style={{ width: 314, position:"relative" }}>
+        <svg viewBox={`0 0 ${width} ${height}`} style={{ width:"100%", height:232, display:"block" }}>
+          {Array.from({ length: segments }, (_, i) => {
+            const a1 = start + (i * step) + 1.4;
+            const a2 = start + ((i + 1) * step) - 1.4;
+
+            const p1 = polar(cx, cy, rOuter, a1);
+            const p2 = polar(cx, cy, rOuter, a2);
+            const p3 = polar(cx, cy, rInner, a2);
+            const p4 = polar(cx, cy, rInner, a1);
+
+            const fill = i < activeCount
+              ? gaugeColorByRatio((i + 1) / segments)
+              : "rgba(66,72,86,.72)";
+
+            return (
+              <path
+                key={i}
+                d={`M ${p1.x} ${p1.y} A ${rOuter} ${rOuter} 0 0 1 ${p2.x} ${p2.y} L ${p3.x} ${p3.y} A ${rInner} ${rInner} 0 0 0 ${p4.x} ${p4.y} Z`}
+                fill={fill}
+                style={{
+                  filter: i < activeCount ? `drop-shadow(0 0 5px ${fill})` : "none",
+                  transition: "fill .25s ease"
+                }}
+              />
+            );
+          })}
+
+          {labels.map((lab, i) => {
+            const p = polar(cx, cy, lab.r, lab.angle);
+            return (
+              <text
+                key={i}
+                x={p.x + lab.dx}
+                y={p.y + lab.dy}
+                fill="rgba(255,255,255,.82)"
+                fontSize="11"
+                fontWeight="800"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                style={{ letterSpacing: ".2px" }}
+              >
+                {lab.text}
+              </text>
+            );
+          })}
+        </svg>
+
+        <div
+          style={{
+            position:"absolute",
+            left:0,
+            right:0,
+            top:128,
+            textAlign:"center",
+            pointerEvents:"none"
+          }}
+        >
+          <div
+            style={{
+              fontSize:12,
+              fontWeight:700,
+              color:mainColor,
+              lineHeight:1.12,
+              maxWidth:136,
+              marginLeft:"auto",
+              marginRight:"auto",
+              textAlign:"center",
+              textWrap:"balance",
+              letterSpacing:".15px", textShadow:`0 0 10px ${mainColor}22`
+            }}
+          >
+            {name}
+          </div>
+        </div>
+
+        <div
+          style={{
+            marginTop:6,
+            textAlign:"center",
+            fontSize:17,
+            fontWeight:700,
+            color:mainColor,
+            letterSpacing:".2px",
+            textShadow:`0 0 10px ${mainColor}22`
+          }}
+          title={totalText}
+        >
+          {totalText}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GaugeCard({ item, hist }){
   const rx = num(item?.rxMbps);
   const tx = num(item?.txMbps);
   const total = rx + tx;
-
-  const size = 170;
-  const cx = 85;
-  const cy = 86;
-  const r = 58;
-  const stroke = 10;
-  const maxGauge = 150;
-  const pct = Math.max(0, Math.min(1, total / maxGauge));
-  const start = 150;
-  const arc = 240;
-  const valEnd = start + (arc * pct);
-
-  function polar(angleDeg){
-    const a = (angleDeg - 90) * Math.PI / 180;
-    return {
-      x: cx + r * Math.cos(a),
-      y: cy + r * Math.sin(a)
-    };
-  }
-
-  function arcPath(a1, a2){
-    const p1 = polar(a1);
-    const p2 = polar(a2);
-    const large = (a2 - a1) > 180 ? 1 : 0;
-    return `M ${p1.x} ${p1.y} A ${r} ${r} 0 ${large} 1 ${p2.x} ${p2.y}`;
-  }
-
-  const bg = arcPath(start, start + arc);
-  const fg = pct > 0 ? arcPath(start, valEnd) : "";
-  const color = gaugeTone(total);
 
   return (
     <div
       style={{
         position:"relative",
         overflow:"hidden",
-        borderRadius:20,
-        padding:14,
-        background:"linear-gradient(180deg, rgba(12,16,26,.95), rgba(8,11,18,.92))",
+        borderRadius:22,
+        padding:16,
+        background:"linear-gradient(180deg, rgba(13,17,28,.96), rgba(8,11,18,.92))",
         border:"1px solid rgba(255,255,255,.08)",
-        boxShadow:"0 14px 34px rgba(0,0,0,.22)"
+        boxShadow:"0 18px 40px rgba(0,0,0,.32), inset 0 0 30px rgba(255,255,255,.025)"
       }}
     >
       <div
@@ -190,65 +275,18 @@ function Gauge({ item, hist }){
           position:"absolute",
           inset:0,
           pointerEvents:"none",
-          background:"radial-gradient(circle at top right, rgba(0,255,220,.06), transparent 35%), radial-gradient(circle at bottom left, rgba(90,110,255,.06), transparent 35%)"
+          background:"radial-gradient(circle at top right, rgba(0,255,220,.05), transparent 30%), radial-gradient(circle at bottom left, rgba(95,110,255,.06), transparent 35%)"
         }}
       />
 
       <div style={{ position:"relative", zIndex:1 }}>
-        <div style={{ display:"flex", justifyContent:"center", marginBottom:6 }}>
-          <div style={{ width:size, height:size, position:"relative" }}>
-            <svg viewBox={`0 0 ${size} ${size}`} style={{ width:size, height:size, display:"block" }}>
-              <path d={bg} fill="none" stroke="rgba(255,255,255,.10)" strokeWidth={stroke} strokeLinecap="round" />
-              {fg ? (
-                <path
-                  d={fg}
-                  fill="none"
-                  stroke={color}
-                  strokeWidth={stroke}
-                  strokeLinecap="round"
-                  style={{ filter:`drop-shadow(0 0 14px ${color})` }}
-                />
-              ) : null}
-            </svg>
+        <SegmentedGauge
+          valueMbps={total}
+          name={item?.name || item?.id || "Uplink"}
+          totalText={`${total.toFixed(2)} Mbps`}
+        />
 
-            <div
-              style={{
-                position:"absolute",
-                inset:0,
-                display:"flex",
-                flexDirection:"column",
-                alignItems:"center",
-                justifyContent:"center",
-                textAlign:"center", pointerEvents:"none", padding:"0 4px"
-              }}
-            >
-              <div style={{ fontSize:22, fontWeight:900, color }}>
-                {total.toFixed(1)}
-                <span style={{ fontSize:11, marginLeft:3, opacity:.92 }}>Mbps</span>
-              </div>
-              <div style={{ fontSize:13, fontWeight:800, marginTop:4, lineHeight:1.15, maxWidth:88 }}>
-                {item?.name || item?.id || "Uplink"}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          style={{
-            textAlign:"center",
-            fontSize:11,
-            opacity:.72,
-            marginTop:2,
-            whiteSpace:"nowrap",
-            overflow:"hidden",
-            textOverflow:"ellipsis"
-          }}
-          title={item?.ip || ""}
-        >
-          {item?.ip || "—"}
-        </div>
-
-        <div style={{ marginTop:10 }}>
+        <div style={{ marginTop:8 }}>
           <Sparkline
             values={hist?.total || []}
             label={`${item?.name || ""} • RX ${fmtMbps(rx)} • TX ${fmtMbps(tx)} • Total ${fmtMbps(total)}`}
@@ -260,17 +298,17 @@ function Gauge({ item, hist }){
             display:"grid",
             gridTemplateColumns:"1fr 1fr 1fr",
             gap:8,
-            marginTop:8
+            marginTop:10
           }}
         >
-          <div style={{ fontSize:11, opacity:.72 }}>
-            RX<br /><strong style={{ color:"#19ff9c", fontSize:13 }}>{fmtMbps(rx)}</strong>
+          <div style={{ fontSize:10, opacity:.74 }}>
+            RX<br /><strong style={{ color:"#7dff7a", fontSize:12 }}>{fmtMbps(rx)}</strong>
           </div>
-          <div style={{ fontSize:11, opacity:.72, textAlign:"center" }}>
-            TX<br /><strong style={{ color:"#7aa2ff", fontSize:13 }}>{fmtMbps(tx)}</strong>
+          <div style={{ fontSize:10, opacity:.74, textAlign:"center" }}>
+            TX<br /><strong style={{ color:"#7aa2ff", fontSize:12 }}>{fmtMbps(tx)}</strong>
           </div>
-          <div style={{ fontSize:11, opacity:.72, textAlign:"right" }}>
-            Port<br /><strong style={{ color:"#fff", fontSize:13 }}>{item?.ifName || "—"}</strong>
+          <div style={{ fontSize:10, opacity:.74, textAlign:"right" }}>
+            Port<br /><strong style={{ color:"#fff", fontSize:12 }}>{item?.ifName || "—"}</strong>
           </div>
         </div>
       </div>
@@ -323,7 +361,7 @@ export default function UplinkTrafficPage(){
     }
 
     load();
-    const t = setInterval(load, 3000);
+    const t = setInterval(load, 2000);
     return () => {
       alive = false;
       clearInterval(t);
@@ -334,16 +372,6 @@ export default function UplinkTrafficPage(){
 
   return (
     <div style={{ padding: 14 }}>
-      <style>{`
-        @keyframes uplinkPulse {
-          0%   { transform: translate(-50%, -50%) scaleX(0.08); opacity: 0; }
-          14%  { opacity: .95; }
-          48%  { transform: translate(-50%, -50%) scaleX(1); opacity: .88; }
-          78%  { opacity: .28; }
-          100% { transform: translate(-50%, -50%) scaleX(1.12); opacity: 0; }
-        }
-      `}</style>
-
       <div style={{ marginBottom: 14 }}>
         <div style={{ fontSize: 30, fontWeight: 900, marginBottom: 4 }}>UPLINK Traffic</div>
         <div style={{ opacity: .68, fontSize: 13 }}>
@@ -369,15 +397,15 @@ export default function UplinkTrafficPage(){
       <div
         style={{
           display:"grid",
-          gridTemplateColumns:"repeat(auto-fit, minmax(340px, 1fr))",
-          gap:14,
+          gridTemplateColumns:"repeat(auto-fit, minmax(320px, 1fr))",
+          gap:16,
           maxWidth: 1500
         }}
       >
         {data.map((it) => {
           const id = String(it?.id || "");
           return (
-            <Gauge
+            <GaugeCard
               key={id}
               item={it}
               hist={hist[id] || { rx: [], tx: [], total: [] }}
