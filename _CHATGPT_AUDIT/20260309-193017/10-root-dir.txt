@@ -1,0 +1,30 @@
+﻿
+Mode   Length   LastWriteTime        Name                                       
+----   ------   -------------        ----                                       
+d--h--          3/9/2026 7:30:22 PM  .git                                       
+d-----          3/2/2026 8:14:56 PM  .vite                                      
+d-----          3/9/2026 1:35:23 PM  backend                                    
+d-----          3/7/2026 5:29:42 PM  data                                       
+d-----          3/3/2026 12:05:16 PM frontend                                   
+d-----          3/2/2026 8:46:22 PM  ops                                        
+d-----          3/2/2026 11:41:14 AM viewer                                     
+d-----          3/9/2026 7:30:17 PM  _CHATGPT_AUDIT                             
+d-----          3/5/2026 3:44:30 PM  _SAVES                                     
+-a---- 981      3/7/2026 5:19:46 PM  .gitignore                                 
+-a---- 14       3/2/2026 8:12:59 PM  .run-pids-tools-isp.txt                    
+-a---- 91519250 3/5/2026 12:14:10 PM backup-liveping-20260305-121244.zip        
+-a---- 15553    3/1/2026 2:31:13 PM  C                                          
+-a---- 453      2/27/2026 2:38:22 PM ecosystem.config.js                        
+-a---- 289      2/27/2026 2:24:56 PM ecosystem.frontend.config.js               
+-a---- 108331   3/7/2026 12:11:47 PM ETH_DIAG2_20260307-121136.txt              
+-a---- 2355     3/7/2026 12:09:43 PM ETH_DIAG_20260307-120942.txt               
+-a---- 478820   3/5/2026 12:11:45 PM LIVEPING_PROJECT_SCAN.txt                  
+-a---- 99       3/3/2026 12:17:54 PM neighbors-ranges.txt                       
+-a---- 855      2/27/2026 2:07:05 PM RUN-ALL-tools-isp.ps1                      
+-a---- 31021808 3/3/2026 1:47:58 PM  tools-isp-export-20260303-134754.zip       
+-a---- 471596   3/9/2026 12:57:47 PM tools-isp-source-20260309-125746.zip       
+-a---- 2244036  3/9/2026 12:58:42 PM tools-isp-source-dump-20260309-125746.txt  
+-a---- 33241288 3/1/2026 2:31:13 PM  _backup-frontend-STABLE-20260228-144433.zip
+
+
+

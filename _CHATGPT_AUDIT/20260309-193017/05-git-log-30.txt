@@ -1,0 +1,30 @@
+﻿6397cef (HEAD -> feature/neighbors-sidebar, tag: SAVE-BEFORE-DASH-HOVER-2026-03-09-173649, origin/feature/neighbors-sidebar) Save current dashboard and history UI state before dashboard hover work
+d9f5aa5 (tag: HISTORY-FINAL-2026-03-09-141159) Finalize history dashboard and saved uplink history state
+ed142ca (tag: HISTORY-FINAL-2026-03-09) Final History dashboard layout + chart clarity
+a92804e (tag: SAFE-HISTORY-PH1-20260309-122814, tag: SAFE-2026-03-09-121924, tag: SAFE-2026-03-09-120759, tag: SAFE-2026-03-09-002415) Save stable state after uplink tuning and legacy rollback
+7aa97e9 (tag: SAFE-2026-03-08-231431) Final polish: lower uplink gauge names slightly
+34c36a2 (tag: SAFE-2026-03-08-220824) Fix Dragon Club uplink and polish UPLINK Traffic gauges
+d7edcb6 (tag: SAFE-2026-03-07-234324, tag: FINAL-2026-03-07-234651) UI: add safe center pulse animation to feedback lines
+0f84e26 (tag: STABLE-2026-03-07-2323, tag: SAFE-2026-03-07-233540) UI: final dashboard balance tuning
+3354eb7 (tag: SAFE-20260307-214221, tag: SAFE-20260307-214149, tag: SAFE-2026-03-07-214637) Restore clean dashboard state after feedback box rollback
+d4f9d53 (tag: SAFE-2026-03-07-204936) Stop tracking runtime traffic history file
+9e80cca Ignore runtime traffic history file
+625a43d Update traffic history snapshot
+199d849 (tag: SAVE-ALL-2026-03-07-171416) FULL SAVE before next development
+f324d37 (tag: DASHBOARD-GRAFANA-STABLE) Dashboard: Grafana-style latency monitor + layout cleanup
+653056f Save Neighbors scan UI and current polished workspace state
+ce77349 (tag: SAFE-2026-03-07-162651) Save Bandwidth LIVE, Latency LIVE, AviatWTM4200, and new Ethernet targets
+a2705b5 (tag: SAFE-2026-03-07-150316) Save clean stable frontend after Latency LIVE validation
+feee572 (tag: SAFE-2026-03-07-142202) Save stable Latency LIVE monitoring + packet loss indicator
+04af557 (tag: SAFE-2026-03-07-141723) Save polished Bandwidth LIVE UI before Live Ping restyle
+d4b65dc (tag: SAFE-2026-03-07-140054) Save latest live Ethernet UI updates and restore point
+691dcfc (tag: SAFE-2026-03-07-134004) Polish Ethernet UI, Combined Traffic, and AviatWTM4200 with safe restore point
+b1a7822 (tag: SAFE-2026-03-07-132504) Save polished Combined Traffic and AviatWTM4200 styling before Ethernet restyle
+0b84351 (tag: SAFE-2026-03-07-130729) Save current combined traffic work before AviatWTM4200 live view
+73b60b9 (tag: SAFE-2026-03-07-125415) Add combined traffic live plus history recorder and UI
+dc340ae (tag: SAFE-2026-03-07-124748, tag: PRE-COMBINED-HISTORY-20260307-123918) Fix Ethernet Speed + Traffic performance and stabilize snapshot polling
+f52f72a (tag: SAFE-2026-03-07-122231) SAVE: eth uplink+snapshot+traffic chart + ui updates (2026-03-05 15:44:29)
+8831934 (tag: SAVE-2026-03-05-154429, tag: PRE-ETH-TRAFFIC-20260305-134155) chore: ignore zip backups
+aad8a08 (tag: STABLE-LIVEPING-20260305-131819) Live Ping: 6 targets + ultra UI + hover tooltip + palette
+815cc01 (tag: TUNE-LIVEPING-UI-20260305-121946, tag: PRE-LIVEPING-20260305-121715, tag: LIVEPING-ULTRA-UI-20260305-122448, tag: LIVEPING-COLORS-20260305-123510, tag: LIVEPING-BEFORE) checkpoint before live ping feature
+be6a98b (tag: SAVE-20260303-134654) Save: ICMP discovery + ping-scan endpoint + neighbors UI merge (20260303-134654)

@@ -1,0 +1,4276 @@
+﻿===== FILE: C:\apps\tools-isp\frontend\src\layout\AppShell.jsx =====
+import React from "react";
+import Sidebar from "./Sidebar";
+
+export default function AppShell({ active, setActive, actions, children }) {
+  return (
+    <div className="ti-app">
+      <Sidebar active={active} setActive={setActive} />
+
+      <div className="ti-main">
+        <header className="ti-topbar ti-topbar--tight">
+          <div className="ti-topbar__left">
+            <div className="ti-topbar__eyebrow">Mission Control</div>
+            <div className="ti-topbar__title">Network Operations Workspace</div>
+          </div>
+
+          <div className="ti-topbar__actions">
+            <button type="button" className="ti-btn ti-btn--ghost" onClick={actions?.onNewPing}>
+              New Ping
+            </button>
+            <button type="button" className="ti-btn ti-btn--ghost" onClick={actions?.onNewMonitor}>
+              New Monitor
+            </button>
+            <button type="button" className="ti-btn ti-btn--primary" onClick={actions?.onNewNote}>
+              New Note
+            </button>
+          </div>
+        </header>
+
+        <main className="ti-content ti-content--tight">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\layout\layout.css =====
+/* ===== AppShell Layout ===== */
+.appShell{ display:flex; min-height:100vh; width:100%; }
+
+.side{
+  width:240px; flex:0 0 240px;
+  border-right:1px solid rgba(255,255,255,.08);
+  background: rgba(10,12,16,.55);
+  backdrop-filter: blur(10px);
+  display:flex; flex-direction:column;
+}
+.side--collapsed{ width:64px; flex:0 0 64px; }
+
+.sideHead{ display:flex; align-items:center; justify-content:space-between; padding:12px 10px; gap:10px; }
+.sideBrand{ display:flex; align-items:center; gap:10px; min-width:0; }
+.sideLogo{ font-size:18px; }
+.sideTitle{ font-weight:900; letter-spacing:.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.sideBtn{
+  height:30px; width:30px; border-radius:10px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  cursor:pointer;
+}
+
+.sideNav{ padding:8px; display:flex; flex-direction:column; gap:6px; }
+
+.sideItem{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 10px; border-radius:12px;
+  border:1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.04);
+  cursor:pointer; text-align:left;
+}
+.sideItem:hover{ background: rgba(255,255,255,.07); }
+.sideItem.isActive{ background: rgba(120,200,255,.14); border-color: rgba(120,200,255,.25); }
+
+.sideIcon{ width:22px; display:flex; justify-content:center; }
+.sideLabel{ font-weight:800; font-size:13px; }
+
+.sideFoot{ margin-top:auto; padding:10px; opacity:.7; font-size:12px; }
+
+.appMain{ flex:1; min-width:0; display:flex; flex-direction:column; }
+
+.topbar{
+  height:52px; display:flex; align-items:center; justify-content:space-between;
+  padding:0 14px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.15);
+}
+.topbarTitle{ font-weight:900; letter-spacing:.2px; }
+
+.appContent{ flex:1; min-width:0; padding:14px; }
+
+.topBtn{
+  height:30px;
+  padding:0 10px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  cursor:pointer;
+  font-weight:800;
+  font-size:12px;
+}
+.topBtn:hover{ background: rgba(255,255,255,.10); }
+
+/* LIVEPING-UI-START */
+
+/* Ultra glass + neon border tokens */
+.lpWrap{
+  padding: 18px 18px 26px 18px;
+  min-height: calc(100vh - 100px);
+}
+.lpTop{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; margin-bottom:14px;
+}
+.lpTitle{
+  font-size: 22px;
+  font-weight: 1000;
+  letter-spacing: .3px;
+  display:flex; align-items:center; gap:12px;
+  position:relative;
+}
+.lpTitle:before{
+  content:"";
+  width: 10px; height:10px; border-radius:999px;
+  background: rgba(140,210,255,.95);
+  box-shadow: 0 0 18px rgba(140,210,255,.55), 0 0 48px rgba(140,210,255,.22);
+}
+.lpControls{ display:flex; gap:8px; align-items:center; }
+
+.lpBtn{
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: inherit;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+}
+.lpBtn:hover{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
+}
+.lpBtn:active{ transform: translateY(1px); }
+
+.lpGrid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 1400px){
+  .lpGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 980px){
+  .lpGrid{ grid-template-columns: 1fr; }
+}
+
+/* Card: gradient border + glass + hover lift */
+.lpCard{
+  position:relative;
+  border-radius: 18px;
+  padding: 12px;
+  overflow:hidden;
+  min-height: 228px;
+
+  background: linear-gradient(180deg,
+    rgba(255,255,255,.075),
+    rgba(255,255,255,.035)
+  );
+
+  border: 1px solid rgba(255,255,255,.10);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  box-shadow:
+    0 22px 55px rgba(0,0,0,.25),
+    inset 0 1px 0 rgba(255,255,255,.10);
+
+  transform: translateZ(0);
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+
+.lpCard:before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius: 20px;
+  background: conic-gradient(
+    from 180deg,
+    rgba(120,200,255,.00),
+    rgba(120,200,255,.55),
+    rgba(80,255,170,.50),
+    rgba(255,90,120,.55),
+    rgba(120,200,255,.00)
+  );
+  opacity: .55;
+  filter: blur(10px);
+  pointer-events:none;
+}
+
+.lpCard:after{
+  content:"";
+  position:absolute;
+  inset: 1px;
+  border-radius: 17px;
+  background: radial-gradient(900px 280px at 18% 0%,
+    rgba(120,200,255,.22),
+    rgba(0,0,0,0) 60%
+  );
+  pointer-events:none;
+}
+
+.lpCard:hover{
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.16);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.32),
+    inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.lpCard.ok{ outline: 1px solid rgba(80,255,170,.18); }
+.lpCard.down{ outline: 1px solid rgba(255,90,120,.18); }
+
+/* Header */
+.lpCardHead{
+  position:relative;
+  display:flex; align-items:flex-start; justify-content:space-between;
+  gap:10px; margin-bottom:10px;
+}
+.lpName{
+  font-weight: 1000;
+  line-height: 1.1;
+  font-size: 14px;
+}
+.lpIp{
+  font-size: 12px;
+  opacity: .72;
+  margin-top: 3px;
+}
+
+/* Status pill */
+.lpPill{
+  display:inline-flex; align-items:center; gap:8px;
+  padding: 8px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.16);
+  font-weight: 1000;
+  font-size: 12px;
+  letter-spacing: .2px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
+.lpDot{
+  width: 8px; height: 8px;
+  border-radius: 999px;
+  position:relative;
+}
+.lpDot:after{
+  content:"";
+  position:absolute; inset:-7px;
+  border-radius:999px;
+  opacity:.0;
+  transform: scale(.75);
+  transition: opacity .18s ease;
+}
+.lpCard.ok .lpDot{
+  background: rgba(80,255,170,.95);
+  box-shadow: 0 0 16px rgba(80,255,170,.40);
+}
+.lpCard.down .lpDot{
+  background: rgba(255,90,120,.95);
+  box-shadow: 0 0 16px rgba(255,90,120,.40);
+}
+.lpCard.ok .lpDot:after{
+  opacity:.55;
+  animation: lpPulse 1.4s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(80,255,170,.35), rgba(0,0,0,0) 70%);
+}
+.lpCard.down .lpDot:after{
+  opacity:.55;
+  animation: lpPulse 1.0s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(255,90,120,.35), rgba(0,0,0,0) 70%);
+}
+@keyframes lpPulse{
+  0%{ transform: scale(.75); opacity:.35; }
+  60%{ transform: scale(1.05); opacity:.15; }
+  100%{ transform: scale(.75); opacity:.35; }
+}
+
+/* Metrics */
+.lpMeta{
+  position:relative;
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.lpStat{
+  padding: 10px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.035);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07);
+}
+.lpLbl{
+  font-size: 11px;
+  opacity: .70;
+  letter-spacing: .25px;
+}
+.lpVal{
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 1000;
+}
+
+/* Chart container */
+.lpChartRow{
+  position:relative;
+  padding: 10px 10px 8px 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.lpChartLabel{
+  font-size: 11px;
+  opacity: .74;
+  margin-bottom: 8px;
+}
+.lpSpark{
+  width: 100%;
+  height: 58px;
+  opacity: .98;
+}
+.lpSpark .lpLine{
+  stroke: rgba(255,255,255,.92);
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
+}
+.lpSpark .lpArea{
+  opacity: .55;
+}
+
+/* Loss bar */
+.lpLossBar{
+  height: 10px;
+  border-radius: 999px;
+  overflow:hidden;
+  margin-top: 10px;
+
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.lpLossFill{
+  height: 100%;
+  background: linear-gradient(90deg,
+    rgba(80,255,170,.80),
+    rgba(120,200,255,.80),
+    rgba(255,90,120,.85)
+  );
+  box-shadow: 0 0 18px rgba(120,200,255,.18);
+}
+
+/* Error */
+.lpErr{
+  margin-top: 9px;
+  font-size: 12px;
+  opacity: .95;
+  padding: 8px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* === LIVEPING PALETTE OVERRIDES (CLASSY NEON) === */
+.lpWrap{
+  /* deep clean background glow (subtle) */
+  background:
+    radial-gradient(900px 420px at 12% 8%, rgba(64,220,255,.10), rgba(0,0,0,0) 60%),
+    radial-gradient(800px 380px at 82% 18%, rgba(120,255,160,.08), rgba(0,0,0,0) 55%),
+    radial-gradient(900px 480px at 50% 92%, rgba(255,90,120,.06), rgba(0,0,0,0) 60%);
+}
+
+/* Make cards darker & cleaner */
+.lpCard{
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+  border-color: rgba(255,255,255,.09);
+}
+.lpCard:before{ opacity:.38; filter: blur(12px); }
+.lpCard:after { opacity:.9; }
+
+/* Strong but tasteful status colors */
+.lpCard.ok{
+  outline: 1px solid rgba(100,255,190,.18);
+}
+.lpCard.down{
+  outline: 1px solid rgba(255,110,130,.18);
+}
+
+/* Title gradient text */
+.lpTitle{
+  background: linear-gradient(90deg, rgba(160,240,255,1), rgba(120,255,190,1));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* Pills */
+.lpPill{
+  background: rgba(0,0,0,.20);
+  border-color: rgba(255,255,255,.12);
+}
+.lpCard.ok .lpDot{
+  background: rgba(120,255,190,.95);
+  box-shadow: 0 0 18px rgba(120,255,190,.42);
+}
+.lpCard.down .lpDot{
+  background: rgba(255,110,130,.95);
+  box-shadow: 0 0 18px rgba(255,110,130,.42);
+}
+
+/* Metric tiles */
+.lpStat{
+  background: rgba(255,255,255,.028);
+  border-color: rgba(255,255,255,.085);
+}
+
+/* Chart: neon cyan line + soft area */
+.lpSpark .lpLine{
+  stroke: rgba(150,245,255,.98);
+  filter:
+    drop-shadow(0 0 10px rgba(120,220,255,.35))
+    drop-shadow(0 10px 22px rgba(0,0,0,.35));
+}
+.lpSpark .lpArea{ opacity:.58; }
+
+/* Loss bar: calm gradient, not too saturated */
+.lpLossFill{
+  background: linear-gradient(90deg,
+    rgba(120,255,190,.85),
+    rgba(150,245,255,.85),
+    rgba(255,110,130,.85)
+  );
+  box-shadow: 0 0 18px rgba(120,220,255,.16);
+}
+/* === END PALETTE OVERRIDES === */
+/* LIVEPING-UI-END */
+
+
+
+
+/* ULTRA COLORS */
+
+.lpCard.ok{
+outline:1px solid rgba(0,255,160,.35);
+box-shadow:
+0 0 15px rgba(0,255,160,.15),
+0 0 60px rgba(0,255,160,.10);
+}
+
+.lpCard.down{
+outline:1px solid rgba(255,60,90,.35);
+box-shadow:
+0 0 15px rgba(255,60,90,.25),
+0 0 60px rgba(255,60,90,.15);
+}
+
+.lpSpark .lpLine{
+stroke:#7ef9ff;
+stroke-width:2.5;
+filter: drop-shadow(0 0 8px #7ef9ff);
+}
+
+.lpSpark .lpArea{
+fill:url(#sparkGrad);
+opacity:.6;
+}
+
+.lpLossFill{
+background:linear-gradient(
+90deg,
+#00ffa6,
+#4cf3ff,
+#ff5f7e
+);
+box-shadow:0 0 20px rgba(0,255,200,.35);
+}
+
+.lpTitle{
+background:linear-gradient(90deg,#7ef9ff,#00ffa6);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+/* ETH-UI-START */
+.ethWrap{
+  padding: 18px 18px 26px 18px;
+  background:
+    radial-gradient(900px 420px at 12% 8%, rgba(64,220,255,.10), rgba(0,0,0,0) 60%),
+    radial-gradient(800px 380px at 82% 18%, rgba(120,255,160,.08), rgba(0,0,0,0) 55%),
+    radial-gradient(900px 480px at 50% 92%, rgba(255,90,120,.06), rgba(0,0,0,0) 60%);
+}
+.ethTop{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+.ethTitle{
+  font-size: 22px; font-weight: 1000; letter-spacing:.3px;
+  background: linear-gradient(90deg, rgba(160,240,255,1), rgba(120,255,190,1));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.ethGrid{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:14px; }
+@media (max-width: 1400px){ .ethGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 980px){ .ethGrid{ grid-template-columns: 1fr; } }
+
+.ethCard{
+  position:relative;
+  border-radius:18px;
+  padding:12px;
+  overflow:hidden;
+  min-height: 260px;
+
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.09);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 22px 55px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.10);
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+.ethCard:before{
+  content:"";
+  position:absolute; inset:-2px;
+  border-radius:20px;
+  background: conic-gradient(
+    from 180deg,
+    rgba(120,200,255,.00),
+    rgba(120,200,255,.55),
+    rgba(80,255,170,.50),
+    rgba(255,90,120,.55),
+    rgba(120,200,255,.00)
+  );
+  opacity:.36;
+  filter: blur(12px);
+  pointer-events:none;
+}
+.ethCard:hover{
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.14);
+  box-shadow: 0 30px 80px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.12);
+}
+.ethCard.ok{ outline:1px solid rgba(120,255,190,.18); }
+.ethCard.down{ outline:1px solid rgba(255,110,130,.18); }
+
+.ethHead{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:10px; }
+.ethName{ font-weight:1000; font-size:14px; line-height:1.1; }
+.ethSub{ font-size:12px; opacity:.72; margin-top:3px; }
+
+.ethPill{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 11px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+  font-weight:1000; font-size:12px;
+}
+.ethDot{ width:8px; height:8px; border-radius:999px; }
+.ethCard.ok .ethDot{ background: rgba(120,255,190,.95); box-shadow: 0 0 18px rgba(120,255,190,.42); }
+.ethCard.down .ethDot{ background: rgba(255,110,130,.95); box-shadow: 0 0 18px rgba(255,110,130,.42); }
+
+.ethMeta{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:10px; margin-bottom:10px; }
+.ethStat{
+  padding:10px; border-radius:14px;
+  border:1px solid rgba(255,255,255,.085);
+  background: rgba(255,255,255,.028);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07);
+}
+.ethLbl{ font-size:11px; opacity:.70; letter-spacing:.25px; }
+.ethVal{ margin-top:2px; font-size:14px; font-weight:1000; }
+
+.ethCharts{ display:grid; grid-template-columns: 1fr; gap:10px; }
+.ethChartBox{
+  padding:10px 10px 8px 10px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+}
+.ethChartLbl{ font-size:11px; opacity:.74; margin-bottom:8px; }
+
+.ethSpark{ width:100%; height:58px; opacity:.98; }
+.ethLine{
+  stroke: rgba(150,245,255,.98);
+  filter: drop-shadow(0 0 10px rgba(120,220,255,.35)) drop-shadow(0 10px 22px rgba(0,0,0,.35));
+}
+.ethArea{ opacity:.58; }
+
+.ethErr{
+  margin-top:9px; font-size:12px; opacity:.95;
+  padding:8px 10px; border-radius:14px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+}
+/* ETH-UI-END */
+
+
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\layout\Sidebar.jsx =====
+import React, { useMemo, useState } from "react";
+
+const NAV = [
+  { id: "dashboard", label: "Dashboard", icon: "◫" },
+  { id: "neighbors", label: "Neighbors", icon: "◎" },
+  { id: "liveping", label: "Latency LIVE", icon: "◌" },
+  { id: "ethernet", label: "Bandwidth LIVE", icon: "⇄" },
+  { id: "uplink", label: "UPLINK Traffic", icon: "▲" },
+  { id: "combined", label: "Combined Traffic", icon: "◈" },
+  { id: "history", label: "History", icon: "◷" },
+  { id: "aviatwtm4200", label: "AviatWTM4200", icon: "▣" },
+  { id: "settings", label: "Settings", icon: "⚙" }
+];
+
+export default function Sidebar({ active, setActive }) {
+  const [collapsed, setCollapsed] = useState(false);
+  const items = useMemo(() => NAV, []);
+
+  return (
+    <aside className={"ti-side" + (collapsed ? " is-collapsed" : "")}>
+      <div className="ti-side__top">
+        <div className="ti-brand" title="tools-isp">
+          <div className="ti-brand__mark">TI</div>
+          {!collapsed ? (
+            <div className="ti-brand__text">
+              <div className="ti-brand__title">tools-isp</div>
+              <div className="ti-brand__sub">NOC Premium</div>
+            </div>
+          ) : null}
+        </div>
+
+        <button
+          type="button"
+          className="ti-side__toggle"
+          onClick={() => setCollapsed(v => !v)}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? "»" : "«"}
+        </button>
+      </div>
+
+      <div className="ti-side__sectionLabel">
+        {!collapsed ? "Navigation" : "•"}
+      </div>
+
+      <nav className="ti-side__nav">
+        {items.map((it) => (
+          <button
+            key={it.id}
+            type="button"
+            className={"ti-side__item" + (active === it.id ? " is-active" : "")}
+            onClick={() => setActive(it.id)}
+            title={it.label}
+          >
+            <span className="ti-side__icon">{it.icon}</span>
+            {!collapsed ? <span className="ti-side__label">{it.label}</span> : null}
+          </button>
+        ))}
+      </nav>
+
+      <div className="ti-side__foot">
+        {!collapsed ? (
+          <>
+            <div className="ti-side__footTitle">Workspace</div>
+            <div className="ti-side__footText">Stable v2 foundation</div>
+          </>
+        ) : null}
+      </div>
+    </aside>
+  );
+}
+
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\layout\Topbar.jsx =====
+import React from "react";
+
+const TITLES = {
+  dashboard: "Dashboard",
+  monitors: "Monitors",
+  ping: "Ping",
+  tools: "Tools",
+  settings: "Settings",
+};
+
+export default function Topbar({ active, actions }) {
+  return (
+    <header className="topbar">
+      <div className="topbarTitle">{TITLES[active] ?? "tools-isp"}</div>
+      <div className="topbarActions">{actions?.onNewPing && (
+  <button className="topBtn" onClick={actions.onNewPing} title="New Ping">+ Ping</button>
+)}
+{actions?.onNewMonitor && (
+  <button className="topBtn" onClick={actions.onNewMonitor} title="New Monitor">+ Monitor</button>
+)}
+{actions?.onNewNote && (
+  <button className="topBtn" onClick={actions.onNewNote} title="New Note">+ Note</button>
+)}</div>
+    </header>
+  );
+}
+
+
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\MonitorBox.jsx =====
+import DragResizeWindow from "./DragResizeWindow.jsx";
+import TrafficGraph from "./TrafficGraph.jsx";
+
+export default function MonitorBox({ monitor, live, points, onClose }) {
+  /* TOOLS_MONITORBOX_NEON_OK_v1 */
+  const bwClass = (v) => (v > 400 ? "bw-insane" : v > 150 ? "bw-high" : v > 50 ? "bw-mid" : "bw-low");
+
+  const down = Number(live?.down ?? 0);
+  const up   = Number(live?.up ?? 0);
+
+  const ipText = monitor?.ip ? String(monitor.ip) : "";
+  const id = monitor?.id;
+
+  return (
+    <DragResizeWindow
+      id={id}
+      title="Drag / Resize"
+      ipText={ipText}
+      defaultRect={{ x: 80, y: 150, w: 520, h: 240 }}
+      minW={360}
+      minH={200}
+      onClose={onClose}
+    >
+      <div style={{ display: "grid", gap: 6, height: "100%", alignContent: "start" }}>
+
+        {/* Neon BW pills */}
+        <div className="bwRow" data-bw="1" style={{ marginTop: -4 }}>
+          <span className={"bwPill " + bwClass(down)} title={"Download: " + down.toFixed(3) + " Mbps"}>
+            <span className="bwLabel">Download</span>
+            <span className="bwVal">{(down).toFixed?.(3) ?? "0"} Mbps</span>
+          </span>
+
+          <span className={"bwPill " + bwClass(up)} title={"Upload: " + up.toFixed(3) + " Mbps"}>
+            <span className="bwLabel">Upload</span>
+            <span className="bwVal">{(up).toFixed?.(3) ?? "0"} Mbps</span>
+          </span>
+        </div>
+
+        {/* Graph */}
+        <div
+          style={{
+            flex: 1,
+            minHeight: 120,
+            borderRadius: 14,
+            border: "1px solid rgba(255,255,255,0.08)",
+            background: "rgba(0,0,0,0.12)",
+            overflow: "hidden"
+          }}
+        >
+          <TrafficGraph points={points || []} height={160} />
+        </div>
+
+        {!live?.ok && live?.err ? (
+          <div style={{ color: "#ff6b6b", fontSize: 12, fontWeight: 800 }}>
+            {live.err}
+          </div>
+        ) : null}
+      </div>
+    </DragResizeWindow>
+  );
+}
+
+/* TOOLS_TIGHT_BW_MB_v1 */
+
+
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\MonitorCanvas.jsx =====
+import { useEffect, useMemo, useState } from "react";
+import { Rnd } from "react-rnd";
+import TrafficGraph from "./TrafficGraph.jsx";
+
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+function defaultLayout(index){
+  // Cascade layout (nice first open)
+  const x = 20 + (index % 3) * 60;
+  const y = 20 + (index % 4) * 50;
+  return { x, y, w: 820, h: 300 };
+}
+
+export default function MonitorCanvas({ monitors, live, history, stopMonitor }) {
+  const key = "tisp.canvas.layout.v1";
+
+  const [layout, setLayout] = useState({}); // { [id]: {x,y,w,h} }
+  const ids = useMemo(() => (monitors || []).map(m => m.id), [monitors]);
+
+  // load saved layout once
+  useEffect(() => {
+    try{
+      const raw = localStorage.getItem(key);
+      if(raw){
+        const j = JSON.parse(raw);
+        if(j && typeof j === "object") setLayout(j);
+      }
+    } catch {}
+  }, []);
+
+  // ensure new monitors get default layout
+  useEffect(() => {
+    setLayout(prev => {
+      let changed = false;
+      const next = { ...prev };
+      ids.forEach((id, idx) => {
+        if(!next[id]){
+          next[id] = defaultLayout(idx);
+          changed = true;
+        }
+      });
+      // remove layouts for deleted monitors
+      Object.keys(next).forEach(id => {
+        if(!ids.includes(id)){
+          delete next[id];
+          changed = true;
+        }
+      });
+      if(changed){
+        try{ localStorage.setItem(key, JSON.stringify(next)); } catch {}
+        return next;
+      }
+      return prev;
+    });
+  }, [ids]);
+
+  function save(id, patch){
+    setLayout(prev => {
+      const cur = prev[id] || defaultLayout(0);
+      const next = { ...prev, [id]: { ...cur, ...patch } };
+      try{ localStorage.setItem(key, JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }
+
+  return (
+    <div className="tisp-canvas">
+      {monitors.map((m, idx) => {
+        const st = layout[m.id] || defaultLayout(idx);
+        const L = live[m.id] || {};
+        const down = (L.down ?? 0);
+        const up = (L.up ?? 0);
+
+        return (
+          <Rnd
+            key={m.id}
+            bounds="parent"
+            size={{ width: st.w, height: st.h }}
+            position={{ x: st.x, y: st.y }}
+            minWidth={520}
+            minHeight={240}
+            
+            onDragStop={(e, d) => save(m.id, { x: d.x, y: d.y })}
+            onResizeStop={(e, dir, ref, delta, pos) => {
+              const w = clamp(ref.offsetWidth, 520, 2400);
+              const h = clamp(ref.offsetHeight, 240, 1600);
+              save(m.id, { x: pos.x, y: pos.y, w, h });
+            }}
+            enableResizing={{
+              top:true, right:true, bottom:true, left:true,
+              topRight:true, bottomRight:true, bottomLeft:true, topLeft:true
+            }}
+          >
+            <div className="tisp-cardWin">
+              <div className="tisp-drag">
+                <div className="tisp-dragTitle">
+                  <strong>{m.label}</strong> ({m.ip}) — ifIndex {m.ifIndex}
+                </div>
+                <div className="tisp-dragHint">drag</div>
+              </div>
+
+              <div className="tisp-cardBody">
+                <div>Download: {(down).toFixed?.(3) ?? "0"} Mbps</div>
+                <div>Upload: {(up).toFixed?.(3) ?? "0"} Mbps</div>
+
+                <TrafficGraph points={(history[m.id] || [])} height={140} />
+
+                {!L.ok && L.err ? <div style={{ color: "red", marginTop: 8 }}>{L.err}</div> : null}
+
+                <div style={{ marginTop: 10 }}>
+                  <button onClick={() => stopMonitor(m.id)}>Close</button>
+                </div>
+              </div>
+            </div>
+          </Rnd>
+        );
+      })}
+    </div>
+  );
+}
+
+
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\MonitorCanvasPure.jsx =====
+import { useRef } from "react";
+import DragResizeWindow from "./DragResizeWindow.jsx";
+import TrafficGraph from "./TrafficGraph.jsx";
+
+function defaultRect(i){
+  return { x: 20 + (i % 3) * 70, y: 20 + (i % 4) * 60, w: 860, h: 320 };
+}
+
+export default function MonitorCanvasPure({ monitors, live, history, stopMonitor }) {
+  const boundsRef = useRef(null);
+
+  return (
+    <div
+      ref={boundsRef}
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "72vh",
+        minHeight: 520,
+        marginTop: 12,
+        border: "1px solid rgba(255,255,255,.10)",
+        borderRadius: 16,
+        background: "rgba(0,0,0,.10)",
+        overflow: "hidden"
+      }}
+    >
+      {(monitors || []).map((m, i) => {
+        const L = live[m.id] || {};
+        const down = (L.down ?? 0);
+        const up = (L.up ?? 0);
+
+        return (
+          <DragResizeWindow
+            key={m.id}
+            id={m.id}
+            boundsRef={boundsRef}
+            title={`${m.label} (${m.ip}) — ifIndex ${m.ifIndex}`}
+            defaultRect={defaultRect(i)}
+          >
+            <div>Download: {(down).toFixed?.(3) ?? "0"} Mbps</div>
+            <div>Upload: {(up).toFixed?.(3) ?? "0"} Mbps</div>
+
+            <TrafficGraph points={(history[m.id] || [])} height={140} />
+
+            {!L.ok && L.err ? (
+              <div style={{ color: "red", marginTop: 8 }}>{L.err}</div>
+            ) : null}
+
+            <div style={{ marginTop: 10 }}>
+              <button onClick={() => stopMonitor(m.id)}>Close</button>
+            </div>
+          </DragResizeWindow>
+        );
+      })}
+    </div>
+  );
+}
+
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\pages\AviatWTM4200Page.jsx =====
+import { useEffect, useState } from "react";
+
+const API_BASE = "";
+
+function num(v){
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function fmtMbps(v){
+  const n = num(v);
+  if(n >= 1000) return (n / 1000).toFixed(2) + " Gbps";
+  return n.toFixed(2) + " Mbps";
+}
+
+
+function TrafficBar({value,color}){
+
+  const v=Math.min(100,value/10)
+
+  return(
+    <div style={{
+      height:6,
+      background:"rgba(255,255,255,.06)",
+      borderRadius:20,
+      overflow:"hidden",
+      marginTop:6,
+      marginBottom:12
+    }}>
+      <div style={{
+        width:v+"%",
+        height:"100%",
+        background:color,
+        boxShadow:"0 0 8px "+color,
+        transition:"width .5s"
+      }}/>
+    </div>
+  )
+
+}
+
+function Metric({ label, value, accent }){
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "10px 12px",
+        borderRadius: 12,
+        background: "rgba(255,255,255,.03)",
+        border: "1px solid rgba(255,255,255,.06)",
+        marginBottom: 10
+      }}
+    >
+      <div style={{ opacity: 0.82, fontSize: 14 }}>{label}</div>
+      <div style={{ fontSize: 18, fontWeight: 800, color: accent || "white" }}>
+        {fmtMbps(value)}<TrafficBar value={value} color={accent}/>
+      </div>
+    </div>
+  );
+}
+
+function Card({ title, subtitle, rx, tx, total, error, large = false }){
+  return (
+    <div
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: 18,
+        padding: large ? 24 : 20,
+        minHeight: large ? 230 : 210,
+        background: "linear-gradient(180deg, rgba(12,16,26,.95), rgba(8,11,18,.92))",
+        border: "1px solid rgba(255,255,255,.10)",
+        boxShadow: "0 18px 40px rgba(0,0,0,.22)"
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          background: "radial-gradient(circle at top right, rgba(0,255,220,.10), transparent 35%), radial-gradient(circle at bottom left, rgba(90,110,255,.10), transparent 35%)"
+        }}
+      />
+
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <div style={{ fontSize: large ? 30 : 22, fontWeight: 900, marginBottom: 6 }}>
+          {title}
+        </div>
+
+        {subtitle ? (
+          <div style={{ opacity: 0.68, marginBottom: 18, fontSize: 14 }}>
+            {subtitle}
+          </div>
+        ) : null}
+
+        <Metric label="RX" value={rx} accent="#00f5d4" />
+        <Metric label="TX" value={tx} accent="#7aa2ff" />
+        <Metric label="Total" value={total} accent="#ffb84d" />
+
+        {error ? (
+          <div
+            style={{
+              marginTop: 12,
+              color: "#ff7272",
+              background: "rgba(255,90,90,.08)",
+              border: "1px solid rgba(255,90,90,.18)",
+              borderRadius: 12,
+              padding: 12,
+              whiteSpace: "pre-wrap"
+            }}
+          >
+            Error: {String(error)}
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+export default function AviatWTM4200Page(){
+  const [data, setData] = useState({
+    combined: { rxMbps: 0, txMbps: 0, totalMbps: 0 },
+    switchA: { rxMbps: 0, txMbps: 0, totalMbps: 0, ip: "10.88.88.254" },
+    switchB: { rxMbps: 0, txMbps: 0, totalMbps: 0, ip: "88.88.88.254" }
+  });
+  const [err, setErr] = useState("");
+
+  async function load(){
+    try{
+      setErr("");
+
+      const r = await fetch(API_BASE + "/api/aviatwtm4200/live", { cache: "no-store" });
+      const j = await r.json();
+
+      if(!j?.ok){
+        throw new Error(j?.error || "AviatWTM4200 live failed");
+      }
+
+      setData({
+        combined: {
+          rxMbps: num(j?.combined?.rxMbps),
+          txMbps: num(j?.combined?.txMbps),
+          totalMbps: num(j?.combined?.totalMbps)
+        },
+        switchA: {
+          rxMbps: num(j?.switchA?.rxMbps),
+          txMbps: num(j?.switchA?.txMbps),
+          totalMbps: num(j?.switchA?.totalMbps),
+          ip: j?.switchA?.ip || "10.88.88.254",
+          error: j?.switchA?.error || ""
+        },
+        switchB: {
+          rxMbps: num(j?.switchB?.rxMbps),
+          txMbps: num(j?.switchB?.txMbps),
+          totalMbps: num(j?.switchB?.totalMbps),
+          ip: j?.switchB?.ip || "88.88.88.254",
+          error: j?.switchB?.error || ""
+        }
+      });
+    } catch(e){
+      setErr(String(e?.message || e || "Unknown error"));
+      setData({
+        combined: { rxMbps: 0, txMbps: 0, totalMbps: 0 },
+        switchA: { rxMbps: 0, txMbps: 0, totalMbps: 0, ip: "10.88.88.254" },
+        switchB: { rxMbps: 0, txMbps: 0, totalMbps: 0, ip: "88.88.88.254" }
+      });
+    }
+  }
+
+  useEffect(() => {
+    load();
+    const t = setInterval(load, 2000);
+    return () => clearInterval(t);
+  }, []);
+
+  return (
+    <div style={{ padding: 20 }}>
+      <div style={{ marginBottom: 18 }}>
+        <div style={{ fontSize: 34, fontWeight: 900, marginBottom: 4 }}>
+          AviatWTM4200
+        </div>
+        <div style={{ opacity: 0.68, fontSize: 14 }}>
+          Live traffic overview for Switch A + Switch B
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 1200 }}>
+        <div style={{ marginBottom: 18 }}>
+          <Card
+            title="Combined Traffic"
+            subtitle="10.88.88.254 + 88.88.88.254"
+            rx={data.combined.rxMbps}
+            tx={data.combined.txMbps}
+            total={data.combined.totalMbps}
+            error={err}
+            large={true}
+          />
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+            gap: 18
+          }}
+        >
+          <Card
+            title="vlan1559"
+            subtitle={data.switchB.ip || "88.88.88.254"}
+            rx={data.switchB.rxMbps}
+            tx={data.switchB.txMbps}
+            total={data.switchB.totalMbps}
+            error={data.switchB.error}
+          />
+
+          <Card
+            title="vlan2430"
+            subtitle={data.switchA.ip || "10.88.88.254"}
+            rx={data.switchA.rxMbps}
+            tx={data.switchA.txMbps}
+            total={data.switchA.totalMbps}
+            error={data.switchA.error}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\pages\CombinedTrafficPage.jsx =====
+import { useEffect, useMemo, useState } from "react";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip
+} from "recharts";
+
+const API_BASE = "";
+const RANGES = ["5m", "30m", "1h", "1d", "30d"];
+
+function num(v){
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function fmtMbps(v){
+  const n = num(v);
+  if(n >= 1000) return (n / 1000).toFixed(2) + " Gbps";
+  return n.toFixed(2) + " Mbps";
+}
+
+function fmtTime(ts, range){
+  const d = new Date(Number(ts));
+  if(range === "1d" || range === "30d"){
+    return d.toLocaleString();
+  }
+  return d.toLocaleTimeString();
+}
+
+
+function TrafficBar({ value, max = 1500, color = "#00f5d4" }){
+  const pct = Math.max(0, Math.min(100, (Number(value || 0) / max) * 100));
+  return (
+    <div
+      style={{
+        marginTop: 6,
+        height: 6,
+        borderRadius: 999,
+        overflow: "hidden",
+        background: "rgba(255,255,255,.05)",
+        border: "1px solid rgba(255,255,255,.06)"
+      }}
+    >
+      <div
+        style={{
+          width: `${pct}%`,
+          height: "100%",
+          background: color,
+          boxShadow: `0 0 8px ${color}`,
+          transition: "width .35s ease"
+        }}
+      />
+    </div>
+  );
+}
+
+function Metric({ label, value, accent }){
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "10px 12px",
+        borderRadius: 12,
+        background: "rgba(255,255,255,.03)",
+        border: "1px solid rgba(255,255,255,.06)",
+        marginBottom: 10
+      }}
+    >
+      <div style={{ opacity: 0.82, fontSize: 14 }}>{label}</div>
+      <div style={{ fontSize: 18, fontWeight: 800, color: accent || "white" }}>
+        {fmtMbps(value)}<TrafficBar value={value} color={accent} />
+      </div>
+    </div>
+  );
+}
+
+function HeroCard({ rx, tx, total, error }){
+  return (
+    <div
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: 18,
+        padding: 22,
+        background: "linear-gradient(180deg, rgba(12,16,26,.95), rgba(8,11,18,.92))",
+        border: "1px solid rgba(255,255,255,.10)",
+        boxShadow: "0 18px 40px rgba(0,0,0,.22)",
+        marginBottom: 18,
+        maxWidth: 1030
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          background: "radial-gradient(circle at top right, rgba(0,255,220,.10), transparent 35%), radial-gradient(circle at bottom left, rgba(90,110,255,.10), transparent 35%)"
+        }}
+      />
+
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <div style={{ fontSize: 30, fontWeight: 900, marginBottom: 6 }}>
+          Combined Traffic
+        </div>
+
+        <div style={{ opacity: 0.68, marginBottom: 18, fontSize: 14 }}>
+          10.88.88.254 + 88.88.88.254
+        </div>
+
+        <Metric label="RX" value={rx} accent="#00f5d4" />
+        <Metric label="TX" value={tx} accent="#7aa2ff" />
+        <Metric label="Total" value={total} accent="#ffb84d" />
+
+        {error ? (
+          <div
+            style={{
+              marginTop: 12,
+              color: "#ff7272",
+              background: "rgba(255,90,90,.08)",
+              border: "1px solid rgba(255,90,90,.18)",
+              borderRadius: 12,
+              padding: 12,
+              whiteSpace: "pre-wrap"
+            }}
+          >
+            Error: {String(error)}
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+export default function CombinedTrafficPage(){
+  const [rx, setRx] = useState(0);
+  const [tx, setTx] = useState(0);
+  const [err, setErr] = useState("");
+  const [range, setRange] = useState("5m");
+  const [history, setHistory] = useState([]);
+  const [histErr, setHistErr] = useState("");
+
+  async function loadLive(){
+    try{
+      setErr("");
+      const r = await fetch(API_BASE + "/api/combined-traffic/live", { cache: "no-store" });
+      const j = await r.json();
+      if(!j?.ok) throw new Error(j?.error || "combined live failed");
+      setRx(num(j?.rxMbps));
+      setTx(num(j?.txMbps));
+    } catch(e){
+      setRx(0);
+      setTx(0);
+      setErr(String(e?.message || e || "Unknown error"));
+    }
+  }
+
+  async function loadHistory(rg){
+    try{
+      setHistErr("");
+      const r = await fetch(API_BASE + "/api/combined-traffic/history?range=" + encodeURIComponent(rg), { cache: "no-store" });
+      const j = await r.json();
+      if(!j?.ok) throw new Error(j?.error || "history failed");
+      setHistory(Array.isArray(j?.data) ? j.data : []);
+    } catch(e){
+      setHistory([]);
+      setHistErr(String(e?.message || e || "Unknown history error"));
+    }
+  }
+
+  useEffect(() => {
+    loadLive();
+    loadHistory(range);
+
+    const t = setInterval(loadLive, 2000);
+    return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    loadHistory(range);
+  }, [range]);
+
+  const rxSafe = num(rx);
+  const txSafe = num(tx);
+  const totalSafe = rxSafe + txSafe;
+
+  const chartData = useMemo(() => {
+    return (history || []).map(p => ({
+      ts: Number(p.ts),
+      label: fmtTime(p.ts, range),
+      rxMbps: num(p.rxMbps),
+      txMbps: num(p.txMbps),
+      totalMbps: num(p.totalMbps)
+    }));
+  }, [history, range]);
+
+  return (
+    <div style={{ padding: 20 }}>
+      <div style={{ marginBottom: 18 }}>
+        <div style={{ fontSize: 34, fontWeight: 900, marginBottom: 4 }}>
+          Combined Traffic
+        </div>
+        <div style={{ opacity: 0.68, fontSize: 14 }}>
+          Live + history overview for the combined traffic source
+        </div>
+      </div>
+
+      <HeroCard
+        rx={rxSafe}
+        tx={txSafe}
+        total={totalSafe}
+        error={err}
+      />
+
+      <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
+        {RANGES.map(rg => (
+          <button
+            key={rg}
+            onClick={() => setRange(rg)}
+            style={{
+              padding: "8px 14px",
+              borderRadius: 12,
+              border: "1px solid rgba(255,255,255,.14)",
+              background: rg === range ? "rgba(80,140,255,.22)" : "rgba(255,255,255,.04)",
+              color: "white",
+              cursor: "pointer",
+              fontWeight: 700,
+              boxShadow: rg === range ? "0 0 0 1px rgba(130,170,255,.18) inset" : "none"
+            }}
+          >
+            {rg}
+          </button>
+        ))}
+      </div>
+
+      <div
+        style={{
+          width: "100%",
+          maxWidth: 1100,
+          height: 420,
+          borderRadius: 18,
+          border: "1px solid rgba(255,255,255,.10)",
+          background: "linear-gradient(180deg, rgba(12,16,26,.95), rgba(8,11,18,.92))",
+          boxShadow: "0 18px 40px rgba(0,0,0,.22)",
+          padding: 12,
+          position: "relative",
+          overflow: "hidden"
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            pointerEvents: "none",
+            background: "radial-gradient(circle at top right, rgba(0,255,220,.08), transparent 35%), radial-gradient(circle at bottom left, rgba(90,110,255,.08), transparent 35%)"
+          }}
+        />
+
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <div style={{ marginBottom: 8, fontWeight: 800, fontSize: 18 }}>
+            History — {range}
+          </div>
+
+          {histErr ? (
+            <div style={{ color: "#ff6b6b", marginBottom: 10 }}>Error: {histErr}</div>
+          ) : null}
+
+          <ResponsiveContainer width="100%" height={350}>
+            <AreaChart data={chartData} margin={{ top: 10, right: 18, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="ctTotalFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="rgba(0,255,200,.35)" />
+                  <stop offset="100%" stopColor="rgba(0,255,200,0)" />
+                </linearGradient>
+              </defs>
+
+              <XAxis dataKey="label" minTickGap={24} />
+              <YAxis />
+              <Tooltip
+                formatter={(value, name) => [fmtMbps(value), name]}
+                labelFormatter={(label) => String(label)}
+                contentStyle={{
+                  background: "rgba(10,12,18,.94)",
+                  border: "1px solid rgba(255,255,255,.16)",
+                  borderRadius: 12,
+                  color: "white"
+                }}
+              />
+
+              <Area
+                type="monotone"
+                dataKey="totalMbps"
+                stroke="rgba(0,255,200,.95)"
+                fill="url(#ctTotalFill)"
+                strokeWidth={2}
+                dot={false}
+                isAnimationActive={false}
+                name="Total"
+              />
+
+              <Line
+                type="monotone"
+                dataKey="rxMbps"
+                stroke="rgba(120,160,255,.95)"
+                strokeWidth={2}
+                dot={false}
+                isAnimationActive={false}
+                name="RX"
+              />
+
+              <Line
+                type="monotone"
+                dataKey="txMbps"
+                stroke="rgba(255,180,90,.95)"
+                strokeWidth={2}
+                dot={false}
+                isAnimationActive={false}
+                name="TX"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\pages\DashboardPage.jsx =====
+import React, { useEffect, useMemo, useState } from "react";
+
+function num(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function fmtMbps(v) {
+  const n = num(v);
+  if (n >= 1000) return (n / 1000).toFixed(2) + " Gbps";
+  return n.toFixed(2) + " Mbps";
+}
+
+function getPressureStatus(total) {
+  const n = num(total);
+  if (n >= 700) return "critical";
+  if (n >= 350) return "high";
+  if (n >= 120) return "warn";
+  return "healthy";
+}
+
+function statusLabel(status) {
+  if (status === "critical") return "Critical";
+  if (status === "high") return "High";
+  if (status === "warn") return "Warning";
+  return "Healthy";
+}
+
+function MetricCard({ title, value, sub, tone = "neutral" }) {
+  return (
+    <div className={"ti-metric2 is-" + tone}>
+      <div className="ti-metric2__title">{title}</div>
+      <div className="ti-metric2__value">{value}</div>
+      <div className="ti-metric2__sub">{sub}</div>
+    </div>
+  );
+}
+
+function PressureList({ rows }) {
+  const max = Math.max(1, ...rows.map(x => num(x.totalMbps)), 1);
+
+  return (
+    <div className="ti-rankList">
+      {rows.map((row, idx) => {
+        const pct = Math.max(4, Math.min(100, (num(row.totalMbps) / max) * 100));
+        const tone = getPressureStatus(row.totalMbps);
+
+        return (
+          <div key={row.id} className="ti-rankRow">
+            <div className="ti-rankRow__top">
+              <div className="ti-rankRow__left">
+                <div className={"ti-rankDot is-" + tone} />
+                <div className="ti-rankIndex">#{idx + 1}</div>
+                <div className="ti-rankRow__name">{row.name || row.id}</div>
+              </div>
+
+              <div className="ti-rankRow__right">
+                <div className={"ti-miniBadge is-" + tone}>{statusLabel(tone)}</div>
+                <div className="ti-rankRow__value">{fmtMbps(row.totalMbps)}</div>
+              </div>
+            </div>
+
+            <div className="ti-rankRow__bar">
+              <div className={"ti-rankRow__fill is-" + tone} style={{ width: pct + "%" }} />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function TrendChart({ items }) {
+  const grouped = useMemo(() => {
+    const map = new Map();
+    for (const row of items) {
+      const ts = String(row?.ts || "");
+      if (!ts) continue;
+      const rx = num(row?.rxMbps);
+      const tx = num(row?.txMbps);
+      const prev = map.get(ts) || { ts, rx: 0, tx: 0 };
+      prev.rx += rx;
+      prev.tx += tx;
+      map.set(ts, prev);
+    }
+    return Array.from(map.values())
+      .sort((a, b) => new Date(a.ts).getTime() - new Date(b.ts).getTime())
+      .slice(-20);
+  }, [items]);
+
+  const width = 920;
+  const height = 230;
+  const padL = 26;
+  const padR = 18;
+  const padT = 14;
+  const padB = 28;
+
+  const rxVals = grouped.map(x => num(x.rx));
+  const txVals = grouped.map(x => num(x.tx));
+  const maxVal = Math.max(1, ...rxVals, ...txVals, 1);
+
+  function makeCoords(values) {
+    return values.map((v, i) => {
+      const x = values.length <= 1
+        ? padL
+        : padL + (i * (width - padL - padR)) / (values.length - 1);
+      const y = height - padB - ((v / maxVal) * (height - padT - padB));
+      return { x, y, v };
+    });
+  }
+
+  function areaPath(points) {
+    if (!points.length) return "";
+    const first = points[0];
+    const last = points[points.length - 1];
+    const line = points.map(p => `${p.x},${p.y}`).join(" L ");
+    return `M ${first.x} ${height - padB} L ${line} L ${last.x} ${height - padB} Z`;
+  }
+
+  const rxPts = makeCoords(rxVals);
+  const txPts = makeCoords(txVals);
+
+  const rxLine = rxPts.map(p => `${p.x},${p.y}`).join(" ");
+  const txLine = txPts.map(p => `${p.x},${p.y}`).join(" ");
+
+  return (
+    <div className="ti-chart2">
+      <div className="ti-chart2__head">
+        <div>
+          <div className="ti-blockTitle">Traffic history</div>
+          <div className="ti-blockSub">Recent combined uplink RX / TX trend</div>
+        </div>
+
+        <div className="ti-chart2__legend">
+          <span className="is-rx">RX</span>
+          <span className="is-tx">TX</span>
+        </div>
+      </div>
+
+      <svg viewBox={`0 0 ${width} ${height}`} className="ti-chart2__svg" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="tiAreaRx" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(103,232,122,0.26)" />
+            <stop offset="100%" stopColor="rgba(103,232,122,0.02)" />
+          </linearGradient>
+          <linearGradient id="tiAreaTx" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(120,168,255,0.24)" />
+            <stop offset="100%" stopColor="rgba(120,168,255,0.02)" />
+          </linearGradient>
+        </defs>
+
+        {[0, 0.25, 0.5, 0.75, 1].map((r, i) => {
+          const y = height - padB - ((height - padT - padB) * r);
+          return (
+            <line
+              key={i}
+              x1={padL}
+              y1={y}
+              x2={width - padR}
+              y2={y}
+              stroke="rgba(255,255,255,0.07)"
+              strokeWidth="1"
+            />
+          );
+        })}
+
+        <path d={areaPath(txPts)} fill="url(#tiAreaTx)" />
+        <path d={areaPath(rxPts)} fill="url(#tiAreaRx)" />
+
+        <polyline
+          points={txLine}
+          fill="none"
+          stroke="#78a8ff"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+
+        <polyline
+          points={rxLine}
+          fill="none"
+          stroke="#67e87a"
+          strokeWidth="2.3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+
+        {txPts.length ? (
+          <circle cx={txPts[txPts.length - 1].x} cy={txPts[txPts.length - 1].y} r="3.6" fill="#78a8ff" />
+        ) : null}
+
+        {rxPts.length ? (
+          <circle cx={rxPts[rxPts.length - 1].x} cy={rxPts[rxPts.length - 1].y} r="3.2" fill="#67e87a" />
+        ) : null}
+      </svg>
+    </div>
+  );
+}
+
+export default function DashboardPage() {
+  const [snapshot, setSnapshot] = useState([]);
+  const [history, setHistory] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let dead = false;
+
+    async function load() {
+      try {
+        const [snapRes, histRes] = await Promise.all([
+          fetch("/api/eth/snapshot", { cache: "no-store" }),
+          fetch("/api/history/uplink?range=1h&limit=200", { cache: "no-store" })
+        ]);
+
+        const snapJson = await snapRes.json();
+        const histJson = await histRes.json();
+
+        if (!snapRes.ok || !snapJson?.ok) {
+          throw new Error(snapJson?.error || `Snapshot HTTP ${snapRes.status}`);
+        }
+        if (!histRes.ok || !histJson?.ok) {
+          throw new Error(histJson?.error || `History HTTP ${histRes.status}`);
+        }
+
+        if (!dead) {
+          setSnapshot(Array.isArray(snapJson?.data) ? snapJson.data : []);
+          setHistory(Array.isArray(histJson?.items) ? histJson.items : []);
+          setError("");
+        }
+      } catch (err) {
+        if (!dead) {
+          setError(err?.message || "Dashboard load failed");
+        }
+      }
+    }
+
+    load();
+    const t = setInterval(load, 10000);
+    return () => {
+      dead = true;
+      clearInterval(t);
+    };
+  }, []);
+
+  const uplinks = useMemo(() => {
+    return snapshot.filter(x => String(x?.id || "").startsWith("uplink_"));
+  }, [snapshot]);
+
+  const totals = useMemo(() => {
+    const rx = uplinks.reduce((s, x) => s + num(x?.rxMbps), 0);
+    const tx = uplinks.reduce((s, x) => s + num(x?.txMbps), 0);
+    return { rx, tx, total: rx + tx };
+  }, [uplinks]);
+
+  const pressure = getPressureStatus(totals.total);
+
+  const ranked = useMemo(() => {
+    return [...uplinks]
+      .map(x => ({ ...x, totalMbps: num(x?.rxMbps) + num(x?.txMbps) }))
+      .sort((a, b) => b.totalMbps - a.totalMbps)
+      .slice(0, 6);
+  }, [uplinks]);
+
+  const counts = useMemo(() => {
+    const out = { healthy: 0, warn: 0, high: 0, critical: 0 };
+    for (const row of uplinks) {
+      const total = num(row?.rxMbps) + num(row?.txMbps);
+      out[getPressureStatus(total)] += 1;
+    }
+    return out;
+  }, [uplinks]);
+
+  const latest = ranked[0] || null;
+
+  return (
+    <div className="ti-dash2">
+      <section className="ti-hero2">
+        <div>
+          <div className="ti-hero2__eyebrow">Operations overview</div>
+          <div className="ti-hero2__title">Network Command Dashboard</div>
+          <div className="ti-hero2__sub">
+            Tight premium monitoring layout with live uplink pressure and recent trend visibility.
+          </div>
+        </div>
+
+        <div className={"ti-hero2__status is-" + pressure}>
+          <div className="ti-hero2__statusLabel">Network pressure</div>
+          <div className="ti-hero2__statusValue">{statusLabel(pressure)}</div>
+        </div>
+      </section>
+
+      {error ? <div className="ti-errorBox">{error}</div> : null}
+
+      <section className="ti-dash2__metrics">
+        <MetricCard title="Total traffic now" value={fmtMbps(totals.total)} sub="Combined RX + TX" tone={pressure} />
+        <MetricCard title="Total RX" value={fmtMbps(totals.rx)} sub="Live receive load" tone="healthy" />
+        <MetricCard title="Total TX" value={fmtMbps(totals.tx)} sub="Live transmit load" tone="high" />
+        <MetricCard title="Tracked uplinks" value={String(uplinks.length)} sub="Current uplink rows" tone="neutral" />
+      </section>
+
+      <section className="ti-dash2__row">
+        <div className="ti-panel2">
+          <div className="ti-blockTitle">Health distribution</div>
+          <div className="ti-blockSub">Current uplink state by live pressure</div>
+
+          <div className="ti-health2">
+            <div className="ti-health2__item is-healthy">
+              <strong>{counts.healthy}</strong>
+              <span>Healthy</span>
+            </div>
+            <div className="ti-health2__item is-warn">
+              <strong>{counts.warn}</strong>
+              <span>Warning</span>
+            </div>
+            <div className="ti-health2__item is-high">
+              <strong>{counts.high}</strong>
+              <span>High</span>
+            </div>
+            <div className="ti-health2__item is-critical">
+              <strong>{counts.critical}</strong>
+              <span>Critical</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="ti-panel2">
+          <div className="ti-blockTitle">Top busy uplinks</div>
+          <div className="ti-blockSub">Ranked by live combined load</div>
+
+          {ranked.length ? (
+            <PressureList rows={ranked} />
+          ) : (
+            <div className="ti-emptyState">No uplink data available.</div>
+          )}
+        </div>
+      </section>
+
+      <section className="ti-dash2__row ti-dash2__row--bottom">
+        <div className="ti-panel2">
+          <TrendChart items={history} />
+        </div>
+
+        <div className="ti-panel2">
+          <div className="ti-blockTitle">Quick context</div>
+          <div className="ti-blockSub">Stable summary of current state</div>
+
+          <div className="ti-kv2">
+            <div className="ti-kv2__row"><span>Latest history rows</span><strong>{history.length}</strong></div>
+            <div className="ti-kv2__row"><span>Strongest uplink</span><strong>{latest?.name || "-"}</strong></div>
+            <div className="ti-kv2__row"><span>Top pressure now</span><strong>{latest ? fmtMbps(latest.totalMbps) : "-"}</strong></div>
+            <div className="ti-kv2__row"><span>Status tier</span><strong>{statusLabel(pressure)}</strong></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\pages\EthernetTrafficPage.jsx =====
+import { useEffect, useMemo, useState } from "react";
+
+const API_BASE = "";
+const WINDOW = 24;
+
+function num(v){
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function fmtMbps(v){
+  const n = num(v);
+  if(n >= 1000) return (n / 1000).toFixed(2) + " Gbps";
+  return n.toFixed(2) + " Mbps";
+}
+
+function fmtSpeed(v){
+  const n = Number(v);
+  return Number.isFinite(n) && n > 0 ? `${n} Mbps` : "â€”";
+}
+
+function statusTone(v){
+  const s = String(v || "").toLowerCase();
+  if(s === "up") return "#00f5d4";
+  if(s === "down") return "#ff8a80";
+  return "#ffd166";
+}
+
+function Metric({ label, value, accent }){
+  return (
+    <div
+      style={{
+        display: "grid",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "6px 8px",
+        borderRadius: 10,
+        background: "rgba(255,255,255,.03)",
+        border: "1px solid rgba(255,255,255,.06)",
+        marginBottom: 8
+      }}
+    >
+      <div style={{ opacity: 0.82, fontSize: 11 }}>{label}</div>
+      <div style={{ fontSize: 13, fontWeight: 800, color: accent || "white" }}>
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function StatusPill({ label, value }){
+  return (
+    <div
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 6,
+        padding: "5px 8px",
+        borderRadius: 999,
+        background: "rgba(255,255,255,.04)",
+        border: "1px solid rgba(255,255,255,.08)",
+        fontSize: 11,
+        marginRight: 6,
+        marginBottom: 6
+      }}
+    >
+      <span style={{ opacity: 0.75 }}>{label}</span>
+      <strong style={{ color: statusTone(value) }}>{String(value || "unk").toUpperCase()}</strong>
+    </div>
+  );
+}
+
+function MiniSpark({ rxValues = [], txValues = [], height = 120 }){
+  const rx = (Array.isArray(rxValues) ? rxValues : []).map(x => num(x));
+  const tx = (Array.isArray(txValues) ? txValues : []).map(x => num(x));
+  const len = Math.max(rx.length, tx.length, 2);
+  const w = 260;
+  const h = height;
+  const pad = 8;
+  const max = Math.max(1, ...rx, ...tx, 1);
+
+  const [hoverIndex, setHoverIndex] = useState(null);
+
+  function buildLine(values){
+    const pts = Array.from({ length: len }, (_, i) => num(values[i] ?? 0));
+    return pts.map((v, i) => {
+      const x = len <= 1 ? pad : pad + (i * (w - pad * 2)) / (len - 1);
+      const y = h - (((v / max) * (h - pad * 2)) + pad);
+      return `${x},${y}`;
+    }).join(" ");
+  }
+
+  const rxLine = buildLine(rx);
+  const txLine = buildLine(tx);
+
+  const tooltipRx = hoverIndex === null ? null : num(rx[hoverIndex] ?? 0);
+  const tooltipTx = hoverIndex === null ? null : num(tx[hoverIndex] ?? 0);
+
+  function handleMove(e){
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const idx = Math.max(0, Math.min(len - 1, Math.round((x / rect.width) * (len - 1))));
+    setHoverIndex(idx);
+  }
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height,
+        borderRadius: 12,
+        overflow: "hidden",
+        background: "rgba(255,255,255,.03)",
+        border: "1px solid rgba(255,255,255,.07)"
+      }}
+      onMouseMove={handleMove}
+      onMouseLeave={() => setHoverIndex(null)}
+    >
+      <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" style={{ width: "100%", height: "100%" }}>
+        <defs>
+          <linearGradient id="ethRxFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(0,255,212,.18)" />
+            <stop offset="100%" stopColor="rgba(0,255,212,0)" />
+          </linearGradient>
+        </defs>
+
+        <polyline
+          fill="none"
+          stroke="#00f5d4"
+          strokeWidth="2.2"
+          points={rxLine}
+        />
+        <polyline
+          fill="none"
+          stroke="#7aa2ff"
+          strokeWidth="2.2"
+          points={txLine}
+        />
+
+        {hoverIndex !== null ? (
+          <line
+            x1={pad + (hoverIndex * (w - pad * 2)) / Math.max(1, len - 1)}
+            x2={pad + (hoverIndex * (w - pad * 2)) / Math.max(1, len - 1)}
+            y1="0"
+            y2={h}
+            stroke="rgba(255,255,255,.18)"
+            strokeDasharray="3 3"
+          />
+        ) : null}
+      </svg>
+
+      {hoverIndex !== null ? (
+        <div
+          style={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+            background: "rgba(10,12,18,.94)",
+            border: "1px solid rgba(255,255,255,.14)",
+            borderRadius: 10,
+            padding: "6px 8px",
+            fontSize: 11,
+            lineHeight: 1.5,
+            boxShadow: "0 10px 20px rgba(0,0,0,.24)"
+          }}
+        >
+          <div style={{ color: "#00f5d4", fontWeight: 700 }}>RX: {fmtMbps(tooltipRx)}</div>
+          <div style={{ color: "#7aa2ff", fontWeight: 700 }}>TX: {fmtMbps(tooltipTx)}</div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function GlobalCard({ totals, hist }){
+  return (
+    <div
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: 18,
+        padding: 16,
+        background: "linear-gradient(180deg, rgba(12,16,26,.95), rgba(8,11,18,.92))",
+        border: "1px solid rgba(255,255,255,.10)",
+        boxShadow: "0 18px 40px rgba(0,0,0,.22)",
+        minHeight: 170
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          background: "radial-gradient(circle at top right, rgba(0,255,220,.10), transparent 35%), radial-gradient(circle at bottom left, rgba(90,110,255,.10), transparent 35%)"
+        }}
+      />
+
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          display: "grid",
+          gridTemplateColumns: "1fr 150px",
+          gap: 12,
+          alignItems: "stretch",
+          minHeight: 125
+        }}
+      >
+        <div>
+          <Metric label="RX" value={fmtMbps(totals?.rx)} accent="#00f5d4" />
+          <Metric label="TX" value={fmtMbps(totals?.tx)} accent="#7aa2ff" />
+          <Metric label="Total" value={fmtMbps(totals?.total)} accent="#ffb84d" />
+        </div>
+
+        <MiniSpark
+          rxValues={hist?.rx || []}
+          txValues={hist?.tx || []}
+          height={125}
+        />
+      </div>
+    </div>
+  );
+}
+
+function EthernetCard({ item, hist }){
+  const rx = num(item?.rxMbps);
+  const tx = num(item?.txMbps);
+  const total = rx + tx;
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: 18,
+        padding: 16,
+        background: "linear-gradient(180deg, rgba(12,16,26,.95), rgba(8,11,18,.92))",
+        border: "1px solid rgba(255,255,255,.10)",
+        boxShadow: "0 18px 40px rgba(0,0,0,.22)",
+        minHeight: 235
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          background: "radial-gradient(circle at top right, rgba(0,255,220,.10), transparent 35%), radial-gradient(circle at bottom left, rgba(90,110,255,.10), transparent 35%)"
+        }}
+      />
+
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <div style={{ fontSize: 18, fontWeight: 900, marginBottom: 6 }}>
+          {item?.name || item?.id || "Ethernet"}
+        </div>
+
+        <div style={{ opacity: 0.68, marginBottom: 10, fontSize: 12 }}>
+          {item?.ip || "â€”"} {item?.ifName ? `â€¢ ${item.ifName}` : ""} {item?.ifIndex ? `â€¢ ifIndex ${item.ifIndex}` : ""}
+        </div>
+
+        <div style={{ marginBottom: 8 }}>
+          <StatusPill label="Status" value={item?.status} />
+          <StatusPill label="Admin" value={item?.admin} />
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 150px",
+            gap: 12,
+            alignItems: "stretch"
+          }}
+        >
+          <div>
+            <Metric label="RX" value={fmtMbps(rx)} accent="#00f5d4" />
+            <Metric label="TX" value={fmtMbps(tx)} accent="#7aa2ff" />
+            <Metric label="Total" value={fmtMbps(total)} accent="#ffb84d" />
+            <Metric label="Link Speed" value={fmtSpeed(item?.speedMb)} accent="#ffffff" />
+          </div>
+
+          <MiniSpark
+            rxValues={hist?.rx || []}
+            txValues={hist?.tx || []}
+            height={125}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function EthernetTrafficPage(){
+  const [data, setData] = useState([]);
+  const [hist, setHist] = useState({});
+  const [err, setErr] = useState("");
+
+  useEffect(() => {
+    let alive = true;
+
+    async function load(){
+      try{
+        const r = await fetch(`${API_BASE}/api/eth/snapshot`, { cache: "no-store" });
+        const j = await r.json();
+
+        if(!j?.ok) throw new Error(j?.error || "snapshot failed");
+
+        const arr = Array.isArray(j?.data) ? j.data : [];
+
+        if(!alive) return;
+
+        setErr("");
+        setData(arr);
+
+        setHist(prev => {
+          const next = { ...prev };
+
+          let totalRx = 0;
+          let totalTx = 0;
+
+          for(const it of arr){
+            const id = String(it?.id || it?.name || it?.ip || Math.random());
+            const rx = num(it?.rxMbps);
+            const tx = num(it?.txMbps);
+
+            totalRx += rx;
+            totalTx += tx;
+
+            if(!next[id]){
+              next[id] = { rx: [], tx: [], total: [] };
+            }
+
+            next[id] = {
+              rx: [...next[id].rx, rx].slice(-WINDOW),
+              tx: [...next[id].tx, tx].slice(-WINDOW),
+              total: [...next[id].total, rx + tx].slice(-WINDOW)
+            };
+          }
+
+          if(!next.__global){
+            next.__global = { rx: [], tx: [], total: [] };
+          }
+
+          next.__global = {
+            rx: [...next.__global.rx, totalRx].slice(-WINDOW),
+            tx: [...next.__global.tx, totalTx].slice(-WINDOW),
+            total: [...next.__global.total, totalRx + totalTx].slice(-WINDOW)
+          };
+
+          return next;
+        });
+      } catch(e){
+        if(!alive) return;
+        setErr(String(e?.message || e || "Unknown error"));
+      }
+    }
+
+    load();
+    const t = setInterval(load, 2000);
+
+    return () => {
+      alive = false;
+      clearInterval(t);
+    };
+  }, []);
+
+  const totals = useMemo(() => {
+    const rx = data.reduce((s, x) => s + num(x?.rxMbps), 0);
+    const tx = data.reduce((s, x) => s + num(x?.txMbps), 0);
+    return { rx, tx, total: rx + tx };
+  }, [data]);
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          gap: 14,
+          maxWidth: 1400
+        }}
+      >{data.filter(x => !String(x?.id || "").startsWith("uplink_")).map((it, idx) => {
+          const id = String(it?.id || it?.name || it?.ip || idx);
+          return (
+            <EthernetCard
+              key={id}
+              item={it}
+              hist={hist[id] || { rx: [], tx: [], total: [] }}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\pages\HistoryPage.jsx =====
+import React, { useEffect, useMemo, useRef, useState } from "react";
+
+const RANGE_OPTIONS = [
+  { key: "all", label: "All" },
+  { key: "1h", label: "1h" },
+  { key: "6h", label: "6h" },
+  { key: "24h", label: "24h" },
+  { key: "7d", label: "7d" }
+];
+
+const STATIC_UPLINK_OPTIONS = [
+  { value: "", label: "All uplinks" },
+  { value: "uplink_dragon_club", label: "To Dragon Club" },
+  { value: "uplink_c5c_jabal", label: "C5C Jabal" },
+  { value: "uplink_to_office", label: "To Office" },
+  { value: "uplink_pharmacy", label: "To Pharmacy Wahib" },
+  { value: "uplink_abou_taher", label: "To Abou Taher" },
+  { value: "uplink_fast_web", label: "To Office Fast Web" },
+  { value: "uplink_daraj_arid", label: "To Daraj El 3arid" },
+  { value: "uplink_rawda", label: "To Rawda" }
+];
+
+function num(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function fmtMbps(v) {
+  return num(v).toFixed(2);
+}
+
+function formatTs(ts) {
+  if (!ts) return "-";
+  try {
+    return new Date(ts).toLocaleString();
+  } catch {
+    return ts;
+  }
+}
+
+function buildHistoryUrl(range, q, uplink) {
+  const params = new URLSearchParams();
+  params.set("limit", "300");
+
+  if (range && range !== "all") params.set("range", range);
+  if (uplink && uplink.trim()) params.set("uplink", uplink.trim());
+  if (q && q.trim()) params.set("q", q.trim());
+
+  return `/api/history/uplink?${params.toString()}`;
+}
+
+function FilterButton({ active, children, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        padding: "8px 12px",
+        borderRadius: 10,
+        border: active ? "1px solid rgba(122,162,255,.55)" : "1px solid rgba(255,255,255,.10)",
+        background: active ? "rgba(122,162,255,.14)" : "rgba(255,255,255,.03)",
+        color: "#fff",
+        cursor: "pointer",
+        fontSize: 13,
+        fontWeight: active ? 700 : 600
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function UplinkPicker({ value, options, onChange }) {
+  const [open, setOpen] = useState(false);
+  const boxRef = useRef(null);
+
+  const current = options.find(x => x.value === value) || options[0] || { value: "", label: "All uplinks" };
+
+  useEffect(() => {
+    function onDoc(e) {
+      if (!boxRef.current) return;
+      if (!boxRef.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
+
+  return (
+    <div ref={boxRef} style={{ position: "relative", minWidth: 190 }}>
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        style={{
+          width: "100%",
+          padding: "9px 12px",
+          borderRadius: 10,
+          border: "1px solid rgba(255,255,255,.12)",
+          background: "linear-gradient(180deg, rgba(18,28,42,.95), rgba(11,18,29,.95))",
+          color: "#fff",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 10,
+          cursor: "pointer",
+          fontWeight: 700
+        }}
+      >
+        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {current.label}
+        </span>
+        <span style={{ opacity: 0.72 }}>▼</span>
+      </button>
+
+      {open ? (
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(100% + 6px)",
+            left: 0,
+            right: 0,
+            zIndex: 50,
+            borderRadius: 12,
+            overflow: "hidden",
+            border: "1px solid rgba(255,255,255,.12)",
+            background: "linear-gradient(180deg, rgba(15,23,36,.98), rgba(9,14,24,.98))",
+            boxShadow: "0 18px 38px rgba(0,0,0,.35)",
+            maxHeight: 320,
+            overflowY: "auto"
+          }}
+        >
+          {options.map(opt => {
+            const active = opt.value === value;
+            return (
+              <button
+                key={opt.value || "all"}
+                type="button"
+                onClick={() => {
+                  onChange(opt.value);
+                  setOpen(false);
+                }}
+                style={{
+                  width: "100%",
+                  textAlign: "left",
+                  padding: "10px 12px",
+                  border: "none",
+                  borderBottom: "1px solid rgba(255,255,255,.06)",
+                  background: active ? "rgba(122,162,255,.16)" : "transparent",
+                  color: "#fff",
+                  cursor: "pointer",
+                  fontWeight: active ? 800 : 600
+                }}
+              >
+                {opt.label}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function HistoryChart({ items }) {
+  const [hoverIdx, setHoverIdx] = useState(null);
+
+  const grouped = useMemo(() => {
+    const map = new Map();
+
+    for (const row of items) {
+      const ts = String(row?.ts || "");
+      if (!ts) continue;
+
+      const prev = map.get(ts) || { ts, rx: 0, tx: 0 };
+      prev.rx += num(row?.rxMbps);
+      prev.tx += num(row?.txMbps);
+      map.set(ts, prev);
+    }
+
+    return Array.from(map.values())
+      .sort((a, b) => new Date(a.ts).getTime() - new Date(b.ts).getTime())
+      .slice(-120);
+  }, [items]);
+
+  const width = 1000;
+  const height = 250;
+  const padL = 42;
+  const padR = 20;
+  const padT = 16;
+  const padB = 28;
+
+  const rxVals = grouped.map(x => num(x.rx));
+  const txVals = grouped.map(x => num(x.tx));
+  const maxVal = Math.max(1, ...rxVals, ...txVals, 1);
+
+  function makeCoords(values) {
+    return values.map((v, i) => {
+      const x = values.length <= 1
+        ? padL
+        : padL + (i * (width - padL - padR)) / (values.length - 1);
+      const y = height - padB - ((v / maxVal) * (height - padT - padB));
+      return { x, y, v };
+    });
+  }
+
+  function areaPath(points) {
+    if (!points.length) return "";
+    const first = points[0];
+    const last = points[points.length - 1];
+    const line = points.map(p => `${p.x},${p.y}`).join(" L ");
+    return `M ${first.x} ${height - padB} L ${line} L ${last.x} ${height - padB} Z`;
+  }
+
+  const rxPts = makeCoords(rxVals);
+  const txPts = makeCoords(txVals);
+  const rxLine = rxPts.map(p => `${p.x},${p.y}`).join(" ");
+  const txLine = txPts.map(p => `${p.x},${p.y}`).join(" ");
+  const hoverRow = hoverIdx !== null ? grouped[hoverIdx] : null;
+  const hoverX = hoverIdx !== null ? (txPts[hoverIdx]?.x ?? rxPts[hoverIdx]?.x ?? null) : null;
+
+  function handleMove(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const usableW = Math.max(1, rect.width);
+    if (!grouped.length) return;
+    const idx = Math.max(0, Math.min(grouped.length - 1, Math.round((x / usableW) * (grouped.length - 1))));
+    setHoverIdx(idx);
+  }
+
+  return (
+    <div
+      style={{
+        border: "1px solid rgba(255,255,255,0.10)",
+        borderRadius: 16,
+        padding: 12,
+        background: "linear-gradient(180deg, rgba(12,22,36,.86), rgba(8,14,24,.86))"
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 12,
+          marginBottom: 10
+        }}
+      >
+        <div>
+          <div style={{ fontWeight: 800, fontSize: 14 }}>Traffic History</div>
+          <div style={{ opacity: 0.62, fontSize: 11 }}>
+            Recent combined uplink RX / TX trend
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: 14, fontSize: 12, fontWeight: 800 }}>
+          <span style={{ color: "#67e87a" }}>RX</span>
+          <span style={{ color: "#78a8ff" }}>TX</span>
+        </div>
+      </div>
+
+      <div style={{ position: "relative" }}>
+        <svg
+          viewBox={`0 0 ${width} ${height}`}
+          preserveAspectRatio="none"
+          style={{
+            width: "100%",
+            height: 250,
+            display: "block",
+            borderRadius: 12,
+            cursor: "crosshair"
+          }}
+          onMouseMove={handleMove}
+          onMouseLeave={() => setHoverIdx(null)}
+        >
+          <defs>
+            <linearGradient id="historyAreaRx" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(103,232,122,0.24)" />
+              <stop offset="100%" stopColor="rgba(103,232,122,0.02)" />
+            </linearGradient>
+            <linearGradient id="historyAreaTx" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(120,168,255,0.24)" />
+              <stop offset="100%" stopColor="rgba(120,168,255,0.02)" />
+            </linearGradient>
+          </defs>
+
+          {[0, 0.25, 0.5, 0.75, 1].map((r, i) => {
+            const y = height - padB - ((height - padT - padB) * r);
+            return (
+              <line
+                key={i}
+                x1={padL}
+                y1={y}
+                x2={width - padR}
+                y2={y}
+                stroke="rgba(255,255,255,0.07)"
+                strokeWidth="1"
+              />
+            );
+          })}
+
+          <path d={areaPath(txPts)} fill="url(#historyAreaTx)" />
+          <path d={areaPath(rxPts)} fill="url(#historyAreaRx)" />
+
+          <polyline
+            points={txLine}
+            fill="none"
+            stroke="#78a8ff"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <polyline
+            points={rxLine}
+            fill="none"
+            stroke="#67e87a"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+
+          {hoverRow && hoverX !== null ? (
+            <>
+              <line
+                x1={hoverX}
+                y1={padT}
+                x2={hoverX}
+                y2={height - padB}
+                stroke="rgba(255,255,255,0.35)"
+                strokeDasharray="5 4"
+                strokeWidth="1.4"
+              />
+              <circle cx={txPts[hoverIdx]?.x || 0} cy={txPts[hoverIdx]?.y || 0} r="5.2" fill="#78a8ff" />
+              <circle cx={rxPts[hoverIdx]?.x || 0} cy={rxPts[hoverIdx]?.y || 0} r="5.2" fill="#67e87a" />
+            </>
+          ) : null}
+        </svg>
+
+        {hoverRow ? (
+          <div
+            style={{
+              position: "absolute",
+              right: 12,
+              top: 10,
+              minWidth: 180,
+              padding: 10,
+              borderRadius: 12,
+              border: "1px solid rgba(255,255,255,.10)",
+              background: "rgba(8,12,18,.96)",
+              boxShadow: "0 14px 28px rgba(0,0,0,.28)",
+              pointerEvents: "none"
+            }}
+          >
+            <div style={{ fontSize: 11, opacity: 0.72, marginBottom: 6 }}>
+              {formatTs(hoverRow.ts)}
+            </div>
+            <div style={{ color: "#67e87a", fontWeight: 800, marginBottom: 4 }}>
+              RX: {fmtMbps(hoverRow.rx)} Mbps
+            </div>
+            <div style={{ color: "#78a8ff", fontWeight: 800 }}>
+              TX: {fmtMbps(hoverRow.tx)} Mbps
+            </div>
+          </div>
+        ) : (
+          <div
+            style={{
+              position: "absolute",
+              right: 12,
+              top: 10,
+              padding: "8px 10px",
+              borderRadius: 10,
+              border: "1px solid rgba(255,255,255,.08)",
+              background: "rgba(8,12,18,.72)",
+              fontSize: 11,
+              opacity: 0.72,
+              pointerEvents: "none"
+            }}
+          >
+            Move mouse over chart
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function HistoryPage() {
+  const [range, setRange] = useState("all");
+  const [search, setSearch] = useState("");
+  const [uplink, setUplink] = useState("");
+  const [appliedSearch, setAppliedSearch] = useState("");
+  const [showTable, setShowTable] = useState(false);
+
+  const [state, setState] = useState({
+    loading: true,
+    ok: false,
+    count: 0,
+    items: [],
+    error: "",
+    filters: {
+      range: null,
+      q: "",
+      uplink: ""
+    }
+  });
+
+  useEffect(() => {
+    let dead = false;
+
+    async function load() {
+      try {
+        const url = buildHistoryUrl(range, appliedSearch, uplink);
+        const res = await fetch(url, {
+          headers: { Accept: "application/json" },
+          cache: "no-store"
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        if (!dead) {
+          setState({
+            loading: false,
+            ok: !!data?.ok,
+            count: Number(data?.count || 0),
+            items: Array.isArray(data?.items) ? data.items : [],
+            error: "",
+            filters: {
+              range: data?.filters?.range ?? null,
+              q: data?.filters?.q ?? "",
+              uplink: data?.filters?.uplink ?? ""
+            }
+          });
+        }
+      } catch (err) {
+        if (!dead) {
+          setState({
+            loading: false,
+            ok: false,
+            count: 0,
+            items: [],
+            error: err?.message || "Failed to load history",
+            filters: { range: null, q: "", uplink: "" }
+          });
+        }
+      }
+    }
+
+    load();
+    const t = setInterval(load, 10000);
+    return () => {
+      dead = true;
+      clearInterval(t);
+    };
+  }, [range, appliedSearch, uplink]);
+
+  function applySearch() {
+    const q = search.trim();
+    setAppliedSearch(q);
+
+    if (q) {
+      setUplink("");
+    }
+  }
+
+  const latest = useMemo(() => {
+    return state.items.length ? state.items[state.items.length - 1] : null;
+  }, [state.items]);
+
+  const effectiveUplinkOptions = useMemo(() => {
+    const seen = new Set();
+    const out = [];
+
+    for (const opt of STATIC_UPLINK_OPTIONS) {
+      if (!seen.has(opt.value)) {
+        seen.add(opt.value);
+        out.push(opt);
+      }
+    }
+
+    for (const row of state.items) {
+      const value = String(row?.uplink || "").trim();
+      const label = String(row?.name || row?.uplink || "").trim();
+      if (!value || seen.has(value)) continue;
+      seen.add(value);
+      out.push({ value, label: label || value });
+    }
+
+    return out;
+  }, [state.items]);
+
+  const filterSummary = useMemo(() => {
+    const bits = [];
+    bits.push(`range: ${range}`);
+    if (uplink) bits.push(`uplink: ${uplink}`);
+    if (appliedSearch) bits.push(`search: ${appliedSearch}`);
+    return bits.join(" • ");
+  }, [range, uplink, appliedSearch]);
+
+  return (
+    <div style={{ padding: 12 }}>
+      <h1 style={{ margin: 0, fontSize: 24 }}>Uplink History</h1>
+      <p style={{ marginTop: 6, opacity: 0.8, fontSize: 13 }}>
+        History of saved uplink samples. Search works on stored history rows only.
+      </p>
+
+      <div
+        style={{
+          display: "flex",
+          gap: 10,
+          flexWrap: "wrap",
+          alignItems: "center",
+          marginTop: 14,
+          marginBottom: 12,
+          padding: 12,
+          borderRadius: 14,
+          border: "1px solid rgba(255,255,255,0.08)",
+          background: "rgba(255,255,255,0.02)"
+        }}
+      >
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {RANGE_OPTIONS.map(opt => (
+            <FilterButton
+              key={opt.key}
+              active={range === opt.key}
+              onClick={() => setRange(opt.key)}
+            >
+              {opt.label}
+            </FilterButton>
+          ))}
+        </div>
+
+        <UplinkPicker
+          value={uplink}
+          options={effectiveUplinkOptions}
+          onChange={setUplink}
+        />
+
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") applySearch();
+          }}
+          placeholder="Search IP / uplink / name / source"
+          style={{
+            width: 230,
+            maxWidth: "100%",
+            padding: "9px 12px",
+            borderRadius: 10,
+            border: "1px solid rgba(255,255,255,0.12)",
+            background: "rgba(255,255,255,0.04)",
+            color: "#fff",
+            outline: "none"
+          }}
+        />
+
+        <button
+          type="button"
+          onClick={applySearch}
+          style={{
+            padding: "9px 12px",
+            borderRadius: 10,
+            border: "1px solid rgba(255,255,255,0.12)",
+            background: "rgba(255,255,255,0.06)",
+            color: "#fff",
+            cursor: "pointer",
+            fontWeight: 700
+          }}
+        >
+          Apply
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setSearch("");
+            setAppliedSearch("");
+            setUplink("");
+          }}
+          style={{
+            padding: "9px 12px",
+            borderRadius: 10,
+            border: "1px solid rgba(255,255,255,0.10)",
+            background: "rgba(255,255,255,0.03)",
+            color: "#fff",
+            cursor: "pointer",
+            fontWeight: 700
+          }}
+        >
+          Clear
+        </button>
+      </div>
+
+      <div
+        style={{
+          marginTop: -2,
+          marginBottom: 10,
+          fontSize: 12,
+          opacity: 0.72
+        }}
+      >
+        Active filters: {filterSummary}
+      </div>
+
+      {state.loading ? (
+        <div style={{ padding: 16 }}>Loading history…</div>
+      ) : state.error ? (
+        <div style={{ color: "#ff8a8a", padding: 16 }}>
+          History fetch failed: {state.error}
+        </div>
+      ) : (
+        <>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
+              gap: 10,
+              marginBottom: 12
+            }}
+          >
+            {[
+              { title: "Status", value: state.ok ? "OK" : "Not ready", color: "#67e87a" },
+              { title: "Rows", value: String(state.count), color: "#fff" },
+              { title: "Latest RX", value: latest ? `${fmtMbps(latest.rxMbps)} Mbps` : "-", color: "#67e87a" },
+              { title: "Latest TX", value: latest ? `${fmtMbps(latest.txMbps)} Mbps` : "-", color: "#78a8ff" },
+              { title: "Range", value: range, color: "#fff" }
+            ].map((card) => (
+              <div
+                key={card.title}
+                style={{
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  borderRadius: 14,
+                  padding: 12,
+                  background: "linear-gradient(180deg, rgba(12,22,36,.86), rgba(8,14,24,.86))"
+                }}
+              >
+                <div style={{ fontSize: 11, opacity: 0.65, marginBottom: 8 }}>{card.title}</div>
+                <div style={{ fontWeight: 900, fontSize: 18, color: card.color }}>{card.value}</div>
+              </div>
+            ))}
+          </div>
+
+          {state.items.length === 0 ? (
+            <div
+              style={{
+                border: "1px solid rgba(255,255,255,0.12)",
+                borderRadius: 14,
+                padding: 18,
+                background: "rgba(255,255,255,0.03)"
+              }}
+            >
+              <div style={{ fontSize: 18, fontWeight: 800, marginBottom: 8 }}>
+                No history found
+              </div>
+              <div style={{ opacity: 0.78, lineHeight: 1.6 }}>
+                No rows matched the current filters.
+              </div>
+            </div>
+          ) : (
+            <>
+              <HistoryChart items={state.items} />
+
+              <div
+                style={{
+                  border: "1px solid rgba(255,255,255,0.10)",
+                  borderRadius: 14,
+                  padding: 12,
+                  marginTop: 10,
+                  marginBottom: 10,
+                  background: "linear-gradient(180deg, rgba(12,22,36,.68), rgba(8,14,24,.68))"
+                }}
+              >
+                <div style={{ opacity: 0.65, marginBottom: 6, fontSize: 12 }}>Latest sample</div>
+                <div style={{ fontWeight: 800 }}>
+                  {latest
+                    ? `${formatTs(latest.ts)} • ${latest.name || latest.uplink || "-"} • RX ${fmtMbps(latest.rxMbps)} Mbps • TX ${fmtMbps(latest.txMbps)} Mbps`
+                    : "-"}
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: 12,
+                  marginBottom: 8
+                }}
+              >
+                <div style={{ opacity: 0.75, fontSize: 13 }}>Detailed rows</div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowTable(v => !v)}
+                  style={{
+                    padding: "8px 12px",
+                    borderRadius: 10,
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    background: "rgba(255,255,255,0.05)",
+                    color: "#fff",
+                    cursor: "pointer",
+                    fontWeight: 700
+                  }}
+                >
+                  {showTable ? "Hide table" : "Show table"}
+                </button>
+              </div>
+
+              {showTable ? (
+                <div
+                  style={{
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    borderRadius: 12,
+                    padding: 12,
+                    overflowX: "auto"
+                  }}
+                >
+                  <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 760 }}>
+                    <thead>
+                      <tr>
+                        <th style={{ textAlign: "left", padding: "8px 6px" }}>Time</th>
+                        <th style={{ textAlign: "left", padding: "8px 6px" }}>RX</th>
+                        <th style={{ textAlign: "left", padding: "8px 6px" }}>TX</th>
+                        <th style={{ textAlign: "left", padding: "8px 6px" }}>Uplink</th>
+                        <th style={{ textAlign: "left", padding: "8px 6px" }}>IP</th>
+                        <th style={{ textAlign: "left", padding: "8px 6px" }}>Name</th>
+                        <th style={{ textAlign: "left", padding: "8px 6px" }}>Source</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[...state.items].slice().reverse().map((row, idx) => (
+                        <tr
+                          key={`${row.ts || "row"}-${idx}`}
+                          style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+                        >
+                          <td style={{ padding: "8px 6px" }}>{formatTs(row.ts)}</td>
+                          <td style={{ padding: "8px 6px", color: "#67e87a", fontWeight: 700 }}>{fmtMbps(row.rxMbps)}</td>
+                          <td style={{ padding: "8px 6px", color: "#78a8ff", fontWeight: 700 }}>{fmtMbps(row.txMbps)}</td>
+                          <td style={{ padding: "8px 6px" }}>{row.uplink || "-"}</td>
+                          <td style={{ padding: "8px 6px" }}>{row.ip || "-"}</td>
+                          <td style={{ padding: "8px 6px" }}>{row.name || "-"}</td>
+                          <td style={{ padding: "8px 6px" }}>{row.source || "-"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : null}
+            </>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\pages\LivePingPage.jsx =====
+import React, { useEffect, useMemo, useRef, useState } from "react";
+
+const API_BASE = import.meta.env?.VITE_API_BASE || "";
+
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+function Sparkline({ points, height = 78 }){
+  const w = 320;
+  const h = height;
+
+  const [hover, setHover] = useState(null);
+
+  const vals = points.filter(v => typeof v === "number" && isFinite(v));
+  const minV = vals.length ? Math.min(...vals) : 0;
+  const maxV = vals.length ? Math.max(...vals) : 100;
+  const span = Math.max(1, (maxV - minV));
+
+  const step = points.length > 1 ? (w / (points.length - 1)) : w;
+
+  const pts = points.map((v,i) => {
+    const x = i * step;
+    const y = (v == null)
+      ? (h - 4)
+      : (h - 4) - (((v - minV) / span) * (h - 14));
+    return { x, y, v };
+  });
+
+  const linePath = (() => {
+    if(pts.length === 0) return "";
+    let d = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
+    for(let i=1;i<pts.length;i++){
+      const p0 = pts[i-1];
+      const p1 = pts[i];
+      const cx = ((p0.x + p1.x) / 2);
+      const cy = ((p0.y + p1.y) / 2);
+      d += ` Q ${p0.x.toFixed(1)} ${p0.y.toFixed(1)} ${cx.toFixed(1)} ${cy.toFixed(1)}`;
+    }
+    const last = pts[pts.length-1];
+    d += ` T ${last.x.toFixed(1)} ${last.y.toFixed(1)}`;
+    return d;
+  })();
+
+  const areaPath = linePath ? `${linePath} L ${w} ${h} L 0 ${h} Z` : "";
+  const gid = useMemo(() => `lpGrad_${Math.random().toString(16).slice(2)}`, []);
+
+  function onMove(e){
+    if(points.length === 0) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const xPx = e.clientX - rect.left;
+    const xSvg = clamp((xPx / rect.width) * w, 0, w);
+    const idx = clamp(Math.round(xSvg / step), 0, points.length - 1);
+    const p = pts[idx];
+
+    setHover({
+      idx,
+      x: p.x,
+      y: p.y,
+      val: (typeof p.v === "number" ? Math.round(p.v) : null)
+    });
+  }
+
+  return (
+    <svg
+      className="lpSpark"
+      viewBox={`0 0 ${w} ${h}`}
+      preserveAspectRatio="none"
+      onMouseMove={onMove}
+      onMouseLeave={() => setHover(null)}
+      style={{
+        width: "100%",
+        height,
+        display: "block"
+      }}
+    >
+      <defs>
+        <linearGradient id={gid} x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stopColor="rgba(140,210,255,.55)" />
+          <stop offset="65%" stopColor="rgba(140,210,255,.10)" />
+          <stop offset="100%" stopColor="rgba(140,210,255,0)" />
+        </linearGradient>
+      </defs>
+
+      {areaPath ? <path d={areaPath} fill={`url(#${gid})`} /> : null}
+      {linePath ? <path d={linePath} fill="none" stroke="rgba(140,210,255,.95)" strokeWidth="2.2" /> : null}
+
+      {hover ? (
+        <g>
+          <line
+            x1={hover.x} x2={hover.x}
+            y1="0" y2={h}
+            stroke="rgba(255,255,255,.22)"
+            strokeDasharray="4 4"
+          />
+          <circle cx={hover.x} cy={hover.y} r="3.6" fill="rgba(140,210,255,.95)" />
+          <circle cx={hover.x} cy={hover.y} r="7" fill="rgba(140,210,255,.18)" />
+
+          {hover.val != null ? (
+            <g transform={`translate(${Math.min(hover.x + 8, w - 66)}, ${Math.max(hover.y - 18, 14)})`}>
+              <rect x="0" y="-12" rx="6" ry="6" width="60" height="18" fill="rgba(0,0,0,.45)" stroke="rgba(255,255,255,.10)" />
+              <text x="8" y="1" fill="rgba(255,255,255,.95)" fontSize="11" fontWeight="800">
+                {hover.val} ms
+              </text>
+            </g>
+          ) : null}
+        </g>
+      ) : null}
+    </svg>
+  );
+}
+
+function pctLoss(points){
+  if(!points.length) return 0;
+  const total = points.length;
+  const lost = points.filter(v => v == null).length;
+  return Math.round((lost / total) * 100);
+}
+
+async function pingOnce(ip){
+  const url = `${API_BASE}/api/ping/once?ip=${encodeURIComponent(ip)}`;
+  const r = await fetch(url, { cache: "no-store" });
+  const j = await r.json();
+  if(!j || !j.ok) throw new Error(j?.error || "Ping failed");
+  return j;
+}
+
+function useInterval(cb, ms){
+  const ref = useRef(cb);
+  useEffect(() => { ref.current = cb; }, [cb]);
+  useEffect(() => {
+    if(ms == null) return;
+    const t = setInterval(() => ref.current(), ms);
+    return () => clearInterval(t);
+  }, [ms]);
+}
+
+function statusTone(up){
+  return up ? "#00f5d4" : "#ff8a80";
+}
+
+function cardBorder(up){
+  return up
+    ? "1px solid rgba(255,255,255,.10)"
+    : "1px solid rgba(255,120,120,.16)";
+}
+
+export default function LivePingPage(){
+  const TARGETS = useMemo(() => ([
+    { ip: "10.0.25.10",    name: "DNS-THGV" },
+    { ip: "192.168.99.1",  name: "GETWAY-THGV" },
+    { ip: "155.15.59.1",   name: "VLAN-CCR1036-12G-4S-THGV" },
+    { ip: "155.15.59.4",   name: "AviatWTM4200-nocomment" },
+    { ip: "112.24.30.1",   name: "VLAN-2-CCR1036-12G-4S-THGV" },
+    { ip: "88.88.88.254",  name: "JetStream managed Switch" },
+  ]), []);
+
+  const WINDOW = 60;
+  const [state, setState] = useState(() => {
+    const obj = {};
+    for(const t of TARGETS){
+      obj[t.ip] = { points: [], last: null, err: null };
+    }
+    return obj;
+  });
+
+  const [running, setRunning] = useState(true);
+
+  useInterval(async () => {
+    if(!running) return;
+
+    for(const t of TARGETS){
+      try{
+        const res = await pingOnce(t.ip);
+        const val = (res.alive && typeof res.timeMs === "number") ? res.timeMs : null;
+
+        setState(prev => {
+          const cur = prev[t.ip] || { points: [], last: null, err: null };
+          const nextPts = [...cur.points, val].slice(-WINDOW);
+          return {
+            ...prev,
+            [t.ip]: { points: nextPts, last: res, err: null }
+          };
+        });
+      } catch(e){
+        setState(prev => {
+          const cur = prev[t.ip] || { points: [], last: null, err: null };
+          const nextPts = [...cur.points, null].slice(-WINDOW);
+          return {
+            ...prev,
+            [t.ip]: { points: nextPts, last: null, err: String(e?.message || e) }
+          };
+        });
+      }
+    }
+  }, 1000);
+
+  return (
+    <div style={{ padding: 20 }}>
+      <div style={{ marginBottom: 18 }}>
+        <div style={{ fontSize: 34, fontWeight: 900, marginBottom: 4 }}>
+          Live Ping
+        </div>
+        <div style={{ opacity: 0.68, fontSize: 14 }}>
+          Real-time latency and packet loss for selected targets
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 12,
+          marginBottom: 18,
+          maxWidth: 1400,
+          flexWrap: "wrap"
+        }}
+      >
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 10,
+            padding: "8px 12px",
+            borderRadius: 999,
+            background: "rgba(255,255,255,.04)",
+            border: "1px solid rgba(255,255,255,.10)"
+          }}
+        >
+          <div
+            style={{
+              width: 9,
+              height: 9,
+              borderRadius: 999,
+              background: running ? "#00f5d4" : "#ffd166",
+              boxShadow: running ? "0 0 10px rgba(0,245,212,.6)" : "0 0 10px rgba(255,209,102,.45)"
+            }}
+          />
+          <div style={{ fontSize: 13, fontWeight: 800 }}>
+            {running ? "LIVE RUNNING" : "PAUSED"}
+          </div>
+        </div>
+
+        <button
+          onClick={() => setRunning(v => !v)}
+          style={{
+            padding: "10px 14px",
+            borderRadius: 12,
+            border: "1px solid rgba(255,255,255,.14)",
+            background: "rgba(255,255,255,.04)",
+            color: "white",
+            cursor: "pointer",
+            fontWeight: 800
+          }}
+        >
+          {running ? "Pause" : "Resume"}
+        </button>
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+          gap: 18,
+          maxWidth: 1400
+        }}
+      >
+        {TARGETS.map(t => {
+          const s = state[t.ip] || { points: [], last: null, err: null };
+          const lastAlive = s.last?.alive === true;
+          const lastMs = (typeof s.last?.timeMs === "number") ? s.last.timeMs : null;
+          const loss = pctLoss(s.points);
+
+          return (
+            <div
+              key={t.ip}
+              style={{
+                position: "relative",
+                overflow: "hidden",
+                borderRadius: 18,
+                padding: 18,
+                background: "linear-gradient(180deg, rgba(12,16,26,.95), rgba(8,11,18,.92))",
+                border: cardBorder(lastAlive),
+                boxShadow: "0 18px 40px rgba(0,0,0,.22)",
+                minHeight: 290
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  pointerEvents: "none",
+                  background: "radial-gradient(circle at top right, rgba(0,255,220,.10), transparent 35%), radial-gradient(circle at bottom left, rgba(90,110,255,.10), transparent 35%)"
+                }}
+              />
+
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ fontSize: 22, fontWeight: 900, marginBottom: 4 }}>
+                    {t.name}
+                  </div>
+                  <div style={{ opacity: 0.7, fontSize: 13 }}>
+                    {t.ip}
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 8,
+                      padding: "7px 10px",
+                      borderRadius: 999,
+                      background: "rgba(255,255,255,.04)",
+                      border: "1px solid rgba(255,255,255,.08)",
+                      fontSize: 12
+                    }}
+                  >
+                    <span style={{ opacity: 0.75 }}>Status</span>
+                    <strong style={{ color: statusTone(lastAlive) }}>
+                      {lastAlive ? "UP" : "DOWN"}
+                    </strong>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 8,
+                      padding: "7px 10px",
+                      borderRadius: 999,
+                      background: "rgba(255,255,255,.04)",
+                      border: "1px solid rgba(255,255,255,.08)",
+                      fontSize: 12
+                    }}
+                  >
+                    <span style={{ opacity: 0.75 }}>Packet Loss</span>
+                    <strong style={{ color: loss > 0 ? "#ffb84d" : "#00f5d4" }}>
+                      {loss}%
+                    </strong>
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "140px 1fr",
+                    gap: 14,
+                    alignItems: "stretch"
+                  }}
+                >
+                  <div>
+                    <div
+                      style={{
+                        padding: "8px 10px",
+                        borderRadius: 12,
+                        background: "rgba(255,255,255,.03)",
+                        border: "1px solid rgba(255,255,255,.06)",
+                        marginBottom: 10
+                      }}
+                    >
+                      <div style={{ opacity: 0.78, fontSize: 12, marginBottom: 4 }}>Latency</div>
+                      <div style={{ fontSize: 18, fontWeight: 900, color: "#8cd2ff" }}>
+                        {lastMs != null ? `${Math.round(lastMs)} ms` : "—"}
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        padding: "8px 10px",
+                        borderRadius: 12,
+                        background: "rgba(255,255,255,.03)",
+                        border: "1px solid rgba(255,255,255,.06)"
+                      }}
+                    >
+                      <div style={{ opacity: 0.78, fontSize: 12, marginBottom: 4 }}>Window</div>
+                      <div style={{ fontSize: 18, fontWeight: 900, color: "#ffffff" }}>
+                        {WINDOW}s
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div
+                      style={{
+                        fontSize: 12,
+                        opacity: 0.74,
+                        marginBottom: 8,
+                        fontWeight: 700
+                      }}
+                    >
+                      Latency Timeline
+                    </div>
+
+                    <div
+                      style={{
+                        borderRadius: 14,
+                        overflow: "hidden",
+                        background: "rgba(255,255,255,.03)",
+                        border: "1px solid rgba(255,255,255,.07)",
+                        padding: 8
+                      }}
+                    >
+                      <Sparkline points={s.points} />
+                    </div>
+
+                    <div
+                      style={{
+                        marginTop: 10,
+                        height: 8,
+                        borderRadius: 999,
+                        overflow: "hidden",
+                        background: "rgba(255,255,255,.05)",
+                        border: "1px solid rgba(255,255,255,.06)"
+                      }}
+                    >
+                      <div
+                        className={
+                          "lpLossFill " +
+                          (loss === 0 ? "ok" : loss <= 10 ? "warn" : "bad")
+                        }
+                        style={{ width: `${loss}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {s.err ? (
+                  <div
+                    style={{
+                      marginTop: 12,
+                      color: "#ff7272",
+                      background: "rgba(255,90,90,.08)",
+                      border: "1px solid rgba(255,90,90,.18)",
+                      borderRadius: 12,
+                      padding: 10,
+                      whiteSpace: "pre-wrap",
+                      fontSize: 12
+                    }}
+                  >
+                    ⚠ {s.err}
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+
+
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\pages\UplinkTrafficPage.jsx =====
+import React, { useEffect, useMemo, useState } from "react";
+
+const API_BASE = "";
+const WINDOW = 24;
+
+const UPLINK_IDS = [
+  "uplink_dragon_club",
+  "uplink_c5c_jabal",
+  "uplink_to_office",
+  "uplink_pharmacy",
+  "uplink_abou_taher",
+  "uplink_fast_web",
+  "uplink_daraj_arid",
+  "uplink_rawda"
+];
+
+function num(v){
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function fmtMbps(v){
+  const n = num(v);
+  if(n >= 1000) return (n / 1000).toFixed(2) + " Gbps";
+  return n.toFixed(2) + " Mbps";
+}
+
+function lineTone(v){
+  const n = num(v);
+  if(n < 20) return "#7dff7a";
+  if(n < 80) return "#ffb347";
+  return "#ff5f6d";
+}
+
+function gaugeColorByRatio(r){
+  if(r < 0.30) return "#7dff7a";
+  if(r < 0.55) return "#b8d84e";
+  if(r < 0.75) return "#ffb347";
+  return "#ff5f6d";
+}
+
+function polar(cx, cy, r, angleDeg){
+  const a = (angleDeg - 90) * Math.PI / 180;
+  return {
+    x: cx + r * Math.cos(a),
+    y: cy + r * Math.sin(a)
+  };
+}
+
+function Sparkline({ values = [], label = "" }){
+  const pts = (Array.isArray(values) ? values : []).map(x => num(x));
+  const len = Math.max(pts.length, 2);
+  const w = 240;
+  const h = 28;
+  const pad = 4;
+  const max = Math.max(1, ...pts, 1);
+
+  const [hover, setHover] = useState(null);
+
+  const coords = Array.from({ length: len }, (_, i) => {
+    const v = num(pts[i] ?? 0);
+    const x = len <= 1 ? pad : pad + (i * (w - pad * 2)) / (len - 1);
+    const y = h - (((v / max) * (h - pad * 2)) + pad);
+    return { x, y, v };
+  });
+
+  function onMove(e){
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const idx = Math.max(0, Math.min(len - 1, Math.round((x / rect.width) * (len - 1))));
+    setHover(idx);
+  }
+
+  const line = coords.map(p => `${p.x},${p.y}`).join(" ");
+  const last = coords[coords.length - 1];
+  const tone = lineTone(last?.v ?? 0);
+
+  return (
+    <div
+      style={{ position:"relative", height:h }}
+      onMouseMove={onMove}
+      onMouseLeave={() => setHover(null)}
+      title={label}
+    >
+      <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" style={{ width:"100%", height:h }}>
+        <line
+          x1="0" y1={h - 2}
+          x2={w} y2={h - 2}
+          stroke="rgba(255,255,255,.06)"
+          strokeWidth="1"
+        />
+        <polyline
+          points={line}
+          fill="none"
+          stroke={tone}
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{ filter:`drop-shadow(0 0 4px ${tone})` }}
+        />
+        <circle cx={last.x} cy={last.y} r="2.1" fill={tone} />
+      </svg>
+
+      {hover !== null ? (
+        <div
+          style={{
+            position:"absolute",
+            right:0,
+            top:-18,
+            fontSize:10,
+            fontWeight:700,
+            padding:"2px 6px",
+            borderRadius:8,
+            background:"rgba(8,10,18,.92)",
+            border:"1px solid rgba(255,255,255,.10)",
+            color:"#fff",
+            whiteSpace:"nowrap"
+          }}
+        >
+          {fmtMbps(coords[hover]?.v ?? 0)}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function SegmentedGauge({ valueMbps, name, totalText }){
+  const total = num(valueMbps);
+  const maxGaugeMbps = 300;
+  const ratio = Math.max(0, Math.min(1, total / maxGaugeMbps));
+
+  const width = 314;
+  const height = 232;
+  const cx = 157;
+  const cy = 176;
+  const rOuter = 116;
+  const rInner = 87;
+
+  const start = -118;
+  const end = 118;
+  const segments = 34;
+  const step = (end - start) / segments;
+  const activeCount = Math.round(segments * ratio);
+
+  const labels = [
+    { text: "0",   angle: -118, r: 132, dx: -3, dy:  6 },
+    { text: "30",  angle: -88,  r: 132, dx: -6, dy: -2 },
+    { text: "60",  angle: -58,  r: 132, dx: -5, dy: -4 },
+    { text: "90",  angle: -28,  r: 134, dx:  0, dy: -5 },
+    { text: "120", angle: 2,    r: 136, dx:  0, dy: -2 },
+    { text: "160", angle: 32,   r: 136, dx:  3, dy: -1 },
+    { text: "200", angle: 62,   r: 136, dx:  4, dy:  0 },
+    { text: "260", angle: 92,   r: 134, dx:  6, dy:  4 },
+    { text: "300", angle: 118,  r: 132, dx:  5, dy:  8 }
+  ];
+
+  const mainColor = gaugeColorByRatio(ratio);
+
+  return (
+    <div style={{ display:"flex", justifyContent:"center" }}>
+      <div style={{ width: 314, position:"relative" }}>
+        <svg viewBox={`0 0 ${width} ${height}`} style={{ width:"100%", height:232, display:"block" }}>
+          {Array.from({ length: segments }, (_, i) => {
+            const a1 = start + (i * step) + 1.4;
+            const a2 = start + ((i + 1) * step) - 1.4;
+
+            const p1 = polar(cx, cy, rOuter, a1);
+            const p2 = polar(cx, cy, rOuter, a2);
+            const p3 = polar(cx, cy, rInner, a2);
+            const p4 = polar(cx, cy, rInner, a1);
+
+            const fill = i < activeCount
+              ? gaugeColorByRatio((i + 1) / segments)
+              : "rgba(66,72,86,.72)";
+
+            return (
+              <path
+                key={i}
+                d={`M ${p1.x} ${p1.y} A ${rOuter} ${rOuter} 0 0 1 ${p2.x} ${p2.y} L ${p3.x} ${p3.y} A ${rInner} ${rInner} 0 0 0 ${p4.x} ${p4.y} Z`}
+                fill={fill}
+                style={{
+                  filter: i < activeCount ? `drop-shadow(0 0 5px ${fill})` : "none",
+                  transition: "fill .25s ease"
+                }}
+              />
+            );
+          })}
+
+          {labels.map((lab, i) => {
+            const p = polar(cx, cy, lab.r, lab.angle);
+            return (
+              <text
+                key={i}
+                x={p.x + lab.dx}
+                y={p.y + lab.dy}
+                fill="rgba(255,255,255,.82)"
+                fontSize="11"
+                fontWeight="800"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                style={{ letterSpacing: ".2px" }}
+              >
+                {lab.text}
+              </text>
+            );
+          })}
+        </svg>
+
+        <div
+          style={{
+            position:"absolute",
+            left:0,
+            right:0,
+            top:128,
+            textAlign:"center",
+            pointerEvents:"none"
+          }}
+        >
+          <div
+            style={{
+              fontSize:12,
+              fontWeight:700,
+              color:mainColor,
+              lineHeight:1.12,
+              maxWidth:136,
+              marginLeft:"auto",
+              marginRight:"auto",
+              textAlign:"center",
+              textWrap:"balance",
+              letterSpacing:".15px", textShadow:`0 0 10px ${mainColor}22`
+            }}
+          >
+            {name}
+          </div>
+        </div>
+
+        <div
+          style={{
+            marginTop:6,
+            textAlign:"center",
+            fontSize:17,
+            fontWeight:700,
+            color:mainColor,
+            letterSpacing:".2px",
+            textShadow:`0 0 10px ${mainColor}22`
+          }}
+          title={totalText}
+        >
+          {totalText}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GaugeCard({ item, hist }){
+  const rx = num(item?.rxMbps);
+  const tx = num(item?.txMbps);
+  const total = rx + tx;
+
+  return (
+    <div
+      style={{
+        position:"relative",
+        overflow:"hidden",
+        borderRadius:22,
+        padding:16,
+        background:"linear-gradient(180deg, rgba(13,17,28,.96), rgba(8,11,18,.92))",
+        border:"1px solid rgba(255,255,255,.08)",
+        boxShadow:"0 18px 40px rgba(0,0,0,.32), inset 0 0 30px rgba(255,255,255,.025)"
+      }}
+    >
+      <div
+        style={{
+          position:"absolute",
+          inset:0,
+          pointerEvents:"none",
+          background:"radial-gradient(circle at top right, rgba(0,255,220,.05), transparent 30%), radial-gradient(circle at bottom left, rgba(95,110,255,.06), transparent 35%)"
+        }}
+      />
+
+      <div style={{ position:"relative", zIndex:1 }}>
+        <SegmentedGauge
+          valueMbps={total}
+          name={item?.name || item?.id || "Uplink"}
+          totalText={`${total.toFixed(2)} Mbps`}
+        />
+
+        <div style={{ marginTop:8 }}>
+          <Sparkline
+            values={hist?.total || []}
+            label={`${item?.name || ""} â€¢ RX ${fmtMbps(rx)} â€¢ TX ${fmtMbps(tx)} â€¢ Total ${fmtMbps(total)}`}
+          />
+        </div>
+
+        <div
+          style={{
+            display:"grid",
+            gridTemplateColumns:"1fr 1fr 1fr",
+            gap:8,
+            marginTop:10
+          }}
+        >
+          <div style={{ fontSize:10, opacity:.74 }}>
+            RX<br /><strong style={{ color:"#7dff7a", fontSize:12 }}>{fmtMbps(rx)}</strong>
+          </div>
+          <div style={{ fontSize:10, opacity:.74, textAlign:"center" }}>
+            TX<br /><strong style={{ color:"#7aa2ff", fontSize:12 }}>{fmtMbps(tx)}</strong>
+          </div>
+          <div style={{ fontSize:10, opacity:.74, textAlign:"right" }}>
+            Port<br /><strong style={{ color:"#fff", fontSize:12 }}>{item?.ifName || "â€”"}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function UplinkTrafficPage(){
+  const [data, setData] = useState([]);
+  const [hist, setHist] = useState({});
+  const [err, setErr] = useState("");
+
+  useEffect(() => {
+    let alive = true;
+
+    async function load(){
+      try{
+        const r = await fetch(`${API_BASE}/api/eth/snapshot`, { cache:"no-store" });
+        const j = await r.json();
+        if(!j?.ok) throw new Error(j?.error || "snapshot failed");
+
+        const arr = (Array.isArray(j?.data) ? j.data : []).filter(x => UPLINK_IDS.includes(String(x?.id || "")));
+
+        if(!alive) return;
+
+        const sorted = [...arr].sort((a,b) => UPLINK_IDS.indexOf(String(a?.id || "")) - UPLINK_IDS.indexOf(String(b?.id || "")));
+
+        setData(sorted);
+        setErr("");
+
+        setHist(prev => {
+          const next = { ...prev };
+          for(const it of sorted){
+            const id = String(it?.id || "");
+            const rx = num(it?.rxMbps);
+            const tx = num(it?.txMbps);
+            if(!next[id]) next[id] = { rx: [], tx: [], total: [] };
+            next[id] = {
+              rx: [...next[id].rx, rx].slice(-WINDOW),
+              tx: [...next[id].tx, tx].slice(-WINDOW),
+              total: [...next[id].total, rx + tx].slice(-WINDOW)
+            };
+          }
+          return next;
+        });
+      } catch(e){
+        if(!alive) return;
+        setErr(String(e?.message || e || "Unknown error"));
+      }
+    }
+
+    load();
+    const t = setInterval(load, 2000);
+    return () => {
+      alive = false;
+      clearInterval(t);
+    };
+  }, []);
+
+  const totalNow = useMemo(() => data.reduce((s,x) => s + num(x?.rxMbps) + num(x?.txMbps), 0), [data]);
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ marginBottom: 14 }}>
+        <div style={{ fontSize: 30, fontWeight: 900, marginBottom: 4 }}>UPLINK Traffic</div>
+        <div style={{ opacity: .68, fontSize: 13 }}>
+          8 core uplinks â€¢ live speed gauges â€¢ total now <strong style={{ color:"#8cd2ff" }}>{fmtMbps(totalNow)}</strong>
+        </div>
+      </div>
+
+      {err ? (
+        <div
+          style={{
+            marginBottom: 12,
+            padding: 10,
+            borderRadius: 12,
+            color:"#ff8a80",
+            background:"rgba(255,90,90,.08)",
+            border:"1px solid rgba(255,90,90,.18)"
+          }}
+        >
+          {err}
+        </div>
+      ) : null}
+
+      <div
+        style={{
+          display:"grid",
+          gridTemplateColumns:"repeat(auto-fit, minmax(320px, 1fr))",
+          gap:16,
+          maxWidth: 1500
+        }}
+      >
+        {data.map((it) => {
+          const id = String(it?.id || "");
+          return (
+            <GaugeCard
+              key={id}
+              item={it}
+              hist={hist[id] || { rx: [], tx: [], total: [] }}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+
+
+===== FILE: C:\apps\tools-isp\frontend\src\workspace\tools\MonitorTool.jsx =====
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { io as ioClient } from "socket.io-client";
+
+const API = window.location.origin.replace(/:\d+$/, ":9090");
+
+function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+function fmtMbps(x){
+  if(x == null || Number.isNaN(Number(x))) return "—";
+  const n = Number(x);
+  if(n >= 1000) return (n/1000).toFixed(2) + " Gbps";
+  return n.toFixed(n >= 100 ? 1 : 2) + " Mbps";
+}
+
+function Spark({ data, height=34 }){
+  const w = 220;
+  const h = height;
+  const pad = 2;
+  const max = Math.max(1, ...data.map(x => Number(x)||0));
+  const pts = data.map((v,i)=>{
+    const x = pad + (i/(Math.max(1,data.length-1))) * (w - pad*2);
+    const y = h - pad - (clamp((Number(v)||0)/max,0,1)) * (h - pad*2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(" ");
+  return (
+    <svg width={w} height={h} className="wsMonSpark" viewBox={`0 0 ${w} ${h}`}>
+      <polyline fill="none" stroke="rgba(120,200,255,.90)" strokeWidth="2" points={pts} />
+    </svg>
+  );
+}
+
+export default function MonitorTool({ win, onChange }) {
+  const [ip, setIp] = useState(win.ip ?? "");
+  const [community, setCommunity] = useState(win.community ?? "");
+  const [ifIndex, setIfIndex] = useState(win.ifIndex ?? "");
+  const [ifName, setIfName] = useState(win.ifName ?? "");
+  const [loadingIfs, setLoadingIfs] = useState(false);
+  const [ifs, setIfs] = useState([]);
+  const [running, setRunning] = useState(!!win.monitorId);
+  const [err, setErr] = useState("");
+
+  const [down, setDown] = useState(null);
+  const [up, setUp] = useState(null);
+  const [histDown, setHistDown] = useState([]);
+  const [histUp, setHistUp] = useState([]);
+
+  const socketRef = useRef(null);
+  const monIdRef = useRef(win.monitorId ?? null);
+
+  // keep window state synced
+  useEffect(() => { onChange?.({ ip }); }, [ip]);
+  useEffect(() => { onChange?.({ community }); }, [community]);
+  useEffect(() => { onChange?.({ ifIndex }); }, [ifIndex]);
+  useEffect(() => { onChange?.({ ifName }); }, [ifName]);
+
+  const canStart = useMemo(() => {
+    return String(ip||"").trim() && String(community||"").trim() && String(ifIndex||"").trim();
+  }, [ip,community,ifIndex]);
+
+  async function loadIfs(){
+    const tip = String(ip||"").trim();
+    const tcom = String(community||"").trim();
+    if(!tip || !tcom){ setErr("Enter IP + Community first"); return; }
+
+    setErr("");
+    setLoadingIfs(true);
+    try{
+      // robust endpoint (snmpwalk)
+      let r = await fetch(API + "/api/interfaces-cli", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ ip: tip, community: tcom })
+      });
+      let j = await r.json();
+      if(!j?.ok || !Array.isArray(j.interfaces)){
+        // fallback to /api/interfaces
+        r = await fetch(API + "/api/interfaces", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ ip: tip, community: tcom })
+        });
+        j = await r.json();
+      }
+
+      const list = (j?.interfaces || j?.rows || j?.data || j?.ifaces || j?.result || j?.monitors || []);
+      const normalized = Array.isArray(j?.interfaces) ? j.interfaces : (Array.isArray(j?.interfaces) ? j.interfaces : (Array.isArray(j?.interfaces) ? j.interfaces : []));
+      const useList = Array.isArray(j?.interfaces) ? j.interfaces : (Array.isArray(j?.interfaces) ? j.interfaces : null);
+
+      const ifList = Array.isArray(j?.interfaces)
+        ? j.interfaces.map(x => ({ ifIndex: x.ifIndex, ifName: x.ifName || x.ifDescr || x.name || String(x.ifIndex) }))
+        : (Array.isArray(j?.interfaces) ? j.interfaces : []);
+
+      // If fallback /api/interfaces returns {interfaces:[{ifIndex,ifName,ifDescr,speed}]}
+      if(ifList.length === 0 && Array.isArray(j?.interfaces)){
+        // already handled
+      }
+
+      let final = ifList;
+      if(final.length === 0 && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+        // try common shape: {interfaces:[...]}
+        if(Array.isArray(j?.interfaces)){
+          final = j.interfaces.map(x => ({ ifIndex: x.ifIndex, ifName: x.ifName || x.ifDescr || x.name || String(x.ifIndex) }));
+        }
+        if(Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+          // ignore
+        }
+      }
+
+      // last fallback if /api/interfaces used
+      if(final.length === 0 && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+        if(Array.isArray(j?.interfaces)) final = j.interfaces;
+      }
+
+      if(final.length === 0 && Array.isArray(j?.interfaces) === false){
+        // /api/interfaces likely returns {ok:true, interfaces:[...]}
+        if(Array.isArray(j?.interfaces)) final = j.interfaces;
+        if(Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+          if(Array.isArray(j?.interfaces)) final = j.interfaces;
+        }
+      }
+
+      // best-effort: if /api/interfaces returns {interfaces:[...]}
+      if(final.length === 0 && Array.isArray(j?.interfaces) === false && Array.isArray(j?.interfaces) === false){
+        if(Array.isArray(j?.interfaces)) final = j.interfaces;
+      }
+
+      // actual shapes:
+      // /api/interfaces-cli => { ok:true, interfaces:[{ifIndex, ifName}] }
+      // /api/interfaces     => { ok:true, interfaces:[{ifIndex, ifName, ifDescr, speed}] }
+      if(final.length === 0 && Array.isArray(j?.interfaces) === false){
+        if(Array.isArray(j?.interfaces)) final = j.interfaces;
+      }
+
+      // handle correct real shapes explicitly
+      if(Array.isArray(j?.interfaces)){
+        final = j.interfaces.map(x => ({ ifIndex: x.ifIndex, ifName: x.ifName || x.ifDescr || x.name || String(x.ifIndex) }));
+      }
+
+      if(final.length === 0){
+        setErr("No interfaces returned");
+        setIfs([]);
+        return;
+      }
+
+      setIfs(final);
+
+      // auto-select current ifIndex or first
+      const current = String(ifIndex||"").trim();
+      const pick = current ? final.find(x => String(x.ifIndex) === current) : final[0];
+      if(pick){
+        setIfIndex(String(pick.ifIndex));
+        setIfName(String(pick.ifName || ("if"+pick.ifIndex)));
+      }
+    }catch(e){
+      setErr(String(e?.message || e));
+    }finally{
+      setLoadingIfs(false);
+    }
+  }
+
+  function ensureSocket(){
+    if(socketRef.current) return socketRef.current;
+    const s = ioClient(API, { transports: ["websocket","polling"] });
+    socketRef.current = s;
+    return s;
+  }
+
+  async function start(){
+    const tip = String(ip||"").trim();
+    const tcom = String(community||"").trim();
+    const tif  = String(ifIndex||"").trim();
+    if(!tip || !tcom || !tif){ setErr("ip + community + ifIndex required"); return; }
+
+    setErr("");
+    setDown(null); setUp(null);
+    setHistDown([]); setHistUp([]);
+
+    // create monitor on backend
+    const r = await fetch(API + "/api/monitors", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ ip: tip, community: tcom, ifIndex: Number(tif), label: tip, intervalMs: 1000 })
+    });
+    const j = await r.json();
+    if(!j?.ok || !j?.id){ setErr(j?.error || "Failed to start monitor"); return; }
+
+    monIdRef.current = j.id;
+    onChange?.({ monitorId: j.id, title: "Monitor — " + tip + (ifName?(" ("+ifName+")"):"") });
+
+    const s = ensureSocket();
+    setRunning(true);
+
+    s.off("monitor:update");
+    s.on("monitor:update", (msg) => {
+      if(!msg || msg.id !== monIdRef.current) return;
+      if(msg.ok === false){
+        setErr(msg.error || "Monitor error");
+        return;
+      }
+      setErr("");
+      const d = Number(msg.down_mbps);
+      const u = Number(msg.up_mbps);
+      setDown(d); setUp(u);
+      setHistDown(prev => [...prev, d].slice(-80));
+      setHistUp(prev => [...prev, u].slice(-80));
+    });
+
+    s.off("monitor:stopped");
+    s.on("monitor:stopped", (msg) => {
+      if(!msg || msg.id !== monIdRef.current) return;
+      monIdRef.current = null;
+      onChange?.({ monitorId: null });
+      setRunning(false);
+    });
+  }
+
+  async function stop(){
+    const id = monIdRef.current;
+    if(!id){
+      setRunning(false);
+      return;
+    }
+    try{
+      await fetch(API + "/api/monitors/" + encodeURIComponent(id), { method:"DELETE" });
+    }catch{}
+    monIdRef.current = null;
+    onChange?.({ monitorId: null });
+    setRunning(false);
+  }
+
+  // cleanup on unmount
+  useEffect(() => {
+    return () => {
+      try{ socketRef.current?.close(); }catch{}
+      socketRef.current = null;
+      // stop backend monitor if still running
+      const id = monIdRef.current;
+      if(id){
+        fetch(API + "/api/monitors/" + encodeURIComponent(id), { method:"DELETE" }).catch(()=>{});
+      }
+      monIdRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div className="wsMonRoot">
+      <div className="wsMonTop">
+        <div className="wsMonField">
+          <div className="wsMonLbl">IP</div>
+          <input className="wsMonIn" value={ip} onChange={(e)=>setIp(e.target.value)} placeholder="192.168.1.1" />
+        </div>
+
+        <div className="wsMonField">
+          <div className="wsMonLbl">Community</div>
+          <input className="wsMonIn" value={community} onChange={(e)=>setCommunity(e.target.value)} placeholder="public" />
+        </div>
+
+        <div className="wsMonField">
+          <div className="wsMonLbl">Interface</div>
+          <select className="wsMonSel" value={String(ifIndex||"")} onChange={(e)=> {
+            const v = e.target.value;
+            setIfIndex(v);
+            const pick = ifs.find(x => String(x.ifIndex) === String(v));
+            setIfName(pick ? String(pick.ifName) : "");
+          }}>
+            {(ifs.length ? ifs : [{ifIndex:"", ifName:"(load interfaces)"}]).map((x,idx)=>(
+              <option key={idx} value={String(x.ifIndex)}>{String(x.ifName)} (#{String(x.ifIndex)})</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="wsMonBtns">
+          <button className="wsMonBtn ghost" onClick={loadIfs} disabled={loadingIfs}>
+            {loadingIfs ? "Loading..." : "Load IFs"}
+          </button>
+
+          {!running ? (
+            <button className="wsMonBtn" onClick={start} disabled={!canStart}>Start</button>
+          ) : (
+            <button className="wsMonBtn danger" onClick={stop}>Stop</button>
+          )}
+        </div>
+      </div>
+
+      {err ? <div className="wsMonErr">⚠ {err}</div> : null}
+
+      <div className="wsMonCards">
+        <div className="wsMonCard">
+          <div className="wsMonCardTop">
+            <div className="wsMonCardTitle">Download</div>
+            <div className="wsMonCardVal">{fmtMbps(down)}</div>
+          </div>
+          <Spark data={histDown} />
+        </div>
+
+        <div className="wsMonCard">
+          <div className="wsMonCardTop">
+            <div className="wsMonCardTitle">Upload</div>
+            <div className="wsMonCardVal">{fmtMbps(up)}</div>
+          </div>
+          <Spark data={histUp} />
+        </div>
+      </div>
+
+      <div className="wsMonFoot">
+        <div className="wsMonHint">
+          Tip: حمّل interfaces، اختار ifIndex، بعدين Start. بيجيك live Mbps.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+

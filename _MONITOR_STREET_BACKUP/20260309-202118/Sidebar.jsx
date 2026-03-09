@@ -9,7 +9,6 @@ const NAV = [
   { id: "combined", label: "Combined Traffic", icon: "◈" },
   { id: "history", label: "History", icon: "◷" },
   { id: "aviatwtm4200", label: "AviatWTM4200", icon: "▣" },
-  { id: "monitorstreet", label: "Monitor Street", icon: "◔" },
   { id: "settings", label: "Settings", icon: "⚙" }
 ];
 
@@ -70,4 +69,3 @@ export default function Sidebar({ active, setActive }) {
     </aside>
   );
 }
-

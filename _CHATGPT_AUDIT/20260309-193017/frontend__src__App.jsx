@@ -8,7 +8,6 @@ import DashboardPage from "./pages/DashboardPage";
 import AppShell from "./layout/AppShell";
 import NeighborsPanel from "./NeighborsPanel";
 import LivePingPage from "./pages/LivePingPage";
-import MonitorStreetPage from "./pages/MonitorStreetPage";
 
 const STORAGE_KEY = "toolsisp_windows_v1";
 
@@ -107,13 +106,9 @@ export default function App() {
         <UplinkTrafficPage />
       ) : active === "history" ? (
         <HistoryPage />
-      ) : active === "monitorstreet" ? (
-        <MonitorStreetPage />
       ) : (
         <DashboardPage windows={windows} setWindows={setWindows} />
       )}
     </AppShell>
   );
 }
-
-

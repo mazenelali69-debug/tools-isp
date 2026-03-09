@@ -1,4 +1,120 @@
-﻿import React, { useMemo, useState, useEffect } from "react";
+﻿===== FILE: frontend\package.json =====
+{
+    "name": "frontend",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite --host 0.0.0.0 --port 5177 --strictPort",
+        "build": "vite build",
+        "lint": "eslint .",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0",
+        "react-rnd": "^10.5.2",
+        "recharts": "^3.7.0",
+        "socket.io-client": "^4.8.3"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.39.1",
+        "@types/react": "^19.2.7",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^5.1.1",
+        "eslint": "^9.39.1",
+        "eslint-plugin-react-hooks": "^7.0.1",
+        "eslint-plugin-react-refresh": "^0.4.24",
+        "globals": "^16.5.0",
+        "vite": "^7.3.1"
+    }
+}
+
+
+
+
+===== FILE: backend\package.json =====
+{
+    "name":  "backend",
+    "version":  "1.0.0",
+    "description":  "",
+    "main": "server.js",
+    "scripts": {
+    "dev": "set PORT=9090 && node server.js",
+    "start": "set PORT=9090 && node server.js",
+                    "test":  "echo \"Error: no test specified\" \u0026\u0026 exit 1"
+                },
+    "keywords":  [
+
+                 ],
+    "author":  "",
+    "license":  "ISC",
+    "type":  "commonjs",
+    "dependencies":  {
+                         "cors":  "^2.8.6",
+                         "dotenv":  "^17.3.1",
+                         "express":  "^5.2.1",
+                         "net-snmp":  "^3.26.1",
+                         "socket.io":  "^4.8.3",
+                         "uuid":  "^13.0.0"
+                     }
+}
+
+
+
+
+
+===== FILE: frontend\vite.config.js =====
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:9090',
+        changeOrigin: true,
+      },
+    },
+  },
+})
+
+
+
+===== FILE: frontend\src\main.jsx =====
+import './theme.css';
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+/* UI-PRO-CLASS-START */
+try {
+  const root = document.documentElement;
+  root.classList.remove('uiV2');
+  root.classList.add('uiPro');
+} catch (e) {}
+/* UI-PRO-CLASS-END */
+
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+
+
+
+
+
+
+
+
+
+===== FILE: frontend\src\App.jsx =====
+import React, { useMemo, useState, useEffect } from "react";
 import HistoryPage from "./pages/HistoryPage";
 import EthernetTrafficPage from "./pages/EthernetTrafficPage";
 import UplinkTrafficPage from "./pages/UplinkTrafficPage";
@@ -8,7 +124,6 @@ import DashboardPage from "./pages/DashboardPage";
 import AppShell from "./layout/AppShell";
 import NeighborsPanel from "./NeighborsPanel";
 import LivePingPage from "./pages/LivePingPage";
-import MonitorStreetPage from "./pages/MonitorStreetPage";
 
 const STORAGE_KEY = "toolsisp_windows_v1";
 
@@ -107,13 +222,13 @@ export default function App() {
         <UplinkTrafficPage />
       ) : active === "history" ? (
         <HistoryPage />
-      ) : active === "monitorstreet" ? (
-        <MonitorStreetPage />
       ) : (
         <DashboardPage windows={windows} setWindows={setWindows} />
       )}
     </AppShell>
   );
 }
+
+
 
 
