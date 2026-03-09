@@ -9,7 +9,6 @@ import AppShell from "./layout/AppShell";
 import NeighborsPanel from "./NeighborsPanel";
 import LivePingPage from "./pages/LivePingPage";
 import MonitorStreetPage from "./pages/MonitorStreetPage";
-import NetworkMapPage from "./pages/NetworkMapPage";
 
 const STORAGE_KEY = "toolsisp_windows_v1";
 
@@ -118,7 +117,6 @@ export default function App() {
     </AppShell>
   );
 }
-
 
 
 

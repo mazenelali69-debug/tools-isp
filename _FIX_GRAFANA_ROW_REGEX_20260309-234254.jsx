@@ -281,12 +281,10 @@ const SERVICE_PING_TARGETS = [
   { id: "instagram", name: "Instagram", host: "instagram.com" },
   { id: "tiktok",    name: "TikTok",    host: "tiktok.com" },
   { id: "yahoo",     name: "Yahoo",     host: "yahoo.com" },
-  { id: "speedtest",   name: "Speedtest",   host: "speedtest.net" },
+  { id: "netflix",   name: "Netflix",   host: "netflix.com" },
   { id: "google",    name: "Google",    host: "google.com" },
   { id: "cnn",       name: "CNN",       host: "cnn.com" }
 ];
-
-const SERVICE_WINDOW = 24;
 
 function pingTone(ms, alive) {
   if (!alive) return "critical";
@@ -294,10 +292,10 @@ function pingTone(ms, alive) {
   if (n >= 220) return "critical";
   if (n >= 120) return "high";
   if (n >= 60) return "warn";
-  return "healthy";
+  return "good";
 }
 
-function fmtPingMs(ms, alive, loss = 0) {
+function fmtPingMs(ms, alive, loss) {
   if (!alive && loss >= 100) return "timeout";
   if (!alive) return "down";
   const n = num(ms);
@@ -305,233 +303,67 @@ function fmtPingMs(ms, alive, loss = 0) {
   return `${Math.round(n)} ms`;
 }
 
-function pingLineTone(v) {
-  const n = num(v);
-  if (n < 60) return "#7dff7a";
-  if (n < 120) return "#ffb347";
-  return "#ff5f6d";
-}
+function buildPingGauge(ms, alive, maxValue = 260) {
+  const value = alive ? Math.max(0, Math.min(maxValue, num(ms))) : maxValue;
+  const startDeg = -205;
+  const endDeg = 25;
+  const span = endDeg - startDeg;
 
-function pingGaugeColorByRatio(r) {
-  if (r < 0.30) return "#7dff7a";
-  if (r < 0.55) return "#b8d84e";
-  if (r < 0.75) return "#ffb347";
-  return "#ff5f6d";
-}
+  const segments = 28;
+  const activeCount = Math.round((value / maxValue) * segments);
 
-function polarPing(cx, cy, r, angleDeg) {
-  const a = (angleDeg - 90) * Math.PI / 180;
-  return {
-    x: cx + r * Math.cos(a),
-    y: cy + r * Math.sin(a)
-  };
-}
+  const r = 86;
+  const cx = 120;
+  const cy = 118;
 
-function PingSparkline({ values = [], label = "" }) {
-  const pts = (Array.isArray(values) ? values : []).map(x => num(x));
-  const len = Math.max(pts.length, 2);
-  const w = 240;
-  const h = 28;
-  const pad = 4;
-  const maxValue = Math.max(1, ...pts, 1);
+  const items = [];
 
-  const [hover, setHover] = useState(null);
+  for (let i = 0; i < segments; i++) {
+    const fromDeg = startDeg + (span * i / segments);
+    const toDeg = startDeg + (span * (i + 0.58) / segments);
 
-  const coords = Array.from({ length: len }, (_, i) => {
-    const v = num(pts[i] ?? 0);
-    const x = len <= 1 ? pad : pad + (i * (w - pad * 2)) / (len - 1);
-    const y = h - (((v / maxValue) * (h - pad * 2)) + pad);
-    return { x, y, v };
-  });
+    const a1 = (fromDeg - 90) * Math.PI / 180;
+    const a2 = (toDeg - 90) * Math.PI / 180;
 
-  function onMove(e) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const idx = Math.max(0, Math.min(len - 1, Math.round((x / rect.width) * (len - 1))));
-    setHover(idx);
+    const x1 = cx + Math.cos(a1) * r;
+    const y1 = cy + Math.sin(a1) * r;
+    const x2 = cx + Math.cos(a2) * r;
+    const y2 = cy + Math.sin(a2) * r;
+
+    let color = "#72ff7d";
+    if (!alive) color = "#ff7995";
+    else if (i / segments < 0.55) color = "#72ff7d";
+    else if (i / segments < 0.78) color = "#caff59";
+    else color = "#ffbe4b";
+
+    items.push({
+      d: `M ${x1.toFixed(2)} ${y1.toFixed(2)} L ${x2.toFixed(2)} ${y2.toFixed(2)}`,
+      active: i < activeCount,
+      color,
+      i
+    });
   }
 
-  const line = coords.map(p => `${p.x},${p.y}`).join(" ");
-  const last = coords[coords.length - 1];
-  const tone = pingLineTone(last?.v ?? 0);
+  const ticks = [
+    { label: "30",  deg: -162 },
+    { label: "60",  deg: -129 },
+    { label: "90",  deg: -94 },
+    { label: "120", deg: -57 },
+    { label: "160", deg: -20 },
+    { label: "200", deg: 22 },
+    { label: "260", deg: 62 }
+  ].map((t, idx) => {
+    const tr = 108;
+    const a = (t.deg - 90) * Math.PI / 180;
+    return {
+      key: idx,
+      x: 120 + Math.cos(a) * tr,
+      y: 118 + Math.sin(a) * tr,
+      label: t.label
+    };
+  });
 
-  return (
-    <div
-      style={{ position: "relative", height: h }}
-      onMouseMove={onMove}
-      onMouseLeave={() => setHover(null)}
-      title={label}
-    >
-      <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" style={{ width: "100%", height: h }}>
-        <line
-          x1="0" y1={h - 2}
-          x2={w} y2={h - 2}
-          stroke="rgba(255,255,255,.06)"
-          strokeWidth="1"
-        />
-        <polyline
-          points={line}
-          fill="none"
-          stroke={tone}
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          style={{ filter: `drop-shadow(0 0 4px ${tone})` }}
-        />
-        <circle cx={last.x} cy={last.y} r="2.1" fill={tone} />
-      </svg>
-
-      {hover !== null ? (
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            top: -18,
-            fontSize: 10,
-            fontWeight: 700,
-            padding: "2px 6px",
-            borderRadius: 8,
-            background: "rgba(8,10,18,.92)",
-            border: "1px solid rgba(255,255,255,.10)",
-            color: "#fff",
-            whiteSpace: "nowrap"
-          }}
-        >
-          {Math.round(coords[hover]?.v ?? 0)} ms
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-function PingSegmentedGauge({ valueMs, name, totalText }) {
-  const total = num(valueMs);
-  const maxGaugeMs = 260;
-  const ratio = Math.max(0, Math.min(1, total / maxGaugeMs));
-
-  const width = 314;
-  const height = 232;
-  const cx = 157;
-  const cy = 176;
-  const rOuter = 116;
-  const rInner = 87;
-
-  const start = -118;
-  const end = 118;
-  const segments = 34;
-  const step = (end - start) / segments;
-  const activeCount = Math.round(segments * ratio);
-
-  const labels = [
-    { text: "0",   angle: -118, r: 132, dx: -3, dy:  6 },
-    { text: "30",  angle: -88,  r: 132, dx: -6, dy: -2 },
-    { text: "60",  angle: -58,  r: 132, dx: -5, dy: -4 },
-    { text: "90",  angle: -28,  r: 134, dx:  0, dy: -5 },
-    { text: "120", angle: 2,    r: 136, dx:  0, dy: -2 },
-    { text: "160", angle: 32,   r: 136, dx:  3, dy: -1 },
-    { text: "200", angle: 62,   r: 136, dx:  4, dy:  0 },
-    { text: "230", angle: 92,   r: 134, dx:  6, dy:  4 },
-    { text: "260", angle: 118,  r: 132, dx:  5, dy:  8 }
-  ];
-
-  const mainColor = pingGaugeColorByRatio(ratio);
-
-  return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
-      <div style={{ width: 314, position: "relative" }}>
-        <svg viewBox={`0 0 ${width} ${height}`} style={{ width: "100%", height: 232, display: "block" }}>
-          {Array.from({ length: segments }, (_, i) => {
-            const a1 = start + (i * step) + 1.4;
-            const a2 = start + ((i + 1) * step) - 1.4;
-
-            const p1 = polarPing(cx, cy, rOuter, a1);
-            const p2 = polarPing(cx, cy, rOuter, a2);
-            const p3 = polarPing(cx, cy, rInner, a2);
-            const p4 = polarPing(cx, cy, rInner, a1);
-
-            const fill = i < activeCount
-              ? pingGaugeColorByRatio((i + 1) / segments)
-              : "rgba(66,72,86,.72)";
-
-            return (
-              <path
-                key={i}
-                d={`M ${p1.x} ${p1.y} A ${rOuter} ${rOuter} 0 0 1 ${p2.x} ${p2.y} L ${p3.x} ${p3.y} A ${rInner} ${rInner} 0 0 0 ${p4.x} ${p4.y} Z`}
-                fill={fill}
-                style={{
-                  filter: i < activeCount ? `drop-shadow(0 0 5px ${fill})` : "none",
-                  transition: "fill .25s ease"
-                }}
-              />
-            );
-          })}
-
-          {labels.map((lab, i) => {
-            const p = polarPing(cx, cy, lab.r, lab.angle);
-            return (
-              <text
-                key={i}
-                x={p.x + lab.dx}
-                y={p.y + lab.dy}
-                fill="rgba(255,255,255,.82)"
-                fontSize="11"
-                fontWeight="800"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                style={{ letterSpacing: ".2px" }}
-              >
-                {lab.text}
-              </text>
-            );
-          })}
-        </svg>
-
-        <div
-          style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            top: 128,
-            textAlign: "center",
-            pointerEvents: "none"
-          }}
-        >
-          <div
-            style={{
-              fontSize: 12,
-              fontWeight: 700,
-              color: mainColor,
-              lineHeight: 1.12,
-              maxWidth: 136,
-              marginLeft: "auto",
-              marginRight: "auto",
-              textAlign: "center",
-              textWrap: "balance",
-              letterSpacing: ".15px",
-              textShadow: `0 0 10px ${mainColor}22`
-            }}
-          >
-            {name}
-          </div>
-        </div>
-
-        <div
-          style={{
-            marginTop: 6,
-            textAlign: "center",
-            fontSize: 17,
-            fontWeight: 700,
-            color: mainColor,
-            letterSpacing: ".2px",
-            textShadow: `0 0 10px ${mainColor}22`
-          }}
-          title={totalText}
-        >
-          {totalText}
-        </div>
-      </div>
-    </div>
-  );
+  return { segments: items, ticks };
 }
 
 function useServicePingData() {
@@ -543,14 +375,6 @@ function useServicePingData() {
       packetLoss: 0
     }))
   );
-
-  const [hist, setHist] = useState(() => {
-    const out = {};
-    for (const t of SERVICE_PING_TARGETS) {
-      out[t.id] = [];
-    }
-    return out;
-  });
 
   useEffect(() => {
     let dead = false;
@@ -600,15 +424,6 @@ function useServicePingData() {
         const m = next.find(x => x.id === r.id);
         return m ? { ...r, ...m } : r;
       }));
-
-      setHist(prev => {
-        const out = { ...prev };
-        for (const row of next) {
-          const v = row.alive ? num(row.pingMs) : 260;
-          out[row.id] = [...(out[row.id] || []), v].slice(-SERVICE_WINDOW);
-        }
-        return out;
-      });
     }
 
     loadPing();
@@ -620,80 +435,76 @@ function useServicePingData() {
     };
   }, []);
 
-  return { rows, hist };
+  return rows;
 }
 
-function ServicePingGaugeCard({ row, hist }) {
+function ServicePingGaugeCard({ row }) {
   const loss = num(row.packetLoss);
-  const totalText = row.alive ? `${Math.round(num(row.pingMs))} ms` : "timeout";
+  const tone = pingTone(row.pingMs, row.alive);
+  const gauge = useMemo(() => buildPingGauge(row.pingMs, row.alive, 260), [row.pingMs, row.alive]);
 
   return (
-    <div
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        borderRadius: 22,
-        padding: 16,
-        background: "linear-gradient(180deg, rgba(13,17,28,.96), rgba(8,11,18,.92))",
-        border: loss > 0
-          ? "1px solid rgba(255,120,145,.22)"
-          : "1px solid rgba(255,255,255,.08)",
-        boxShadow: loss > 0
-          ? "0 18px 40px rgba(0,0,0,.32), inset 0 0 30px rgba(255,255,255,.025), 0 0 0 1px rgba(255,120,145,.06)"
-          : "0 18px 40px rgba(0,0,0,.32), inset 0 0 30px rgba(255,255,255,.025)"
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          pointerEvents: "none",
-          background: loss > 0
-            ? "radial-gradient(circle at top right, rgba(255,90,120,.08), transparent 30%), radial-gradient(circle at bottom left, rgba(95,110,255,.06), transparent 35%)"
-            : "radial-gradient(circle at top right, rgba(0,255,220,.05), transparent 30%), radial-gradient(circle at bottom left, rgba(95,110,255,.06), transparent 35%)"
-        }}
-      />
+    <div className={`dpg-card is-${tone} ${loss > 0 ? "is-loss" : ""}`}>
+      <div className="dpg-card__bg" />
 
-      <div style={{ position: "relative", zIndex: 1 }}>
-        <PingSegmentedGauge
-          valueMs={row.alive ? num(row.pingMs) : 260}
-          name={row.name}
-          totalText={totalText}
-        />
+      <div className="dpg-gaugeWrap">
+        <svg viewBox="0 0 240 210" className="dpg-gauge" aria-hidden="true">
+          {gauge.ticks.map(t => (
+            <text
+              key={t.key}
+              x={t.x}
+              y={t.y}
+              className="dpg-tick"
+              textAnchor="middle"
+              dominantBaseline="central"
+            >
+              {t.label}
+            </text>
+          ))}
 
-        <div style={{ marginTop: 8 }}>
-          <PingSparkline
-            values={hist || []}
-            label={`${row.name} • ${fmtPingMs(row.pingMs, row.alive, loss)}`}
-          />
+          {gauge.segments.map(seg => (
+            <path
+              key={seg.i}
+              d={seg.d}
+              className={`dpg-seg ${seg.active ? "is-active" : ""}`}
+              style={seg.active ? { stroke: seg.color } : undefined}
+            />
+          ))}
+        </svg>
+
+        <div className="dpg-center">
+          <div className="dpg-name">{row.name}</div>
+          <div className={`dpg-ping ${loss > 0 ? "is-loss" : ""}`}>
+            {fmtPingMs(row.pingMs, row.alive, loss)}
+          </div>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            gap: 8,
-            marginTop: 10
-          }}
-        >
-          <div style={{ fontSize: 10, opacity: .74 }}>
-            Status<br />
-            <strong style={{ color: row.alive ? "#7dff7a" : "#ff8a9f", fontSize: 12 }}>
-              {row.alive ? "UP" : "DOWN"}
-            </strong>
+        <div className="dpg-total">
+          {row.alive ? `${Math.round(num(row.pingMs))} ms` : "timeout"}
+        </div>
+      </div>
+
+      <div className="dpg-neon">
+        <div className="dpg-neon__line" />
+        <div className="dpg-neon__dot" />
+      </div>
+
+      <div className="dpg-meta">
+        <div className="dpg-meta__col">
+          <div className="dpg-meta__label">Status</div>
+          <div className={`dpg-meta__value ${row.alive ? "is-ok" : "is-bad"}`}>
+            {row.alive ? "UP" : "DOWN"}
           </div>
-          <div style={{ fontSize: 10, opacity: .74, textAlign: "center" }}>
-            Loss<br />
-            <strong style={{ color: "#7aa2ff", fontSize: 12 }}>
-              {Math.round(loss)}%
-            </strong>
-          </div>
-          <div style={{ fontSize: 10, opacity: .74, textAlign: "right" }}>
-            Host<br />
-            <strong style={{ color: "#fff", fontSize: 12 }}>
-              {row.host}
-            </strong>
-          </div>
+        </div>
+
+        <div className="dpg-meta__col">
+          <div className="dpg-meta__label">Loss</div>
+          <div className="dpg-meta__value is-mid">{Math.round(loss)}%</div>
+        </div>
+
+        <div className="dpg-meta__col is-right">
+          <div className="dpg-meta__label">Target</div>
+          <div className="dpg-meta__value">Ping</div>
         </div>
       </div>
     </div>
@@ -701,29 +512,20 @@ function ServicePingGaugeCard({ row, hist }) {
 }
 
 function ServicePingSection() {
-  const { rows, hist } = useServicePingData();
+  const rows = useServicePingData();
 
   return (
-    <section style={{ marginTop: 14 }}>
-      <div style={{ marginBottom: 14 }}>
-        <div className="dashx-blockTitle">Service ping gauges</div>
-        <div className="dashx-blockSub">8 public services • same uplink gauge style • live latency</div>
+    <section className="dpg-section">
+      <div className="dpg-section__head">
+        <div>
+          <div className="dashx-blockTitle">Service ping gauges</div>
+          <div className="dashx-blockSub">Live latency for the 8 public services</div>
+        </div>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-          gap: 16,
-          maxWidth: 1500
-        }}
-      >
+      <div className="dpg-grid">
         {rows.map(row => (
-          <ServicePingGaugeCard
-            key={row.id}
-            row={row}
-            hist={hist[row.id] || []}
-          />
+          <ServicePingGaugeCard key={row.id} row={row} />
         ))}
       </div>
     </section>
@@ -866,11 +668,25 @@ export default function DashboardPage() {
       </section>
 
 
-    
-      <ServicePingSection />
-
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
