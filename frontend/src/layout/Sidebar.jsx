@@ -1,14 +1,16 @@
-import React, { useMemo, useState } from "react";
+﻿import React, { useMemo, useState } from "react";
 
 const NAV = [
   { id: "dashboard", label: "Dashboard", icon: "🏠" },
   { id: "neighbors", label: "Neighbors", icon: "🧭" },
-  { id: "liveping", label: "🛰️ Latency LIVE", icon: "??" },
+  { id: "liveping", label: "Latency LIVE", icon: "📶" },
   { id: "ethernet", label: "Bandwidth LIVE", icon: "↔" },
-    { key: "uplink", id: "uplink", label: "UPLINK Traffic", title: "UPLINK Traffic" },
-{ id: "combined", label: "Combined Traffic", icon: "📡" },
+  { id: "uplink", label: "UPLINK Traffic", icon: "📡" },
+  { id: "combined", label: "Combined Traffic", icon: "📊" },
+  { id: "history", label: "History", icon: "🕘" },
   { id: "aviatwtm4200", label: "AviatWTM4200", icon: "📶" },
-{ id: "settings",  label: "Settings",  icon: "⚙️" }];
+  { id: "settings", label: "Settings", icon: "⚙️" }
+];
 
 export default function Sidebar({ active, setActive }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -22,7 +24,12 @@ export default function Sidebar({ active, setActive }) {
           {!collapsed && <span className="sideTitle">tools-isp</span>}
         </div>
 
-        <button className="sideBtn" onClick={() => setCollapsed(v => !v)} title="Toggle">
+        <button
+          className="sideBtn"
+          onClick={() => setCollapsed(v => !v)}
+          title="Toggle"
+          type="button"
+        >
           {collapsed ? "»" : "«"}
         </button>
       </div>
@@ -34,6 +41,7 @@ export default function Sidebar({ active, setActive }) {
             className={"sideItem" + (active === it.id ? " isActive" : "")}
             onClick={() => setActive(it.id)}
             title={it.label}
+            type="button"
           >
             <span className="sideIcon">{it.icon}</span>
             {!collapsed && <span className="sideLabel">{it.label}</span>}
@@ -47,10 +55,3 @@ export default function Sidebar({ active, setActive }) {
     </aside>
   );
 }
-
-
-
-
-
-
-

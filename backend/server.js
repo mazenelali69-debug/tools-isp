@@ -12,10 +12,69 @@ const { v4: uuidv4 } = require("uuid");
 process.on("uncaughtException", (err) => console.error("🔥 UncaughtException:", err));
 process.on("unhandledRejection", (err) => console.error("🔥 UnhandledRejection:", err));
 
+const historyRouter = require("./routes/history");
+const { appendUplinkHistory } = require("./lib/historyStore");
 const app = express();
+let __lastHistoryWriteAt = 0;
+function toFiniteNumber(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+function pickFirstFinite(candidates) {
+  for (const v of candidates) {
+    const n = toFiniteNumber(v);
+    if (n !== null) return n;
+  }
+  return null;
+}
+
+function recordUplinkHistorySample(payload) {
+  try {
+    if (!payload || typeof payload !== "object") return;
+
+    const now = Date.now();
+
+    // anti-spam: at most one write every 10s
+    if (now - __lastHistoryWriteAt < 10000) return;
+
+    const rxMbps = pickFirstFinite([
+      payload.rxMbps,
+      payload.downloadMbps,
+      payload.rx_mbps,
+      payload.download_mbps,
+      payload.rx,
+      payload.download
+    ]);
+
+    const txMbps = pickFirstFinite([
+      payload.txMbps,
+      payload.uploadMbps,
+      payload.tx_mbps,
+      payload.upload_mbps,
+      payload.tx,
+      payload.upload
+    ]);
+
+    if (rxMbps === null && txMbps === null) return;
+
+    appendUplinkHistory({
+      ts: new Date(now).toISOString(),
+      rxMbps: rxMbps ?? 0,
+      txMbps: txMbps ?? 0,
+      source: "live-monitor"
+    });
+
+    __lastHistoryWriteAt = now;
+  } catch (_) {
+    // never break live flow because of history write
+  }
+}
+
+
+app.use("/api/history", historyRouter);
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
-
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: true, credentials: true } });
 
@@ -86,7 +145,6 @@ app.get("/api/ping/once", async (req, res) => {
 /* ETH-API-START */
 const fs = require("fs");
 const path = require("path");
-
 const ETH_CFG_PATH = path.join(__dirname, "ethTargets.json");
 
 // In-memory rate cache: key = ip#ifIndex, value = { rx, tx, t }
@@ -292,6 +350,45 @@ if(prev && rx != null && tx != null){
 }
 
 // GET /api/eth/snapshot  -> returns all 6
+
+function appendSnapshotHistoryFromEthData(rows) {
+  try {
+    const UPLINK_IDS = new Set([
+      "uplink_dragon_club",
+      "uplink_c5c_jabal",
+      "uplink_to_office",
+      "uplink_pharmacy",
+      "uplink_abou_taher",
+      "uplink_fast_web",
+      "uplink_daraj_arid",
+      "uplink_rawda"
+    ]);
+
+    const list = Array.isArray(rows) ? rows : [];
+    const uplinks = list.filter(x => x && x.ok && UPLINK_IDS.has(String(x.id || "")));
+
+    if (!uplinks.length) return;
+
+    const now = Date.now();
+    if (now - __lastHistoryWriteAt < 10000) return;
+
+    for (const item of uplinks) {
+      appendUplinkHistory({
+        ts: new Date(now).toISOString(),
+        rxMbps: Math.round((Number(item.rxMbps) || 0) * 1000) / 1000,
+        txMbps: Math.round((Number(item.txMbps) || 0) * 1000) / 1000,
+        source: "eth-snapshot-uplink",
+        uplink: item.id || null,
+        ip: item.ip || null,
+        name: item.name || null
+      });
+    }
+
+    __lastHistoryWriteAt = now;
+  } catch (_) {
+    // never break snapshot API because of history write
+  }
+}
 app.get("/api/eth/snapshot", async (req, res) => {
   try{
     const raw = fs.readFileSync(ETH_CFG_PATH, "utf8");
@@ -302,6 +399,7 @@ app.get("/api/eth/snapshot", async (req, res) => {
     for(const t of targets){
       out.push(await ethSnapshotOne(t));
     }
+    appendSnapshotHistoryFromEthData(out);
     res.json({ ok:true, data: out });
   } catch(e){
     res.status(500).json({ ok:false, error:String(e?.message||e) });
@@ -801,6 +899,17 @@ app.post("/api/monitors", (req, res) => {
         const downMbps = (din * 8) / dt / 1_000_000;
         const upMbps   = (dout * 8) / dt / 1_000_000;
 
+        recordUplinkHistorySample({
+          ts: now,
+          down_mbps: Math.max(0, Number(downMbps.toFixed(3))),
+          up_mbps: Math.max(0, Number(upMbps.toFixed(3))),
+          id: state.id,
+          ip: state.ip,
+          label: state.label,
+          ifIndex: state.ifIndex,
+          ok: true
+        });
+
         io.emit("monitor:update", {
           id: state.id, ip: state.ip, label: state.label, ifIndex: state.ifIndex, ts: now,
           down_mbps: Math.max(0, Number(downMbps.toFixed(3))),
@@ -1025,6 +1134,18 @@ app.post("/api/monitors-universal",(req,res)=>{
 
           const downMbps = Number((Number(din) * 8) / dt / 1_000_000);
           const upMbps   = Number((Number(dout) * 8) / dt / 1_000_000);
+
+          recordUplinkHistorySample({
+            ts: now,
+            down_mbps: Math.max(0, Number(downMbps.toFixed(3))),
+            up_mbps: Math.max(0, Number(upMbps.toFixed(3))),
+            id: state.id,
+            ip: state.ip,
+            label: state.label,
+            ifIndex: state.ifIndex,
+            ok: true,
+            mode: state.mode
+          });
 
           io.emit("monitor:update",{
             id: state.id,
@@ -2040,3 +2161,11 @@ app.get("/api/aviatwtm4200/live", async (req, res) => {
 });
 
 /* ===== END AVIAT WTM4200 LIVE API ===== */
+
+
+
+
+
+
+
+
