@@ -387,7 +387,7 @@ function PingSparkline({ values = [], label = "" }) {
             position: "absolute",
             right: 0,
             top: -18,
-            fontSize: 9,
+            fontSize: 10,
             fontWeight: 700,
             padding: "2px 6px",
             borderRadius: 8,
@@ -409,12 +409,12 @@ function PingSegmentedGauge({ valueMs, name, totalText }) {
   const maxGaugeMs = 260;
   const ratio = Math.max(0, Math.min(1, total / maxGaugeMs));
 
-  const width = 270;
-  const height = 198;
-  const cx = 135;
-  const cy = 150;
-  const rOuter = 96;
-  const rInner = 72;
+  const width = 314;
+  const height = 232;
+  const cx = 157;
+  const cy = 176;
+  const rOuter = 116;
+  const rInner = 87;
 
   const start = -118;
   const end = 118;
@@ -438,8 +438,8 @@ function PingSegmentedGauge({ valueMs, name, totalText }) {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <div style={{ width: 270, position: "relative" }}>
-        <svg viewBox={`0 0 ${width} ${height}`} style={{ width: "100%", height: 198, display: "block" }}>
+      <div style={{ width: 314, position: "relative" }}>
+        <svg viewBox={`0 0 ${width} ${height}`} style={{ width: "100%", height: 232, display: "block" }}>
           {Array.from({ length: segments }, (_, i) => {
             const a1 = start + (i * step) + 1.4;
             const a2 = start + ((i + 1) * step) - 1.4;
@@ -491,18 +491,18 @@ function PingSegmentedGauge({ valueMs, name, totalText }) {
             position: "absolute",
             left: 0,
             right: 0,
-            top: 108,
+            top: 128,
             textAlign: "center",
             pointerEvents: "none"
           }}
         >
           <div
             style={{
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: 700,
               color: mainColor,
               lineHeight: 1.12,
-              maxWidth: 118,
+              maxWidth: 136,
               marginLeft: "auto",
               marginRight: "auto",
               textAlign: "center",
@@ -519,7 +519,7 @@ function PingSegmentedGauge({ valueMs, name, totalText }) {
           style={{
             marginTop: 6,
             textAlign: "center",
-            fontSize: 15,
+            fontSize: 17,
             fontWeight: 700,
             color: mainColor,
             letterSpacing: ".2px",
@@ -632,8 +632,8 @@ function ServicePingGaugeCard({ row, hist }) {
       style={{
         position: "relative",
         overflow: "hidden",
-        borderRadius: 18,
-        padding: 12,
+        borderRadius: 22,
+        padding: 16,
         background: "linear-gradient(180deg, rgba(13,17,28,.96), rgba(8,11,18,.92))",
         border: loss > 0
           ? "1px solid rgba(255,120,145,.22)"
@@ -661,7 +661,7 @@ function ServicePingGaugeCard({ row, hist }) {
           totalText={totalText}
         />
 
-        <div style={{ marginTop: 4 }}>
+        <div style={{ marginTop: 8 }}>
           <PingSparkline
             values={hist || []}
             label={`${row.name} • ${fmtPingMs(row.pingMs, row.alive, loss)}`}
@@ -672,25 +672,25 @@ function ServicePingGaugeCard({ row, hist }) {
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr 1fr",
-            gap: 6,
-            marginTop: 6
+            gap: 8,
+            marginTop: 10
           }}
         >
-          <div style={{ fontSize: 9, opacity: .74 }}>
+          <div style={{ fontSize: 10, opacity: .74 }}>
             Status<br />
-            <strong style={{ color: row.alive ? "#7dff7a" : "#ff8a9f", fontSize: 11 }}>
+            <strong style={{ color: row.alive ? "#7dff7a" : "#ff8a9f", fontSize: 12 }}>
               {row.alive ? "UP" : "DOWN"}
             </strong>
           </div>
-          <div style={{ fontSize: 9, opacity: .74, textAlign: "center" }}>
+          <div style={{ fontSize: 10, opacity: .74, textAlign: "center" }}>
             Loss<br />
-            <strong style={{ color: "#7aa2ff", fontSize: 11 }}>
+            <strong style={{ color: "#7aa2ff", fontSize: 12 }}>
               {Math.round(loss)}%
             </strong>
           </div>
-          <div style={{ fontSize: 9, opacity: .74, textAlign: "right" }}>
+          <div style={{ fontSize: 10, opacity: .74, textAlign: "right" }}>
             Host<br />
-            <strong style={{ color: "#fff", fontSize: 11 }}>
+            <strong style={{ color: "#fff", fontSize: 12 }}>
               {row.host}
             </strong>
           </div>
@@ -704,12 +704,17 @@ function ServicePingSection() {
   const { rows, hist } = useServicePingData();
 
   return (
-    <section style={{ marginTop: 6 }}>
-<div
+    <section style={{ marginTop: 14 }}>
+      <div style={{ marginBottom: 14 }}>
+        <div className="dashx-blockTitle">Service ping gauges</div>
+        <div className="dashx-blockSub">8 public services • same uplink gauge style • live latency</div>
+      </div>
+
+      <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-          gap: 12,
+          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          gap: 16,
           maxWidth: 1500
         }}
       >
@@ -799,7 +804,22 @@ export default function DashboardPage() {
 
   return (
     <div className="dashx-page">
-{error ? <div className="dashx-errorBox">{error}</div> : null}
+      <section className="dashx-hero">
+        <div>
+          <div className="dashx-hero__eyebrow">Operations overview</div>
+          <div className="dashx-hero__title">Network Command Dashboard</div>
+          <div className="dashx-hero__sub">
+            Clean live overview for uplink pressure, top busy links, and recent traffic trend.
+          </div>
+        </div>
+
+        <div className={"dashx-hero__status is-" + pressure}>
+          <div className="dashx-hero__statusLabel">Network pressure</div>
+          <div className="dashx-hero__statusValue">{statusLabel(pressure)}</div>
+        </div>
+      </section>
+
+      {error ? <div className="dashx-errorBox">{error}</div> : null}
 
       <section className="dashx-metrics">
         <MetricCard title="Total traffic now" value={fmtMbps(totals.total)} sub="Combined RX + TX" tone={pressure} />
@@ -809,7 +829,14 @@ export default function DashboardPage() {
       </section>
 
             <section className="dashx-midFull" style={{ gridTemplateColumns: "1fr" }}>
-<div className="dashx-midFull__topbusy dashx-panel" style={{ width: "100%" }}>
+        <div className="dashx-midFull__health dashx-panel">
+          <div className="dashx-blockTitle">Health distribution</div>
+          <div className="dashx-blockSub">Current uplink state by live pressure</div>
+
+          
+        </div>
+
+        <div className="dashx-midFull__topbusy dashx-panel" style={{ width: "100%" }}>
           <div className="dashx-blockTitle">Top busy uplinks</div>
           <div className="dashx-blockSub">Ranked by live combined load</div>
 
