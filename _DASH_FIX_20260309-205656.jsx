@@ -113,7 +113,7 @@ function TrendChart({ items }) {
     if (!points.length) return "";
     const first = points[0];
     const last = points[points.length - 1];
-    const line = points.map(p => `${p.x},${p.y}`).join(" L ");
+    const line = points.map(p => $"{p.x},{p.y}").join(" L ");
     return `M ${first.x} ${height - padB} L ${line} L ${last.x} ${height - padB} Z`;
   }
 
