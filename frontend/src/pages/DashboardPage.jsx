@@ -1,78 +1,357 @@
-﻿import React from "react";
-import Workspace from "../workspace/Workspace";
-import LegacyApp from "../App.legacy";
-import PingStatusBoxes from "../components/PingStatusBoxes";
-import InternetHealthBox from "../components/InternetHealthBox";
-import InternetFeedbackBox from "../components/InternetFeedbackBox";
+﻿import React, { useEffect, useMemo, useState } from "react";
 
-export default function DashboardPage({ windows, setWindows }){
+function num(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function fmtMbps(v) {
+  const n = num(v);
+  if (n >= 1000) return (n / 1000).toFixed(2) + " Gbps";
+  return n.toFixed(2) + " Mbps";
+}
+
+function getPressureStatus(total) {
+  const n = num(total);
+  if (n >= 700) return "critical";
+  if (n >= 350) return "high";
+  if (n >= 120) return "warn";
+  return "healthy";
+}
+
+function statusLabel(status) {
+  if (status === "critical") return "Critical";
+  if (status === "high") return "High";
+  if (status === "warn") return "Warning";
+  return "Healthy";
+}
+
+function MetricCard({ title, value, sub, tone = "neutral" }) {
   return (
-    <div style={{ padding: 20 }}>
-      <div style={{ marginBottom: 18 }}>
-        <div style={{ fontSize: 34, fontWeight: 900, marginBottom: 4 }}>
-          Dashboard
+    <div className={"ti-metric2 is-" + tone}>
+      <div className="ti-metric2__title">{title}</div>
+      <div className="ti-metric2__value">{value}</div>
+      <div className="ti-metric2__sub">{sub}</div>
+    </div>
+  );
+}
+
+function PressureList({ rows }) {
+  const max = Math.max(1, ...rows.map(x => num(x.totalMbps)), 1);
+
+  return (
+    <div className="ti-rankList">
+      {rows.map((row, idx) => {
+        const pct = Math.max(4, Math.min(100, (num(row.totalMbps) / max) * 100));
+        const tone = getPressureStatus(row.totalMbps);
+
+        return (
+          <div key={row.id} className="ti-rankRow">
+            <div className="ti-rankRow__top">
+              <div className="ti-rankRow__left">
+                <div className={"ti-rankDot is-" + tone} />
+                <div className="ti-rankIndex">#{idx + 1}</div>
+                <div className="ti-rankRow__name">{row.name || row.id}</div>
+              </div>
+
+              <div className="ti-rankRow__right">
+                <div className={"ti-miniBadge is-" + tone}>{statusLabel(tone)}</div>
+                <div className="ti-rankRow__value">{fmtMbps(row.totalMbps)}</div>
+              </div>
+            </div>
+
+            <div className="ti-rankRow__bar">
+              <div className={"ti-rankRow__fill is-" + tone} style={{ width: pct + "%" }} />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function TrendChart({ items }) {
+  const grouped = useMemo(() => {
+    const map = new Map();
+    for (const row of items) {
+      const ts = String(row?.ts || "");
+      if (!ts) continue;
+      const rx = num(row?.rxMbps);
+      const tx = num(row?.txMbps);
+      const prev = map.get(ts) || { ts, rx: 0, tx: 0 };
+      prev.rx += rx;
+      prev.tx += tx;
+      map.set(ts, prev);
+    }
+    return Array.from(map.values())
+      .sort((a, b) => new Date(a.ts).getTime() - new Date(b.ts).getTime())
+      .slice(-20);
+  }, [items]);
+
+  const width = 920;
+  const height = 230;
+  const padL = 26;
+  const padR = 18;
+  const padT = 14;
+  const padB = 28;
+
+  const rxVals = grouped.map(x => num(x.rx));
+  const txVals = grouped.map(x => num(x.tx));
+  const maxVal = Math.max(1, ...rxVals, ...txVals, 1);
+
+  function makeCoords(values) {
+    return values.map((v, i) => {
+      const x = values.length <= 1
+        ? padL
+        : padL + (i * (width - padL - padR)) / (values.length - 1);
+      const y = height - padB - ((v / maxVal) * (height - padT - padB));
+      return { x, y, v };
+    });
+  }
+
+  function areaPath(points) {
+    if (!points.length) return "";
+    const first = points[0];
+    const last = points[points.length - 1];
+    const line = points.map(p => `${p.x},${p.y}`).join(" L ");
+    return `M ${first.x} ${height - padB} L ${line} L ${last.x} ${height - padB} Z`;
+  }
+
+  const rxPts = makeCoords(rxVals);
+  const txPts = makeCoords(txVals);
+
+  const rxLine = rxPts.map(p => `${p.x},${p.y}`).join(" ");
+  const txLine = txPts.map(p => `${p.x},${p.y}`).join(" ");
+
+  return (
+    <div className="ti-chart2">
+      <div className="ti-chart2__head">
+        <div>
+          <div className="ti-blockTitle">Traffic history</div>
+          <div className="ti-blockSub">Recent combined uplink RX / TX trend</div>
         </div>
-        <div style={{ opacity: 0.68, fontSize: 14 }}>
-          Legacy workspace inside polished shell
+
+        <div className="ti-chart2__legend">
+          <span className="is-rx">RX</span>
+          <span className="is-tx">TX</span>
         </div>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(420px, 760px) minmax(320px, 1fr)",
-          gap: 14,
-          alignItems: "start",
-          marginBottom: 14
-        }}
-      >
-        <PingStatusBoxes />
-        <InternetHealthBox />
-      </div>
+      <svg viewBox={`0 0 ${width} ${height}`} className="ti-chart2__svg" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="tiAreaRx" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(103,232,122,0.26)" />
+            <stop offset="100%" stopColor="rgba(103,232,122,0.02)" />
+          </linearGradient>
+          <linearGradient id="tiAreaTx" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(120,168,255,0.24)" />
+            <stop offset="100%" stopColor="rgba(120,168,255,0.02)" />
+          </linearGradient>
+        </defs>
 
-      <div style={{ marginBottom: 14 }}>
-        <InternetFeedbackBox />
-      </div>
+        {[0, 0.25, 0.5, 0.75, 1].map((r, i) => {
+          const y = height - padB - ((height - padT - padB) * r);
+          return (
+            <line
+              key={i}
+              x1={padL}
+              y1={y}
+              x2={width - padR}
+              y2={y}
+              stroke="rgba(255,255,255,0.07)"
+              strokeWidth="1"
+            />
+          );
+        })}
 
-      <div
-        style={{
-          position: "relative",
-          overflow: "hidden",
-          borderRadius: 18,
-          padding: 14,
-          background: "linear-gradient(180deg, rgba(12,16,26,.95), rgba(8,11,18,.92))",
-          border: "1px solid rgba(255,255,255,.10)",
-          boxShadow: "0 18px 40px rgba(0,0,0,.22)",
-          minHeight: "0"
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            pointerEvents: "none",
-            background: "radial-gradient(circle at top right, rgba(0,255,220,.08), transparent 35%), radial-gradient(circle at bottom left, rgba(90,110,255,.08), transparent 35%)"
-          }}
+        <path d={areaPath(txPts)} fill="url(#tiAreaTx)" />
+        <path d={areaPath(rxPts)} fill="url(#tiAreaRx)" />
+
+        <polyline
+          points={txLine}
+          fill="none"
+          stroke="#78a8ff"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
 
-        <style>{`
-          .dashboardLegacyHost h2,
-          .dashboardLegacyHost > div > div[style*="margin-bottom: 10"],
-          .dashboardLegacyHost > div > div[style*="grid-template-columns: 1fr 1fr 1fr 1fr"],
-          .dashboardLegacyHost > div > div[style*="margin-top: 10"],
-          .dashboardLegacyHost .dd,
-          .dashboardLegacyHost button[onClick],
-          .dashboardLegacyHost hr {
-            display: none !important;
-          }
-        `}</style>
+        <polyline
+          points={rxLine}
+          fill="none"
+          stroke="#67e87a"
+          strokeWidth="2.3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
 
-        <div className="dashboardLegacyHost" style={{ position: "relative", zIndex: 1 }}>
-          <Workspace windows={windows} setWindows={setWindows}>
-            <LegacyApp />
-          </Workspace>
+        {txPts.length ? (
+          <circle cx={txPts[txPts.length - 1].x} cy={txPts[txPts.length - 1].y} r="3.6" fill="#78a8ff" />
+        ) : null}
+
+        {rxPts.length ? (
+          <circle cx={rxPts[rxPts.length - 1].x} cy={rxPts[rxPts.length - 1].y} r="3.2" fill="#67e87a" />
+        ) : null}
+      </svg>
+    </div>
+  );
+}
+
+export default function DashboardPage() {
+  const [snapshot, setSnapshot] = useState([]);
+  const [history, setHistory] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let dead = false;
+
+    async function load() {
+      try {
+        const [snapRes, histRes] = await Promise.all([
+          fetch("/api/eth/snapshot", { cache: "no-store" }),
+          fetch("/api/history/uplink?range=1h&limit=200", { cache: "no-store" })
+        ]);
+
+        const snapJson = await snapRes.json();
+        const histJson = await histRes.json();
+
+        if (!snapRes.ok || !snapJson?.ok) {
+          throw new Error(snapJson?.error || `Snapshot HTTP ${snapRes.status}`);
+        }
+        if (!histRes.ok || !histJson?.ok) {
+          throw new Error(histJson?.error || `History HTTP ${histRes.status}`);
+        }
+
+        if (!dead) {
+          setSnapshot(Array.isArray(snapJson?.data) ? snapJson.data : []);
+          setHistory(Array.isArray(histJson?.items) ? histJson.items : []);
+          setError("");
+        }
+      } catch (err) {
+        if (!dead) {
+          setError(err?.message || "Dashboard load failed");
+        }
+      }
+    }
+
+    load();
+    const t = setInterval(load, 10000);
+    return () => {
+      dead = true;
+      clearInterval(t);
+    };
+  }, []);
+
+  const uplinks = useMemo(() => {
+    return snapshot.filter(x => String(x?.id || "").startsWith("uplink_"));
+  }, [snapshot]);
+
+  const totals = useMemo(() => {
+    const rx = uplinks.reduce((s, x) => s + num(x?.rxMbps), 0);
+    const tx = uplinks.reduce((s, x) => s + num(x?.txMbps), 0);
+    return { rx, tx, total: rx + tx };
+  }, [uplinks]);
+
+  const pressure = getPressureStatus(totals.total);
+
+  const ranked = useMemo(() => {
+    return [...uplinks]
+      .map(x => ({ ...x, totalMbps: num(x?.rxMbps) + num(x?.txMbps) }))
+      .sort((a, b) => b.totalMbps - a.totalMbps)
+      .slice(0, 6);
+  }, [uplinks]);
+
+  const counts = useMemo(() => {
+    const out = { healthy: 0, warn: 0, high: 0, critical: 0 };
+    for (const row of uplinks) {
+      const total = num(row?.rxMbps) + num(row?.txMbps);
+      out[getPressureStatus(total)] += 1;
+    }
+    return out;
+  }, [uplinks]);
+
+  const latest = ranked[0] || null;
+
+  return (
+    <div className="ti-dash2">
+      <section className="ti-hero2">
+        <div>
+          <div className="ti-hero2__eyebrow">Operations overview</div>
+          <div className="ti-hero2__title">Network Command Dashboard</div>
+          <div className="ti-hero2__sub">
+            Tight premium monitoring layout with live uplink pressure and recent trend visibility.
+          </div>
         </div>
-      </div>
+
+        <div className={"ti-hero2__status is-" + pressure}>
+          <div className="ti-hero2__statusLabel">Network pressure</div>
+          <div className="ti-hero2__statusValue">{statusLabel(pressure)}</div>
+        </div>
+      </section>
+
+      {error ? <div className="ti-errorBox">{error}</div> : null}
+
+      <section className="ti-dash2__metrics">
+        <MetricCard title="Total traffic now" value={fmtMbps(totals.total)} sub="Combined RX + TX" tone={pressure} />
+        <MetricCard title="Total RX" value={fmtMbps(totals.rx)} sub="Live receive load" tone="healthy" />
+        <MetricCard title="Total TX" value={fmtMbps(totals.tx)} sub="Live transmit load" tone="high" />
+        <MetricCard title="Tracked uplinks" value={String(uplinks.length)} sub="Current uplink rows" tone="neutral" />
+      </section>
+
+      <section className="ti-dash2__row">
+        <div className="ti-panel2">
+          <div className="ti-blockTitle">Health distribution</div>
+          <div className="ti-blockSub">Current uplink state by live pressure</div>
+
+          <div className="ti-health2">
+            <div className="ti-health2__item is-healthy">
+              <strong>{counts.healthy}</strong>
+              <span>Healthy</span>
+            </div>
+            <div className="ti-health2__item is-warn">
+              <strong>{counts.warn}</strong>
+              <span>Warning</span>
+            </div>
+            <div className="ti-health2__item is-high">
+              <strong>{counts.high}</strong>
+              <span>High</span>
+            </div>
+            <div className="ti-health2__item is-critical">
+              <strong>{counts.critical}</strong>
+              <span>Critical</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="ti-panel2">
+          <div className="ti-blockTitle">Top busy uplinks</div>
+          <div className="ti-blockSub">Ranked by live combined load</div>
+
+          {ranked.length ? (
+            <PressureList rows={ranked} />
+          ) : (
+            <div className="ti-emptyState">No uplink data available.</div>
+          )}
+        </div>
+      </section>
+
+      <section className="ti-dash2__row ti-dash2__row--bottom">
+        <div className="ti-panel2">
+          <TrendChart items={history} />
+        </div>
+
+        <div className="ti-panel2">
+          <div className="ti-blockTitle">Quick context</div>
+          <div className="ti-blockSub">Stable summary of current state</div>
+
+          <div className="ti-kv2">
+            <div className="ti-kv2__row"><span>Latest history rows</span><strong>{history.length}</strong></div>
+            <div className="ti-kv2__row"><span>Strongest uplink</span><strong>{latest?.name || "-"}</strong></div>
+            <div className="ti-kv2__row"><span>Top pressure now</span><strong>{latest ? fmtMbps(latest.totalMbps) : "-"}</strong></div>
+            <div className="ti-kv2__row"><span>Status tier</span><strong>{statusLabel(pressure)}</strong></div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

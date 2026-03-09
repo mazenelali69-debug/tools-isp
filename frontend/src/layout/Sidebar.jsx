@@ -1,15 +1,15 @@
 ﻿import React, { useMemo, useState } from "react";
 
 const NAV = [
-  { id: "dashboard", label: "Dashboard", icon: "🏠" },
-  { id: "neighbors", label: "Neighbors", icon: "🧭" },
-  { id: "liveping", label: "Latency LIVE", icon: "📶" },
-  { id: "ethernet", label: "Bandwidth LIVE", icon: "↔" },
-  { id: "uplink", label: "UPLINK Traffic", icon: "📡" },
-  { id: "combined", label: "Combined Traffic", icon: "📊" },
-  { id: "history", label: "History", icon: "🕘" },
-  { id: "aviatwtm4200", label: "AviatWTM4200", icon: "📶" },
-  { id: "settings", label: "Settings", icon: "⚙️" }
+  { id: "dashboard", label: "Dashboard", icon: "◫" },
+  { id: "neighbors", label: "Neighbors", icon: "◎" },
+  { id: "liveping", label: "Latency LIVE", icon: "◌" },
+  { id: "ethernet", label: "Bandwidth LIVE", icon: "⇄" },
+  { id: "uplink", label: "UPLINK Traffic", icon: "▲" },
+  { id: "combined", label: "Combined Traffic", icon: "◈" },
+  { id: "history", label: "History", icon: "◷" },
+  { id: "aviatwtm4200", label: "AviatWTM4200", icon: "▣" },
+  { id: "settings", label: "Settings", icon: "⚙" }
 ];
 
 export default function Sidebar({ active, setActive }) {
@@ -17,40 +17,54 @@ export default function Sidebar({ active, setActive }) {
   const items = useMemo(() => NAV, []);
 
   return (
-    <aside className={"side" + (collapsed ? " side--collapsed" : "")}>
-      <div className="sideHead">
-        <div className="sideBrand" title="tools-isp">
-          <span className="sideLogo">🛠️</span>
-          {!collapsed && <span className="sideTitle">tools-isp</span>}
+    <aside className={"ti-side" + (collapsed ? " is-collapsed" : "")}>
+      <div className="ti-side__top">
+        <div className="ti-brand" title="tools-isp">
+          <div className="ti-brand__mark">TI</div>
+          {!collapsed ? (
+            <div className="ti-brand__text">
+              <div className="ti-brand__title">tools-isp</div>
+              <div className="ti-brand__sub">NOC Premium</div>
+            </div>
+          ) : null}
         </div>
 
         <button
-          className="sideBtn"
-          onClick={() => setCollapsed(v => !v)}
-          title="Toggle"
           type="button"
+          className="ti-side__toggle"
+          onClick={() => setCollapsed(v => !v)}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? "»" : "«"}
         </button>
       </div>
 
-      <nav className="sideNav">
-        {items.map(it => (
+      <div className="ti-side__sectionLabel">
+        {!collapsed ? "Navigation" : "•"}
+      </div>
+
+      <nav className="ti-side__nav">
+        {items.map((it) => (
           <button
             key={it.id}
-            className={"sideItem" + (active === it.id ? " isActive" : "")}
+            type="button"
+            className={"ti-side__item" + (active === it.id ? " is-active" : "")}
             onClick={() => setActive(it.id)}
             title={it.label}
-            type="button"
           >
-            <span className="sideIcon">{it.icon}</span>
-            {!collapsed && <span className="sideLabel">{it.label}</span>}
+            <span className="ti-side__icon">{it.icon}</span>
+            {!collapsed ? <span className="ti-side__label">{it.label}</span> : null}
           </button>
         ))}
       </nav>
 
-      <div className="sideFoot">
-        {!collapsed && <div className="sideHint">Layout → Workspace → Polish</div>}
+      <div className="ti-side__foot">
+        {!collapsed ? (
+          <>
+            <div className="ti-side__footTitle">Workspace</div>
+            <div className="ti-side__footText">Stable v2 foundation</div>
+          </>
+        ) : null}
       </div>
     </aside>
   );
