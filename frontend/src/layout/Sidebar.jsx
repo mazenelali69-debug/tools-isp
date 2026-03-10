@@ -2,6 +2,7 @@
 
 const NAV = [
   { id: "dashboard", label: "Dashboard", icon: "◫" },
+  { id: "tplinkjetstream", label: "TP-Link-JETStream", icon: "◉" },
   { id: "neighbors", label: "Neighbors", icon: "◎" },
   { id: "liveping", label: "Latency LIVE", icon: "◌" },
   { id: "ethernet", label: "Bandwidth LIVE", icon: "⇄" },
@@ -58,7 +59,7 @@ export default function Sidebar({ active, setActive }) {
             {!collapsed ? <span className="ti-side__label">{it.label}</span> : null}
           </button>
         ))}
-      </nav>
+</nav>
 
       <div className="ti-side__foot">
         {!collapsed ? (

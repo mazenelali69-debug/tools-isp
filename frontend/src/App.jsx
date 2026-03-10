@@ -10,6 +10,7 @@ import NeighborsPanel from "./NeighborsPanel";
 import LivePingPage from "./pages/LivePingPage";
 import MonitorStreetPage from "./pages/MonitorStreetPage";
 import NetworkMapPage from "./pages/NetworkMapPage";
+import TpLinkJetstreamPage from "./pages/TpLinkJetstreamPage";
 
 const STORAGE_KEY = "toolsisp_windows_v1";
 
@@ -94,6 +95,8 @@ export default function App() {
     <AppShell active={active} setActive={setActive} actions={actions}>
       {active === "dashboard" ? (
         <DashboardPage windows={windows} setWindows={setWindows} />
+      ) : active === "tplinkjetstream" ? (
+        <TpLinkJetstreamPage />
       ) : active === "neighbors" ? (
         <NeighborsPanel />
       ) : active === "liveping" ? (
@@ -118,7 +121,3 @@ export default function App() {
     </AppShell>
   );
 }
-
-
-
-

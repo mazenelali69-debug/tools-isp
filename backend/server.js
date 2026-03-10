@@ -1,4 +1,16 @@
-﻿require("dotenv").config();
+
+const { exec } = require("child_process");
+
+function checkVlan1559(cb){
+  exec("ping -n 1 155.15.59.1", (err,stdout)=>{
+    if(stdout && stdout.includes("TTL=")){
+      cb("ONLINE");
+    }else{
+      cb("DOWN");
+    }
+  });
+}
+require("dotenv").config();
 const netNeighbors = require("net");
 const { spawn } = require("child_process");
 const { execFile } = require("child_process");
@@ -9,8 +21,8 @@ const { Server } = require("socket.io");
 const snmp = require("net-snmp");
 const { v4: uuidv4 } = require("uuid");
 
-process.on("uncaughtException", (err) => console.error("🔥 UncaughtException:", err));
-process.on("unhandledRejection", (err) => console.error("🔥 UnhandledRejection:", err));
+process.on("uncaughtException", (err) => console.error("ðŸ”¥ UncaughtException:", err));
+process.on("unhandledRejection", (err) => console.error("ðŸ”¥ UnhandledRejection:", err));
 
 const historyRouter = require("./routes/history");
 const { appendUplinkHistory } = require("./lib/historyStore");
@@ -1012,7 +1024,7 @@ app.post("/api/debug/walk-ifdescr", async (req, res) => {
 });
 
 //
-// API: Universal interfaces via SNMP CLI (snmpwalk) — works across vendors
+// API: Universal interfaces via SNMP CLI (snmpwalk) â€” works across vendors
 // POST /api/interfaces-cli  { ip, community }
 // returns: { ok:true, count, interfaces:[{ifIndex, ifName}] }
 //
@@ -1503,11 +1515,204 @@ app.get("/api/ping-scan", async (req, res) => {
   }
 });
 /* PING-SCAN-API-END */
-/* NEIGHBORS-ROUTE-END */
+/* NEIGHBORS-ROUTE-END *//* TP-LINK-JETSTREAM-HEALTH-START */
+app.get("/api/tplink-jetstream/health", async (req, res) => {
+  try {
+    const targets = [
+      {
+        ip: "88.88.88.254",
+        community: "public",
+        trafficIdx: "49179",
+        memOid: "1.3.6.1.4.1.11863.6.4.1.2.1.1.2.1",
+        friendlyPort: "ether27"
+      },
+      {
+        ip: "10.88.88.254",
+        community: "public",
+        trafficIdx: "49162",
+        memOid: "1.3.6.1.4.1.11863.6.4.1.2.1.1.2.1",
+        friendlyPort: "ether10"
+      }
+    ];
 
+    const OID_SYSNAME_STD = "1.3.6.1.2.1.1.5.0";
+    const OID_UPTIME_STD  = "1.3.6.1.2.1.1.3.0";
+    const OID_FW_TP       = "1.3.6.1.4.1.11863.6.1.1.6.0";
+    const OID_IFNUMBER    = "1.3.6.1.2.1.2.1.0";
+
+    const toNum = (v) => {
+      if (v === null || v === undefined) return 0;
+      if (typeof v === "number") return Number.isFinite(v) ? v : 0;
+      if (typeof v === "bigint") return Number(v);
+      if (Buffer.isBuffer(v)) {
+        try {
+          let n = 0n;
+          for (const b of v.values()) n = (n << 8n) + BigInt(b);
+          return Number(n);
+        } catch { return 0; }
+      }
+      const n = Number(v);
+      return Number.isFinite(n) ? n : 0;
+    };
+
+    const vbVal = (vb) => {
+      if (!vb) return null;
+      try { if (snmp.isVarbindError(vb)) return null; } catch {}
+      return vb.value;
+    };
+
+    const parsePct = (v) => {
+      const s = String(v ?? "").trim();
+      const m1 = s.match(/(-?\d+(?:\.\d+)?)\s*%/);
+      if (m1) return Number(m1[1]);
+      const m2 = s.match(/(-?\d+(?:\.\d+)?)/);
+      if (m2) return Number(m2[1]);
+      return 0;
+    };
+
+    async function readOne(t) {
+      let session = null;
+      try {
+        const ip = t.ip;
+        const community = t.community;
+        const idx = t.trafficIdx;
+
+        const rxOid   = `1.3.6.1.4.1.11863.6.1.1.11.1.1.${idx}`;
+        const txOid   = `1.3.6.1.4.1.11863.6.1.1.11.1.2.${idx}`;
+        const nameOid = `1.3.6.1.4.1.11863.6.8.1.1.2.2.${idx}`;
+
+        session = snmp.createSession(ip, community, {
+          version: snmp.Version2c,
+          timeout: 4500,
+          retries: 1
+        });
+
+        const basics = await snmpGet(session, [
+          OID_SYSNAME_STD,
+          OID_UPTIME_STD,
+          OID_IFNUMBER,
+          OID_FW_TP,
+          rxOid,
+          txOid,
+          nameOid,
+          t.memOid
+        ]);
+
+        const sysName   = String(vbVal(basics?.[0]) ?? ip);
+        const sysUpTime = toNum(vbVal(basics?.[1]));
+        const ifNumber  = toNum(vbVal(basics?.[2]));
+        const firmware  = String(vbVal(basics?.[3]) ?? "N/A");
+        const rxPct     = parsePct(vbVal(basics?.[4]));
+        const txPct     = parsePct(vbVal(basics?.[5]));
+        const portLabelRaw = String(vbVal(basics?.[6]) ?? "").trim();
+        const portLabel = portLabelRaw || t.friendlyPort || `ether-${idx}`;
+        const memPct    = toNum(vbVal(basics?.[7]));
+
+        const PORT_MBPS = 1000;
+        const rxMbps = Number(((rxPct / 100) * PORT_MBPS).toFixed(2));
+        const txMbps = Number(((txPct / 100) * PORT_MBPS).toFixed(2));
+
+        let portsUp = 0;
+        let portsDown = 0;
+        let portsTotal = ifNumber;
+
+        try {
+          const namesOids = [];
+          for (let i = 1; i <= ifNumber; i++) {
+            namesOids.push(`1.3.6.1.2.1.31.1.1.1.1.${i}`);
+            namesOids.push(`1.3.6.1.2.1.2.2.1.8.${i}`);
+          }
+
+          if (namesOids.length > 0) {
+            const vbs = await snmpGet(session, namesOids);
+            for (let i = 0; i < vbs.length; i += 2) {
+              const ifName = String(vbVal(vbs[i]) ?? "").trim();
+              const oper   = toNum(vbVal(vbs[i + 1]));
+              if (!ifName) continue;
+              if (oper === 1) portsUp++;
+              else portsDown++;
+            }
+          }
+        } catch {
+          portsUp = 0;
+          portsDown = 0;
+        }
+
+        return {
+          ok: true,
+          ip,
+          sysName,
+          model: "TP-Link JetStream",
+          firmware,
+          sysUpTime,
+          cpuPercent: 0,
+          temperatureC: 0,
+          freeMemoryBytes: Math.round((memPct / 100) * 1024 * 1024 * 1024),
+          databaseSizeBytes: 0,
+          memoryPercent: memPct,
+          portsTotal,
+          portsUp,
+          portsDown,
+          traffic: { rxMbps, txMbps },
+          ethPort: {
+            label: portLabel,
+            rxPct,
+            txPct,
+            index: idx
+          }
+        };
+      } catch (e) {
+        return {
+          ok: false,
+          ip: t.ip,
+          error: String(e?.message || e || "SNMP read failed"),
+          model: "TP-Link JetStream",
+          firmware: "N/A",
+          sysUpTime: 0,
+          cpuPercent: 0,
+          temperatureC: 0,
+          freeMemoryBytes: 0,
+          databaseSizeBytes: 0,
+          memoryPercent: 0,
+          portsTotal: 0,
+          portsUp: 0,
+          portsDown: 0,
+          traffic: { rxMbps: 0, txMbps: 0 },
+          ethPort: {
+            label: t.friendlyPort || "ethernet",
+            rxPct: 0,
+            txPct: 0,
+            index: t.trafficIdx
+          }
+        };
+      } finally {
+        try { if (session) session.close(); } catch {}
+      }
+    }
+
+    const switches = [];
+    for (const t of targets) {
+      switches.push(await readOne(t));
+    }
+
+    checkVlan1559((status) => {
+      return res.json({
+        ok: true,
+        vlan1559Status: status,
+        switches: switches.map(s => ({ ...s, vlan1559Status: status }))
+      });
+    });
+  } catch (e) {
+    return res.status(500).json({
+      ok: false,
+      error: String(e?.message || e || "TP-Link JetStream health failed")
+    });
+  }
+});
+/* TP-LINK-JETSTREAM-HEALTH-END */
 
 const PORT = process.env.PORT || 9090;
-server.listen(PORT, "0.0.0.0", () => console.log("✅ tools-isp backend listening on", PORT));
+server.listen(PORT, "0.0.0.0", () => console.log("âœ… tools-isp backend listening on", PORT));
 
 
 
@@ -1582,12 +1787,12 @@ app.get("/api/ping", (req, res) => {
   const ip = (req.query.ip || "").toString().trim();
   if(!ip) return res.status(400).json({ ok:false, error:"Missing ip" });
 
-  // حماية بسيطة ضد injection (بدنا نسمح IP/hostname فقط)
+  // Ø­Ù…Ø§ÙŠØ© Ø¨Ø³ÙŠØ·Ø© Ø¶Ø¯ injection (Ø¨Ø¯Ù†Ø§ Ù†Ø³Ù…Ø­ IP/hostname ÙÙ‚Ø·)
   if(!ip.match(/^[a-zA-Z0-9\.\-:]+$/)) {
     return res.status(400).json({ ok:false, error:"Invalid ip" });
   }
 
-  // ping على Windows: -n 1
+  // ping Ø¹Ù„Ù‰ Windows: -n 1
   const args = ["-n","1","-w","1000", ip]; // 1 ping, timeout 1000ms
   execFile("ping", args, { windowsHide:true }, (err, stdout, stderr) => {
     const out = ((stdout||"") + (stderr||"")).trim();
@@ -2198,7 +2403,7 @@ app.get("/api/aviatwtm4200/live", async (req, res) => {
 app.get("/api/test/whatsapp-alert", async (req, res) => {
   const msg =
     req.query.msg ||
-    ("🚨 tools-isp test alert`nTime: " + new Date().toLocaleString());
+    ("ðŸš¨ tools-isp test alert`nTime: " + new Date().toLocaleString());
 
   const out = await sendWhatsAppAlert(String(msg));
   res.json(out);
@@ -2358,7 +2563,7 @@ async function nocCheckPingForIp(ip, label) {
       st.down = true;
 
       await nocSend(
-        "🚨 DEVICE DOWN`n`n" +
+        "ðŸš¨ DEVICE DOWN`n`n" +
         "Device IP: " + ip + "`n" +
         "Issue: Ping stopped`n" +
         "Name: " + label + "`n" +
@@ -2372,7 +2577,7 @@ async function nocCheckPingForIp(ip, label) {
       st.down = false;
 
       await nocSend(
-        "✅ DEVICE RECOVERED`n`n" +
+        "âœ… DEVICE RECOVERED`n`n" +
         "Device IP: " + ip + "`n" +
         "Issue: Ping restored`n" +
         "Ping: " + Math.round(pingMs) + " ms`n" +
@@ -2387,7 +2592,7 @@ async function nocCheckPingForIp(ip, label) {
       st.highPing = true;
 
       await nocSend(
-        "⚠️ HIGH LATENCY`n`n" +
+        "âš ï¸ HIGH LATENCY`n`n" +
         "Device IP: " + ip + "`n" +
         "Ping: " + Math.round(pingMs) + " ms`n" +
         "Limit: " + NOC_ALERT_CFG.highPingMs + " ms`n" +
@@ -2402,7 +2607,7 @@ async function nocCheckPingForIp(ip, label) {
       st.highPing = false;
 
       await nocSend(
-        "✅ LATENCY NORMAL`n`n" +
+        "âœ… LATENCY NORMAL`n`n" +
         "Device IP: " + ip + "`n" +
         "Ping: " + Math.round(pingMs) + " ms`n" +
         "Name: " + label + "`n" +
@@ -2418,7 +2623,7 @@ async function nocCheckPingForIp(ip, label) {
 
     if (lossPct >= NOC_ALERT_CFG.packetLossAlertPct) {
       await nocSend(
-        "⚠️ PACKET LOSS`n`n" +
+        "âš ï¸ PACKET LOSS`n`n" +
         "Device IP: " + ip + "`n" +
         "Loss: " + lossPct + "%`n" +
         "Window: " + NOC_ALERT_CFG.packetLossWindow + " checks`n" +
@@ -2469,7 +2674,7 @@ async function nocCheckEthRow(row) {
     st.ethDown = true;
 
     await nocSend(
-      "🚨 DEVICE DOWN`n`n" +
+      "ðŸš¨ DEVICE DOWN`n`n" +
       "Device IP: " + ip + "`n" +
       "Issue: Ethernet down`n" +
       "Interface: " + ifName + "`n" +
@@ -2484,7 +2689,7 @@ async function nocCheckEthRow(row) {
     st.ethDown = false;
 
     await nocSend(
-      "✅ ETHERNET RESTORED`n`n" +
+      "âœ… ETHERNET RESTORED`n`n" +
       "Device IP: " + ip + "`n" +
       "Interface: " + ifName + "`n" +
       "Name: " + label + "`n" +
@@ -2501,7 +2706,7 @@ async function nocCheckEthRow(row) {
     st.trafficStopped = true;
 
     await nocSend(
-      "⚠️ TRAFFIC STOPPED`n`n" +
+      "âš ï¸ TRAFFIC STOPPED`n`n" +
       "Device IP: " + ip + "`n" +
       "Interface: " + ifName + "`n" +
       "RX: " + rx.toFixed(2) + " Mbps`n" +
@@ -2518,7 +2723,7 @@ async function nocCheckEthRow(row) {
     st.trafficFailStreak = 0;
 
     await nocSend(
-      "✅ TRAFFIC RESTORED`n`n" +
+      "âœ… TRAFFIC RESTORED`n`n" +
       "Device IP: " + ip + "`n" +
       "Interface: " + ifName + "`n" +
       "RX: " + rx.toFixed(2) + " Mbps`n" +
@@ -2600,3 +2805,12 @@ app.get("/api/test/noc-alerts-run", async (req, res) => {
 // =====================================
 
 
+app.get("/api/vlan1559-status", (req, res) => {
+  checkVlan1559((status) => {
+    res.json({
+      ok: true,
+      ip: "155.15.59.1",
+      vlan1559Status: status
+    });
+  });
+});
