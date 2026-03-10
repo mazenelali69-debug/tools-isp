@@ -476,8 +476,8 @@ function useStreetData(){
     loadTraffic();
     loadPing();
 
-    const t1 = setInterval(loadTraffic, 2000);
-    const t2 = setInterval(loadPing, 2500);
+    const t1 = setInterval(loadTraffic, 3000);
+    const t2 = setInterval(loadPing, 4000);
 
     return () => {
       alive = false;
@@ -548,3 +548,4 @@ export default function MonitorStreetPage(){
     </div>
   );
 }
+

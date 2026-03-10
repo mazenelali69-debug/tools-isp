@@ -270,7 +270,7 @@ export default function CombinedTrafficPage(){
             <div style={{ color: "#ff6b6b", marginBottom: 10 }}>Error: {histErr}</div>
           ) : null}
 
-          <ResponsiveContainer width="100%" height={350}>
+          <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={chartData} margin={{ top: 10, right: 18, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="ctTotalFill" x1="0" y1="0" x2="0" y2="1">
@@ -329,4 +329,5 @@ export default function CombinedTrafficPage(){
     </div>
   );
 }
+
 
