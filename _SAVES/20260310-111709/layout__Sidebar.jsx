@@ -63,14 +63,13 @@ export default function Sidebar({ active, setActive }) {
       <div className="ti-side__foot">
         {!collapsed ? (
           <>
-            <div className="ti-side__footTitle">Powered by Nocomment</div>
-            <div className="ti-side__footText">70411518</div>
+            <div className="ti-side__footTitle">Workspace</div>
+            <div className="ti-side__footText">Stable v2 foundation</div>
           </>
         ) : null}
       </div>
     </aside>
   );
 }
-
 
 

@@ -1,0 +1,682 @@
+﻿diff --git a/frontend/src/index.css b/frontend/src/index.css
+index 0b53605..52abb61 100644
+--- a/frontend/src/index.css
++++ b/frontend/src/index.css
+@@ -5942,3 +5942,143 @@ body{
+    DASH-METRICS-ONE-LINE-END
+    ===================================== */
+ 
++
++/* WELCOME-TOAST-START */
++.dashx-welcomeToast{
++  position: fixed;
++  top: 18px;
++  right: 18px;
++  z-index: 9999;
++  padding: 12px 16px;
++  border-radius: 14px;
++  background: linear-gradient(180deg, rgba(18,28,43,.98), rgba(10,18,29,.98));
++  border: 1px solid rgba(255,255,255,.10);
++  box-shadow: 0 18px 40px rgba(0,0,0,.28);
++  color: #eef6ff;
++  font-size: 14px;
++  font-weight: 900;
++  letter-spacing: .01em;
++  backdrop-filter: blur(8px);
++  animation: dashxWelcomeIn .22s ease-out;
++}
++
++@keyframes dashxWelcomeIn{
++  from{
++    opacity: 0;
++    transform: translateY(-8px);
++  }
++  to{
++    opacity: 1;
++    transform: translateY(0);
++  }
++}
++/* WELCOME-TOAST-END */
++
++
++.dashx-midFull__topbusy{
++  width:100% !important;
++  max-width:none !important;
++}
++
++.dashx-panel{
++  width:100% !important;
++}
++
++.dashx-midFull{
++  width:100% !important;
++}
++
++
++.dashx-page{
++  width:100%;
++  max-width:1600px;
++  margin:0 auto;
++  padding:20px;
++}
++
++.dashx-midFull{
++  display:grid;
++  grid-template-columns:1fr;
++  gap:14px;
++  width:100%;
++}
++
++.dashx-midFull__topbusy{
++  width:100%;
++}
++
++.fwb-list{
++  width:100%;
++}
++
++.fwb-row{
++  width:100%;
++}
++
++.fwb-row__bar{
++  width:100%;
++}
++
++
++
++
++/* ===== PING-DOWN-SPACE ===== */
++.dashx-pings,
++.service-pings,
++.pingSection{
++  margin-top:20vh;
++}
++/* ===== END ===== */
++
++
++
++
++
++/* ===== TOP BUSY BIGGER ROWS ===== */
++
++.fwb-row{
++  padding-top:10px;
++  padding-bottom:10px;
++}
++
++.fwb-row__bar{
++  margin-top:8px;
++}
++
++.fwb-strip{
++  transform:scaleY(1.35);
++  transform-origin:center;
++}
++
++/* ===== END ===== */
++
++
++
++
++
++
++/* ===== TOP BUSY HEAT BAR STYLE ===== */
++
++.pressure-row{
++  width:100%;
++}
++
++.pressure-bar{
++  display:flex;
++  gap:0px !important;
++  width:100%;
++}
++
++.pressure-seg{
++  flex:1;
++  height:12px;
++  margin:0 !important;
++  border-radius:0 !important;
++}
++
++/* smooth gradient */
++.pressure-seg.green  { background:#2ecc71 }
++.pressure-seg.yellow { background:#f1c40f }
++.pressure-seg.orange { background:#e67e22 }
++.pressure-seg.red    { background:#e74c3c }
++
+diff --git a/frontend/src/layout/Sidebar.jsx b/frontend/src/layout/Sidebar.jsx
+index a99571e..3f1fc1e 100644
+--- a/frontend/src/layout/Sidebar.jsx
++++ b/frontend/src/layout/Sidebar.jsx
+@@ -63,8 +63,8 @@ export default function Sidebar({ active, setActive }) {
+       <div className="ti-side__foot">
+         {!collapsed ? (
+           <>
+-            <div className="ti-side__footTitle">Workspace</div>
+-            <div className="ti-side__footText">Stable v2 foundation</div>
++            <div className="ti-side__footTitle">Powered by Nocomment</div>
++            <div className="ti-side__footText">70411518</div>
+           </>
+         ) : null}
+       </div>
+@@ -73,3 +73,4 @@ export default function Sidebar({ active, setActive }) {
+ }
+ 
+ 
++
+diff --git a/frontend/src/pages/DashboardPage.jsx b/frontend/src/pages/DashboardPage.jsx
+index 9e2d33d..a888b7a 100644
+--- a/frontend/src/pages/DashboardPage.jsx
++++ b/frontend/src/pages/DashboardPage.jsx
+@@ -1,4 +1,4 @@
+-∩╗┐import React, { useEffect, useMemo, useState } from "react";
++import React, { useEffect, useMemo, useState } from "react";
+ 
+ function num(v) {
+   const n = Number(v);
+@@ -19,13 +19,6 @@ function getPressureStatus(total) {
+   return "healthy";
+ }
+ 
+-function statusLabel(status) {
+-  if (status === "critical") return "Critical";
+-  if (status === "high") return "High";
+-  if (status === "warn") return "Warning";
+-  return "Healthy";
+-}
+-
+ function MetricCard({ title, value, sub, tone = "neutral" }) {
+   return (
+     <div className={"dashx-metric is-" + tone}>
+@@ -36,241 +29,95 @@ function MetricCard({ title, value, sub, tone = "neutral" }) {
+   );
+ }
+ 
+-
+-function HeatBar({ value, maxValue = 220 }) {
+-  const blocks = 64;
+-  const safe = Math.max(0, num(value));
+-  const ratio = Math.max(0, Math.min(1, safe / maxValue));
+-  const active = Math.max(0, Math.round(blocks * ratio));
+-
+-  return (
+-    <div className="dashx-strip">
+-      {Array.from({ length: blocks }, (_, i) => {
+-        const p = i / Math.max(1, blocks - 1);
+-        let cls = "dashx-strip__cell";
+-
+-        if (i < active) {
+-          if (p < 0.34) cls += " is-green";
+-          else if (p < 0.58) cls += " is-lime";
+-          else if (p < 0.78) cls += " is-amber";
+-          else cls += " is-red";
+-        } else {
+-          cls += " is-off";
+-        }
+-
+-        return <span key={i} className={cls} />;
+-      })}
+-    </div>
+-  );
+-}
+-
+-function StripMeter({ value, maxValue = 220 }) {
+-  const totalBlocks = 72;
+-  const safe = Math.max(0, num(value));
+-  const ratio = Math.max(0, Math.min(1, safe / maxValue));
+-  const activeBlocks = Math.max(0, Math.round(totalBlocks * ratio));
+-
+-  return (
+-    <div className="gbg-strip">
+-      {Array.from({ length: totalBlocks }, (_, i) => {
+-        const p = i / Math.max(1, totalBlocks - 1);
+-        let cls = "gbg-strip__cell";
+-
+-        if (i < activeBlocks) {
+-          if (p < 0.34) cls += " is-green";
+-          else if (p < 0.58) cls += " is-lime";
+-          else if (p < 0.80) cls += " is-amber";
+-          else cls += " is-red";
+-        } else {
+-          cls += " is-off";
+-        }
+-
+-        return <span key={i} className={cls} />;
+-      })}
+-    </div>
+-  );
+-}
+-function FullWidthStrip({ value, maxValue = 220 }) {
+-  const totalBlocks = 84;
+-  const safe = Math.max(0, num(value));
+-  const ratio = Math.max(0, Math.min(1, safe / maxValue));
+-  const activeBlocks = Math.max(0, Math.round(totalBlocks * ratio));
++function TopBusyPanel({ rows }) {
++  const maxValue = Math.max(1, ...rows.map(x => num(x.totalMbps)), 1);
+ 
+   return (
+-    <div className="fwb-strip">
+-      {Array.from({ length: totalBlocks }, (_, i) => {
+-        const p = i / Math.max(1, totalBlocks - 1);
+-        let cls = "fwb-strip__cell";
+-
+-        if (i < activeBlocks) {
+-          if (p < 0.34) cls += " is-green";
+-          else if (p < 0.58) cls += " is-lime";
+-          else if (p < 0.80) cls += " is-amber";
+-          else cls += " is-red";
+-        } else {
+-          cls += " is-off";
+-        }
++    <div
++      className="dashx-panel"
++      style={{
++        width: "100%",
++        minHeight: 360,
++        padding: 14,
++        borderRadius: 18,
++        background: "linear-gradient(180deg, rgba(13,17,28,.96), rgba(8,11,18,.92))",
++        border: "1px solid rgba(255,255,255,.08)",
++        boxShadow: "0 18px 40px rgba(0,0,0,.32), inset 0 0 30px rgba(255,255,255,.02)"
++      }}
++    >
++      <div className="dashx-blockTitle">Top busy uplinks</div>
++      <div className="dashx-blockSub" style={{ marginBottom: 12 }}>
++        Ranked by live combined load
++      </div>
+ 
+-        return <span key={i} className={cls} />;
+-      })}
+-    </div>
+-  );
+-}
+-function PressureList({ rows }) {
+-  const maxValue = Math.max(1, ...rows.map(x => num(x.totalMbps)), 1);
++      <div style={{ display: "grid", gap: 12 }}>
++        {rows.map((row, idx) => {
++          const ratio = Math.max(0, Math.min(1, num(row.totalMbps) / maxValue));
++          const fillWidth = `${(ratio * 100).toFixed(2)}%`;
+ 
+-  return (
+-    <div className="fwb-list">
+-      {rows.map((row, idx) => {
+-        const tone = getPressureStatus(row.totalMbps);
+-
+-        return (
+-          <div key={row.id} className="fwb-row">
+-            <div className="fwb-row__head">
+-              <div className="fwb-row__left">
+-                <span className={"fwb-dot is-" + tone} />
+-                <span className="fwb-rank">#{idx + 1}</span>
+-                <span className="fwb-name">{row.name || row.id}</span>
++          return (
++            <div key={row.id}>
++              <div
++                style={{
++                  display: "grid",
++                  gridTemplateColumns: "auto 1fr auto",
++                  alignItems: "center",
++                  gap: 10,
++                  marginBottom: 8
++                }}
++              >
++                <div style={{ color: "#7dff7a", fontWeight: 900, fontSize: 10 }}>
++                  #{idx + 1}
++                </div>
++
++                <div
++                  style={{
++                    fontWeight: 700,
++                    fontSize: 11,
++                    color: "rgba(255,255,255,.94)",
++                    whiteSpace: "nowrap",
++                    overflow: "hidden",
++                    textOverflow: "ellipsis"
++                  }}
++                  title={row.name || row.id}
++                >
++                  {row.name || row.id}
++                </div>
++
++                <div
++                  style={{
++                    fontWeight: 900,
++                    fontSize: 11,
++                    color: "rgba(255,255,255,.92)"
++                  }}
++                >
++                  {fmtMbps(row.totalMbps)}
++                </div>
+               </div>
+ 
+-              <div className="fwb-row__right">
+-                <span className="fwb-value">{fmtMbps(row.totalMbps)}</span>
++              <div
++                style={{
++                  height: 18,
++                  width: "100%",
++                  borderRadius: 3,
++                  background: "rgba(35,50,82,.75)",
++                  overflow: "hidden",
++                  boxShadow: "inset 0 0 0 1px rgba(255,255,255,.03)"
++                }}
++              >
++                <div
++                  style={{
++                    width: fillWidth,
++                    height: "100%",
++                    background:
++                      "linear-gradient(90deg, #47d96b 0%, #b9da48 52%, #efb14a 78%, #ef6969 100%)"
++                  }}
++                />
+               </div>
+             </div>
+-
+-            <div className="fwb-row__bar">
+-              <FullWidthStrip value={row.totalMbps} maxValue={maxValue} />
+-            </div>
+-          </div>
+-        );
+-      })}
+-    </div>
+-  );
+-}
+-
+-function TrendChart({ items }) {
+-  const grouped = useMemo(() => {
+-    const map = new Map();
+-    for (const row of items) {
+-      const ts = String(row?.ts || "");
+-      if (!ts) continue;
+-      const rx = num(row?.rxMbps);
+-      const tx = num(row?.txMbps);
+-      const prev = map.get(ts) || { ts, rx: 0, tx: 0 };
+-      prev.rx += rx;
+-      prev.tx += tx;
+-      map.set(ts, prev);
+-    }
+-    return Array.from(map.values())
+-      .sort((a, b) => new Date(a.ts).getTime() - new Date(b.ts).getTime())
+-      .slice(-20);
+-  }, [items]);
+-
+-  const width = 920;
+-  const height = 220;
+-  const padL = 26;
+-  const padR = 18;
+-  const padT = 14;
+-  const padB = 28;
+-
+-  const rxVals = grouped.map(x => num(x.rx));
+-  const txVals = grouped.map(x => num(x.tx));
+-  const maxVal = Math.max(1, ...rxVals, ...txVals, 1);
+-
+-  function makeCoords(values) {
+-    return values.map((v, i) => {
+-      const x = values.length <= 1
+-        ? padL
+-        : padL + (i * (width - padL - padR)) / (values.length - 1);
+-      const y = height - padB - ((v / maxVal) * (height - padT - padB));
+-      return { x, y, v };
+-    });
+-  }
+-
+-  function areaPath(points) {
+-    if (!points.length) return "";
+-    const first = points[0];
+-    const last = points[points.length - 1];
+-    const line = points.map(p => `${p.x},${p.y}`).join(" L ");
+-    return `M ${first.x} ${height - padB} L ${line} L ${last.x} ${height - padB} Z`;
+-  }
+-
+-  const rxPts = makeCoords(rxVals);
+-  const txPts = makeCoords(txVals);
+-
+-  const rxLine = rxPts.map(p => `${p.x},${p.y}`).join(" ");
+-  const txLine = txPts.map(p => `${p.x},${p.y}`).join(" ");
+-
+-  return (
+-    <div className="dashx-chart">
+-      <div className="dashx-chart__head">
+-        <div>
+-          <div className="dashx-blockTitle">Traffic history</div>
+-          <div className="dashx-blockSub">Recent combined uplink RX / TX trend</div>
+-        </div>
+-
+-        <div className="dashx-chart__legend">
+-          <span className="is-rx">RX</span>
+-          <span className="is-tx">TX</span>
+-        </div>
+-      </div>
+-
+-      <svg viewBox={`0 0 ${width} ${height}`} className="dashx-chart__svg" preserveAspectRatio="none">
+-        <defs>
+-          <linearGradient id="dashxAreaRx" x1="0" y1="0" x2="0" y2="1">
+-            <stop offset="0%" stopColor="rgba(103,232,122,0.22)" />
+-            <stop offset="100%" stopColor="rgba(103,232,122,0.01)" />
+-          </linearGradient>
+-          <linearGradient id="dashxAreaTx" x1="0" y1="0" x2="0" y2="1">
+-            <stop offset="0%" stopColor="rgba(120,168,255,0.20)" />
+-            <stop offset="100%" stopColor="rgba(120,168,255,0.01)" />
+-          </linearGradient>
+-        </defs>
+-
+-        {[0, 0.25, 0.5, 0.75, 1].map((r, i) => {
+-          const y = height - padB - ((height - padT - padB) * r);
+-          return (
+-            <line
+-              key={i}
+-              x1={padL}
+-              y1={y}
+-              x2={width - padR}
+-              y2={y}
+-              stroke="rgba(255,255,255,0.06)"
+-              strokeWidth="1"
+-            />
+           );
+         })}
+-
+-        <path d={areaPath(txPts)} fill="url(#dashxAreaTx)" />
+-        <path d={areaPath(rxPts)} fill="url(#dashxAreaRx)" />
+-
+-        <polyline
+-          points={txLine}
+-          fill="none"
+-          stroke="#78a8ff"
+-          strokeWidth="2.5"
+-          strokeLinecap="round"
+-          strokeLinejoin="round"
+-        />
+-
+-        <polyline
+-          points={rxLine}
+-          fill="none"
+-          stroke="#67e87a"
+-          strokeWidth="2.3"
+-          strokeLinecap="round"
+-          strokeLinejoin="round"
+-        />
+-
+-        {txPts.length ? (
+-          <circle cx={txPts[txPts.length - 1].x} cy={txPts[txPts.length - 1].y} r="3.5" fill="#78a8ff" />
+-        ) : null}
+-
+-        {rxPts.length ? (
+-          <circle cx={rxPts[rxPts.length - 1].x} cy={rxPts[rxPts.length - 1].y} r="3.2" fill="#67e87a" />
+-        ) : null}
+-      </svg>
++      </div>
+     </div>
+   );
+ }
+@@ -280,28 +127,16 @@ const SERVICE_PING_TARGETS = [
+   { id: "whatsapp",  name: "WhatsApp",  host: "web.whatsapp.com" },
+   { id: "instagram", name: "Instagram", host: "instagram.com" },
+   { id: "tiktok",    name: "TikTok",    host: "tiktok.com" },
+-  { id: "yahoo",     name: "Yahoo",     host: "yahoo.com" },
+-  { id: "speedtest",   name: "Speedtest",   host: "speedtest.net" },
+-  { id: "google",    name: "Google",    host: "google.com" },
+-  { id: "cnn",       name: "CNN",       host: "cnn.com" }
++  { id: "google",    name: "Google",    host: "google.com" }
+ ];
+ 
+ const SERVICE_WINDOW = 24;
+ 
+-function pingTone(ms, alive) {
+-  if (!alive) return "critical";
+-  const n = num(ms);
+-  if (n >= 220) return "critical";
+-  if (n >= 120) return "high";
+-  if (n >= 60) return "warn";
+-  return "healthy";
+-}
+-
+ function fmtPingMs(ms, alive, loss = 0) {
+   if (!alive && loss >= 100) return "timeout";
+   if (!alive) return "down";
+   const n = num(ms);
+-  if (loss > 0) return `${Math.round(n)} ms ΓÇó PL ${Math.round(loss)}%`;
++  if (loss > 0) return `${Math.round(n)} ms ò PL ${Math.round(loss)}%`;
+   return `${Math.round(n)} ms`;
+ }
+ 
+@@ -664,7 +499,7 @@ function ServicePingGaugeCard({ row, hist }) {
+         <div style={{ marginTop: 4 }}>
+           <PingSparkline
+             values={hist || []}
+-            label={`${row.name} ΓÇó ${fmtPingMs(row.pingMs, row.alive, loss)}`}
++            label={`${row.name} ò ${fmtPingMs(row.pingMs, row.alive, loss)}`}
+           />
+         </div>
+ 
+@@ -678,19 +513,19 @@ function ServicePingGaugeCard({ row, hist }) {
+         >
+           <div style={{ fontSize: 9, opacity: .74 }}>
+             Status<br />
+-            <strong style={{ color: row.alive ? "#7dff7a" : "#ff8a9f", fontSize: 11 }}>
++            <strong style={{ color: row.alive ? "#7dff7a" : "#ff8a9f", fontSize: 10 }}>
+               {row.alive ? "UP" : "DOWN"}
+             </strong>
+           </div>
+           <div style={{ fontSize: 9, opacity: .74, textAlign: "center" }}>
+             Loss<br />
+-            <strong style={{ color: "#7aa2ff", fontSize: 11 }}>
++            <strong style={{ color: "#7aa2ff", fontSize: 10 }}>
+               {Math.round(loss)}%
+             </strong>
+           </div>
+           <div style={{ fontSize: 9, opacity: .74, textAlign: "right" }}>
+             Host<br />
+-            <strong style={{ color: "#fff", fontSize: 11 }}>
++            <strong style={{ color: "#fff", fontSize: 10 }}>
+               {row.host}
+             </strong>
+           </div>
+@@ -704,8 +539,8 @@ function ServicePingSection() {
+   const { rows, hist } = useServicePingData();
+ 
+   return (
+-    <section style={{ marginTop: 6 }}>
+-<div
++    <section style={{ marginTop: 28 }}>
++      <div
+         style={{
+           display: "grid",
+           gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+@@ -724,9 +559,9 @@ function ServicePingSection() {
+     </section>
+   );
+ }
++
+ export default function DashboardPage() {
+   const [snapshot, setSnapshot] = useState([]);
+-  const [history, setHistory] = useState([]);
+   const [error, setError] = useState("");
+ 
+   useEffect(() => {
+@@ -734,24 +569,15 @@ export default function DashboardPage() {
+ 
+     async function load() {
+       try {
+-        const [snapRes, histRes] = await Promise.all([
+-          fetch("/api/eth/snapshot", { cache: "no-store" }),
+-          fetch("/api/history/uplink?range=1h&limit=200", { cache: "no-store" })
+-        ]);
+-
++        const snapRes = await fetch("/api/eth/snapshot", { cache: "no-store" });
+         const snapJson = await snapRes.json();
+-        const histJson = await histRes.json();
+ 
+         if (!snapRes.ok || !snapJson?.ok) {
+           throw new Error(snapJson?.error || `Snapshot HTTP ${snapRes.status}`);
+         }
+-        if (!histRes.ok || !histJson?.ok) {
+-          throw new Error(histJson?.error || `History HTTP ${histRes.status}`);
+-        }
+ 
+         if (!dead) {
+           setSnapshot(Array.isArray(snapJson?.data) ? snapJson.data : []);
+-          setHistory(Array.isArray(histJson?.items) ? histJson.items : []);
+           setError("");
+         }
+       } catch (err) {
+@@ -761,6 +587,7 @@ export default function DashboardPage() {
+ 
+     load();
+     const t = setInterval(load, 10000);
++
+     return () => {
+       dead = true;
+       clearInterval(t);
+@@ -786,20 +613,9 @@ export default function DashboardPage() {
+       .slice(0, 6);
+   }, [uplinks]);
+ 
+-  const counts = useMemo(() => {
+-    const out = { healthy: 0, warn: 0, high: 0, critical: 0 };
+-    for (const row of uplinks) {
+-      const total = num(row?.rxMbps) + num(row?.txMbps);
+-      out[getPressureStatus(total)] += 1;
+-    }
+-    return out;
+-  }, [uplinks]);
+-
+-  const latest = ranked[0] || null;
+-
+   return (
+     <div className="dashx-page">
+-{error ? <div className="dashx-errorBox">{error}</div> : null}
++      {error ? <div className="dashx-errorBox">{error}</div> : null}
+ 
+       <section className="dashx-metrics">
+         <MetricCard title="Total traffic now" value={fmtMbps(totals.total)} sub="Combined RX + TX" tone={pressure} />
+@@ -808,24 +624,13 @@ export default function DashboardPage() {
+         <MetricCard title="Tracked uplinks" value={String(uplinks.length)} sub="Current uplink rows" tone="neutral" />
+       </section>
+ 
+-            <section className="dashx-midFull" style={{ gridTemplateColumns: "1fr" }}>
+-<div className="dashx-midFull__topbusy dashx-panel" style={{ width: "100%" }}>
+-          <div className="dashx-blockTitle">Top busy uplinks</div>
+-          <div className="dashx-blockSub">Ranked by live combined load</div>
+-
+-          {ranked.length ? (
+-            <PressureList rows={ranked} />
+-          ) : (
+-            <div className="dashx-emptyState">No uplink data available.</div>
+-          )}
+-        </div>
++      <section style={{ width: "100%", marginTop: 22 }}>
++        <TopBusyPanel rows={ranked} />
+       </section>
+ 
+-
+-    
+       <ServicePingSection />
+-
+     </div>
+   );
+ }
+ 
++

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frontend</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  
+<!-- WELCOME-NOCOMMENT -->
+<script>
+window.addEventListener("load",function(){
+
+ const box=document.createElement("div");
+ box.innerText="Welcome back to Nocomment";
+
+ box.style.position="fixed";
+ box.style.top="20px";
+ box.style.right="20px";
+ box.style.padding="12px 18px";
+ box.style.background="rgba(10,20,35,.95)";
+ box.style.color="#fff";
+ box.style.fontWeight="700";
+ box.style.borderRadius="10px";
+ box.style.boxShadow="0 10px 25px rgba(0,0,0,.35)";
+ box.style.zIndex="99999";
+ box.style.fontSize="14px";
+ box.style.transition="opacity .4s";
+
+ document.body.appendChild(box);
+
+ setTimeout(()=>{
+  box.style.opacity="0";
+  setTimeout(()=>box.remove(),400);
+ },3000);
+
+});
+</script>
+</body>
+</html>
+
