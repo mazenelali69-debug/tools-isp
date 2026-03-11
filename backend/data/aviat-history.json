@@ -1,0 +1,7746 @@
+[
+  {
+    "ts": 1773231066675,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1175.65,
+      "txMbps": 108.09,
+      "totalMbps": 1283.75,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 73.23,
+      "txMbps": 702.36,
+      "totalMbps": 775.59,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 32.67,
+      "txMbps": 461.1,
+      "totalMbps": 493.77,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1175.65,
+      "txMbps": 108.09,
+      "totalMbps": 1283.75
+    }
+  },
+  {
+    "ts": 1773231076615,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1170.37,
+      "txMbps": 113.06,
+      "totalMbps": 1283.43,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 72.3,
+      "txMbps": 685.28,
+      "totalMbps": 757.57,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 28.19,
+      "txMbps": 386.23,
+      "totalMbps": 414.41,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1170.37,
+      "txMbps": 113.06,
+      "totalMbps": 1283.43
+    }
+  },
+  {
+    "ts": 1773231086592,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1056.45,
+      "txMbps": 98.99,
+      "totalMbps": 1155.44,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 71.97,
+      "txMbps": 606.53,
+      "totalMbps": 678.5,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 26.09,
+      "txMbps": 461,
+      "totalMbps": 487.1,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1056.45,
+      "txMbps": 98.99,
+      "totalMbps": 1155.44
+    }
+  },
+  {
+    "ts": 1773231096573,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1102.03,
+      "txMbps": 105.64,
+      "totalMbps": 1207.66,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 77.63,
+      "txMbps": 725.59,
+      "totalMbps": 803.22,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 25.45,
+      "txMbps": 387.72,
+      "totalMbps": 413.16,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1102.03,
+      "txMbps": 105.64,
+      "totalMbps": 1207.66
+    }
+  },
+  {
+    "ts": 1773231106600,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1219.95,
+      "txMbps": 112.24,
+      "totalMbps": 1332.19,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 82.32,
+      "txMbps": 758.97,
+      "totalMbps": 841.29,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 25.1,
+      "txMbps": 443.03,
+      "totalMbps": 468.14,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1219.95,
+      "txMbps": 112.24,
+      "totalMbps": 1332.19
+    }
+  },
+  {
+    "ts": 1773231116662,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1350.18,
+      "txMbps": 130.14,
+      "totalMbps": 1480.32,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 101.86,
+      "txMbps": 836.11,
+      "totalMbps": 937.97,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.29,
+      "txMbps": 544.24,
+      "totalMbps": 573.54,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1350.18,
+      "txMbps": 130.14,
+      "totalMbps": 1480.32
+    }
+  },
+  {
+    "ts": 1773231126619,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1217.01,
+      "txMbps": 123.88,
+      "totalMbps": 1340.9,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 92.15,
+      "txMbps": 631.01,
+      "totalMbps": 723.16,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 30.01,
+      "txMbps": 590.34,
+      "totalMbps": 620.35,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1217.01,
+      "txMbps": 123.88,
+      "totalMbps": 1340.9
+    }
+  },
+  {
+    "ts": 1773231136637,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1124.33,
+      "txMbps": 152.19,
+      "totalMbps": 1276.52,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 126.35,
+      "txMbps": 723.29,
+      "totalMbps": 849.64,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 26.58,
+      "txMbps": 421.12,
+      "totalMbps": 447.7,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1124.33,
+      "txMbps": 152.19,
+      "totalMbps": 1276.52
+    }
+  },
+  {
+    "ts": 1773231146611,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1159.66,
+      "txMbps": 123.46,
+      "totalMbps": 1283.12,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 85.53,
+      "txMbps": 647.31,
+      "totalMbps": 732.84,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 34.68,
+      "txMbps": 516.75,
+      "totalMbps": 551.43,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1159.66,
+      "txMbps": 123.46,
+      "totalMbps": 1283.12
+    }
+  },
+  {
+    "ts": 1773231156664,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 957.46,
+      "txMbps": 122.28,
+      "totalMbps": 1079.74,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 81,
+      "txMbps": 564.17,
+      "totalMbps": 645.18,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 30.84,
+      "txMbps": 335.05,
+      "totalMbps": 365.89,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 957.46,
+      "txMbps": 122.28,
+      "totalMbps": 1079.74
+    }
+  },
+  {
+    "ts": 1773231166663,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1160.09,
+      "txMbps": 138.61,
+      "totalMbps": 1298.7,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 104.76,
+      "txMbps": 694.73,
+      "totalMbps": 799.48,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.09,
+      "txMbps": 460.53,
+      "totalMbps": 491.61,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1160.09,
+      "txMbps": 138.61,
+      "totalMbps": 1298.7
+    }
+  },
+  {
+    "ts": 1773231176711,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1208.95,
+      "txMbps": 127.51,
+      "totalMbps": 1336.46,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 91.29,
+      "txMbps": 709.64,
+      "totalMbps": 800.93,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.69,
+      "txMbps": 465.78,
+      "totalMbps": 497.48,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1208.95,
+      "txMbps": 127.51,
+      "totalMbps": 1336.46
+    }
+  },
+  {
+    "ts": 1773231186663,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1011.25,
+      "txMbps": 126.21,
+      "totalMbps": 1137.47,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 75.06,
+      "txMbps": 617.22,
+      "totalMbps": 692.28,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 50.02,
+      "txMbps": 380.6,
+      "totalMbps": 430.62,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1011.25,
+      "txMbps": 126.21,
+      "totalMbps": 1137.47
+    }
+  },
+  {
+    "ts": 1773231196705,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1008.33,
+      "txMbps": 117.55,
+      "totalMbps": 1125.88,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 79.79,
+      "txMbps": 616.5,
+      "totalMbps": 696.29,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 35.34,
+      "txMbps": 409.78,
+      "totalMbps": 445.12,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1008.33,
+      "txMbps": 117.55,
+      "totalMbps": 1125.88
+    }
+  },
+  {
+    "ts": 1773231206667,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 884.73,
+      "txMbps": 103.17,
+      "totalMbps": 987.91,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 72.27,
+      "txMbps": 488.34,
+      "totalMbps": 560.61,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.45,
+      "txMbps": 401.4,
+      "totalMbps": 430.85,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 884.73,
+      "txMbps": 103.17,
+      "totalMbps": 987.91
+    }
+  },
+  {
+    "ts": 1773231216694,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1010.89,
+      "txMbps": 106.87,
+      "totalMbps": 1117.76,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 76.31,
+      "txMbps": 631.89,
+      "totalMbps": 708.2,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.16,
+      "txMbps": 392.26,
+      "totalMbps": 423.42,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1010.89,
+      "txMbps": 106.87,
+      "totalMbps": 1117.76
+    }
+  },
+  {
+    "ts": 1773231226676,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1080.01,
+      "txMbps": 107.52,
+      "totalMbps": 1187.53,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 78.45,
+      "txMbps": 678.54,
+      "totalMbps": 756.99,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.09,
+      "txMbps": 424.68,
+      "totalMbps": 455.77,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1080.01,
+      "txMbps": 107.52,
+      "totalMbps": 1187.53
+    }
+  },
+  {
+    "ts": 1773231236769,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 882.78,
+      "txMbps": 101.05,
+      "totalMbps": 983.84,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 72.59,
+      "txMbps": 560.63,
+      "totalMbps": 633.22,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 26.09,
+      "txMbps": 314.68,
+      "totalMbps": 340.77,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 882.78,
+      "txMbps": 101.05,
+      "totalMbps": 983.84
+    }
+  },
+  {
+    "ts": 1773231246807,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1100.1,
+      "txMbps": 121.48,
+      "totalMbps": 1221.59,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 80.1,
+      "txMbps": 744.54,
+      "totalMbps": 824.64,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 37,
+      "txMbps": 367.23,
+      "totalMbps": 404.23,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1100.1,
+      "txMbps": 121.48,
+      "totalMbps": 1221.59
+    }
+  },
+  {
+    "ts": 1773231256780,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1331.36,
+      "txMbps": 115.94,
+      "totalMbps": 1447.3,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 62.57,
+      "txMbps": 829.73,
+      "totalMbps": 892.29,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 53.04,
+      "txMbps": 551.29,
+      "totalMbps": 604.33,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1331.36,
+      "txMbps": 115.94,
+      "totalMbps": 1447.3
+    }
+  },
+  {
+    "ts": 1773231266728,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1235.25,
+      "txMbps": 107.84,
+      "totalMbps": 1343.09,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 73.79,
+      "txMbps": 804.47,
+      "totalMbps": 878.26,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 33.55,
+      "txMbps": 444.83,
+      "totalMbps": 478.37,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1235.25,
+      "txMbps": 107.84,
+      "totalMbps": 1343.09
+    }
+  },
+  {
+    "ts": 1773231276782,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1089.86,
+      "txMbps": 92.08,
+      "totalMbps": 1181.94,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 62.46,
+      "txMbps": 698.08,
+      "totalMbps": 760.55,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.29,
+      "txMbps": 388.92,
+      "totalMbps": 420.21,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1089.86,
+      "txMbps": 92.08,
+      "totalMbps": 1181.94
+    }
+  },
+  {
+    "ts": 1773231286736,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1216.13,
+      "txMbps": 101.18,
+      "totalMbps": 1317.31,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 67.2,
+      "txMbps": 784.84,
+      "totalMbps": 852.04,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 34.15,
+      "txMbps": 441.27,
+      "totalMbps": 475.42,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1216.13,
+      "txMbps": 101.18,
+      "totalMbps": 1317.31
+    }
+  },
+  {
+    "ts": 1773231296794,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1139.83,
+      "txMbps": 96.76,
+      "totalMbps": 1236.59,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 62.56,
+      "txMbps": 760.94,
+      "totalMbps": 823.5,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 33.84,
+      "txMbps": 377.7,
+      "totalMbps": 411.54,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1139.83,
+      "txMbps": 96.76,
+      "totalMbps": 1236.59
+    }
+  },
+  {
+    "ts": 1773231306735,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1178.01,
+      "txMbps": 117.2,
+      "totalMbps": 1295.2,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 74.41,
+      "txMbps": 807.67,
+      "totalMbps": 882.07,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 39.89,
+      "txMbps": 363.63,
+      "totalMbps": 403.52,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1178.01,
+      "txMbps": 117.2,
+      "totalMbps": 1295.2
+    }
+  },
+  {
+    "ts": 1773231316823,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1203.78,
+      "txMbps": 96.05,
+      "totalMbps": 1299.82,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 63.61,
+      "txMbps": 677.77,
+      "totalMbps": 741.38,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 26.99,
+      "txMbps": 473.86,
+      "totalMbps": 500.85,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1203.78,
+      "txMbps": 96.05,
+      "totalMbps": 1299.82
+    }
+  },
+  {
+    "ts": 1773231326761,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1233.19,
+      "txMbps": 116.71,
+      "totalMbps": 1349.9,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 87.65,
+      "txMbps": 785.28,
+      "totalMbps": 872.93,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 27.26,
+      "txMbps": 434.33,
+      "totalMbps": 461.59,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1233.19,
+      "txMbps": 116.71,
+      "totalMbps": 1349.9
+    }
+  },
+  {
+    "ts": 1773231336762,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1182.05,
+      "txMbps": 101.41,
+      "totalMbps": 1283.45,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 72.6,
+      "txMbps": 792.37,
+      "totalMbps": 864.97,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 25.84,
+      "txMbps": 373.96,
+      "totalMbps": 399.79,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1182.05,
+      "txMbps": 101.41,
+      "totalMbps": 1283.45
+    }
+  },
+  {
+    "ts": 1773231346767,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1217.46,
+      "txMbps": 127.04,
+      "totalMbps": 1344.51,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 74.15,
+      "txMbps": 744.96,
+      "totalMbps": 819.11,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 47.2,
+      "txMbps": 467.79,
+      "totalMbps": 515,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1217.46,
+      "txMbps": 127.04,
+      "totalMbps": 1344.51
+    }
+  },
+  {
+    "ts": 1773231356761,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1139.98,
+      "txMbps": 104.56,
+      "totalMbps": 1244.54,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 66,
+      "txMbps": 685.56,
+      "totalMbps": 751.55,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 36.02,
+      "txMbps": 446.49,
+      "totalMbps": 482.51,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1139.98,
+      "txMbps": 104.56,
+      "totalMbps": 1244.54
+    }
+  },
+  {
+    "ts": 1773231366804,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1183.68,
+      "txMbps": 139.34,
+      "totalMbps": 1323.02,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 91.22,
+      "txMbps": 677.25,
+      "totalMbps": 768.46,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 45.46,
+      "txMbps": 486.71,
+      "totalMbps": 532.18,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1183.68,
+      "txMbps": 139.34,
+      "totalMbps": 1323.02
+    }
+  },
+  {
+    "ts": 1773231376822,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1123.56,
+      "txMbps": 129.42,
+      "totalMbps": 1252.97,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 95.19,
+      "txMbps": 763.58,
+      "totalMbps": 858.77,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 33.86,
+      "txMbps": 389.94,
+      "totalMbps": 423.8,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1123.56,
+      "txMbps": 129.42,
+      "totalMbps": 1252.97
+    }
+  },
+  {
+    "ts": 1773231386821,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1045.27,
+      "txMbps": 139.2,
+      "totalMbps": 1184.47,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 97.91,
+      "txMbps": 649.42,
+      "totalMbps": 747.33,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 39.16,
+      "txMbps": 359.28,
+      "totalMbps": 398.44,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1045.27,
+      "txMbps": 139.2,
+      "totalMbps": 1184.47
+    }
+  },
+  {
+    "ts": 1773231396823,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1023.22,
+      "txMbps": 163.07,
+      "totalMbps": 1186.29,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 122.87,
+      "txMbps": 706.95,
+      "totalMbps": 829.82,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 40.31,
+      "txMbps": 315.6,
+      "totalMbps": 355.91,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1023.22,
+      "txMbps": 163.07,
+      "totalMbps": 1186.29
+    }
+  },
+  {
+    "ts": 1773231406825,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1067.88,
+      "txMbps": 194.74,
+      "totalMbps": 1262.62,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 126.73,
+      "txMbps": 657,
+      "totalMbps": 783.73,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 64.65,
+      "txMbps": 394.01,
+      "totalMbps": 458.66,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1067.88,
+      "txMbps": 194.74,
+      "totalMbps": 1262.62
+    }
+  },
+  {
+    "ts": 1773231416860,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1053.02,
+      "txMbps": 211.14,
+      "totalMbps": 1264.16,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 147.23,
+      "txMbps": 685.25,
+      "totalMbps": 832.47,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 63.76,
+      "txMbps": 396.27,
+      "totalMbps": 460.03,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1053.02,
+      "txMbps": 211.14,
+      "totalMbps": 1264.16
+    }
+  },
+  {
+    "ts": 1773231426874,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1060.33,
+      "txMbps": 171.59,
+      "totalMbps": 1231.92,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 148.6,
+      "txMbps": 713.37,
+      "totalMbps": 861.97,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 35.62,
+      "txMbps": 423.39,
+      "totalMbps": 459.01,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1060.33,
+      "txMbps": 171.59,
+      "totalMbps": 1231.92
+    }
+  },
+  {
+    "ts": 1773231436933,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1073.02,
+      "txMbps": 177.61,
+      "totalMbps": 1250.63,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 137.28,
+      "txMbps": 641.29,
+      "totalMbps": 778.57,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.81,
+      "txMbps": 396.32,
+      "totalMbps": 428.13,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1073.02,
+      "txMbps": 177.61,
+      "totalMbps": 1250.63
+    }
+  },
+  {
+    "ts": 1773231446866,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1164.57,
+      "txMbps": 161.08,
+      "totalMbps": 1325.66,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 122.26,
+      "txMbps": 796.19,
+      "totalMbps": 918.45,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 34.73,
+      "txMbps": 353.23,
+      "totalMbps": 387.96,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1164.57,
+      "txMbps": 161.08,
+      "totalMbps": 1325.66
+    }
+  },
+  {
+    "ts": 1773231456875,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1117.36,
+      "txMbps": 143.38,
+      "totalMbps": 1260.74,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 101.37,
+      "txMbps": 670.04,
+      "totalMbps": 771.41,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 42.48,
+      "txMbps": 449.27,
+      "totalMbps": 491.75,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1117.36,
+      "txMbps": 143.38,
+      "totalMbps": 1260.74
+    }
+  },
+  {
+    "ts": 1773231466865,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1336.33,
+      "txMbps": 148.8,
+      "totalMbps": 1485.14,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 102.94,
+      "txMbps": 777.53,
+      "totalMbps": 880.48,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 44.81,
+      "txMbps": 545.27,
+      "totalMbps": 590.08,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1336.33,
+      "txMbps": 148.8,
+      "totalMbps": 1485.14
+    }
+  },
+  {
+    "ts": 1773231476893,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1039.65,
+      "txMbps": 141.74,
+      "totalMbps": 1181.39,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 105.09,
+      "txMbps": 654.57,
+      "totalMbps": 759.66,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 34.72,
+      "txMbps": 370.01,
+      "totalMbps": 404.73,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1039.65,
+      "txMbps": 141.74,
+      "totalMbps": 1181.39
+    }
+  },
+  {
+    "ts": 1773231486867,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1269.87,
+      "txMbps": 145.85,
+      "totalMbps": 1415.72,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 82.35,
+      "txMbps": 717.55,
+      "totalMbps": 799.89,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 63.96,
+      "txMbps": 556.19,
+      "totalMbps": 620.15,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1269.87,
+      "txMbps": 145.85,
+      "totalMbps": 1415.72
+    }
+  },
+  {
+    "ts": 1773231496952,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1322.96,
+      "txMbps": 123.6,
+      "totalMbps": 1446.56,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 92.51,
+      "txMbps": 810.47,
+      "totalMbps": 902.98,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 28.71,
+      "txMbps": 493.14,
+      "totalMbps": 521.85,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1322.96,
+      "txMbps": 123.6,
+      "totalMbps": 1446.56
+    }
+  },
+  {
+    "ts": 1773231506943,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1189.54,
+      "txMbps": 129.59,
+      "totalMbps": 1319.14,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 88.38,
+      "txMbps": 666.13,
+      "totalMbps": 754.51,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 39.66,
+      "txMbps": 513.25,
+      "totalMbps": 552.91,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1189.54,
+      "txMbps": 129.59,
+      "totalMbps": 1319.14
+    }
+  },
+  {
+    "ts": 1773231517002,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1090,
+      "txMbps": 123.67,
+      "totalMbps": 1213.67,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 94.43,
+      "txMbps": 588.31,
+      "totalMbps": 682.73,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 26.4,
+      "txMbps": 481.27,
+      "totalMbps": 507.66,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1090,
+      "txMbps": 123.67,
+      "totalMbps": 1213.67
+    }
+  },
+  {
+    "ts": 1773231526926,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1135.98,
+      "txMbps": 144.2,
+      "totalMbps": 1280.17,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 115.78,
+      "txMbps": 689.17,
+      "totalMbps": 804.96,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 26.6,
+      "txMbps": 458.85,
+      "totalMbps": 485.45,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1135.98,
+      "txMbps": 144.2,
+      "totalMbps": 1280.17
+    }
+  },
+  {
+    "ts": 1773231536928,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1089.72,
+      "txMbps": 168.11,
+      "totalMbps": 1257.83,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 116.57,
+      "txMbps": 662.72,
+      "totalMbps": 779.29,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 52.77,
+      "txMbps": 405.91,
+      "totalMbps": 458.68,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1089.72,
+      "txMbps": 168.11,
+      "totalMbps": 1257.83
+    }
+  },
+  {
+    "ts": 1773231546975,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1206.93,
+      "txMbps": 194.32,
+      "totalMbps": 1401.25,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 142.63,
+      "txMbps": 729.22,
+      "totalMbps": 871.85,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 40.07,
+      "txMbps": 419,
+      "totalMbps": 459.07,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1206.93,
+      "txMbps": 194.32,
+      "totalMbps": 1401.25
+    }
+  },
+  {
+    "ts": 1773231557000,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1175.51,
+      "txMbps": 206.51,
+      "totalMbps": 1382.02,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 147.64,
+      "txMbps": 657.21,
+      "totalMbps": 804.85,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 0,
+      "txMbps": 478.88,
+      "totalMbps": 478.88,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1175.51,
+      "txMbps": 206.51,
+      "totalMbps": 1382.02
+    }
+  },
+  {
+    "ts": 1773231567018,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1086.15,
+      "txMbps": 193.13,
+      "totalMbps": 1279.27,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 121.76,
+      "txMbps": 623.89,
+      "totalMbps": 745.65,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 55.93,
+      "txMbps": 387.58,
+      "totalMbps": 443.52,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1086.15,
+      "txMbps": 193.13,
+      "totalMbps": 1279.27
+    }
+  },
+  {
+    "ts": 1773231576966,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1084.72,
+      "txMbps": 169.19,
+      "totalMbps": 1253.91,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 114.46,
+      "txMbps": 699.24,
+      "totalMbps": 813.7,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 42.58,
+      "txMbps": 304.2,
+      "totalMbps": 346.78,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1084.72,
+      "txMbps": 169.19,
+      "totalMbps": 1253.91
+    }
+  },
+  {
+    "ts": 1773231586991,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1042.47,
+      "txMbps": 103.44,
+      "totalMbps": 1145.92,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 78.06,
+      "txMbps": 645.13,
+      "totalMbps": 723.2,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 24.33,
+      "txMbps": 380.61,
+      "totalMbps": 404.94,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1042.47,
+      "txMbps": 103.44,
+      "totalMbps": 1145.92
+    }
+  },
+  {
+    "ts": 1773231596952,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1022.75,
+      "txMbps": 148.83,
+      "totalMbps": 1171.57,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 114.94,
+      "txMbps": 664.87,
+      "totalMbps": 779.81,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 30.24,
+      "txMbps": 337.7,
+      "totalMbps": 367.94,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1022.75,
+      "txMbps": 148.83,
+      "totalMbps": 1171.57
+    }
+  },
+  {
+    "ts": 1773231607023,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1049.87,
+      "txMbps": 164.71,
+      "totalMbps": 1214.58,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 120.64,
+      "txMbps": 662.42,
+      "totalMbps": 783.06,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 37.74,
+      "txMbps": 345.41,
+      "totalMbps": 383.15,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1049.87,
+      "txMbps": 164.71,
+      "totalMbps": 1214.58
+    }
+  },
+  {
+    "ts": 1773231617093,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1154.61,
+      "txMbps": 159.63,
+      "totalMbps": 1314.24,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 127.64,
+      "txMbps": 759.23,
+      "totalMbps": 886.86,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.68,
+      "txMbps": 412.93,
+      "totalMbps": 442.61,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1154.61,
+      "txMbps": 159.63,
+      "totalMbps": 1314.24
+    }
+  },
+  {
+    "ts": 1773231626975,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1119.26,
+      "txMbps": 186.36,
+      "totalMbps": 1305.62,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 136.91,
+      "txMbps": 643.81,
+      "totalMbps": 780.72,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 49.43,
+      "txMbps": 480.19,
+      "totalMbps": 529.61,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1119.26,
+      "txMbps": 186.36,
+      "totalMbps": 1305.62
+    }
+  },
+  {
+    "ts": 1773231637001,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1106.3,
+      "txMbps": 173.45,
+      "totalMbps": 1279.76,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 129.22,
+      "txMbps": 744.12,
+      "totalMbps": 873.33,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 38.9,
+      "txMbps": 360.26,
+      "totalMbps": 399.16,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1106.3,
+      "txMbps": 173.45,
+      "totalMbps": 1279.76
+    }
+  },
+  {
+    "ts": 1773231646988,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1174.42,
+      "txMbps": 179.13,
+      "totalMbps": 1353.55,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 142.41,
+      "txMbps": 714.32,
+      "totalMbps": 856.73,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 36,
+      "txMbps": 440.9,
+      "totalMbps": 476.9,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1174.42,
+      "txMbps": 179.13,
+      "totalMbps": 1353.55
+    }
+  },
+  {
+    "ts": 1773231656967,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 978.48,
+      "txMbps": 89.4,
+      "totalMbps": 1067.89,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 55.14,
+      "txMbps": 618.82,
+      "totalMbps": 673.97,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 32.62,
+      "txMbps": 365.24,
+      "totalMbps": 397.85,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 978.48,
+      "txMbps": 89.4,
+      "totalMbps": 1067.89
+    }
+  },
+  {
+    "ts": 1773231667043,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1103.08,
+      "txMbps": 125.18,
+      "totalMbps": 1228.26,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 85.41,
+      "txMbps": 625.33,
+      "totalMbps": 710.73,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 38.38,
+      "txMbps": 484.3,
+      "totalMbps": 522.68,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1103.08,
+      "txMbps": 125.18,
+      "totalMbps": 1228.26
+    }
+  },
+  {
+    "ts": 1773231677119,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1173.1,
+      "txMbps": 170.17,
+      "totalMbps": 1343.27,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 73.45,
+      "txMbps": 640.16,
+      "totalMbps": 713.6,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 82.38,
+      "txMbps": 446.02,
+      "totalMbps": 528.4,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1173.1,
+      "txMbps": 170.17,
+      "totalMbps": 1343.27
+    }
+  },
+  {
+    "ts": 1773231687052,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1076.33,
+      "txMbps": 107.4,
+      "totalMbps": 1183.73,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 77.03,
+      "txMbps": 589.62,
+      "totalMbps": 666.65,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.17,
+      "txMbps": 484.85,
+      "totalMbps": 514.02,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1076.33,
+      "txMbps": 107.4,
+      "totalMbps": 1183.73
+    }
+  },
+  {
+    "ts": 1773231697039,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1051.39,
+      "txMbps": 132.16,
+      "totalMbps": 1183.55,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 107.43,
+      "txMbps": 703.55,
+      "totalMbps": 810.98,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 27.46,
+      "txMbps": 369.84,
+      "totalMbps": 397.3,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1051.39,
+      "txMbps": 132.16,
+      "totalMbps": 1183.55
+    }
+  },
+  {
+    "ts": 1773231707070,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 892.43,
+      "txMbps": 122.9,
+      "totalMbps": 1015.33,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 78.26,
+      "txMbps": 592.16,
+      "totalMbps": 670.41,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 47.53,
+      "txMbps": 357.63,
+      "totalMbps": 405.16,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 892.43,
+      "txMbps": 122.9,
+      "totalMbps": 1015.33
+    }
+  },
+  {
+    "ts": 1773231717094,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1264.42,
+      "txMbps": 123.52,
+      "totalMbps": 1387.94,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 78.37,
+      "txMbps": 703.75,
+      "totalMbps": 782.12,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 40.26,
+      "txMbps": 544.52,
+      "totalMbps": 584.78,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1264.42,
+      "txMbps": 123.52,
+      "totalMbps": 1387.94
+    }
+  },
+  {
+    "ts": 1773231727112,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1260.75,
+      "txMbps": 167.47,
+      "totalMbps": 1428.22,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 64.69,
+      "txMbps": 752.08,
+      "totalMbps": 816.77,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 92.57,
+      "txMbps": 437.87,
+      "totalMbps": 530.44,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1260.75,
+      "txMbps": 167.47,
+      "totalMbps": 1428.22
+    }
+  },
+  {
+    "ts": 1773231737116,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1142.12,
+      "txMbps": 153.01,
+      "totalMbps": 1295.13,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 65.05,
+      "txMbps": 664.01,
+      "totalMbps": 729.06,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 80.82,
+      "txMbps": 444.89,
+      "totalMbps": 525.71,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1142.12,
+      "txMbps": 153.01,
+      "totalMbps": 1295.13
+    }
+  },
+  {
+    "ts": 1773231747084,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1003.47,
+      "txMbps": 151.44,
+      "totalMbps": 1154.91,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 67.77,
+      "txMbps": 658.37,
+      "totalMbps": 726.14,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 86.32,
+      "txMbps": 361.63,
+      "totalMbps": 447.95,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1003.47,
+      "txMbps": 151.44,
+      "totalMbps": 1154.91
+    }
+  },
+  {
+    "ts": 1773231757065,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1098.77,
+      "txMbps": 96.25,
+      "totalMbps": 1195.03,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 75.7,
+      "txMbps": 755.33,
+      "totalMbps": 831.03,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 26.19,
+      "txMbps": 416.15,
+      "totalMbps": 442.34,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1098.77,
+      "txMbps": 96.25,
+      "totalMbps": 1195.03
+    }
+  },
+  {
+    "ts": 1773231767092,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1300.16,
+      "txMbps": 111.72,
+      "totalMbps": 1411.89,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 78.8,
+      "txMbps": 703.16,
+      "totalMbps": 781.95,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 27.95,
+      "txMbps": 540.48,
+      "totalMbps": 568.43,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1300.16,
+      "txMbps": 111.72,
+      "totalMbps": 1411.89
+    }
+  },
+  {
+    "ts": 1773231777106,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1255.27,
+      "txMbps": 94.93,
+      "totalMbps": 1350.2,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 61.32,
+      "txMbps": 739.6,
+      "totalMbps": 800.92,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 32.58,
+      "txMbps": 487.11,
+      "totalMbps": 519.68,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1255.27,
+      "txMbps": 94.93,
+      "totalMbps": 1350.2
+    }
+  },
+  {
+    "ts": 1773231787129,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1113.9,
+      "txMbps": 148.17,
+      "totalMbps": 1262.07,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 63.13,
+      "txMbps": 708.17,
+      "totalMbps": 771.3,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 83.49,
+      "txMbps": 395.4,
+      "totalMbps": 478.89,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1113.9,
+      "txMbps": 148.17,
+      "totalMbps": 1262.07
+    }
+  },
+  {
+    "ts": 1773231797161,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1089.7,
+      "txMbps": 148.76,
+      "totalMbps": 1238.46,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 61.08,
+      "txMbps": 671.49,
+      "totalMbps": 732.57,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 80.76,
+      "txMbps": 380.07,
+      "totalMbps": 460.83,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1089.7,
+      "txMbps": 148.76,
+      "totalMbps": 1238.46
+    }
+  },
+  {
+    "ts": 1773231807094,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1142.85,
+      "txMbps": 106.91,
+      "totalMbps": 1249.75,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 57.98,
+      "txMbps": 718.4,
+      "totalMbps": 776.38,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 43.86,
+      "txMbps": 389.25,
+      "totalMbps": 433.11,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1142.85,
+      "txMbps": 106.91,
+      "totalMbps": 1249.75
+    }
+  },
+  {
+    "ts": 1773231817117,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1512.31,
+      "txMbps": 127.75,
+      "totalMbps": 1640.06,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 79.88,
+      "txMbps": 988.55,
+      "totalMbps": 1068.44,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 48.68,
+      "txMbps": 496.58,
+      "totalMbps": 545.25,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1512.31,
+      "txMbps": 127.75,
+      "totalMbps": 1640.06
+    }
+  },
+  {
+    "ts": 1773231827130,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1289.48,
+      "txMbps": 121.95,
+      "totalMbps": 1411.44,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 91.25,
+      "txMbps": 869.31,
+      "totalMbps": 960.56,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 28.17,
+      "txMbps": 391.84,
+      "totalMbps": 420.01,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1289.48,
+      "txMbps": 121.95,
+      "totalMbps": 1411.44
+    }
+  },
+  {
+    "ts": 1773231837173,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1173.93,
+      "txMbps": 104.86,
+      "totalMbps": 1278.79,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 66.09,
+      "txMbps": 755.27,
+      "totalMbps": 821.36,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 30.63,
+      "txMbps": 388.49,
+      "totalMbps": 419.12,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1173.93,
+      "txMbps": 104.86,
+      "totalMbps": 1278.79
+    }
+  },
+  {
+    "ts": 1773231847169,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1229.27,
+      "txMbps": 185.89,
+      "totalMbps": 1415.17,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 148.84,
+      "txMbps": 743.29,
+      "totalMbps": 892.14,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.11,
+      "txMbps": 457.82,
+      "totalMbps": 486.93,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1229.27,
+      "txMbps": 185.89,
+      "totalMbps": 1415.17
+    }
+  },
+  {
+    "ts": 1773231857221,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1290.06,
+      "txMbps": 110.12,
+      "totalMbps": 1400.17,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 75.24,
+      "txMbps": 745.85,
+      "totalMbps": 821.09,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 33.21,
+      "txMbps": 566.69,
+      "totalMbps": 599.9,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1290.06,
+      "txMbps": 110.12,
+      "totalMbps": 1400.17
+    }
+  },
+  {
+    "ts": 1773231867162,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1072.62,
+      "txMbps": 101.47,
+      "totalMbps": 1174.09,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 66.02,
+      "txMbps": 617.38,
+      "totalMbps": 683.39,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.9,
+      "txMbps": 440.94,
+      "totalMbps": 472.84,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1072.62,
+      "txMbps": 101.47,
+      "totalMbps": 1174.09
+    }
+  },
+  {
+    "ts": 1773231877171,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1492.06,
+      "txMbps": 133.23,
+      "totalMbps": 1625.29,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 77.65,
+      "txMbps": 923.77,
+      "totalMbps": 1001.42,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 51.43,
+      "txMbps": 574.04,
+      "totalMbps": 625.47,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1492.06,
+      "txMbps": 133.23,
+      "totalMbps": 1625.29
+    }
+  },
+  {
+    "ts": 1773231887164,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1155.85,
+      "txMbps": 114.07,
+      "totalMbps": 1269.91,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 60.97,
+      "txMbps": 607.19,
+      "totalMbps": 668.16,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 49.3,
+      "txMbps": 546.91,
+      "totalMbps": 596.21,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1155.85,
+      "txMbps": 114.07,
+      "totalMbps": 1269.91
+    }
+  },
+  {
+    "ts": 1773231897213,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1223.27,
+      "txMbps": 184.47,
+      "totalMbps": 1407.74,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 116.25,
+      "txMbps": 739.35,
+      "totalMbps": 855.6,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 65.88,
+      "txMbps": 483.17,
+      "totalMbps": 549.06,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1223.27,
+      "txMbps": 184.47,
+      "totalMbps": 1407.74
+    }
+  },
+  {
+    "ts": 1773231907228,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1050.24,
+      "txMbps": 113.03,
+      "totalMbps": 1163.27,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 71.23,
+      "txMbps": 718.75,
+      "totalMbps": 789.98,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 41.8,
+      "txMbps": 405.08,
+      "totalMbps": 446.89,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1050.24,
+      "txMbps": 113.03,
+      "totalMbps": 1163.27
+    }
+  },
+  {
+    "ts": 1773231917242,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1123.06,
+      "txMbps": 117.29,
+      "totalMbps": 1240.34,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 62.99,
+      "txMbps": 616.88,
+      "totalMbps": 679.87,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 54.27,
+      "txMbps": 481.38,
+      "totalMbps": 535.66,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1123.06,
+      "txMbps": 117.29,
+      "totalMbps": 1240.34
+    }
+  },
+  {
+    "ts": 1773231927194,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1095.8,
+      "txMbps": 153.2,
+      "totalMbps": 1249,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 74.64,
+      "txMbps": 720.31,
+      "totalMbps": 794.96,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 73.91,
+      "txMbps": 402.39,
+      "totalMbps": 476.3,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1095.8,
+      "txMbps": 153.2,
+      "totalMbps": 1249
+    }
+  },
+  {
+    "ts": 1773231937211,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1241.27,
+      "txMbps": 88.4,
+      "totalMbps": 1329.68,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 59.24,
+      "txMbps": 796.09,
+      "totalMbps": 855.33,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 27.65,
+      "txMbps": 453.84,
+      "totalMbps": 481.5,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1241.27,
+      "txMbps": 88.4,
+      "totalMbps": 1329.68
+    }
+  },
+  {
+    "ts": 1773231947274,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1125.06,
+      "txMbps": 84.08,
+      "totalMbps": 1209.14,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 56.18,
+      "txMbps": 702.91,
+      "totalMbps": 759.08,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 27.11,
+      "txMbps": 427.91,
+      "totalMbps": 455.02,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1125.06,
+      "txMbps": 84.08,
+      "totalMbps": 1209.14
+    }
+  },
+  {
+    "ts": 1773231957226,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1048.49,
+      "txMbps": 79.56,
+      "totalMbps": 1128.05,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 51.07,
+      "txMbps": 538.66,
+      "totalMbps": 589.73,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 26.61,
+      "txMbps": 512.11,
+      "totalMbps": 538.72,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1048.49,
+      "txMbps": 79.56,
+      "totalMbps": 1128.05
+    }
+  },
+  {
+    "ts": 1773231967252,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1073.53,
+      "txMbps": 83.12,
+      "totalMbps": 1156.65,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 49.37,
+      "txMbps": 653.08,
+      "totalMbps": 702.45,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 30.75,
+      "txMbps": 399.23,
+      "totalMbps": 429.98,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1073.53,
+      "txMbps": 83.12,
+      "totalMbps": 1156.65
+    }
+  },
+  {
+    "ts": 1773231977317,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1187.43,
+      "txMbps": 78.63,
+      "totalMbps": 1266.06,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 51.02,
+      "txMbps": 754.82,
+      "totalMbps": 805.84,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 26.61,
+      "txMbps": 453.51,
+      "totalMbps": 480.12,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1187.43,
+      "txMbps": 78.63,
+      "totalMbps": 1266.06
+    }
+  },
+  {
+    "ts": 1773231987501,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1327.16,
+      "txMbps": 81.73,
+      "totalMbps": 1408.89,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 57.96,
+      "txMbps": 836.59,
+      "totalMbps": 894.55,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 28.09,
+      "txMbps": 528.89,
+      "totalMbps": 556.98,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1327.16,
+      "txMbps": 81.73,
+      "totalMbps": 1408.89
+    }
+  },
+  {
+    "ts": 1773231997338,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1249.45,
+      "txMbps": 102.47,
+      "totalMbps": 1351.92,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 60.6,
+      "txMbps": 651.99,
+      "totalMbps": 712.59,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 35.69,
+      "txMbps": 518.6,
+      "totalMbps": 554.29,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1249.45,
+      "txMbps": 102.47,
+      "totalMbps": 1351.92
+    }
+  },
+  {
+    "ts": 1773232007319,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1267.96,
+      "txMbps": 79.92,
+      "totalMbps": 1347.88,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 50.77,
+      "txMbps": 795.34,
+      "totalMbps": 846.12,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 25.29,
+      "txMbps": 425.43,
+      "totalMbps": 450.72,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1267.96,
+      "txMbps": 79.92,
+      "totalMbps": 1347.88
+    }
+  },
+  {
+    "ts": 1773232017271,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1067.97,
+      "txMbps": 85.03,
+      "totalMbps": 1153,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 55.64,
+      "txMbps": 678.83,
+      "totalMbps": 734.47,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.75,
+      "txMbps": 396.12,
+      "totalMbps": 427.87,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1067.97,
+      "txMbps": 85.03,
+      "totalMbps": 1153
+    }
+  },
+  {
+    "ts": 1773232027372,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1196.03,
+      "txMbps": 90.77,
+      "totalMbps": 1286.8,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 61.37,
+      "txMbps": 738.12,
+      "totalMbps": 799.49,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 28.06,
+      "txMbps": 444.47,
+      "totalMbps": 472.53,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1196.03,
+      "txMbps": 90.77,
+      "totalMbps": 1286.8
+    }
+  },
+  {
+    "ts": 1773232037381,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1359.15,
+      "txMbps": 95.6,
+      "totalMbps": 1454.76,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 66.88,
+      "txMbps": 839.42,
+      "totalMbps": 906.3,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.71,
+      "txMbps": 549.63,
+      "totalMbps": 579.35,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1359.15,
+      "txMbps": 95.6,
+      "totalMbps": 1454.76
+    }
+  },
+  {
+    "ts": 1773232047366,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1136.7,
+      "txMbps": 89.77,
+      "totalMbps": 1226.47,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 62.11,
+      "txMbps": 667.12,
+      "totalMbps": 729.23,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 24.43,
+      "txMbps": 443.28,
+      "totalMbps": 467.71,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1136.7,
+      "txMbps": 89.77,
+      "totalMbps": 1226.47
+    }
+  },
+  {
+    "ts": 1773232057300,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1185.38,
+      "txMbps": 98.18,
+      "totalMbps": 1283.56,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 65.56,
+      "txMbps": 694.93,
+      "totalMbps": 760.49,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 25.34,
+      "txMbps": 412.45,
+      "totalMbps": 437.78,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1185.38,
+      "txMbps": 98.18,
+      "totalMbps": 1283.56
+    }
+  },
+  {
+    "ts": 1773232067337,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1328.92,
+      "txMbps": 88.32,
+      "totalMbps": 1417.24,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 58.72,
+      "txMbps": 771.11,
+      "totalMbps": 829.83,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.65,
+      "txMbps": 551.35,
+      "totalMbps": 581,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1328.92,
+      "txMbps": 88.32,
+      "totalMbps": 1417.24
+    }
+  },
+  {
+    "ts": 1773232077302,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1366.22,
+      "txMbps": 92.91,
+      "totalMbps": 1459.13,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 59.04,
+      "txMbps": 884.68,
+      "totalMbps": 943.72,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.54,
+      "txMbps": 476.63,
+      "totalMbps": 508.17,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1366.22,
+      "txMbps": 92.91,
+      "totalMbps": 1459.13
+    }
+  },
+  {
+    "ts": 1773232087303,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1293.81,
+      "txMbps": 90.87,
+      "totalMbps": 1384.67,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 58.64,
+      "txMbps": 815.37,
+      "totalMbps": 874.01,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.12,
+      "txMbps": 495.91,
+      "totalMbps": 527.03,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1293.81,
+      "txMbps": 90.87,
+      "totalMbps": 1384.67
+    }
+  },
+  {
+    "ts": 1773232097370,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1143.23,
+      "txMbps": 87.56,
+      "totalMbps": 1230.79,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 56.36,
+      "txMbps": 603.08,
+      "totalMbps": 659.44,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.15,
+      "txMbps": 522.83,
+      "totalMbps": 553.98,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1143.23,
+      "txMbps": 87.56,
+      "totalMbps": 1230.79
+    }
+  },
+  {
+    "ts": 1773232107304,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1057.76,
+      "txMbps": 76.52,
+      "totalMbps": 1134.28,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 49.06,
+      "txMbps": 572.03,
+      "totalMbps": 621.09,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 25.6,
+      "txMbps": 481.52,
+      "totalMbps": 507.12,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1057.76,
+      "txMbps": 76.52,
+      "totalMbps": 1134.28
+    }
+  },
+  {
+    "ts": 1773232117344,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1105.1,
+      "txMbps": 93.93,
+      "totalMbps": 1199.03,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 71.42,
+      "txMbps": 696.89,
+      "totalMbps": 768.31,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 24.94,
+      "txMbps": 413.29,
+      "totalMbps": 438.23,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1105.1,
+      "txMbps": 93.93,
+      "totalMbps": 1199.03
+    }
+  },
+  {
+    "ts": 1773232127329,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1112.15,
+      "txMbps": 79.63,
+      "totalMbps": 1191.78,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 48.2,
+      "txMbps": 589.55,
+      "totalMbps": 637.75,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 27.91,
+      "txMbps": 505.3,
+      "totalMbps": 533.21,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1112.15,
+      "txMbps": 79.63,
+      "totalMbps": 1191.78
+    }
+  },
+  {
+    "ts": 1773232137357,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1280.61,
+      "txMbps": 83.77,
+      "totalMbps": 1364.38,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 53.16,
+      "txMbps": 720.11,
+      "totalMbps": 773.27,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.54,
+      "txMbps": 549.81,
+      "totalMbps": 579.36,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1280.61,
+      "txMbps": 83.77,
+      "totalMbps": 1364.38
+    }
+  },
+  {
+    "ts": 1773232147356,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1155.8,
+      "txMbps": 83.02,
+      "totalMbps": 1238.82,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 53.41,
+      "txMbps": 582.64,
+      "totalMbps": 636.05,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 27.54,
+      "txMbps": 552.97,
+      "totalMbps": 580.51,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1155.8,
+      "txMbps": 83.02,
+      "totalMbps": 1238.82
+    }
+  },
+  {
+    "ts": 1773232157422,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1072.85,
+      "txMbps": 79.58,
+      "totalMbps": 1152.43,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 51.66,
+      "txMbps": 603.08,
+      "totalMbps": 654.74,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 23.54,
+      "txMbps": 444.88,
+      "totalMbps": 468.41,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1072.85,
+      "txMbps": 79.58,
+      "totalMbps": 1152.43
+    }
+  },
+  {
+    "ts": 1773232167360,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1108.08,
+      "txMbps": 97.41,
+      "totalMbps": 1205.49,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 74.56,
+      "txMbps": 577.48,
+      "totalMbps": 652.04,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 23.9,
+      "txMbps": 515.57,
+      "totalMbps": 539.48,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1108.08,
+      "txMbps": 97.41,
+      "totalMbps": 1205.49
+    }
+  },
+  {
+    "ts": 1773232177382,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1032.25,
+      "txMbps": 79.45,
+      "totalMbps": 1111.7,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 56.33,
+      "txMbps": 627.98,
+      "totalMbps": 684.31,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 22.87,
+      "txMbps": 434.4,
+      "totalMbps": 457.28,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1032.25,
+      "txMbps": 79.45,
+      "totalMbps": 1111.7
+    }
+  },
+  {
+    "ts": 1773232187355,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1124.99,
+      "txMbps": 92.91,
+      "totalMbps": 1217.9,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 54.31,
+      "txMbps": 563.95,
+      "totalMbps": 618.27,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 37.8,
+      "txMbps": 575.5,
+      "totalMbps": 613.3,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1124.99,
+      "txMbps": 92.91,
+      "totalMbps": 1217.9
+    }
+  },
+  {
+    "ts": 1773232197352,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1335.76,
+      "txMbps": 102.05,
+      "totalMbps": 1437.81,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 62.15,
+      "txMbps": 657.7,
+      "totalMbps": 719.85,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 36.24,
+      "txMbps": 672.98,
+      "totalMbps": 709.22,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1335.76,
+      "txMbps": 102.05,
+      "totalMbps": 1437.81
+    }
+  },
+  {
+    "ts": 1773232207395,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1230.77,
+      "txMbps": 91.68,
+      "totalMbps": 1322.45,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 59.31,
+      "txMbps": 690.28,
+      "totalMbps": 749.58,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 34.49,
+      "txMbps": 582.91,
+      "totalMbps": 617.41,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1230.77,
+      "txMbps": 91.68,
+      "totalMbps": 1322.45
+    }
+  },
+  {
+    "ts": 1773232217432,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1224.86,
+      "txMbps": 94.31,
+      "totalMbps": 1319.16,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 58.4,
+      "txMbps": 605.34,
+      "totalMbps": 663.74,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 27.36,
+      "txMbps": 533.41,
+      "totalMbps": 560.78,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1224.86,
+      "txMbps": 94.31,
+      "totalMbps": 1319.16
+    }
+  },
+  {
+    "ts": 1773232227383,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1198.97,
+      "txMbps": 94.72,
+      "totalMbps": 1293.7,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 64.16,
+      "txMbps": 595.52,
+      "totalMbps": 659.68,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.16,
+      "txMbps": 595.31,
+      "totalMbps": 626.47,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1198.97,
+      "txMbps": 94.72,
+      "totalMbps": 1293.7
+    }
+  },
+  {
+    "ts": 1773232237409,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1217.84,
+      "txMbps": 87.83,
+      "totalMbps": 1305.67,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 60.22,
+      "txMbps": 663.12,
+      "totalMbps": 723.34,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 28.05,
+      "txMbps": 574.31,
+      "totalMbps": 602.36,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1217.84,
+      "txMbps": 87.83,
+      "totalMbps": 1305.67
+    }
+  },
+  {
+    "ts": 1773232247393,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1128.23,
+      "txMbps": 96.52,
+      "totalMbps": 1224.75,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 64.74,
+      "txMbps": 610.78,
+      "totalMbps": 675.52,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 28.54,
+      "txMbps": 518.27,
+      "totalMbps": 546.81,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1128.23,
+      "txMbps": 96.52,
+      "totalMbps": 1224.75
+    }
+  },
+  {
+    "ts": 1773232257412,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1161.35,
+      "txMbps": 94.14,
+      "totalMbps": 1255.49,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 66.8,
+      "txMbps": 691.02,
+      "totalMbps": 757.83,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 26.74,
+      "txMbps": 484.75,
+      "totalMbps": 511.49,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1161.35,
+      "txMbps": 94.14,
+      "totalMbps": 1255.49
+    }
+  },
+  {
+    "ts": 1773232267394,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1225.75,
+      "txMbps": 90.28,
+      "totalMbps": 1316.03,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 61.6,
+      "txMbps": 752.49,
+      "totalMbps": 814.1,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 28.12,
+      "txMbps": 475.73,
+      "totalMbps": 503.84,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1225.75,
+      "txMbps": 90.28,
+      "totalMbps": 1316.03
+    }
+  },
+  {
+    "ts": 1773232277466,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1170.64,
+      "txMbps": 79.83,
+      "totalMbps": 1250.47,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 53.71,
+      "txMbps": 700.38,
+      "totalMbps": 754.08,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 24.69,
+      "txMbps": 485.05,
+      "totalMbps": 509.74,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1170.64,
+      "txMbps": 79.83,
+      "totalMbps": 1250.47
+    }
+  },
+  {
+    "ts": 1773232287455,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1277.48,
+      "txMbps": 99.25,
+      "totalMbps": 1376.73,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 66,
+      "txMbps": 694.95,
+      "totalMbps": 760.96,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.39,
+      "txMbps": 572.85,
+      "totalMbps": 604.25,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1277.48,
+      "txMbps": 99.25,
+      "totalMbps": 1376.73
+    }
+  },
+  {
+    "ts": 1773232297508,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1087.54,
+      "txMbps": 92.32,
+      "totalMbps": 1179.86,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 57.81,
+      "txMbps": 557.95,
+      "totalMbps": 615.76,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.29,
+      "txMbps": 515.77,
+      "totalMbps": 547.06,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1087.54,
+      "txMbps": 92.32,
+      "totalMbps": 1179.86
+    }
+  },
+  {
+    "ts": 1773232307456,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1105.13,
+      "txMbps": 93.2,
+      "totalMbps": 1198.32,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 64.7,
+      "txMbps": 629.14,
+      "totalMbps": 693.85,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.36,
+      "txMbps": 492.94,
+      "totalMbps": 522.3,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1105.13,
+      "txMbps": 93.2,
+      "totalMbps": 1198.32
+    }
+  },
+  {
+    "ts": 1773232317504,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1097.52,
+      "txMbps": 105.34,
+      "totalMbps": 1202.86,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 73.12,
+      "txMbps": 620.8,
+      "totalMbps": 693.93,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 30.14,
+      "txMbps": 444.77,
+      "totalMbps": 474.91,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1097.52,
+      "txMbps": 105.34,
+      "totalMbps": 1202.86
+    }
+  },
+  {
+    "ts": 1773232327467,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 962.04,
+      "txMbps": 107.15,
+      "totalMbps": 1069.19,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 75.96,
+      "txMbps": 518.73,
+      "totalMbps": 594.7,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.56,
+      "txMbps": 464.07,
+      "totalMbps": 495.63,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 962.04,
+      "txMbps": 107.15,
+      "totalMbps": 1069.19
+    }
+  },
+  {
+    "ts": 1773232337475,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1131.85,
+      "txMbps": 164.47,
+      "totalMbps": 1296.32,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 137.16,
+      "txMbps": 655.84,
+      "totalMbps": 793,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 0,
+      "txMbps": 470.99,
+      "totalMbps": 470.99,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1131.85,
+      "txMbps": 164.47,
+      "totalMbps": 1296.32
+    }
+  },
+  {
+    "ts": 1773232347457,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 997.03,
+      "txMbps": 92,
+      "totalMbps": 1089.03,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 60.5,
+      "txMbps": 583.97,
+      "totalMbps": 644.47,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.72,
+      "txMbps": 403.24,
+      "totalMbps": 432.96,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 997.03,
+      "txMbps": 92,
+      "totalMbps": 1089.03
+    }
+  },
+  {
+    "ts": 1773232357511,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1296.45,
+      "txMbps": 114.38,
+      "totalMbps": 1410.83,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 68.21,
+      "txMbps": 605.24,
+      "totalMbps": 673.45,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 28.86,
+      "txMbps": 478.21,
+      "totalMbps": 507.07,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1296.45,
+      "txMbps": 114.38,
+      "totalMbps": 1410.83
+    }
+  },
+  {
+    "ts": 1773232367440,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1234.77,
+      "txMbps": 107.8,
+      "totalMbps": 1342.58,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 74.19,
+      "txMbps": 724.06,
+      "totalMbps": 798.24,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.24,
+      "txMbps": 497.23,
+      "totalMbps": 526.46,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1234.77,
+      "txMbps": 107.8,
+      "totalMbps": 1342.58
+    }
+  },
+  {
+    "ts": 1773232377506,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1041.91,
+      "txMbps": 101.89,
+      "totalMbps": 1143.79,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 66.94,
+      "txMbps": 548.06,
+      "totalMbps": 615,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 30.29,
+      "txMbps": 487.93,
+      "totalMbps": 518.22,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1041.91,
+      "txMbps": 101.89,
+      "totalMbps": 1143.79
+    }
+  },
+  {
+    "ts": 1773232387474,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1134.41,
+      "txMbps": 102.97,
+      "totalMbps": 1237.38,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 71.36,
+      "txMbps": 659.94,
+      "totalMbps": 731.3,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 30.87,
+      "txMbps": 479.48,
+      "totalMbps": 510.35,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1134.41,
+      "txMbps": 102.97,
+      "totalMbps": 1237.38
+    }
+  },
+  {
+    "ts": 1773232397494,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1197.47,
+      "txMbps": 110.12,
+      "totalMbps": 1307.59,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 63.69,
+      "txMbps": 507.28,
+      "totalMbps": 570.97,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 36.7,
+      "txMbps": 623.71,
+      "totalMbps": 660.41,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1197.47,
+      "txMbps": 110.12,
+      "totalMbps": 1307.59
+    }
+  },
+  {
+    "ts": 1773232407500,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 997.45,
+      "txMbps": 106.13,
+      "totalMbps": 1103.58,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 72.05,
+      "txMbps": 595.73,
+      "totalMbps": 667.77,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 30.86,
+      "txMbps": 402.54,
+      "totalMbps": 433.4,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 997.45,
+      "txMbps": 106.13,
+      "totalMbps": 1103.58
+    }
+  },
+  {
+    "ts": 1773232417497,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1113.15,
+      "txMbps": 120.87,
+      "totalMbps": 1234.02,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 85.5,
+      "txMbps": 554.15,
+      "totalMbps": 639.64,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 34.28,
+      "txMbps": 557.12,
+      "totalMbps": 591.4,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1113.15,
+      "txMbps": 120.87,
+      "totalMbps": 1234.02
+    }
+  },
+  {
+    "ts": 1773232427494,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1040.09,
+      "txMbps": 83.62,
+      "totalMbps": 1123.71,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 44.04,
+      "txMbps": 584.86,
+      "totalMbps": 628.9,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 38.89,
+      "txMbps": 452.47,
+      "totalMbps": 491.36,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1040.09,
+      "txMbps": 83.62,
+      "totalMbps": 1123.71
+    }
+  },
+  {
+    "ts": 1773232437485,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1228.28,
+      "txMbps": 80.04,
+      "totalMbps": 1308.32,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 48.16,
+      "txMbps": 701.03,
+      "totalMbps": 749.18,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 30.35,
+      "txMbps": 534.25,
+      "totalMbps": 564.6,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1228.28,
+      "txMbps": 80.04,
+      "totalMbps": 1308.32
+    }
+  },
+  {
+    "ts": 1773232447535,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1115.26,
+      "txMbps": 79.74,
+      "totalMbps": 1195,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 44.87,
+      "txMbps": 643.37,
+      "totalMbps": 688.24,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.65,
+      "txMbps": 450.58,
+      "totalMbps": 482.22,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1115.26,
+      "txMbps": 79.74,
+      "totalMbps": 1195
+    }
+  },
+  {
+    "ts": 1773232457555,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1186.96,
+      "txMbps": 80.3,
+      "totalMbps": 1267.26,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 41.2,
+      "txMbps": 503.47,
+      "totalMbps": 544.66,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.72,
+      "txMbps": 567.1,
+      "totalMbps": 596.82,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1186.96,
+      "txMbps": 80.3,
+      "totalMbps": 1267.26
+    }
+  },
+  {
+    "ts": 1773232467546,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 973.04,
+      "txMbps": 90.49,
+      "totalMbps": 1063.54,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 58.91,
+      "txMbps": 538.09,
+      "totalMbps": 597,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.23,
+      "txMbps": 430.39,
+      "totalMbps": 461.61,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 973.04,
+      "txMbps": 90.49,
+      "totalMbps": 1063.54
+    }
+  },
+  {
+    "ts": 1773232477613,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1112.92,
+      "txMbps": 95.17,
+      "totalMbps": 1208.09,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 69.02,
+      "txMbps": 635.83,
+      "totalMbps": 704.85,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 30.34,
+      "txMbps": 522.52,
+      "totalMbps": 552.85,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1112.92,
+      "txMbps": 95.17,
+      "totalMbps": 1208.09
+    }
+  },
+  {
+    "ts": 1773232487620,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1097.12,
+      "txMbps": 98.43,
+      "totalMbps": 1195.55,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 67.09,
+      "txMbps": 527.6,
+      "totalMbps": 594.69,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.97,
+      "txMbps": 567.77,
+      "totalMbps": 597.75,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1097.12,
+      "txMbps": 98.43,
+      "totalMbps": 1195.55
+    }
+  },
+  {
+    "ts": 1773232497589,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1223.09,
+      "txMbps": 105.71,
+      "totalMbps": 1328.79,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 68.86,
+      "txMbps": 649.05,
+      "totalMbps": 717.91,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 35.93,
+      "txMbps": 564.13,
+      "totalMbps": 600.06,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1223.09,
+      "txMbps": 105.71,
+      "totalMbps": 1328.79
+    }
+  },
+  {
+    "ts": 1773232507676,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1267.67,
+      "txMbps": 108.04,
+      "totalMbps": 1375.7,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 72.44,
+      "txMbps": 768.61,
+      "totalMbps": 841.05,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.35,
+      "txMbps": 438.17,
+      "totalMbps": 469.52,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1267.67,
+      "txMbps": 108.04,
+      "totalMbps": 1375.7
+    }
+  },
+  {
+    "ts": 1773232517654,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1064.47,
+      "txMbps": 92.83,
+      "totalMbps": 1157.31,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 63.45,
+      "txMbps": 593.4,
+      "totalMbps": 656.85,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 30.61,
+      "txMbps": 492.08,
+      "totalMbps": 522.7,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1064.47,
+      "txMbps": 92.83,
+      "totalMbps": 1157.31
+    }
+  },
+  {
+    "ts": 1773232527645,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1141.26,
+      "txMbps": 89.97,
+      "totalMbps": 1231.24,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 53.19,
+      "txMbps": 622.15,
+      "totalMbps": 675.34,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 33.57,
+      "txMbps": 499.77,
+      "totalMbps": 533.34,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1141.26,
+      "txMbps": 89.97,
+      "totalMbps": 1231.24
+    }
+  },
+  {
+    "ts": 1773232537602,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 941.7,
+      "txMbps": 82.77,
+      "totalMbps": 1024.47,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 39.85,
+      "txMbps": 462.22,
+      "totalMbps": 502.06,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 40.9,
+      "txMbps": 467.57,
+      "totalMbps": 508.48,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 941.7,
+      "txMbps": 82.77,
+      "totalMbps": 1024.47
+    }
+  },
+  {
+    "ts": 1773232547593,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1329.11,
+      "txMbps": 114.9,
+      "totalMbps": 1444.01,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 75.46,
+      "txMbps": 719.8,
+      "totalMbps": 795.27,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 36.74,
+      "txMbps": 600.77,
+      "totalMbps": 637.51,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1329.11,
+      "txMbps": 114.9,
+      "totalMbps": 1444.01
+    }
+  },
+  {
+    "ts": 1773232557647,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1097.13,
+      "txMbps": 90.07,
+      "totalMbps": 1187.2,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 51.21,
+      "txMbps": 462.19,
+      "totalMbps": 513.4,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 32.31,
+      "txMbps": 560.77,
+      "totalMbps": 593.08,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1097.13,
+      "txMbps": 90.07,
+      "totalMbps": 1187.2
+    }
+  },
+  {
+    "ts": 1773232567663,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1209.48,
+      "txMbps": 81.5,
+      "totalMbps": 1290.98,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 44.94,
+      "txMbps": 571.52,
+      "totalMbps": 616.46,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.99,
+      "txMbps": 578.95,
+      "totalMbps": 610.94,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1209.48,
+      "txMbps": 81.5,
+      "totalMbps": 1290.98
+    }
+  },
+  {
+    "ts": 1773232577697,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1063.62,
+      "txMbps": 84.6,
+      "totalMbps": 1148.22,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 47.38,
+      "txMbps": 535.43,
+      "totalMbps": 582.82,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 36.19,
+      "txMbps": 536.19,
+      "totalMbps": 572.37,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1063.62,
+      "txMbps": 84.6,
+      "totalMbps": 1148.22
+    }
+  },
+  {
+    "ts": 1773232587662,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1175.38,
+      "txMbps": 98.28,
+      "totalMbps": 1273.65,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 59.71,
+      "txMbps": 595.84,
+      "totalMbps": 655.56,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 35.33,
+      "txMbps": 546.36,
+      "totalMbps": 581.69,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1175.38,
+      "txMbps": 98.28,
+      "totalMbps": 1273.65
+    }
+  },
+  {
+    "ts": 1773232597669,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1107.3,
+      "txMbps": 83.31,
+      "totalMbps": 1190.61,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 51.92,
+      "txMbps": 652.02,
+      "totalMbps": 703.95,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.89,
+      "txMbps": 443.51,
+      "totalMbps": 473.4,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1107.3,
+      "txMbps": 83.31,
+      "totalMbps": 1190.61
+    }
+  },
+  {
+    "ts": 1773232607661,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1210.85,
+      "txMbps": 91.35,
+      "totalMbps": 1302.2,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 56.61,
+      "txMbps": 592.2,
+      "totalMbps": 648.81,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.69,
+      "txMbps": 549.14,
+      "totalMbps": 578.82,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1210.85,
+      "txMbps": 91.35,
+      "totalMbps": 1302.2
+    }
+  },
+  {
+    "ts": 1773232617667,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1111.81,
+      "txMbps": 130.75,
+      "totalMbps": 1242.56,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 54.96,
+      "txMbps": 519.43,
+      "totalMbps": 574.38,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 73.74,
+      "txMbps": 586.79,
+      "totalMbps": 660.53,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1111.81,
+      "txMbps": 130.75,
+      "totalMbps": 1242.56
+    }
+  },
+  {
+    "ts": 1773232627708,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1281.38,
+      "txMbps": 117.66,
+      "totalMbps": 1399.04,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 68.67,
+      "txMbps": 577.31,
+      "totalMbps": 645.98,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 38.81,
+      "txMbps": 623.48,
+      "totalMbps": 662.29,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1281.38,
+      "txMbps": 117.66,
+      "totalMbps": 1399.04
+    }
+  },
+  {
+    "ts": 1773232637753,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1248.79,
+      "txMbps": 104.97,
+      "totalMbps": 1353.76,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 51.41,
+      "txMbps": 654.28,
+      "totalMbps": 705.69,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 46.41,
+      "txMbps": 505.35,
+      "totalMbps": 551.75,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1248.79,
+      "txMbps": 104.97,
+      "totalMbps": 1353.76
+    }
+  },
+  {
+    "ts": 1773232647772,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1214.4,
+      "txMbps": 91.86,
+      "totalMbps": 1306.26,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 55.5,
+      "txMbps": 640.06,
+      "totalMbps": 695.56,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.57,
+      "txMbps": 534.26,
+      "totalMbps": 565.83,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1214.4,
+      "txMbps": 91.86,
+      "totalMbps": 1306.26
+    }
+  },
+  {
+    "ts": 1773232657740,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1160.97,
+      "txMbps": 107.69,
+      "totalMbps": 1268.66,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 60.72,
+      "txMbps": 691.78,
+      "totalMbps": 752.5,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 46.9,
+      "txMbps": 451.9,
+      "totalMbps": 498.8,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1160.97,
+      "txMbps": 107.69,
+      "totalMbps": 1268.66
+    }
+  },
+  {
+    "ts": 1773232667753,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1271.66,
+      "txMbps": 100.21,
+      "totalMbps": 1371.86,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 62.01,
+      "txMbps": 592.45,
+      "totalMbps": 654.46,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 32.1,
+      "txMbps": 650.35,
+      "totalMbps": 682.46,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1271.66,
+      "txMbps": 100.21,
+      "totalMbps": 1371.86
+    }
+  },
+  {
+    "ts": 1773232677741,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1196.56,
+      "txMbps": 110.53,
+      "totalMbps": 1307.09,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 73.72,
+      "txMbps": 657.13,
+      "totalMbps": 730.84,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 35.55,
+      "txMbps": 528.56,
+      "totalMbps": 564.11,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1196.56,
+      "txMbps": 110.53,
+      "totalMbps": 1307.09
+    }
+  },
+  {
+    "ts": 1773232687768,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 989.16,
+      "txMbps": 97.65,
+      "totalMbps": 1086.81,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 64.5,
+      "txMbps": 562.79,
+      "totalMbps": 627.29,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 33.71,
+      "txMbps": 451.8,
+      "totalMbps": 485.51,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 989.16,
+      "txMbps": 97.65,
+      "totalMbps": 1086.81
+    }
+  },
+  {
+    "ts": 1773232697826,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1120.47,
+      "txMbps": 105.38,
+      "totalMbps": 1225.85,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 67.53,
+      "txMbps": 632.27,
+      "totalMbps": 699.8,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 36.03,
+      "txMbps": 496.84,
+      "totalMbps": 532.87,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1120.47,
+      "txMbps": 105.38,
+      "totalMbps": 1225.85
+    }
+  },
+  {
+    "ts": 1773232707772,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1032.67,
+      "txMbps": 139.91,
+      "totalMbps": 1172.58,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 106.03,
+      "txMbps": 601.29,
+      "totalMbps": 707.32,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 33.22,
+      "txMbps": 445.69,
+      "totalMbps": 478.91,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1032.67,
+      "txMbps": 139.91,
+      "totalMbps": 1172.58
+    }
+  },
+  {
+    "ts": 1773232717769,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1173.47,
+      "txMbps": 121.56,
+      "totalMbps": 1295.02,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 67.63,
+      "txMbps": 569.6,
+      "totalMbps": 637.23,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 42.87,
+      "txMbps": 552.25,
+      "totalMbps": 595.12,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1173.47,
+      "txMbps": 121.56,
+      "totalMbps": 1295.02
+    }
+  },
+  {
+    "ts": 1773232727829,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1197.42,
+      "txMbps": 99.91,
+      "totalMbps": 1297.33,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 77.02,
+      "txMbps": 742.86,
+      "totalMbps": 819.88,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 28.39,
+      "txMbps": 495.29,
+      "totalMbps": 523.67,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1197.42,
+      "txMbps": 99.91,
+      "totalMbps": 1297.33
+    }
+  },
+  {
+    "ts": 1773232737770,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1198.27,
+      "txMbps": 83.07,
+      "totalMbps": 1281.34,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 46.45,
+      "txMbps": 804.6,
+      "totalMbps": 851.05,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 33.97,
+      "txMbps": 422.21,
+      "totalMbps": 456.18,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1198.27,
+      "txMbps": 83.07,
+      "totalMbps": 1281.34
+    }
+  },
+  {
+    "ts": 1773232747807,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1116.93,
+      "txMbps": 81.45,
+      "totalMbps": 1198.37,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 42.51,
+      "txMbps": 658.09,
+      "totalMbps": 700.59,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 37.6,
+      "txMbps": 467.03,
+      "totalMbps": 504.63,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1116.93,
+      "txMbps": 81.45,
+      "totalMbps": 1198.37
+    }
+  },
+  {
+    "ts": 1773232757882,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1181.32,
+      "txMbps": 82.11,
+      "totalMbps": 1263.43,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 43.51,
+      "txMbps": 663.49,
+      "totalMbps": 707,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 39.04,
+      "txMbps": 534.06,
+      "totalMbps": 573.1,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1181.32,
+      "txMbps": 82.11,
+      "totalMbps": 1263.43
+    }
+  },
+  {
+    "ts": 1773232767763,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1203.17,
+      "txMbps": 95.54,
+      "totalMbps": 1298.7,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 57.16,
+      "txMbps": 709.69,
+      "totalMbps": 766.84,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 36.42,
+      "txMbps": 485.12,
+      "totalMbps": 521.54,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1203.17,
+      "txMbps": 95.54,
+      "totalMbps": 1298.7
+    }
+  },
+  {
+    "ts": 1773232777801,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1191.49,
+      "txMbps": 77.89,
+      "totalMbps": 1269.38,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 39.76,
+      "txMbps": 705.76,
+      "totalMbps": 745.52,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 38.75,
+      "txMbps": 525.75,
+      "totalMbps": 564.5,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1191.49,
+      "txMbps": 77.89,
+      "totalMbps": 1269.38
+    }
+  },
+  {
+    "ts": 1773232787817,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 989.22,
+      "txMbps": 75.33,
+      "totalMbps": 1064.55,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 36.39,
+      "txMbps": 566.79,
+      "totalMbps": 603.18,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 41.97,
+      "txMbps": 459.64,
+      "totalMbps": 501.6,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 989.22,
+      "txMbps": 75.33,
+      "totalMbps": 1064.55
+    }
+  },
+  {
+    "ts": 1773232797799,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 971.56,
+      "txMbps": 65.14,
+      "totalMbps": 1036.7,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 36.08,
+      "txMbps": 491.54,
+      "totalMbps": 527.62,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.86,
+      "txMbps": 507.61,
+      "totalMbps": 537.47,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 971.56,
+      "txMbps": 65.14,
+      "totalMbps": 1036.7
+    }
+  },
+  {
+    "ts": 1773232807835,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1215.43,
+      "txMbps": 89.12,
+      "totalMbps": 1304.55,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 41.47,
+      "txMbps": 618.03,
+      "totalMbps": 659.51,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 46.68,
+      "txMbps": 586.85,
+      "totalMbps": 633.53,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1215.43,
+      "txMbps": 89.12,
+      "totalMbps": 1304.55
+    }
+  },
+  {
+    "ts": 1773232817878,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1053,
+      "txMbps": 90.49,
+      "totalMbps": 1143.48,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 53.02,
+      "txMbps": 607.12,
+      "totalMbps": 660.13,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 43.79,
+      "txMbps": 511.08,
+      "totalMbps": 554.87,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1053,
+      "txMbps": 90.49,
+      "totalMbps": 1143.48
+    }
+  },
+  {
+    "ts": 1773232827827,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1162.79,
+      "txMbps": 75.95,
+      "totalMbps": 1238.74,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 44.42,
+      "txMbps": 712.12,
+      "totalMbps": 756.55,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.04,
+      "txMbps": 466.49,
+      "totalMbps": 497.52,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1162.79,
+      "txMbps": 75.95,
+      "totalMbps": 1238.74
+    }
+  },
+  {
+    "ts": 1773232837872,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1055.13,
+      "txMbps": 68.13,
+      "totalMbps": 1123.25,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 39.06,
+      "txMbps": 702.68,
+      "totalMbps": 741.74,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 28.38,
+      "txMbps": 348.58,
+      "totalMbps": 376.96,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1055.13,
+      "txMbps": 68.13,
+      "totalMbps": 1123.25
+    }
+  },
+  {
+    "ts": 1773232847978,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1300.82,
+      "txMbps": 84.64,
+      "totalMbps": 1385.45,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 43.7,
+      "txMbps": 700.72,
+      "totalMbps": 744.42,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 34.11,
+      "txMbps": 510.45,
+      "totalMbps": 544.56,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1300.82,
+      "txMbps": 84.64,
+      "totalMbps": 1385.45
+    }
+  },
+  {
+    "ts": 1773232857854,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1020.58,
+      "txMbps": 66.56,
+      "totalMbps": 1087.14,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 38.69,
+      "txMbps": 663.22,
+      "totalMbps": 701.91,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 28.81,
+      "txMbps": 374.42,
+      "totalMbps": 403.24,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1020.58,
+      "txMbps": 66.56,
+      "totalMbps": 1087.14
+    }
+  },
+  {
+    "ts": 1773232867883,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1058.4,
+      "txMbps": 72.85,
+      "totalMbps": 1131.25,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 40.51,
+      "txMbps": 611.01,
+      "totalMbps": 651.51,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 32.66,
+      "txMbps": 472.41,
+      "totalMbps": 505.08,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1058.4,
+      "txMbps": 72.85,
+      "totalMbps": 1131.25
+    }
+  },
+  {
+    "ts": 1773232877890,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1085.7,
+      "txMbps": 103.71,
+      "totalMbps": 1189.41,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 69.49,
+      "txMbps": 585.36,
+      "totalMbps": 654.84,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 34.13,
+      "txMbps": 517.88,
+      "totalMbps": 552.02,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1085.7,
+      "txMbps": 103.71,
+      "totalMbps": 1189.41
+    }
+  },
+  {
+    "ts": 1773232887938,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1241.34,
+      "txMbps": 134.45,
+      "totalMbps": 1375.79,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 72.89,
+      "txMbps": 706.69,
+      "totalMbps": 779.58,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 52.71,
+      "txMbps": 440.82,
+      "totalMbps": 493.53,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1241.34,
+      "txMbps": 134.45,
+      "totalMbps": 1375.79
+    }
+  },
+  {
+    "ts": 1773232897959,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1175.73,
+      "txMbps": 114.8,
+      "totalMbps": 1290.53,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 79.51,
+      "txMbps": 708.76,
+      "totalMbps": 788.28,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 40.19,
+      "txMbps": 561.18,
+      "totalMbps": 601.37,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1175.73,
+      "txMbps": 114.8,
+      "totalMbps": 1290.53
+    }
+  },
+  {
+    "ts": 1773232908005,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1135.46,
+      "txMbps": 122.18,
+      "totalMbps": 1257.64,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 72.9,
+      "txMbps": 588.72,
+      "totalMbps": 661.62,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 41.82,
+      "txMbps": 472.23,
+      "totalMbps": 514.05,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1135.46,
+      "txMbps": 122.18,
+      "totalMbps": 1257.64
+    }
+  },
+  {
+    "ts": 1773232917922,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1122.24,
+      "txMbps": 126.92,
+      "totalMbps": 1249.15,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 81.98,
+      "txMbps": 589.25,
+      "totalMbps": 671.23,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 41.28,
+      "txMbps": 500.74,
+      "totalMbps": 542.02,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1122.24,
+      "txMbps": 126.92,
+      "totalMbps": 1249.15
+    }
+  },
+  {
+    "ts": 1773232927998,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1257.47,
+      "txMbps": 115.73,
+      "totalMbps": 1373.2,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 80.97,
+      "txMbps": 645.76,
+      "totalMbps": 726.73,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.61,
+      "txMbps": 560.21,
+      "totalMbps": 591.82,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1257.47,
+      "txMbps": 115.73,
+      "totalMbps": 1373.2
+    }
+  },
+  {
+    "ts": 1773232937962,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1090.7,
+      "txMbps": 76.26,
+      "totalMbps": 1166.97,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 39.86,
+      "txMbps": 605.08,
+      "totalMbps": 644.95,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 34.24,
+      "txMbps": 466.61,
+      "totalMbps": 500.85,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1090.7,
+      "txMbps": 76.26,
+      "totalMbps": 1166.97
+    }
+  },
+  {
+    "ts": 1773232947909,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 849.67,
+      "txMbps": 118.74,
+      "totalMbps": 968.41,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 64.76,
+      "txMbps": 476.27,
+      "totalMbps": 541.04,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 53.17,
+      "txMbps": 386.01,
+      "totalMbps": 439.17,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 849.67,
+      "txMbps": 118.74,
+      "totalMbps": 968.41
+    }
+  },
+  {
+    "ts": 1773232957866,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1188.58,
+      "txMbps": 80.91,
+      "totalMbps": 1269.49,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 46.45,
+      "txMbps": 659.81,
+      "totalMbps": 706.26,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 39.63,
+      "txMbps": 562.92,
+      "totalMbps": 602.55,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1188.58,
+      "txMbps": 80.91,
+      "totalMbps": 1269.49
+    }
+  },
+  {
+    "ts": 1773232967940,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1035.43,
+      "txMbps": 69.03,
+      "totalMbps": 1104.46,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 37.82,
+      "txMbps": 573.15,
+      "totalMbps": 610.98,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 29.32,
+      "txMbps": 465.9,
+      "totalMbps": 495.23,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1035.43,
+      "txMbps": 69.03,
+      "totalMbps": 1104.46
+    }
+  },
+  {
+    "ts": 1773232977914,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1085.86,
+      "txMbps": 153.77,
+      "totalMbps": 1239.63,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 71.32,
+      "txMbps": 610.3,
+      "totalMbps": 681.63,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 88.43,
+      "txMbps": 512.74,
+      "totalMbps": 601.17,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1085.86,
+      "txMbps": 153.77,
+      "totalMbps": 1239.63
+    }
+  },
+  {
+    "ts": 1773232987898,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1184.43,
+      "txMbps": 125.17,
+      "totalMbps": 1309.6,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 76.07,
+      "txMbps": 667.88,
+      "totalMbps": 743.96,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 49.25,
+      "txMbps": 541.25,
+      "totalMbps": 590.5,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1184.43,
+      "txMbps": 125.17,
+      "totalMbps": 1309.6
+    }
+  },
+  {
+    "ts": 1773232998006,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1071.95,
+      "txMbps": 127.23,
+      "totalMbps": 1199.18,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 72.87,
+      "txMbps": 628.84,
+      "totalMbps": 701.72,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 62.09,
+      "txMbps": 509.53,
+      "totalMbps": 571.62,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1071.95,
+      "txMbps": 127.23,
+      "totalMbps": 1199.18
+    }
+  },
+  {
+    "ts": 1773233007900,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1028.38,
+      "txMbps": 202.33,
+      "totalMbps": 1230.72,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 115.3,
+      "txMbps": 628.49,
+      "totalMbps": 743.8,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 94.79,
+      "txMbps": 437.62,
+      "totalMbps": 532.41,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1028.38,
+      "txMbps": 202.33,
+      "totalMbps": 1230.72
+    }
+  },
+  {
+    "ts": 1773233017926,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1101.19,
+      "txMbps": 139.07,
+      "totalMbps": 1240.26,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 79.4,
+      "txMbps": 554.22,
+      "totalMbps": 633.62,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 54.43,
+      "txMbps": 502.58,
+      "totalMbps": 557.01,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1101.19,
+      "txMbps": 139.07,
+      "totalMbps": 1240.26
+    }
+  },
+  {
+    "ts": 1773233027949,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1074.6,
+      "txMbps": 142.4,
+      "totalMbps": 1217,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 66.52,
+      "txMbps": 638.85,
+      "totalMbps": 705.37,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 73.75,
+      "txMbps": 437.19,
+      "totalMbps": 510.94,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1074.6,
+      "txMbps": 142.4,
+      "totalMbps": 1217
+    }
+  },
+  {
+    "ts": 1773233037958,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1219.78,
+      "txMbps": 88.28,
+      "totalMbps": 1308.06,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 38.45,
+      "txMbps": 671.4,
+      "totalMbps": 709.85,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 48.43,
+      "txMbps": 527.51,
+      "totalMbps": 575.95,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1219.78,
+      "txMbps": 88.28,
+      "totalMbps": 1308.06
+    }
+  },
+  {
+    "ts": 1773233047947,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1194.1,
+      "txMbps": 89.5,
+      "totalMbps": 1283.6,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 39.85,
+      "txMbps": 602.74,
+      "totalMbps": 642.59,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 45.64,
+      "txMbps": 550.14,
+      "totalMbps": 595.78,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1194.1,
+      "txMbps": 89.5,
+      "totalMbps": 1283.6
+    }
+  },
+  {
+    "ts": 1773233058025,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 993.03,
+      "txMbps": 73.58,
+      "totalMbps": 1066.61,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 40.89,
+      "txMbps": 575.91,
+      "totalMbps": 616.8,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 36.33,
+      "txMbps": 472.41,
+      "totalMbps": 508.74,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 993.03,
+      "txMbps": 73.58,
+      "totalMbps": 1066.61
+    }
+  },
+  {
+    "ts": 1773233067966,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1153.96,
+      "txMbps": 78.41,
+      "totalMbps": 1232.37,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 43.07,
+      "txMbps": 645.07,
+      "totalMbps": 688.14,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 33.1,
+      "txMbps": 522.98,
+      "totalMbps": 556.08,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1153.96,
+      "txMbps": 78.41,
+      "totalMbps": 1232.37
+    }
+  },
+  {
+    "ts": 1773233077931,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1025.48,
+      "txMbps": 91.99,
+      "totalMbps": 1117.47,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 58.16,
+      "txMbps": 526.92,
+      "totalMbps": 585.08,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 32.31,
+      "txMbps": 514.3,
+      "totalMbps": 546.61,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1025.48,
+      "txMbps": 91.99,
+      "totalMbps": 1117.47
+    }
+  },
+  {
+    "ts": 1773233087999,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1218.83,
+      "txMbps": 103.35,
+      "totalMbps": 1322.17,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 58.58,
+      "txMbps": 552.6,
+      "totalMbps": 611.18,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 44.7,
+      "txMbps": 681.37,
+      "totalMbps": 726.07,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1218.83,
+      "txMbps": 103.35,
+      "totalMbps": 1322.17
+    }
+  },
+  {
+    "ts": 1773233098002,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1163.98,
+      "txMbps": 117.52,
+      "totalMbps": 1281.5,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 62.61,
+      "txMbps": 586.16,
+      "totalMbps": 648.77,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 56.29,
+      "txMbps": 588.33,
+      "totalMbps": 644.62,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1163.98,
+      "txMbps": 117.52,
+      "totalMbps": 1281.5
+    }
+  },
+  {
+    "ts": 1773233108062,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1092,
+      "txMbps": 121.98,
+      "totalMbps": 1213.98,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 71.12,
+      "txMbps": 572.11,
+      "totalMbps": 643.23,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 48.73,
+      "txMbps": 518.58,
+      "totalMbps": 567.3,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1092,
+      "txMbps": 121.98,
+      "totalMbps": 1213.98
+    }
+  },
+  {
+    "ts": 1773233118048,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1073.3,
+      "txMbps": 98.28,
+      "totalMbps": 1171.58,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 60.17,
+      "txMbps": 529.27,
+      "totalMbps": 589.44,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 39.61,
+      "txMbps": 566.09,
+      "totalMbps": 605.7,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1073.3,
+      "txMbps": 98.28,
+      "totalMbps": 1171.58
+    }
+  },
+  {
+    "ts": 1773233128050,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1066.18,
+      "txMbps": 109.77,
+      "totalMbps": 1175.95,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 54.95,
+      "txMbps": 549.79,
+      "totalMbps": 604.73,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 46.37,
+      "txMbps": 511.47,
+      "totalMbps": 557.84,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1066.18,
+      "txMbps": 109.77,
+      "totalMbps": 1175.95
+    }
+  },
+  {
+    "ts": 1773233138035,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1164.1,
+      "txMbps": 86.91,
+      "totalMbps": 1251.01,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 38.05,
+      "txMbps": 586.14,
+      "totalMbps": 624.19,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 46.06,
+      "txMbps": 556.55,
+      "totalMbps": 602.61,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1164.1,
+      "txMbps": 86.91,
+      "totalMbps": 1251.01
+    }
+  },
+  {
+    "ts": 1773233148008,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1283.27,
+      "txMbps": 82.61,
+      "totalMbps": 1365.88,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 37.95,
+      "txMbps": 662.03,
+      "totalMbps": 699.98,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 41.66,
+      "txMbps": 595.8,
+      "totalMbps": 637.46,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1283.27,
+      "txMbps": 82.61,
+      "totalMbps": 1365.88
+    }
+  },
+  {
+    "ts": 1773233158065,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1196.14,
+      "txMbps": 96.49,
+      "totalMbps": 1292.63,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 43.78,
+      "txMbps": 628.99,
+      "totalMbps": 672.76,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 50.04,
+      "txMbps": 554.07,
+      "totalMbps": 604.11,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1196.14,
+      "txMbps": 96.49,
+      "totalMbps": 1292.63
+    }
+  },
+  {
+    "ts": 1773233168439,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1243.12,
+      "txMbps": 88.41,
+      "totalMbps": 1331.53,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 44.04,
+      "txMbps": 714.91,
+      "totalMbps": 758.95,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 36,
+      "txMbps": 467.49,
+      "totalMbps": 503.49,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1243.12,
+      "txMbps": 88.41,
+      "totalMbps": 1331.53
+    }
+  },
+  {
+    "ts": 1773233178167,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1272.75,
+      "txMbps": 92.98,
+      "totalMbps": 1365.73,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 44,
+      "txMbps": 684.15,
+      "totalMbps": 728.15,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 45.79,
+      "txMbps": 561.03,
+      "totalMbps": 606.82,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1272.75,
+      "txMbps": 92.98,
+      "totalMbps": 1365.73
+    }
+  },
+  {
+    "ts": 1773233188133,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1220.33,
+      "txMbps": 85.56,
+      "totalMbps": 1305.89,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 44.69,
+      "txMbps": 629.97,
+      "totalMbps": 674.66,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 35.47,
+      "txMbps": 581.34,
+      "totalMbps": 616.81,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1220.33,
+      "txMbps": 85.56,
+      "totalMbps": 1305.89
+    }
+  },
+  {
+    "ts": 1773233198174,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1198.39,
+      "txMbps": 193.56,
+      "totalMbps": 1391.95,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 74.93,
+      "txMbps": 565.27,
+      "totalMbps": 640.19,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 105.66,
+      "txMbps": 542.04,
+      "totalMbps": 647.7,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1198.39,
+      "txMbps": 193.56,
+      "totalMbps": 1391.95
+    }
+  },
+  {
+    "ts": 1773233208157,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1054.31,
+      "txMbps": 119.81,
+      "totalMbps": 1174.12,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 33.6,
+      "txMbps": 501.08,
+      "totalMbps": 534.68,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 76.89,
+      "txMbps": 478.23,
+      "totalMbps": 555.12,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1054.31,
+      "txMbps": 119.81,
+      "totalMbps": 1174.12
+    }
+  },
+  {
+    "ts": 1773233218196,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 998.65,
+      "txMbps": 114.26,
+      "totalMbps": 1112.91,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 39.17,
+      "txMbps": 526.48,
+      "totalMbps": 565.65,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 70.03,
+      "txMbps": 460.06,
+      "totalMbps": 530.09,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 998.65,
+      "txMbps": 114.26,
+      "totalMbps": 1112.91
+    }
+  },
+  {
+    "ts": 1773233228146,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1270.13,
+      "txMbps": 88.28,
+      "totalMbps": 1358.41,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 43.37,
+      "txMbps": 686.81,
+      "totalMbps": 730.18,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 39.53,
+      "txMbps": 511.88,
+      "totalMbps": 551.41,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1270.13,
+      "txMbps": 88.28,
+      "totalMbps": 1358.41
+    }
+  },
+  {
+    "ts": 1773233238216,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1052.8,
+      "txMbps": 85.42,
+      "totalMbps": 1138.22,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 43.16,
+      "txMbps": 517.72,
+      "totalMbps": 560.89,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 39.16,
+      "txMbps": 508.65,
+      "totalMbps": 547.81,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1052.8,
+      "txMbps": 85.42,
+      "totalMbps": 1138.22
+    }
+  },
+  {
+    "ts": 1773233248157,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1028.08,
+      "txMbps": 76.91,
+      "totalMbps": 1105,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 36.72,
+      "txMbps": 513.83,
+      "totalMbps": 550.55,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 39.01,
+      "txMbps": 522.15,
+      "totalMbps": 561.17,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1028.08,
+      "txMbps": 76.91,
+      "totalMbps": 1105
+    }
+  },
+  {
+    "ts": 1773233258176,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 968.81,
+      "txMbps": 108.73,
+      "totalMbps": 1077.54,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 44.63,
+      "txMbps": 499.47,
+      "totalMbps": 544.11,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 62.59,
+      "txMbps": 421.6,
+      "totalMbps": 484.18,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 968.81,
+      "txMbps": 108.73,
+      "totalMbps": 1077.54
+    }
+  },
+  {
+    "ts": 1773233268215,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1161.15,
+      "txMbps": 93.55,
+      "totalMbps": 1254.71,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 38.64,
+      "txMbps": 669.12,
+      "totalMbps": 707.77,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 51.69,
+      "txMbps": 457.66,
+      "totalMbps": 509.35,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1161.15,
+      "txMbps": 93.55,
+      "totalMbps": 1254.71
+    }
+  },
+  {
+    "ts": 1773233278188,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1120.97,
+      "txMbps": 89.96,
+      "totalMbps": 1210.93,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 39.69,
+      "txMbps": 618.64,
+      "totalMbps": 658.34,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 49.89,
+      "txMbps": 483.16,
+      "totalMbps": 533.05,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1120.97,
+      "txMbps": 89.96,
+      "totalMbps": 1210.93
+    }
+  },
+  {
+    "ts": 1773233288111,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1241.02,
+      "txMbps": 82.03,
+      "totalMbps": 1323.05,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 38.24,
+      "txMbps": 586.35,
+      "totalMbps": 624.6,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 41.06,
+      "txMbps": 638.01,
+      "totalMbps": 679.07,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1241.02,
+      "txMbps": 82.03,
+      "totalMbps": 1323.05
+    }
+  },
+  {
+    "ts": 1773233298167,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1016.41,
+      "txMbps": 84.37,
+      "totalMbps": 1100.78,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 35.87,
+      "txMbps": 474.75,
+      "totalMbps": 510.63,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 48.19,
+      "txMbps": 553.17,
+      "totalMbps": 601.36,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1016.41,
+      "txMbps": 84.37,
+      "totalMbps": 1100.78
+    }
+  },
+  {
+    "ts": 1773233308154,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1093.63,
+      "txMbps": 94.43,
+      "totalMbps": 1188.06,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 60.12,
+      "txMbps": 520.45,
+      "totalMbps": 580.57,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 35.78,
+      "txMbps": 574.82,
+      "totalMbps": 610.61,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1093.63,
+      "txMbps": 94.43,
+      "totalMbps": 1188.06
+    }
+  },
+  {
+    "ts": 1773233318206,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1237.54,
+      "txMbps": 105.15,
+      "totalMbps": 1342.69,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 38.95,
+      "txMbps": 735.21,
+      "totalMbps": 774.15,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 62.62,
+      "txMbps": 493.38,
+      "totalMbps": 556,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1237.54,
+      "txMbps": 105.15,
+      "totalMbps": 1342.69
+    }
+  },
+  {
+    "ts": 1773233328223,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1122.02,
+      "txMbps": 107.01,
+      "totalMbps": 1229.03,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 37.17,
+      "txMbps": 621.35,
+      "totalMbps": 658.52,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 65.95,
+      "txMbps": 498.36,
+      "totalMbps": 564.31,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1122.02,
+      "txMbps": 107.01,
+      "totalMbps": 1229.03
+    }
+  },
+  {
+    "ts": 1773233338243,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1021.53,
+      "txMbps": 85.99,
+      "totalMbps": 1107.51,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 30.97,
+      "txMbps": 500.51,
+      "totalMbps": 531.49,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 51.46,
+      "txMbps": 525.11,
+      "totalMbps": 576.57,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1021.53,
+      "txMbps": 85.99,
+      "totalMbps": 1107.51
+    }
+  },
+  {
+    "ts": 1773233348223,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1070.24,
+      "txMbps": 89.35,
+      "totalMbps": 1159.59,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 39.81,
+      "txMbps": 638.62,
+      "totalMbps": 678.44,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 48.84,
+      "txMbps": 445.02,
+      "totalMbps": 493.86,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1070.24,
+      "txMbps": 89.35,
+      "totalMbps": 1159.59
+    }
+  },
+  {
+    "ts": 1773233358282,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1168.01,
+      "txMbps": 72.41,
+      "totalMbps": 1240.43,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 37.74,
+      "txMbps": 636.53,
+      "totalMbps": 674.26,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 31.06,
+      "txMbps": 530.16,
+      "totalMbps": 561.22,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1168.01,
+      "txMbps": 72.41,
+      "totalMbps": 1240.43
+    }
+  },
+  {
+    "ts": 1773233368213,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1106.78,
+      "txMbps": 72.36,
+      "totalMbps": 1179.14,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 37.1,
+      "txMbps": 604.6,
+      "totalMbps": 641.69,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 32.79,
+      "txMbps": 509.31,
+      "totalMbps": 542.1,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1106.78,
+      "txMbps": 72.36,
+      "totalMbps": 1179.14
+    }
+  },
+  {
+    "ts": 1773233378294,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1244.79,
+      "txMbps": 92.21,
+      "totalMbps": 1336.99,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 44.02,
+      "txMbps": 724.15,
+      "totalMbps": 768.17,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 47.72,
+      "txMbps": 510.33,
+      "totalMbps": 558.05,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1244.79,
+      "txMbps": 92.21,
+      "totalMbps": 1336.99
+    }
+  },
+  {
+    "ts": 1773233388284,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1090.77,
+      "txMbps": 74.74,
+      "totalMbps": 1165.51,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 34.74,
+      "txMbps": 561.38,
+      "totalMbps": 596.12,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 33.38,
+      "txMbps": 444.82,
+      "totalMbps": 478.2,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1090.77,
+      "txMbps": 74.74,
+      "totalMbps": 1165.51
+    }
+  },
+  {
+    "ts": 1773233398271,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1008.61,
+      "txMbps": 127.92,
+      "totalMbps": 1136.53,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 48.81,
+      "txMbps": 613.4,
+      "totalMbps": 662.21,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 77.8,
+      "txMbps": 411.27,
+      "totalMbps": 489.06,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1008.61,
+      "txMbps": 127.92,
+      "totalMbps": 1136.53
+    }
+  },
+  {
+    "ts": 1773233408293,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1083.91,
+      "txMbps": 130.29,
+      "totalMbps": 1214.2,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 40.43,
+      "txMbps": 713.77,
+      "totalMbps": 754.2,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 85.64,
+      "txMbps": 360.51,
+      "totalMbps": 446.15,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1083.91,
+      "txMbps": 130.29,
+      "totalMbps": 1214.2
+    }
+  },
+  {
+    "ts": 1773233418304,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1134.84,
+      "txMbps": 161.27,
+      "totalMbps": 1296.11,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 43.13,
+      "txMbps": 623.27,
+      "totalMbps": 666.4,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 114.55,
+      "txMbps": 527.62,
+      "totalMbps": 642.17,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1134.84,
+      "txMbps": 161.27,
+      "totalMbps": 1296.11
+    }
+  },
+  {
+    "ts": 1773233428307,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1150.83,
+      "txMbps": 100.32,
+      "totalMbps": 1251.15,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 40.17,
+      "txMbps": 553.91,
+      "totalMbps": 594.08,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 57.81,
+      "txMbps": 577.39,
+      "totalMbps": 635.19,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1150.83,
+      "txMbps": 100.32,
+      "totalMbps": 1251.15
+    }
+  },
+  {
+    "ts": 1773233438564,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1061.44,
+      "txMbps": 82.71,
+      "totalMbps": 1144.14,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 53.36,
+      "txMbps": 674.28,
+      "totalMbps": 727.64,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 32.93,
+      "txMbps": 461.2,
+      "totalMbps": 494.13,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1061.44,
+      "txMbps": 82.71,
+      "totalMbps": 1144.14
+    }
+  },
+  {
+    "ts": 1773233448351,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 883.45,
+      "txMbps": 103.7,
+      "totalMbps": 987.15,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 70.46,
+      "txMbps": 468.98,
+      "totalMbps": 539.44,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 33.8,
+      "txMbps": 400.35,
+      "totalMbps": 434.14,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 883.45,
+      "txMbps": 103.7,
+      "totalMbps": 987.15
+    }
+  },
+  {
+    "ts": 1773233458292,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1152.36,
+      "txMbps": 104.21,
+      "totalMbps": 1256.57,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 51.09,
+      "txMbps": 684.27,
+      "totalMbps": 735.36,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 53.05,
+      "txMbps": 504.29,
+      "totalMbps": 557.35,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1152.36,
+      "txMbps": 104.21,
+      "totalMbps": 1256.57
+    }
+  },
+  {
+    "ts": 1773233468300,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 944.84,
+      "txMbps": 132.34,
+      "totalMbps": 1077.19,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 42.68,
+      "txMbps": 593,
+      "totalMbps": 635.68,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 100.26,
+      "txMbps": 426.83,
+      "totalMbps": 527.09,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 944.84,
+      "txMbps": 132.34,
+      "totalMbps": 1077.19
+    }
+  },
+  {
+    "ts": 1773233478428,
+    "uplink": {
+      "key": "uplink",
+      "name": "UPLINK",
+      "rxMbps": 1171.39,
+      "txMbps": 143.33,
+      "totalMbps": 1314.72,
+      "status": "up"
+    },
+    "switchB": {
+      "key": "switchB",
+      "name": "Switch B",
+      "rxMbps": 40.21,
+      "txMbps": 597.24,
+      "totalMbps": 637.45,
+      "status": "up"
+    },
+    "switchA": {
+      "key": "switchA",
+      "name": "Switch A",
+      "rxMbps": 90.76,
+      "txMbps": 530.53,
+      "totalMbps": 621.29,
+      "status": "up"
+    },
+    "combined": {
+      "rxMbps": 1171.39,
+      "txMbps": 143.33,
+      "totalMbps": 1314.72
+    }
+  }
+]

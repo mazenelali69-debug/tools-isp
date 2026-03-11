@@ -10,7 +10,6 @@ const NAV = [
   { id: "combined", label: "Combined Traffic", icon: "◈" },
   { id: "history", label: "History", icon: "◷" },
   { id: "aviatwtm4200", label: "AviatWTM4200", icon: "▣" },
-  { id: "aviathistory", label: "Aviat History", icon: "◫" },
   { id: "monitorstreet", label: "Monitor Street", icon: "◔" },
   { id: "networkmap", label: "Network Map", icon: "⌘" },
   { id: "isptopology", label: "ISP Topology", icon: "◉" },
@@ -74,7 +73,6 @@ export default function Sidebar({ active, setActive }) {
     </aside>
   );
 }
-
 
 
 

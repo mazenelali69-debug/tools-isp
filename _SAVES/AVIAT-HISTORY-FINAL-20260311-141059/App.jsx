@@ -1,5 +1,4 @@
-﻿import AviatHistoryPage from "./pages/AviatHistoryPage.jsx";
-import IspTopologyPage from "./pages/IspTopologyPage.jsx";
+﻿import IspTopologyPage from "./pages/IspTopologyPage.jsx";
 import React, { useMemo, useState, useEffect } from "react";
 import HistoryPage from "./pages/HistoryPage";
 import EthernetTrafficPage from "./pages/EthernetTrafficPage";
@@ -105,8 +104,6 @@ export default function App() {
         <LivePingPage />
       ) : active === "aviatwtm4200" ? (
         <AviatWTM4200Page />
-      ) : active === "aviathistory" ? (
-        <AviatHistoryPage />
       ) : active === "combined" ? (
         <CombinedTrafficPage />
       ) : active === "ethernet" ? (
@@ -127,4 +124,3 @@ export default function App() {
     </AppShell>
   );
 }
-
