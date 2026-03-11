@@ -12,7 +12,6 @@ const NAV = [
   { id: "aviatwtm4200", label: "AviatWTM4200", icon: "▣" },
   { id: "monitorstreet", label: "Monitor Street", icon: "◔" },
   { id: "networkmap", label: "Network Map", icon: "⌘" },
-  { id: "isptopology", label: "ISP Topology", icon: "◉" },
   { id: "settings", label: "Settings", icon: "⚙" }
 ];
 
@@ -60,6 +59,7 @@ export default function Sidebar({ active, setActive }) {
             {!collapsed ? <span className="ti-side__label">{it.label}</span> : null}
           </button>
         ))}
+<a href="/map">Map</a>
 </nav>
 
       <div className="ti-side__foot">
@@ -73,9 +73,6 @@ export default function Sidebar({ active, setActive }) {
     </aside>
   );
 }
-
-
-
 
 
 

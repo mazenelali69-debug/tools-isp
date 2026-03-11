@@ -1,5 +1,4 @@
-﻿import IspTopologyPage from "./pages/IspTopologyPage.jsx";
-import React, { useMemo, useState, useEffect } from "react";
+﻿import React, { useMemo, useState, useEffect } from "react";
 import HistoryPage from "./pages/HistoryPage";
 import EthernetTrafficPage from "./pages/EthernetTrafficPage";
 import UplinkTrafficPage from "./pages/UplinkTrafficPage";
@@ -116,11 +115,10 @@ export default function App() {
         <MonitorStreetPage />
       ) : active === "networkmap" ? (
         <NetworkMapPage />
-      ) : active === "isptopology" ? (
-        <IspTopologyPage />
       ) : (
         <DashboardPage windows={windows} setWindows={setWindows} />
       )}
     </AppShell>
   );
 }
+

@@ -116,11 +116,14 @@ export default function App() {
         <MonitorStreetPage />
       ) : active === "networkmap" ? (
         <NetworkMapPage />
-      ) : active === "isptopology" ? (
-        <IspTopologyPage />
       ) : (
         <DashboardPage windows={windows} setWindows={setWindows} />
       )}
     </AppShell>
   );
 }
+
+
+
+
+
