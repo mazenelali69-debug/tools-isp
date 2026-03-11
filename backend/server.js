@@ -2,7 +2,7 @@
 const { exec } = require("child_process");
 
 function checkVlan1559(cb){
-  exec("ping -n 1 155.15.59.1", (err,stdout)=>{
+  execFile("ping", ["-n","1","-w","1000","155.15.59.1"], { windowsHide:true }, (err, stdout, stderr) => {
     if(stdout && stdout.includes("TTL=")){
       cb("ONLINE");
     }else{
@@ -21,8 +21,8 @@ const { Server } = require("socket.io");
 const snmp = require("net-snmp");
 const { v4: uuidv4 } = require("uuid");
 
-process.on("uncaughtException", (err) => console.error("ðŸ”¥ UncaughtException:", err));
-process.on("unhandledRejection", (err) => console.error("ðŸ”¥ UnhandledRejection:", err));
+process.on("uncaughtException", (err) => console.error("🔥 UncaughtException:", err));
+process.on("unhandledRejection", (err) => console.error("🔥 UnhandledRejection:", err));
 
 const historyRouter = require("./routes/history");
 const { appendUplinkHistory } = require("./lib/historyStore");
@@ -1024,7 +1024,7 @@ app.post("/api/debug/walk-ifdescr", async (req, res) => {
 });
 
 //
-// API: Universal interfaces via SNMP CLI (snmpwalk) â€” works across vendors
+// API: Universal interfaces via SNMP CLI (snmpwalk) — works across vendors
 // POST /api/interfaces-cli  { ip, community }
 // returns: { ok:true, count, interfaces:[{ifIndex, ifName}] }
 //
@@ -1226,18 +1226,7 @@ app.post("/api/monitors-universal",(req,res)=>{
 const { execFile: execFileNeighbors } = require("child_process");
 
 function runPwshJson(psCommand, timeoutMs = 30000){
-  return new Promise((resolve, reject) => {
-    const args = ["-NoProfile","-ExecutionPolicy","Bypass","-Command", psCommand];
-    execFileNeighbors("powershell.exe", args, { windowsHide:true, timeout: timeoutMs, maxBuffer: 25*1024*1024 }, (err, stdout, stderr) => {
-      if(err){
-        const msg = (stderr && stderr.trim()) ? stderr.trim() : err.message;
-        return reject(new Error(msg));
-      }
-      const out = (stdout || "").trim();
-      try { resolve(out ? JSON.parse(out) : []); }
-      catch(e){ reject(new Error("Neighbors JSON parse failed: " + out.slice(0, 500))); }
-    });
-  });
+  return Promise.resolve([]);
 }
 
 async function getNeighborsWindows(){
@@ -1712,7 +1701,7 @@ app.get("/api/tplink-jetstream/health", async (req, res) => {
 /* TP-LINK-JETSTREAM-HEALTH-END */
 
 const PORT = process.env.PORT || 9090;
-server.listen(PORT, "0.0.0.0", () => console.log("âœ… tools-isp backend listening on", PORT));
+server.listen(PORT, "0.0.0.0", () => console.log("✅ tools-isp backend listening on", PORT));
 
 
 
@@ -1787,12 +1776,12 @@ app.get("/api/ping", (req, res) => {
   const ip = (req.query.ip || "").toString().trim();
   if(!ip) return res.status(400).json({ ok:false, error:"Missing ip" });
 
-  // Ø­Ù…Ø§ÙŠØ© Ø¨Ø³ÙŠØ·Ø© Ø¶Ø¯ injection (Ø¨Ø¯Ù†Ø§ Ù†Ø³Ù…Ø­ IP/hostname ÙÙ‚Ø·)
+  // حماية بسيطة ضد injection (بدنا نسمح IP/hostname فقط)
   if(!ip.match(/^[a-zA-Z0-9\.\-:]+$/)) {
     return res.status(400).json({ ok:false, error:"Invalid ip" });
   }
 
-  // ping Ø¹Ù„Ù‰ Windows: -n 1
+  // ping على Windows: -n 1
   const args = ["-n","1","-w","1000", ip]; // 1 ping, timeout 1000ms
   execFile("ping", args, { windowsHide:true }, (err, stdout, stderr) => {
     const out = ((stdout||"") + (stderr||"")).trim();
@@ -2403,7 +2392,7 @@ app.get("/api/aviatwtm4200/live", async (req, res) => {
 app.get("/api/test/whatsapp-alert", async (req, res) => {
   const msg =
     req.query.msg ||
-    ("ðŸš¨ tools-isp test alert`nTime: " + new Date().toLocaleString());
+    ("🚨 tools-isp test alert`nTime: " + new Date().toLocaleString());
 
   const out = await sendWhatsAppAlert(String(msg));
   res.json(out);
@@ -2563,7 +2552,7 @@ async function nocCheckPingForIp(ip, label) {
       st.down = true;
 
       await nocSend(
-        "ðŸš¨ DEVICE DOWN`n`n" +
+        "🚨 DEVICE DOWN`n`n" +
         "Device IP: " + ip + "`n" +
         "Issue: Ping stopped`n" +
         "Name: " + label + "`n" +
@@ -2577,7 +2566,7 @@ async function nocCheckPingForIp(ip, label) {
       st.down = false;
 
       await nocSend(
-        "âœ… DEVICE RECOVERED`n`n" +
+        "✅ DEVICE RECOVERED`n`n" +
         "Device IP: " + ip + "`n" +
         "Issue: Ping restored`n" +
         "Ping: " + Math.round(pingMs) + " ms`n" +
@@ -2592,7 +2581,7 @@ async function nocCheckPingForIp(ip, label) {
       st.highPing = true;
 
       await nocSend(
-        "âš ï¸ HIGH LATENCY`n`n" +
+        "⚠️ HIGH LATENCY`n`n" +
         "Device IP: " + ip + "`n" +
         "Ping: " + Math.round(pingMs) + " ms`n" +
         "Limit: " + NOC_ALERT_CFG.highPingMs + " ms`n" +
@@ -2607,7 +2596,7 @@ async function nocCheckPingForIp(ip, label) {
       st.highPing = false;
 
       await nocSend(
-        "âœ… LATENCY NORMAL`n`n" +
+        "✅ LATENCY NORMAL`n`n" +
         "Device IP: " + ip + "`n" +
         "Ping: " + Math.round(pingMs) + " ms`n" +
         "Name: " + label + "`n" +
@@ -2623,7 +2612,7 @@ async function nocCheckPingForIp(ip, label) {
 
     if (lossPct >= NOC_ALERT_CFG.packetLossAlertPct) {
       await nocSend(
-        "âš ï¸ PACKET LOSS`n`n" +
+        "⚠️ PACKET LOSS`n`n" +
         "Device IP: " + ip + "`n" +
         "Loss: " + lossPct + "%`n" +
         "Window: " + NOC_ALERT_CFG.packetLossWindow + " checks`n" +
@@ -2674,7 +2663,7 @@ async function nocCheckEthRow(row) {
     st.ethDown = true;
 
     await nocSend(
-      "ðŸš¨ DEVICE DOWN`n`n" +
+      "🚨 DEVICE DOWN`n`n" +
       "Device IP: " + ip + "`n" +
       "Issue: Ethernet down`n" +
       "Interface: " + ifName + "`n" +
@@ -2689,7 +2678,7 @@ async function nocCheckEthRow(row) {
     st.ethDown = false;
 
     await nocSend(
-      "âœ… ETHERNET RESTORED`n`n" +
+      "✅ ETHERNET RESTORED`n`n" +
       "Device IP: " + ip + "`n" +
       "Interface: " + ifName + "`n" +
       "Name: " + label + "`n" +
@@ -2706,7 +2695,7 @@ async function nocCheckEthRow(row) {
     st.trafficStopped = true;
 
     await nocSend(
-      "âš ï¸ TRAFFIC STOPPED`n`n" +
+      "⚠️ TRAFFIC STOPPED`n`n" +
       "Device IP: " + ip + "`n" +
       "Interface: " + ifName + "`n" +
       "RX: " + rx.toFixed(2) + " Mbps`n" +
@@ -2723,7 +2712,7 @@ async function nocCheckEthRow(row) {
     st.trafficFailStreak = 0;
 
     await nocSend(
-      "âœ… TRAFFIC RESTORED`n`n" +
+      "✅ TRAFFIC RESTORED`n`n" +
       "Device IP: " + ip + "`n" +
       "Interface: " + ifName + "`n" +
       "RX: " + rx.toFixed(2) + " Mbps`n" +
@@ -3023,4 +3012,8 @@ if (!global.__aviatHistoryIntervalStarted) {
 // =====================================
 // AVIAT_HISTORY_FINAL_END
 // =====================================
+
+
+
+
 
