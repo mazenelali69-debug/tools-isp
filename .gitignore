@@ -61,3 +61,4 @@ _backup-frontend-*.zip
 *.zip
 data/combined-traffic-history.json
 backend/data/uplink-history.json
+backend/data/aviat-history.json
