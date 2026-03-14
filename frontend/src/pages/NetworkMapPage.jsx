@@ -75,7 +75,7 @@ function useMapData() {
     async function loadTraffic() {
       const next = await Promise.all(LINKS.map(async (t) => {
         try {
-          const url = `/api/eth/throughput?ip=${encodeURIComponent(t.ip)}&community=${encodeURIComponent(t.community)}&ifIndex=${encodeURIComponent(t.ifIndex)}&ms=800`;
+          const url = `/api/eth/snapshotput?ip=${encodeURIComponent(t.ip)}&community=${encodeURIComponent(t.community)}&ifIndex=${encodeURIComponent(t.ifIndex)}&ms=800`;
           const res = await fetch(url, { cache: "no-store" });
           const js = await res.json();
 
@@ -268,4 +268,6 @@ export default function NetworkMapPage() {
     </div>
   );
 }
+
+
 

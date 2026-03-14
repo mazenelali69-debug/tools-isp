@@ -1,4 +1,4 @@
-﻿require("dotenv").config();
+require("dotenv").config();
 const netNeighbors = require("net");
 const { spawn } = require("child_process");
 const { execFile } = require("child_process");
@@ -9,8 +9,8 @@ const { Server } = require("socket.io");
 const snmp = require("net-snmp");
 const { v4: uuidv4 } = require("uuid");
 
-process.on("uncaughtException", (err) => console.error("🔥 UncaughtException:", err));
-process.on("unhandledRejection", (err) => console.error("🔥 UnhandledRejection:", err));
+process.on("uncaughtException", (err) => console.error("?? UncaughtException:", err));
+process.on("unhandledRejection", (err) => console.error("?? UnhandledRejection:", err));
 
 const historyRouter = require("./routes/history");
 const { appendUplinkHistory } = require("./lib/historyStore");
@@ -1012,7 +1012,7 @@ app.post("/api/debug/walk-ifdescr", async (req, res) => {
 });
 
 //
-// API: Universal interfaces via SNMP CLI (snmpwalk) — works across vendors
+// API: Universal interfaces via SNMP CLI (snmpwalk) � works across vendors
 // POST /api/interfaces-cli  { ip, community }
 // returns: { ok:true, count, interfaces:[{ifIndex, ifName}] }
 //
@@ -1216,7 +1216,7 @@ const { execFile: execFileNeighbors } = require("child_process");
 function runPwshJson(psCommand, timeoutMs = 30000){
   return new Promise((resolve, reject) => {
     const args = ["-NoProfile","-ExecutionPolicy","Bypass","-Command", psCommand];
-    execFileNeighbors("powershell.exe", args, { windowsHide:true, timeout: timeoutMs, maxBuffer: 25*1024*1024 }, (err, stdout, stderr) => {
+    execFileNeighbors("powershell.exe", { windowsHide:true }, args, { windowsHide:true, timeout: timeoutMs, maxBuffer: 25*1024*1024 }, (err, stdout, stderr) => {
       if(err){
         const msg = (stderr && stderr.trim()) ? stderr.trim() : err.message;
         return reject(new Error(msg));
@@ -1507,7 +1507,7 @@ app.get("/api/ping-scan", async (req, res) => {
 
 
 const PORT = process.env.PORT || 9090;
-server.listen(PORT, "0.0.0.0", () => console.log("✅ tools-isp backend listening on", PORT));
+server.listen(PORT, "0.0.0.0", () => console.log("? tools-isp backend listening on", PORT));
 
 
 
@@ -1582,12 +1582,12 @@ app.get("/api/ping", (req, res) => {
   const ip = (req.query.ip || "").toString().trim();
   if(!ip) return res.status(400).json({ ok:false, error:"Missing ip" });
 
-  // حماية بسيطة ضد injection (بدنا نسمح IP/hostname فقط)
+  // ????? ????? ?? injection (???? ???? IP/hostname ???)
   if(!ip.match(/^[a-zA-Z0-9\.\-:]+$/)) {
     return res.status(400).json({ ok:false, error:"Invalid ip" });
   }
 
-  // ping على Windows: -n 1
+  // ping ??? Windows: -n 1
   const args = ["-n","1","-w","1000", ip]; // 1 ping, timeout 1000ms
   execFile("ping", args, { windowsHide:true }, (err, stdout, stderr) => {
     const out = ((stdout||"") + (stderr||"")).trim();
@@ -2198,7 +2198,7 @@ app.get("/api/aviatwtm4200/live", async (req, res) => {
 app.get("/api/test/whatsapp-alert", async (req, res) => {
   const msg =
     req.query.msg ||
-    ("🚨 tools-isp test alert`nTime: " + new Date().toLocaleString());
+    ("?? tools-isp test alert`nTime: " + new Date().toLocaleString());
 
   const out = await sendWhatsAppAlert(String(msg));
   res.json(out);
@@ -2206,4 +2206,5 @@ app.get("/api/test/whatsapp-alert", async (req, res) => {
 // =====================================
 // CALLMEBOT_WHATSAPP_TEST_ROUTE_END
 // =====================================
+
 

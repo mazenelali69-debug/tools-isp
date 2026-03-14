@@ -136,7 +136,7 @@ function Sparkline({ values = [], label = "" }){
 
 function SegmentedGauge({ valueMbps, name, pingText, totalText, alertLoss }){
   const total = num(valueMbps);
-  const maxGaugeMbps = 1000;
+  const maxGaugeMbps = 300;
   const ratio = Math.max(0, Math.min(1, total / maxGaugeMbps));
 
   const width = 314;
@@ -153,15 +153,15 @@ function SegmentedGauge({ valueMbps, name, pingText, totalText, alertLoss }){
   const activeCount = Math.round(segments * ratio);
 
   const labels = [
-    { text: "0",    angle: -118, r: 132, dx: -3, dy:  6 },
-    { text: "100",  angle: -88,  r: 132, dx: -6, dy: -2 },
-    { text: "200",  angle: -58,  r: 132, dx: -5, dy: -4 },
-    { text: "300",  angle: -28,  r: 134, dx:  0, dy: -5 },
-    { text: "500",  angle: 2,    r: 136, dx:  0, dy: -2 },
-    { text: "700",  angle: 32,   r: 136, dx:  3, dy: -1 },
-    { text: "800",  angle: 62,   r: 136, dx:  4, dy:  0 },
-    { text: "900",  angle: 92,   r: 134, dx:  6, dy:  4 },
-    { text: "1000", angle: 118,  r: 132, dx:  5, dy:  8 }
+    { text: "0",   angle: -118, r: 132, dx: -3, dy:  6 },
+    { text: "30",  angle: -88,  r: 132, dx: -6, dy: -2 },
+    { text: "60",  angle: -58,  r: 132, dx: -5, dy: -4 },
+    { text: "90",  angle: -28,  r: 134, dx:  0, dy: -5 },
+    { text: "120", angle: 2,    r: 136, dx:  0, dy: -2 },
+    { text: "160", angle: 32,   r: 136, dx:  3, dy: -1 },
+    { text: "200", angle: 62,   r: 136, dx:  4, dy:  0 },
+    { text: "260", angle: 92,   r: 134, dx:  6, dy:  4 },
+    { text: "300", angle: 118,  r: 132, dx:  5, dy:  8 }
   ];
 
   const mainColor = alertLoss ? "#ff7f8f" : gaugeColorByRatio(ratio);
@@ -410,30 +410,30 @@ const [data, setData] = useState(TARGETS.map(x => ({
   useEffect(() => {
     let alive = true;
 
-        async function loadTraffic(){
+    async function loadTraffic(){
       try{
-        const r = await fetch(`/api/monitor-street/snapshot`, { cache:"no-store" });
-        const j = await r.json();
-        if(!j?.ok) throw new Error(j?.error || "snapshot failed");
+        const rows = await Promise.all(TARGETS.map(async (t) => {
+          try{
+            const url = `/api/eth/throughput?ip=${encodeURIComponent(t.ip)}&community=${encodeURIComponent(t.community)}&ifIndex=${encodeURIComponent(t.ifIndex)}&ms=350`;
+            const r = await fetch(url, { cache:"no-store" });
+            const j = await r.json();
+            if(!r.ok || !j?.ok) throw new Error(j?.error || "throughput failed");
 
-        const arr = Array.isArray(j?.data) ? j.data : [];
-        const rows = TARGETS.map(t => {
-          const found = arr.find(x => String(x?.id || "") === String(t.id));
-          return found
-            ? {
-                ...t,
-                ...found,
-                rxMbps: num(found?.rxMbps),
-                txMbps: num(found?.txMbps),
-                ok: !!found?.ok
-              }
-            : {
-                ...t,
-                rxMbps: 0,
-                txMbps: 0,
-                ok: false
-              };
-        });
+            return {
+              ...t,
+              rxMbps: num(j?.rxMbps),
+              txMbps: num(j?.txMbps),
+              ok: true
+            };
+          } catch {
+            return {
+              ...t,
+              rxMbps: 0,
+              txMbps: 0,
+              ok: false
+            };
+          }
+        }));
 
         if(!alive) return;
 
@@ -587,9 +587,6 @@ export default function MonitorStreetPage(){
     </div>
   );
 }
-
-
-
 
 
 

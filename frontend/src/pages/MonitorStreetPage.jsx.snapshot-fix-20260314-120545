@@ -410,30 +410,30 @@ const [data, setData] = useState(TARGETS.map(x => ({
   useEffect(() => {
     let alive = true;
 
-        async function loadTraffic(){
+    async function loadTraffic(){
       try{
-        const r = await fetch(`/api/monitor-street/snapshot`, { cache:"no-store" });
-        const j = await r.json();
-        if(!j?.ok) throw new Error(j?.error || "snapshot failed");
+        const rows = await Promise.all(TARGETS.map(async (t) => {
+          try{
+            const url = `/api/eth/throughput?ip=${encodeURIComponent(t.ip)}&community=${encodeURIComponent(t.community)}&ifIndex=${encodeURIComponent(t.ifIndex)}&ms=350`;
+            const r = await fetch(url, { cache:"no-store" });
+            const j = await r.json();
+            if(!r.ok || !j?.ok) throw new Error(j?.error || "throughput failed");
 
-        const arr = Array.isArray(j?.data) ? j.data : [];
-        const rows = TARGETS.map(t => {
-          const found = arr.find(x => String(x?.id || "") === String(t.id));
-          return found
-            ? {
-                ...t,
-                ...found,
-                rxMbps: num(found?.rxMbps),
-                txMbps: num(found?.txMbps),
-                ok: !!found?.ok
-              }
-            : {
-                ...t,
-                rxMbps: 0,
-                txMbps: 0,
-                ok: false
-              };
-        });
+            return {
+              ...t,
+              rxMbps: num(j?.rxMbps),
+              txMbps: num(j?.txMbps),
+              ok: true
+            };
+          } catch {
+            return {
+              ...t,
+              rxMbps: 0,
+              txMbps: 0,
+              ok: false
+            };
+          }
+        }));
 
         if(!alive) return;
 
@@ -587,7 +587,6 @@ export default function MonitorStreetPage(){
     </div>
   );
 }
-
 
 
 

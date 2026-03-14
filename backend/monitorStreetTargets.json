@@ -1,0 +1,66 @@
+[
+  {
+    "id": "redwan",
+    "name": "Redwan",
+    "ip": "88.88.88.4",
+    "community": "public",
+    "ifIndex": 3,
+    "ifName": "ether2"
+  },
+  {
+    "id": "fadelcenter",
+    "name": "Fadel Center",
+    "ip": "88.88.88.5",
+    "community": "public",
+    "ifIndex": 4,
+    "ifName": "ether3"
+  },
+  {
+    "id": "pharmacy",
+    "name": "Pharmacy",
+    "ip": "88.88.88.9",
+    "community": "public",
+    "ifIndex": 6,
+    "ifName": "ether5"
+  },
+  {
+    "id": "c5c",
+    "name": "C5C",
+    "ip": "88.88.88.10",
+    "community": "public",
+    "ifIndex": 5,
+    "ifName": "ether4"
+  },
+  {
+    "id": "davo",
+    "name": "Davo",
+    "ip": "88.88.88.15",
+    "community": "public",
+    "ifIndex": 5,
+    "ifName": "ether4"
+  },
+  {
+    "id": "fastweb1",
+    "name": "FastWeb-1",
+    "ip": "10.88.88.111",
+    "community": "public",
+    "ifIndex": 6,
+    "ifName": "ether1"
+  },
+  {
+    "id": "fastweb2",
+    "name": "FastWeb-2",
+    "ip": "10.88.88.111",
+    "community": "public",
+    "ifIndex": 2,
+    "ifName": "ether2"
+  },
+  {
+    "id": "dalla",
+    "name": "Dalla",
+    "ip": "10.88.88.111",
+    "community": "public",
+    "ifIndex": 3,
+    "ifName": "ether3"
+  }
+]
