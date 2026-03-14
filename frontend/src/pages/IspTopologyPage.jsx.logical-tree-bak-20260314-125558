@@ -1,0 +1,436 @@
+﻿import React, { useMemo, useState } from "react";
+
+const nodes = [
+  { id:"up1", ip:"155.15.59.4",    label:"Transit A", role:"Upstream", layer:"Transport", status:"up",      x:582,  y:130,  note:"Primary transport edge" },
+  { id:"up2", ip:"122.24.30.4",    label:"Transit B", role:"Upstream", layer:"Transport", status:"up",      x:752,  y:130,  note:"Secondary transport edge" },
+
+  { id:"c1",  ip:"88.88.88.254",   label:"Core SW 254", role:"Main Switch", layer:"Core", status:"up",      x:412,  y:257, note:"Main backbone core switch" },
+  { id:"c2",  ip:"88.88.88.253",   label:"Core SW 253", role:"Main Switch", layer:"Core", status:"up",      x:548,  y:257, note:"Main backbone core switch" },
+  { id:"c3",  ip:"88.88.88.252",   label:"Core SW 252", role:"Main Switch", layer:"Core", status:"up",      x:684,  y:257, note:"Main backbone core switch" },
+  { id:"c4",  ip:"88.88.88.251",   label:"Core SW 251", role:"Main Switch", layer:"Core", status:"warning", x:820,  y:257, note:"Core switch, watch state" },
+  { id:"c5",  ip:"10.88.88.254",   label:"Core SW 10.254", role:"Main Switch", layer:"Core", status:"up",   x:956,  y:257, note:"Private core side" },
+
+  { id:"r1",  ip:"88.88.88.250",   label:"Branch 250", role:"Main Router", layer:"Branch", status:"up",      x:260,  y:427, note:"Main router / POP" },
+  { id:"r2",  ip:"88.88.88.249",   label:"Branch 249", role:"Main Router", layer:"Branch", status:"up",      x:378,  y:427, note:"Main router / POP" },
+  { id:"r3",  ip:"88.88.88.1",     label:"Branch 1",   role:"Main Router", layer:"Branch", status:"up",      x:498,  y:427, note:"Main router / POP" },
+  { id:"r4",  ip:"88.88.88.2",     label:"Branch 2",   role:"Main Router", layer:"Branch", status:"up",      x:616,  y:427, note:"Main router / POP" },
+  { id:"r5",  ip:"88.88.88.4",     label:"Branch 4",   role:"Main Router", layer:"Branch", status:"up",      x:736,  y:427, note:"Main router / POP" },
+  { id:"r6",  ip:"88.88.88.5",     label:"Branch 5",   role:"Main Router", layer:"Branch", status:"warning", x:854,  y:427, note:"Main router / POP" },
+  { id:"r7",  ip:"88.88.88.6",     label:"Branch 6",   role:"Main Router", layer:"Branch", status:"up",      x:974,  y:427, note:"Main router / POP" },
+  { id:"r8",  ip:"88.88.88.7",     label:"Branch 7",   role:"Main Router", layer:"Branch", status:"up",      x:1092,  y:427, note:"Main router / POP" },
+
+  { id:"r9",  ip:"88.88.88.9",     label:"Branch 9",   role:"Main Router", layer:"Branch", status:"up",      x:319,  y:588, note:"Main router / POP" },
+  { id:"r10", ip:"88.88.88.10",    label:"Branch 10",  role:"Main Router", layer:"Branch", status:"up",      x:438,  y:588, note:"Main router / POP" },
+  { id:"r11", ip:"88.88.88.11",    label:"Branch 11",  role:"Main Router", layer:"Branch", status:"up",      x:557,  y:588, note:"Main router / POP" },
+  { id:"r12", ip:"88.88.88.12",    label:"Branch 12",  role:"Main Router", layer:"Branch", status:"up",      x:676,  y:588, note:"Main router / POP" },
+  { id:"r13", ip:"88.88.88.13",    label:"Branch 13",  role:"Main Router", layer:"Branch", status:"up",      x:795,  y:588, note:"Main router / POP" },
+  { id:"r14", ip:"88.88.88.14",    label:"Branch 14",  role:"Main Router", layer:"Branch", status:"down",    x:914,  y:588, note:"Main router / POP" },
+  { id:"r15", ip:"88.88.88.15",    label:"Branch 15",  role:"Main Router", layer:"Branch", status:"up",      x:1033,  y:588, note:"Main router / POP" },
+  { id:"r16", ip:"10.88.88.111",   label:"Branch 10.111", role:"Main Router", layer:"Branch", status:"up",   x:1152,  y:588, note:"Private branch edge" }
+];
+
+const links = [
+  ["up1","c2"], ["up2","c4"],
+  ["c1","c2"], ["c2","c3"], ["c3","c4"], ["c4","c5"],
+  ["c1","r1"], ["c1","r2"],
+  ["c2","r3"], ["c2","r4"],
+  ["c3","r5"], ["c3","r6"],
+  ["c4","r7"], ["c4","r8"],
+  ["c1","r9"], ["c2","r10"], ["c2","r11"], ["c3","r12"],
+  ["c3","r13"], ["c4","r14"], ["c5","r15"], ["c5","r16"]
+];
+
+function getStatusColor(status) {
+  if (status === "up") return "#35f2a1";
+  if (status === "warning") return "#f7c948";
+  if (status === "down") return "#ff6b81";
+  return "#7ea2d8";
+}
+
+function getNodeTheme(node) {
+  if (node.layer === "Transport") {
+    return { fill: "#f7c948", stroke: "#ffe08a", glow: "rgba(247,201,72,.30)", r: 18 };
+  }
+  if (node.layer === "Core") {
+    return { fill: "#25c8ff", stroke: "#8fe9ff", glow: "rgba(37,200,255,.26)", r: 19 };
+  }
+  return { fill: "#35f2a1", stroke: "#a8ffdd", glow: "rgba(53,242,161,.20)", r: 16 };
+}
+
+const flowCss = `
+  .topology-flow-line {
+    stroke-dasharray: 10 16;
+    animation: topologyFlow 1.6s linear infinite;
+  }
+
+  .topology-flow-line.dim {
+    stroke-dasharray: 8 18;
+    animation-duration: 2.2s;
+    opacity: 0.85;
+  }
+
+  @keyframes topologyFlow {
+    from { stroke-dashoffset: 0; }
+    to   { stroke-dashoffset: -52; }
+  }
+`;
+function StatCard({ label, value, tone }) {
+  return (
+    <div style={{
+      minWidth:92,
+      padding:"3px 8px",
+      borderRadius:12,
+      background: tone,
+      border: "1px solid rgba(255,255,255,0.08)",
+      boxShadow: "0 10px 30px rgba(0,0,0,0.22)"
+    }}>
+      <div style={{ fontSize:9, color:"#9fb5d8", marginBottom:2, letterSpacing:1, textTransform:"uppercase" }}>
+        {label}
+      </div>
+      <div style={{ fontSize:13, fontWeight:800, color:"#fff", lineHeight:1 }}>
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function Pill({ children, bg, color }) {
+  return (
+    <div style={{
+      padding: "9px 13px",
+      borderRadius: 999,
+      background: bg,
+      border: "1px solid rgba(255,255,255,0.08)",
+      color,
+      fontWeight: 700,
+      fontSize: 13
+    }}>
+      {children}
+    </div>
+  );
+}
+
+export default function IspTopologyPage() {
+  const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState("c2");
+
+  const byId = useMemo(
+    () => Object.fromEntries(nodes.map(n => [n.id, n])),
+    []
+  );
+
+  const filteredIds = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return new Set(nodes.map(n => n.id));
+    return new Set(
+      nodes
+        .filter(n =>
+          n.ip.toLowerCase().includes(q) ||
+          n.label.toLowerCase().includes(q) ||
+          n.role.toLowerCase().includes(q) ||
+          n.layer.toLowerCase().includes(q) ||
+          n.status.toLowerCase().includes(q)
+        )
+        .map(n => n.id)
+    );
+  }, [query]);
+
+  const visibleNodes = nodes.filter(n => filteredIds.has(n.id));
+  const visibleNodeIds = new Set(visibleNodes.map(n => n.id));
+  const visibleLinks = links.filter(([a, b]) => visibleNodeIds.has(a) && visibleNodeIds.has(b));
+
+  const selected = byId[selectedId] || visibleNodes[0] || nodes[0];
+
+  const totals = useMemo(() => {
+    return {
+      total: nodes.length,
+      transport: nodes.filter(n => n.layer === "Transport").length,
+      core: nodes.filter(n => n.layer === "Core").length,
+      branch: nodes.filter(n => n.layer === "Branch").length
+    };
+  }, []);
+
+  return (
+    <div style={{
+      minHeight: "100%",
+      padding: 22,
+      background:
+        "radial-gradient(circle at top left, rgba(0,170,255,0.14), transparent 28%), radial-gradient(circle at top right, rgba(120,80,255,0.10), transparent 24%), linear-gradient(180deg, #07111f 0%, #040b16 100%)",
+      color: "#fff"
+    }}>
+      <style>{flowCss}</style>
+      <div style={{ marginBottom: 18 }}>
+        <div style={{
+          fontSize: 12,
+          letterSpacing: 2,
+          textTransform: "uppercase",
+          color: "#7ea2d8",
+          marginBottom:4
+        }}>
+          ISP Topology v1
+        </div>
+        <div style={{ fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>
+          Smart Backbone Map
+        </div>
+        <div style={{ marginTop: 10, color: "#a8bddf", fontSize: 14 }}>
+          Static operational view — Upstream → Core → Branches
+        </div>
+      </div>
+
+      <div style={{
+        display: "flex",
+        gap: 12,
+        flexWrap: "wrap",
+        marginBottom: 16
+      }}>
+        <StatCard label="Total Nodes" value={totals.total} tone="rgba(255,255,255,0.03)" />
+        <StatCard label="Upstream" value={totals.transport} tone="rgba(247,201,72,0.10)" />
+        <StatCard label="Core" value={totals.core} tone="rgba(37,200,255,0.10)" />
+        <StatCard label="Branches" value={totals.branch} tone="rgba(53,242,161,0.10)" />
+      </div>
+
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "minmax(0, 1fr) 320px",
+        gap: 16,
+        alignItems: "start"
+      }}>
+        <div style={{
+          border: "1px solid rgba(120,160,255,0.18)",
+          borderRadius: 24,
+          overflow: "hidden",
+          background: "rgba(4, 11, 22, 0.70)",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.35)"
+        }}>
+          <div style={{
+            display: "flex",
+            gap: 12,
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: 16,
+            borderBottom: "1px solid rgba(255,255,255,0.06)"
+          }}>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <Pill bg="rgba(247,201,72,0.12)" color="#ffe08a">Upstream / Transport</Pill>
+              <Pill bg="rgba(37,200,255,0.12)" color="#8fe9ff">Core Switches</Pill>
+              <Pill bg="rgba(53,242,161,0.12)" color="#a8ffdd">Main Routers / Branches</Pill>
+            </div>
+
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search IP / label / role / status"
+              style={{
+                width: 280,
+                maxWidth: "100%",
+                padding: "12px 14px",
+                borderRadius:12,
+                border: "1px solid rgba(255,255,255,0.10)",
+                background: "rgba(255,255,255,0.04)",
+                color: "#fff",
+                outline: "none"
+              }}
+            />
+          </div>
+
+          <div style={{ overflow: "auto" }}>
+            <div style={{ minWidth: 1120, padding: 14 }}>
+              <svg width="1080" height="620" viewBox="0 0 1420 820" style={{ display: "block" }}>
+                <defs>
+                  <pattern id="grid" width="22" height="22" patternUnits="userSpaceOnUse">
+                    <path d="M 22 0 L 0 0 0 22" fill="none" stroke="rgba(120,160,255,0.05)" strokeWidth="0.8" />
+                  </pattern>
+                </defs>
+
+                <rect x="0" y="0" width="1420" height="820" fill="url(#grid)" rx="26" />
+
+                <text x="620" y="34" fill="#f8d66d" fontSize="13" fontWeight="700">UPSTREAM / TRANSPORT</text>
+                <text x="625" y="190" fill="#74dcff" fontSize="13" fontWeight="700">MAIN SWITCHES / CORE</text>
+                <text x="615" y="390" fill="#64f0b1" fontSize="13" fontWeight="700">MAIN ROUTERS / BRANCHES</text>
+
+                {visibleLinks.map((pair, i) => {
+                  const a = byId[pair[0]];
+                  const b = byId[pair[1]];
+                  const selectedLink = selected && (selected.id === a.id || selected.id === b.id);
+
+                  return (
+                    <g key={i}>
+                      <line
+                        x1={a.x}
+                        y1={a.y}
+                        x2={b.x}
+                        y2={b.y}
+                        stroke={selectedLink ? "rgba(121, 222, 255, 0.35)" : "rgba(80, 155, 255, 0.12)"}
+                        strokeWidth={selectedLink ? "7" : "5"}
+                        strokeLinecap="round"
+                      />
+                      <line
+                        x1={a.x}
+                        y1={a.y}
+                        x2={b.x}
+                        y2={b.y}
+                        stroke={selectedLink ? "rgba(158, 236, 255, 0.95)" : "rgba(120, 205, 255, 0.64)"}
+                        strokeWidth={selectedLink ? "2.4" : "1.7"}
+                        strokeLinecap="round"
+                      />
+                    </g>
+                  );
+                })}
+
+                {visibleNodes.map((node) => {
+                  const t = getNodeTheme(node);
+                  const selectedNode = selected && selected.id === node.id;
+                  const statusColor = getStatusColor(node.status);
+
+                  return (
+                    <g
+                      key={node.id}
+                      onClick={() => setSelectedId(node.id)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <circle cx={node.x} cy={node.y} r={t.r + (selectedNode ? 11 : 7)} fill={selectedNode ? "rgba(158,236,255,.20)" : t.glow} />
+                      <circle cx={node.x} cy={node.y} r={t.r} fill={t.fill} stroke={selectedNode ? "#ffffff" : t.stroke} strokeWidth={selectedNode ? "3.2" : "2.4"} />
+                      <circle cx={node.x + t.r - 3} cy={node.y - t.r + 4} r="4.5" fill={statusColor} stroke="#08111d" strokeWidth="2" />
+
+                      <text
+                        x={node.x}
+                        y={node.y + 29}
+                        textAnchor="middle"
+                        fill="#e2eeff"
+                        fontSize="10.5"
+                        fontWeight="700"
+                      >
+                        {node.label}
+                      </text>
+                      <text
+                        x={node.x}
+                        y={node.y + 42}
+                        textAnchor="middle"
+                        fill="#86a4cf"
+                        fontSize="9.5"
+                      >
+                        {node.ip}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div style={{
+          border: "1px solid rgba(120,160,255,0.18)",
+          borderRadius: 24,
+          background: "rgba(4, 11, 22, 0.74)",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.35)",
+          overflow: "hidden",
+          position: "sticky",
+          top: 20
+        }}>
+          <div style={{
+            padding: "16px 18px",
+            borderBottom: "1px solid rgba(255,255,255,0.06)"
+          }}>
+            <div style={{
+              fontSize: 12,
+              textTransform: "uppercase",
+              letterSpacing: 2,
+              color: "#7ea2d8",
+              marginBottom:4
+            }}>
+              Selected Device
+            </div>
+            <div style={{ fontSize: 26, fontWeight: 800 }}>
+              {selected ? selected.label : "No node"}
+            </div>
+            <div style={{ color: "#9db5da", marginTop: 6 }}>
+              {selected ? selected.ip : "-"}
+            </div>
+          </div>
+
+          <div style={{ padding: 18, display: "grid", gap: 12 }}>
+            <div style={{
+              padding: 14,
+              borderRadius: 16,
+              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.06)"
+            }}>
+              <div style={{ color: "#7ea2d8", fontSize: 12, marginBottom: 6 }}>Role</div>
+              <div style={{ fontSize: 16, fontWeight: 700 }}>{selected?.role || "-"}</div>
+            </div>
+
+            <div style={{
+              padding: 14,
+              borderRadius: 16,
+              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.06)"
+            }}>
+              <div style={{ color: "#7ea2d8", fontSize: 12, marginBottom: 6 }}>Layer</div>
+              <div style={{ fontSize: 16, fontWeight: 700 }}>{selected?.layer || "-"}</div>
+            </div>
+
+            <div style={{
+              padding: 14,
+              borderRadius: 16,
+              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.06)"
+            }}>
+              <div style={{ color: "#7ea2d8", fontSize: 12, marginBottom: 6 }}>Status</div>
+              <div style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                fontSize: 15,
+                fontWeight: 800,
+                color: getStatusColor(selected?.status || "unknown")
+              }}>
+                <span style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: 999,
+                  background: getStatusColor(selected?.status || "unknown"),
+                  display: "inline-block"
+                }} />
+                {(selected?.status || "unknown").toUpperCase()}
+              </div>
+            </div>
+
+            <div style={{
+              padding: 14,
+              borderRadius: 16,
+              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.06)"
+            }}>
+              <div style={{ color: "#7ea2d8", fontSize: 12, marginBottom: 6 }}>Notes</div>
+              <div style={{ fontSize: 14, color: "#d7e6ff", lineHeight: 1.5 }}>
+                {selected?.note || "-"}
+              </div>
+            </div>
+
+            <div style={{
+              padding: 14,
+              borderRadius: 16,
+              background: "rgba(120,160,255,0.06)",
+              border: "1px solid rgba(120,160,255,0.10)"
+            }}>
+              <div style={{ color: "#7ea2d8", fontSize: 12, marginBottom:4 }}>Phase</div>
+              <div style={{ fontSize: 14, color: "#dbe7ff", lineHeight: 1.5 }}>
+                Static Smart Topology.
+                Ready later for live ping, SNMP, utilization, alarms, and interface-level paths.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+
+
+

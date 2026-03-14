@@ -1,0 +1,348 @@
+﻿import React, { useEffect, useMemo, useState } from "react";
+import { MapContainer, TileLayer, CircleMarker, Polyline, Tooltip, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+
+const OFFICE = [34.44654536, 35.85867849];
+
+const nodeMeta = {
+  "254": { label:"TP LINK IN Aviat", ip:"88.88.88.254", type:"core", lat:34.44654536, lng:35.85867849 },
+  "253": { label:"TP Link1 IN Cabinet", ip:"88.88.88.253", type:"tp",   lat:34.44745, lng:35.85595 },
+  "252": { label:"TP Link2 IN Cabinet", ip:"88.88.88.252", type:"tp",   lat:34.44745, lng:35.86155 },
+
+  "10":  { label:"IN C5C", ip:"88.88.88.10", type:"mk",  lat:34.44510, lng:35.85868 },
+  "11":  { label:"IN Army Jabal", ip:"88.88.88.11", type:"mk", lat:34.44385, lng:35.85868 },
+  "12":  { label:"IN Home Fast Web", ip:"88.88.88.12", type:"mk", lat:34.44255, lng:35.85868 },
+  "13":  { label:"Finished Jabal", ip:"88.88.88.13", type:"mk", lat:34.44125, lng:35.85868 },
+
+  "9":   { label:"88.88.88.9", ip:"88.88.88.9", type:"mk", lat:34.44585, lng:35.85395 },
+  "4":   { label:"HexGR3 ON Redwan", ip:"88.88.88.4", type:"mk", lat:34.44485, lng:35.85595 },
+  "5":   { label:"HexGR3 ON Center Fadel", ip:"88.88.88.5", type:"mk", lat:34.44345, lng:35.85595 },
+
+  "251": { label:"TP link On fast web", ip:"88.88.88.251", type:"tp", lat:34.44510, lng:35.86155 },
+  "15":  { label:"HexGR3 ON Davo", ip:"88.88.88.15", type:"mk", lat:34.44370, lng:35.86155 },
+
+  "10254":   { label:"TP LINK IN Aviat VLAN 2", ip:"10.88.88.254", type:"core", lat:34.44810, lng:35.86185 },
+  "10111sfp":{ label:"HEX S", ip:"10.88.88.111", type:"mk", lat:34.44700, lng:35.86185 },
+  "10111e1": { label:"Office 1", ip:"10.88.88.111", type:"edge", lat:34.44565, lng:35.86085 },
+  "10111e2": { label:"Office 3", ip:"10.88.88.111", type:"edge", lat:34.44565, lng:35.86185 },
+  "10111e3": { label:"Rawda Street", ip:"10.88.88.111", type:"edge", lat:34.44565, lng:35.86295 }
+};
+
+const links = [
+  { id:"link-254-253", source:"254", target:"253" },
+  { id:"link-254-252", source:"254", target:"252" },
+  { id:"link-254-10",  source:"254", target:"10"  },
+  { id:"link-253-9",   source:"253", target:"9"   },
+  { id:"link-253-4",   source:"253", target:"4"   },
+  { id:"link-4-5",     source:"4",   target:"5"   },
+  { id:"link-252-251", source:"252", target:"251" },
+  { id:"link-251-15",  source:"251", target:"15"  },
+  { id:"link-10-11",   source:"10",  target:"11"  },
+  { id:"link-11-12",   source:"11",  target:"12"  },
+  { id:"link-12-13",   source:"12",  target:"13"  },
+  { id:"link-vlan2-hexs",   source:"10254",   target:"10111sfp" },
+  { id:"link-hexs-office1", source:"10111sfp", target:"10111e1"  },
+  { id:"link-hexs-office3", source:"10111sfp", target:"10111e2"  },
+  { id:"link-hexs-rawda",   source:"10111sfp", target:"10111e3"  }
+];
+
+const primaryNodeMetrics = {
+  "254": {
+    port: "27",
+    ifIndex: 49179,
+    rxOid: "1.3.6.1.2.1.31.1.1.1.6.49179",
+    txOid: "1.3.6.1.2.1.31.1.1.1.10.49179"
+  },
+  "10254": {
+    port: "gigabitEthernet 1/0/10",
+    ifIndex: 49162,
+    rxOid: "1.3.6.1.2.1.31.1.1.1.6.49162",
+    txOid: "1.3.6.1.2.1.31.1.1.1.10.49162"
+  }
+};
+
+function toneForTraffic(total) {
+  if (total >= 700) {
+    return { color:"#ff5b5b", weight:6, fill:"#ff5b5b", text:"#ffd9d9", badge:"rgba(90,20,20,.88)" };
+  }
+  if (total >= 250) {
+    return { color:"#ffca58", weight:5, fill:"#ffca58", text:"#fff1c4", badge:"rgba(80,60,15,.88)" };
+  }
+  return { color:"#4ad2ff", weight:4, fill:"#4ad2ff", text:"#d7f6ff", badge:"rgba(10,45,60,.88)" };
+}
+
+function nodeStyle(type, selected) {
+  if (type === "core") return { radius: selected ? 11 : 9, fillColor:"#78dbff", color:"#dff8ff", weight:2, fillOpacity:0.95 };
+  if (type === "tp")   return { radius: selected ? 10 : 8, fillColor:"#54c7ff", color:"#e6f8ff", weight:2, fillOpacity:0.95 };
+  if (type === "edge") return { radius: selected ? 9 : 7, fillColor:"#d19bff", color:"#f5e6ff", weight:2, fillOpacity:0.95 };
+  return { radius: selected ? 10 : 8, fillColor:"#47efb4", color:"#e7fff6", weight:2, fillOpacity:0.95 };
+}
+
+function MapAutoFocus({ center }) {
+  const map = useMap();
+  useEffect(() => {
+    map.setView(center, map.getZoom(), { animate: true });
+  }, [center, map]);
+  return null;
+}
+
+export default function IspTopologyPage() {
+  const [traffic, setTraffic] = useState({});
+  const [selectedId, setSelectedId] = useState("254");
+
+  useEffect(() => {
+    let stop = false;
+
+    const tick = async () => {
+      try {
+        const res = await fetch("/api/topology/snapshot");
+        const json = await res.json();
+        if (!stop && json?.ok && Array.isArray(json.data)) {
+          setTraffic(Object.fromEntries(json.data.map(x => [x.id, x])));
+        }
+      } catch {}
+    };
+
+    tick();
+    const timer = setInterval(tick, 3000);
+    return () => {
+      stop = true;
+      clearInterval(timer);
+    };
+  }, []);
+
+  const selectedNode = nodeMeta[selectedId] || nodeMeta["254"];
+  const selectedTraffic =
+    Object.values(traffic).find(x => x.targetId === selectedId) ||
+    Object.values(traffic).find(x => x.sourceId === selectedId) ||
+    null;
+
+  const selectedPrimary = primaryNodeMetrics[selectedId] || null;
+  const selectedPortValue = selectedPrimary ? selectedPrimary.port : (selectedTraffic ? selectedTraffic.port : "-");
+  const selectedIfIndexValue = String(selectedPrimary ? selectedPrimary.ifIndex : (selectedTraffic ? selectedTraffic.ifIndex : "-"));
+  const selectedRxOidValue = selectedPrimary ? selectedPrimary.rxOid : (selectedTraffic ? selectedTraffic.rxOid : "-");
+  const selectedTxOidValue = selectedPrimary ? selectedPrimary.txOid : (selectedTraffic ? selectedTraffic.txOid : "-");
+
+  const selectedCenter = [selectedNode.lat, selectedNode.lng];
+
+  return (
+    <div style={{
+      minHeight:"100%",
+      padding:20,
+      background:"linear-gradient(180deg,#040912 0%,#070f18 100%)",
+      color:"#fff"
+    }}>
+      <style>{`
+        .leaflet-container {
+          background: #060c14;
+          font-family: Segoe UI, Arial, sans-serif;
+        }
+
+        .topology-map .leaflet-tile {
+          filter: brightness(0.32) contrast(1.35) saturate(0) hue-rotate(180deg);
+        }
+
+        .topology-map .leaflet-control-zoom a {
+          background: rgba(8,15,24,.92);
+          color: #fff;
+          border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+
+        .traffic-badge {
+          background: rgba(4,10,18,.92);
+          border: 1px solid rgba(255,255,255,.10);
+          color: #e8f7ff;
+          border-radius: 999px;
+          padding: 3px 8px;
+          font-size: 11px;
+          font-weight: 800;
+          box-shadow: 0 10px 30px rgba(0,0,0,.35);
+          white-space: nowrap;
+        }
+
+        .node-label {
+          color: #f4f9ff;
+          font-size: 12px;
+          font-weight: 800;
+          text-shadow: 0 2px 8px rgba(0,0,0,.75);
+          white-space: nowrap;
+        }
+
+        .node-ip {
+          color: #9ec0e6;
+          font-size: 11px;
+          font-weight: 700;
+          text-shadow: 0 2px 8px rgba(0,0,0,.75);
+          white-space: nowrap;
+        }
+      `}</style>
+
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 330px", gap:16, alignItems:"start" }}>
+        <div style={{
+          border:"1px solid rgba(120,160,255,0.14)",
+          borderRadius:24,
+          overflow:"hidden",
+          background:"#06101a",
+          boxShadow:"0 24px 80px rgba(0,0,0,0.35)"
+        }}>
+          <div style={{
+            display:"flex",
+            justifyContent:"space-between",
+            alignItems:"center",
+            padding:"14px 16px",
+            borderBottom:"1px solid rgba(255,255,255,0.05)"
+          }}>
+            <div style={{ fontSize:18, fontWeight:800 }}>⚡ NoComment Live Map Topology</div>
+            <div style={{ color:"#99b6d8", fontSize:12 }}>
+              Tripoli / Office center
+            </div>
+          </div>
+
+          <div className="topology-map" style={{ height:760 }}>
+            <MapContainer
+              center={OFFICE}
+              zoom={15}
+              minZoom={13}
+              maxZoom={19}
+              zoomSnap={0.25}
+              scrollWheelZoom={true}
+              style={{ width:"100%", height:"100%" }}
+            >
+              <MapAutoFocus center={selectedCenter} />
+
+              <TileLayer
+                attribution='&copy; OpenStreetMap contributors'
+                url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+
+              {links.map((link) => {
+                const a = nodeMeta[link.source];
+                const b = nodeMeta[link.target];
+                const t = traffic[link.id];
+                const tone = toneForTraffic(t?.totalMbps || 0);
+
+                return (
+                  <React.Fragment key={link.id}>
+                    <Polyline
+                      positions={[[a.lat, a.lng], [b.lat, b.lng]]}
+                      pathOptions={{
+                        color: tone.color,
+                        weight: tone.weight,
+                        opacity: 0.88
+                      }}
+                    />
+                    {t ? (
+                      <CircleMarker
+                        center={[(a.lat + b.lat)/2, (a.lng + b.lng)/2]}
+                        radius={0.1}
+                        pathOptions={{ opacity:0, fillOpacity:0 }}
+                      >
+                        <Tooltip permanent direction="center" opacity={1} className="traffic-badge">
+                          {t.totalMbps.toFixed(1)} Mb
+                        </Tooltip>
+                      </CircleMarker>
+                    ) : null}
+                  </React.Fragment>
+                );
+              })}
+
+              {Object.entries(nodeMeta).map(([id, node]) => {
+                const style = nodeStyle(node.type, selectedId === id);
+                return (
+                  <React.Fragment key={id}>
+                    <CircleMarker
+                      center={[node.lat, node.lng]}
+                      radius={style.radius}
+                      pathOptions={{
+                        color: style.color,
+                        weight: style.weight,
+                        fillColor: style.fillColor,
+                        fillOpacity: style.fillOpacity
+                      }}
+                      eventHandlers={{ click: () => setSelectedId(id) }}
+                    >
+                      <Tooltip direction="top" offset={[0,-8]} opacity={1}>
+                        <div style={{ minWidth: 180 }}>
+                          <div style={{ fontWeight: 800 }}>{node.label}</div>
+                          <div>{node.ip}</div>
+                        </div>
+                      </Tooltip>
+                    </CircleMarker>
+
+                    <CircleMarker
+                      center={[node.lat - 0.00022, node.lng]}
+                      radius={0.1}
+                      pathOptions={{ opacity:0, fillOpacity:0 }}
+                    >
+                      <Tooltip permanent direction="bottom" offset={[0,0]} opacity={1} className="node-label">
+                        {node.label}
+                      </Tooltip>
+                    </CircleMarker>
+
+                    <CircleMarker
+                      center={[node.lat - 0.00045, node.lng]}
+                      radius={0.1}
+                      pathOptions={{ opacity:0, fillOpacity:0 }}
+                    >
+                      <Tooltip permanent direction="bottom" offset={[0,0]} opacity={1} className="node-ip">
+                        {node.ip}
+                      </Tooltip>
+                    </CircleMarker>
+                  </React.Fragment>
+                );
+              })}
+            </MapContainer>
+          </div>
+        </div>
+
+        <div style={{
+          border:"1px solid rgba(120,160,255,0.14)",
+          borderRadius:24,
+          padding:16,
+          background:"#07101a",
+          boxShadow:"0 24px 80px rgba(0,0,0,0.35)"
+        }}>
+          <div style={{ color:"#7fa7d8", fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>
+            Selected Node
+          </div>
+          <div style={{ fontSize:28, fontWeight:800 }}>{selectedNode.label}</div>
+          <div style={{ color:"#9bbce5", marginTop:6, marginBottom:16 }}>{selectedNode.ip}</div>
+
+          <InfoCard title="Type" value={selectedNode.type} />
+          <InfoCard title="Linked Traffic" value={selectedTraffic ? `${selectedTraffic.totalMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="RX" value={selectedTraffic ? `${selectedTraffic.rxMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="TX" value={selectedTraffic ? `${selectedTraffic.txMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="Port" value={selectedPortValue} />
+          <InfoCard title="ifIndex" value={selectedIfIndexValue} />
+          <InfoCard title="RX OID" value={selectedRxOidValue} mono />
+          <InfoCard title="TX OID" value={selectedTxOidValue} mono />
+          <InfoCard title="Coordinates" value={`${selectedNode.lat}, ${selectedNode.lng}`} mono />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InfoCard({ title, value, mono }) {
+  return (
+    <div style={{
+      border:"1px solid rgba(255,255,255,0.06)",
+      borderRadius:16,
+      padding:12,
+      background:"rgba(255,255,255,0.02)",
+      marginBottom:10
+    }}>
+      <div style={{ color:"#7fa7d8", fontSize:11, marginBottom:6 }}>{title}</div>
+      <div style={{
+        color:"#eef6ff",
+        fontSize: mono ? 11.5 : 15,
+        fontWeight: mono ? 500 : 700,
+        fontFamily: mono ? "Consolas, monospace" : "inherit",
+        lineHeight:1.5,
+        wordBreak:"break-all"
+      }}>
+        {value}
+      </div>
+    </div>
+  );
+}

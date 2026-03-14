@@ -180,8 +180,8 @@ export default function IspTopologyPage() {
   const [locked, setLocked] = useState(false);
   const [mode, setMode] = useState("move");
   const [linkStart, setLinkStart] = useState(null);
-  const [zoom, setZoom] = useState(0.52);
-  const [offset, setOffset] = useState({ x: 170, y: 40 });
+  const [zoom, setZoom] = useState(0.64);
+  const [offset, setOffset] = useState({ x: 160, y: -120 });
 
   const dragRef = useRef({
     active:false,
@@ -319,8 +319,8 @@ export default function IspTopologyPage() {
 
   const resetLayout = async () => {
     setNodes(DEFAULT_NODES);
-    setZoom(0.52);
-    setOffset({ x: 170, y: 40 });
+    setZoom(0.64);
+    setOffset({ x: 160, y: -120 });
     setLinkStart(null);
 
     try {
@@ -450,7 +450,7 @@ export default function IspTopologyPage() {
         }
       `}</style>
 
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 220px", gap:16, alignItems:"start" }}>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 300px", gap:16, alignItems:"start" }}>
         <div style={{
           border:"1px solid rgba(120,160,255,0.14)",
           borderRadius:24,
@@ -467,7 +467,7 @@ export default function IspTopologyPage() {
             gap:10,
             flexWrap:"wrap"
           }}>
-            <div style={{ fontSize:14, fontWeight:800 }}>⚡ NoComment Ultimate Topology Builder</div>
+            <div style={{ fontSize:18, fontWeight:800 }}>⚡ NoComment Ultimate Topology Builder</div>
 
             <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
               <button onClick={() => setLocked(v => !v)} style={locked ? activeBtnStyle : btnStyle}>
@@ -489,7 +489,7 @@ export default function IspTopologyPage() {
             ref={workspaceRef}
             onWheel={handleWheel}
             style={{
-              height:700,
+              height:780,
               overflow:"hidden",
               position:"relative",
               background:
@@ -713,7 +713,7 @@ export default function IspTopologyPage() {
         <div style={{
           border:"1px solid rgba(120,160,255,0.14)",
           borderRadius:24,
-          padding:12,
+          padding:16,
           background:"#07101a",
           boxShadow:"0 24px 80px rgba(0,0,0,0.35)"
         }}>
@@ -721,11 +721,26 @@ export default function IspTopologyPage() {
             Selected Node
           </div>
 
-          <div style={{ fontSize:14, fontWeight:800 }}>{selectedNode.label}</div>
+          <div style={{ fontSize:18, fontWeight:800 }}>{selectedNode.label}</div>
           <div style={{ color:"#9bbce5", marginTop:6, marginBottom:16 }}>{selectedNode.ip}</div>
 
-          <InfoCard title="IP" value={selectedNode.ip} mono />
-          <InfoCard title="Live Speed" value={selectedTraffic ? `${selectedTraffic.totalMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="Mode" value={locked ? "LOCKED" : mode.toUpperCase()} />
+          <InfoCard title="Link Start" value={linkStart || "-"} />
+          <InfoCard title="Nodes" value={String(stats.total)} />
+          <InfoCard title="Links" value={String(stats.links)} />
+          <InfoCard title="Core" value={String(stats.core)} />
+          <InfoCard title="TP-Link" value={String(stats.tp)} />
+          <InfoCard title="Mikrotik" value={String(stats.mk)} />
+          <InfoCard title="Edge" value={String(stats.edge)} />
+          <InfoCard title="Type" value={selectedNode.type} />
+          <InfoCard title="Linked Traffic" value={selectedTraffic ? `${selectedTraffic.totalMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="RX" value={selectedTraffic ? `${selectedTraffic.rxMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="TX" value={selectedTraffic ? `${selectedTraffic.txMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="Port" value={selectedPortValue} />
+          <InfoCard title="ifIndex" value={selectedIfIndexValue} />
+          <InfoCard title="RX OID" value={selectedRxOidValue} mono />
+          <InfoCard title="TX OID" value={selectedTxOidValue} mono />
+          <InfoCard title="Position" value={`${Math.round(selectedNode.x)}, ${Math.round(selectedNode.y)}`} mono />
         </div>
       </div>
     </div>
@@ -744,7 +759,7 @@ function InfoCard({ title, value, mono }) {
       <div style={{ color:"#7fa7d8", fontSize:8, marginBottom:6 }}>{title}</div>
       <div style={{
         color:"#eef6ff",
-        fontSize: mono ? 9.5 : 11.5,
+        fontSize: mono ? 10.5 : 13,
         fontWeight: mono ? 500 : 700,
         fontFamily: mono ? "Consolas, monospace" : "inherit",
         lineHeight:1.5,
@@ -771,8 +786,6 @@ const activeBtnStyle = {
   background:"rgba(71,215,255,0.20)",
   border:"1px solid rgba(71,215,255,0.48)"
 };
-
-
 
 
 

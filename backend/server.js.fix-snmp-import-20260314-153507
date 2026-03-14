@@ -1,5 +1,5 @@
 ﻿
-const { exec, execFileSync } = require("child_process");
+const { exec } = require("child_process");
 
 function checkVlan1559(cb){
   execFile("ping", ["-n","1","-w","1000","155.15.59.1"], { windowsHide:true }, (err, stdout, stderr) => {
@@ -1404,7 +1404,7 @@ function tcpTouch(host, port, timeoutMs=180){
 
 async function icmpPing(host, timeoutMs=350){
   return new Promise((resolve) => {
-    const { exec, execFileSync } = require("child_process");
+    const { exec } = require("child_process");
     // Windows ping: -n 1 (one echo), -w timeoutMs (ms)
     exec(`ping -n 1 -w ${timeoutMs} ${host}`, { windowsHide:true }, (err, stdout) => {
       if(err) return resolve(false);
@@ -3229,7 +3229,7 @@ function topologyMakeSeed(id) {
 }
 
 const TOPOLOGY_SNMP_COMMUNITY = process.env.TOPOLOGY_SNMP_COMMUNITY || "public";
-const TOPOLOGY_SNMP_BIN = "C:\\usr\\bin\\snmpget.exe";
+const TOPOLOGY_SNMP_BIN = process.env.TOPOLOGY_SNMP_BIN || "snmpget";
 
 function topologyParseCounter(raw) {
   const text = String(raw || "");
@@ -3245,15 +3245,11 @@ function topologySnmpRead(ip, oid) {
     const raw = execFileSync(
       TOPOLOGY_SNMP_BIN,
       ["-v2c", "-c", TOPOLOGY_SNMP_COMMUNITY, ip, oid],
-      { encoding: "utf8", timeout: 5000, windowsHide: true }
+      { encoding: "utf8", timeout: 2500, windowsHide: true }
     );
-    return { value: topologyParseCounter(raw), raw: String(raw || "").trim(), error: null };
-  } catch (error) {
-    return {
-      value: null,
-      raw: error?.stdout ? String(error.stdout).trim() : "",
-      error: String(error?.message || error)
-    };
+    return topologyParseCounter(raw);
+  } catch {
+    return null;
   }
 }
 
@@ -3266,11 +3262,8 @@ function topologyRead(link) {
     ts: null
   };
 
-  const rxRead = topologySnmpRead(link.ip, link.rxOid);
-  const txRead = topologySnmpRead(link.ip, link.txOid);
-
-  const rxCounter = rxRead.value;
-  const txCounter = txRead.value;
+  const rxCounter = topologySnmpRead(link.ip, link.rxOid);
+  const txCounter = topologySnmpRead(link.ip, link.txOid);
 
   let rxMbps = 0;
   let txMbps = 0;
@@ -3328,90 +3321,6 @@ app.get('/api/topology/snapshot', (_req, res) => {
     res.json({ ok: true, data });
   } catch (error) {
     res.status(500).json({ ok: false, error: String(error?.message || error) });
-  }
-});
-
-
-
-
-
-
-
-
-
-
-/* ============================
-   NODE POSITION SAVE ENGINE
-============================ */
-
-const POS_FILE = __dirname + "/data/node-positions.json";
-
-app.get("/api/topology/positions",(req,res)=>{
-  try{
-    const data = JSON.parse(fs.readFileSync(POS_FILE,"utf8"));
-    res.json({ok:true,data});
-  }catch{
-    res.json({ok:true,data:{}});
-  }
-});
-
-app.post("/api/topology/positions",(req,res)=>{
-  try{
-    fs.writeFileSync(POS_FILE,JSON.stringify(req.body,null,2));
-    res.json({ok:true});
-  }catch(e){
-    res.json({ok:false,error:String(e)});
-  }
-});
-
-
-/* ============================
-   TOPOLOGY LINK SAVE ENGINE
-============================ */
-
-const LINK_FILE = __dirname + "/data/topology-links.json";
-
-app.get("/api/topology/links",(req,res)=>{
-  try{
-    const data = JSON.parse(fs.readFileSync(LINK_FILE,"utf8"));
-    res.json({ok:true,data});
-  }catch{
-    res.json({ok:true,data:[]});
-  }
-});
-
-app.post("/api/topology/links",(req,res)=>{
-  try{
-    fs.writeFileSync(LINK_FILE,JSON.stringify(req.body,null,2));
-    res.json({ok:true});
-  }catch(e){
-    res.json({ok:false,error:String(e)});
-  }
-});
-
-
-/* ============================
-   TOPOLOGY LINK BUILDER API
-============================ */
-
-const TOPOLOGY_LINKS_FILE = __dirname + "/data/topology-links.json";
-
-app.get("/api/topology/links", (req, res) => {
-  try {
-    const data = JSON.parse(fs.readFileSync(TOPOLOGY_LINKS_FILE, "utf8"));
-    res.json({ ok: true, data: Array.isArray(data) ? data : [] });
-  } catch {
-    res.json({ ok: true, data: [] });
-  }
-});
-
-app.post("/api/topology/links", (req, res) => {
-  try {
-    const data = Array.isArray(req.body) ? req.body : [];
-    fs.writeFileSync(TOPOLOGY_LINKS_FILE, JSON.stringify(data, null, 2));
-    res.json({ ok: true });
-  } catch (e) {
-    res.json({ ok: false, error: String(e) });
   }
 });
 

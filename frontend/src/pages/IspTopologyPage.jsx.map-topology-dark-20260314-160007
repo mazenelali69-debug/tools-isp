@@ -1,0 +1,424 @@
+﻿import React, { useEffect, useMemo, useRef, useState } from "react";
+
+const nodes = [
+  { id:"254", label:"TP LINK IN Aviat", ip:"88.88.88.254", x:760, y:80, type:"core" },
+  { id:"253", label:"TP Link1 IN Cabinet", ip:"88.88.88.253", x:420, y:220, type:"tp" },
+  { id:"252", label:"TP Link2 IN Cabinet", ip:"88.88.88.252", x:1080, y:220, type:"tp" },
+
+  { id:"10", label:"IN C5C", ip:"88.88.88.10", x:760, y:220, type:"mk" },
+  { id:"11", label:"IN Army Jabal", ip:"88.88.88.11", x:760, y:370, type:"mk" },
+  { id:"12", label:"IN Home Fast Web", ip:"88.88.88.12", x:760, y:520, type:"mk" },
+  { id:"13", label:"Finished Jabal", ip:"88.88.88.13", x:760, y:670, type:"mk" },
+
+  { id:"9", label:"88.88.88.9", ip:"88.88.88.9", x:260, y:370, type:"mk" },
+  { id:"4", label:"HexGR3 ON Redwan", ip:"88.88.88.4", x:420, y:370, type:"mk" },
+  { id:"5", label:"HexGR3 ON Center Fadel", ip:"88.88.88.5", x:420, y:520, type:"mk" },
+
+  { id:"251", label:"TP link On fast web", ip:"88.88.88.251", x:1080, y:370, type:"tp" },
+  { id:"15", label:"HexGR3 ON Davo", ip:"88.88.88.15", x:1080, y:520, type:"mk" },
+
+  { id:"10254", label:"TP LINK IN Aviat VLAN 2", ip:"10.88.88.254", x:1330, y:80, type:"core" },
+  { id:"10111sfp", label:"HEX S", ip:"10.88.88.111", x:1330, y:220, type:"mk" },
+  { id:"10111e1", label:"Office 1", ip:"10.88.88.111", x:1180, y:380, type:"edge" },
+  { id:"10111e2", label:"Office 3", ip:"10.88.88.111", x:1330, y:380, type:"edge" },
+  { id:"10111e3", label:"Rawda Street", ip:"10.88.88.111", x:1480, y:380, type:"edge" }
+];
+
+const links = [
+  { id:"link-254-253", source:"254", target:"253" },
+  { id:"link-254-252", source:"254", target:"252" },
+  { id:"link-254-10", source:"254", target:"10" },
+  { id:"link-253-9", source:"253", target:"9" },
+  { id:"link-253-4", source:"253", target:"4" },
+  { id:"link-4-5", source:"4", target:"5" },
+  { id:"link-252-251", source:"252", target:"251" },
+  { id:"link-251-15", source:"251", target:"15" },
+  { id:"link-10-11", source:"10", target:"11" },
+  { id:"link-11-12", source:"11", target:"12" },
+  { id:"link-12-13", source:"12", target:"13" },
+  { id:"link-vlan2-hexs", source:"10254", target:"10111sfp" },
+  { id:"link-hexs-office1", source:"10111sfp", target:"10111e1" },
+  { id:"link-hexs-office3", source:"10111sfp", target:"10111e2" },
+  { id:"link-hexs-rawda", source:"10111sfp", target:"10111e3" }
+];
+
+const primaryNodeMetrics = {
+  "254": {
+    port: "27",
+    ifIndex: 49179,
+    rxOid: "1.3.6.1.2.1.31.1.1.1.6.49179",
+    txOid: "1.3.6.1.2.1.31.1.1.1.10.49179"
+  },
+  "10254": {
+    port: "gigabitEthernet 1/0/10",
+    ifIndex: 49162,
+    rxOid: "1.3.6.1.2.1.31.1.1.1.6.49162",
+    txOid: "1.3.6.1.2.1.31.1.1.1.10.49162"
+  }
+};
+
+function nodeTheme(type) {
+  if (type === "core") return { fill:"#0d2036", stroke:"#78dbff", glow:"rgba(120,219,255,.20)" };
+  if (type === "tp") return { fill:"#12253a", stroke:"#4fc4ff", glow:"rgba(79,196,255,.18)" };
+  if (type === "edge") return { fill:"#281a41", stroke:"#cb92ff", glow:"rgba(203,146,255,.18)" };
+  return { fill:"#12253a", stroke:"#45f3b7", glow:"rgba(69,243,183,.18)" };
+}
+
+function loadTone(total) {
+  if (total >= 700) return { glow:"rgba(255,72,72,.28)", main:"#ff5e5e", flow:"#ffd0d0", badge:"#511414", text:"#ffd7d7" };
+  if (total >= 250) return { glow:"rgba(255,188,55,.24)", main:"#ffca58", flow:"#fff1b8", badge:"#453611", text:"#fff1bf" };
+  return { glow:"rgba(61,211,255,.20)", main:"#4ad2ff", flow:"#d6f7ff", badge:"#112d3c", text:"#d8f5ff" };
+}
+
+function mapPoint(x, y) {
+  return `${x},${y}`;
+}
+
+function LebanonMap() {
+  const coast = [
+    mapPoint(930,120), mapPoint(910,150), mapPoint(900,190), mapPoint(890,230),
+    mapPoint(885,270), mapPoint(890,320), mapPoint(900,360), mapPoint(905,410),
+    mapPoint(900,455), mapPoint(890,500), mapPoint(885,550), mapPoint(888,610),
+    mapPoint(900,680), mapPoint(915,740)
+  ].join(" ");
+
+  const east = [
+    mapPoint(980,118), mapPoint(1005,155), mapPoint(1020,210), mapPoint(1030,280),
+    mapPoint(1035,350), mapPoint(1045,425), mapPoint(1052,500), mapPoint(1048,565),
+    mapPoint(1038,635), mapPoint(1015,700), mapPoint(985,742)
+  ].join(" ");
+
+  return (
+    <>
+      <rect x="0" y="0" width="1600" height="860" fill="url(#bgDark)" />
+      <rect x="0" y="0" width="1600" height="860" fill="url(#seaGlow)" />
+
+      <path
+        d={`M ${coast} L ${east} L 935,748 L 920,700 L 915,640 L 918,585 L 923,520 L 928,455 L 930,380 L 930,310 L 934,245 L 940,190 L 945,145 Z`}
+        fill="url(#landFill)"
+        stroke="rgba(140,180,215,0.30)"
+        strokeWidth="2"
+      />
+
+      <path
+        d="M 943 145 L 968 178 L 977 230 L 987 288 L 996 346 L 1003 410 L 1006 478 L 1002 540 L 992 610 L 977 672"
+        fill="none"
+        stroke="rgba(120,160,210,0.18)"
+        strokeWidth="2"
+        strokeDasharray="8 10"
+      />
+
+      <path
+        d="M 905 205 L 980 195 M 900 280 L 995 270 M 898 360 L 1004 350 M 894 445 L 1007 440 M 892 535 L 1001 525 M 896 620 L 988 610"
+        fill="none"
+        stroke="rgba(120,160,210,0.12)"
+        strokeWidth="1.4"
+      />
+
+      <circle cx="915" cy="245" r="6" fill="#8ce7ff" />
+      <circle cx="915" cy="245" r="16" fill="rgba(140,231,255,0.10)" />
+      <text x="930" y="248" fill="#bfeeff" fontSize="12" fontWeight="700">Tripoli / NoComment</text>
+
+      <text x="940" y="110" fill="rgba(220,240,255,0.16)" fontSize="26" fontWeight="800">LEBANON</text>
+    </>
+  );
+}
+
+export default function IspTopologyPage() {
+  const [selectedId, setSelectedId] = useState("254");
+  const [traffic, setTraffic] = useState({});
+  const [zoom, setZoom] = useState(0.9);
+  const [offset, setOffset] = useState({ x: -120, y: 10 });
+  const dragRef = useRef({ active:false, x:0, y:0, ox:0, oy:0 });
+
+  const byId = useMemo(() => Object.fromEntries(nodes.map(n => [n.id, n])), []);
+  const selected = byId[selectedId] || nodes[0];
+
+  useEffect(() => {
+    let stop = false;
+
+    const tick = async () => {
+      try {
+        const res = await fetch("/api/topology/snapshot");
+        const json = await res.json();
+        if (!stop && json?.ok && Array.isArray(json.data)) {
+          const map = Object.fromEntries(json.data.map(item => [item.id, item]));
+          setTraffic(map);
+        }
+      } catch {}
+    };
+
+    tick();
+    const timer = setInterval(tick, 3000);
+    return () => {
+      stop = true;
+      clearInterval(timer);
+    };
+  }, []);
+
+  const onWheel = (e) => {
+    e.preventDefault();
+    const factor = e.deltaY > 0 ? 0.92 : 1.08;
+    setZoom(v => Math.max(0.45, Math.min(1.8, v * factor)));
+  };
+
+  const onMouseDown = (e) => {
+    dragRef.current = {
+      active: true,
+      x: e.clientX,
+      y: e.clientY,
+      ox: offset.x,
+      oy: offset.y
+    };
+  };
+
+  const onMouseMove = (e) => {
+    if (!dragRef.current.active) return;
+    setOffset({
+      x: dragRef.current.ox + (e.clientX - dragRef.current.x),
+      y: dragRef.current.oy + (e.clientY - dragRef.current.y)
+    });
+  };
+
+  const onMouseUp = () => {
+    dragRef.current.active = false;
+  };
+
+  const selectedTraffic = Object.values(traffic).find(x => x.targetId === selectedId) ||
+    Object.values(traffic).find(x => x.sourceId === selectedId) || null;
+
+  const selectedPrimary = primaryNodeMetrics[selectedId] || null;
+  const selectedPortValue = selectedPrimary ? selectedPrimary.port : (selectedTraffic ? selectedTraffic.port : "-");
+  const selectedIfIndexValue = String(selectedPrimary ? selectedPrimary.ifIndex : (selectedTraffic ? selectedTraffic.ifIndex : "-"));
+  const selectedRxOidValue = selectedPrimary ? selectedPrimary.rxOid : (selectedTraffic ? selectedTraffic.rxOid : "-");
+  const selectedTxOidValue = selectedPrimary ? selectedPrimary.txOid : (selectedTraffic ? selectedTraffic.txOid : "-");
+
+  return (
+    <div style={{
+      minHeight:"100%",
+      padding:20,
+      background:"linear-gradient(180deg,#040a12 0%,#07101c 100%)",
+      color:"#fff"
+    }}>
+      <style>{`
+        .topo-flow {
+          stroke-dasharray: 9 14;
+          animation: topoFlow 1.3s linear infinite;
+        }
+        @keyframes topoFlow {
+          from { stroke-dashoffset: 0; }
+          to { stroke-dashoffset: -46; }
+        }
+      `}</style>
+
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 330px", gap:16, alignItems:"start" }}>
+        <div style={{
+          border:"1px solid rgba(120,160,255,0.14)",
+          borderRadius:24,
+          overflow:"hidden",
+          background:"#06101a",
+          boxShadow:"0 24px 80px rgba(0,0,0,0.35)"
+        }}>
+          <div style={{
+            display:"flex",
+            justifyContent:"space-between",
+            alignItems:"center",
+            padding:"14px 16px",
+            borderBottom:"1px solid rgba(255,255,255,0.05)"
+          }}>
+            <div style={{ fontSize:18, fontWeight:800 }}>⚡ NoComment Real Topology Engine</div>
+            <div style={{ display:"flex", gap:8 }}>
+              <button onClick={() => setZoom(z => Math.min(1.8, z + 0.1))} style={btnStyle}>+</button>
+              <button onClick={() => setZoom(z => Math.max(0.45, z - 0.1))} style={btnStyle}>-</button>
+              <button onClick={() => { setZoom(0.9); setOffset({ x:-120, y:10 }); }} style={btnStyle}>Reset</button>
+            </div>
+          </div>
+
+          <div
+            onWheel={onWheel}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseUp}
+            style={{ height:760, overflow:"hidden", cursor: dragRef.current.active ? "grabbing" : "grab" }}
+          >
+            <svg width="100%" height="100%" viewBox="0 0 1600 860" style={{ display:"block" }}>
+              <defs>
+                <linearGradient id="bgDark" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#04101b" />
+                  <stop offset="100%" stopColor="#030813" />
+                </linearGradient>
+                <radialGradient id="seaGlow" cx="50%" cy="40%" r="90%">
+                  <stop offset="0%" stopColor="rgba(44,128,255,0.08)" />
+                  <stop offset="100%" stopColor="rgba(44,128,255,0.00)" />
+                </radialGradient>
+                <linearGradient id="landFill" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#0d1926" />
+                  <stop offset="100%" stopColor="#142334" />
+                </linearGradient>
+              </defs>
+
+              <LebanonMap />
+
+              <g transform={`translate(${offset.x},${offset.y}) scale(${zoom})`}>
+                {links.map((link) => {
+                  const a = byId[link.source];
+                  const b = byId[link.target];
+                  const t = traffic[link.id];
+                  const tone = loadTone(t?.totalMbps || 0);
+                  const isSelected = selectedId === a.id || selectedId === b.id;
+
+                  return (
+                    <g key={link.id}>
+                      <line
+                        x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+                        stroke={isSelected ? tone.glow : "rgba(70,160,255,0.10)"}
+                        strokeWidth={isSelected ? 12 : 8}
+                        strokeLinecap="round"
+                      />
+                      <line
+                        x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+                        stroke={tone.main}
+                        strokeWidth={isSelected ? 3.8 : 2.4}
+                        strokeLinecap="round"
+                      />
+                      <line
+                        className="topo-flow"
+                        x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+                        stroke={tone.flow}
+                        strokeWidth={isSelected ? 2.0 : 1.3}
+                        strokeLinecap="round"
+                      />
+                      {t ? (
+                        <g>
+                          <rect
+                            x={(a.x + b.x)/2 - 38}
+                            y={(a.y + b.y)/2 - 13}
+                            rx="8"
+                            width="76"
+                            height="26"
+                            fill={tone.badge}
+                            stroke="rgba(255,255,255,0.10)"
+                          />
+                          <text
+                            x={(a.x + b.x)/2}
+                            y={(a.y + b.y)/2 + 4}
+                            textAnchor="middle"
+                            fill={tone.text}
+                            fontSize="10.5"
+                            fontWeight="800"
+                          >
+                            {t.totalMbps.toFixed(1)} Mb
+                          </text>
+                        </g>
+                      ) : null}
+                    </g>
+                  );
+                })}
+
+                {nodes.map((node) => {
+                  const theme = nodeTheme(node.type);
+                  const isSelected = selectedId === node.id;
+                  return (
+                    <g key={node.id} onClick={() => setSelectedId(node.id)} style={{ cursor:"pointer" }}>
+                      <circle
+                        cx={node.x}
+                        cy={node.y}
+                        r={isSelected ? 26 : 22}
+                        fill={theme.glow}
+                      />
+                      <circle
+                        cx={node.x}
+                        cy={node.y}
+                        r={18}
+                        fill={theme.fill}
+                        stroke={isSelected ? "#ffffff" : theme.stroke}
+                        strokeWidth={isSelected ? 3 : 2}
+                      />
+                      <text
+                        x={node.x}
+                        y={node.y + 38}
+                        textAnchor="middle"
+                        fill="#f3f8ff"
+                        fontSize="12.5"
+                        fontWeight="700"
+                      >
+                        {node.label}
+                      </text>
+                      <text
+                        x={node.x}
+                        y={node.y + 54}
+                        textAnchor="middle"
+                        fill="#8db5e4"
+                        fontSize="10.5"
+                      >
+                        {node.ip}
+                      </text>
+                    </g>
+                  );
+                })}
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div style={{
+          border:"1px solid rgba(120,160,255,0.14)",
+          borderRadius:24,
+          padding:16,
+          background:"#07101a",
+          boxShadow:"0 24px 80px rgba(0,0,0,0.35)"
+        }}>
+          <div style={{ color:"#7fa7d8", fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>
+            Selected Node
+          </div>
+          <div style={{ fontSize:28, fontWeight:800 }}>{selected.label}</div>
+          <div style={{ color:"#9bbce5", marginTop:6, marginBottom:16 }}>{selected.ip}</div>
+
+          <InfoCard title="Type" value={selected.type} />
+          <InfoCard title="Linked Traffic" value={selectedTraffic ? `${selectedTraffic.totalMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="RX" value={selectedTraffic ? `${selectedTraffic.rxMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="TX" value={selectedTraffic ? `${selectedTraffic.txMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="Port" value={selectedPortValue} />
+          <InfoCard title="ifIndex" value={selectedIfIndexValue} />
+          <InfoCard title="RX OID" value={selectedRxOidValue} mono />
+          <InfoCard title="TX OID" value={selectedTxOidValue} mono />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InfoCard({ title, value, mono }) {
+  return (
+    <div style={{
+      border:"1px solid rgba(255,255,255,0.06)",
+      borderRadius:16,
+      padding:12,
+      background:"rgba(255,255,255,0.02)",
+      marginBottom:10
+    }}>
+      <div style={{ color:"#7fa7d8", fontSize:11, marginBottom:6 }}>{title}</div>
+      <div style={{
+        color:"#eef6ff",
+        fontSize: mono ? 11.5 : 15,
+        fontWeight: mono ? 500 : 700,
+        fontFamily: mono ? "Consolas, monospace" : "inherit",
+        lineHeight:1.5,
+        wordBreak:"break-all"
+      }}>
+        {value}
+      </div>
+    </div>
+  );
+}
+
+const btnStyle = {
+  padding:"8px 12px",
+  borderRadius:12,
+  border:"1px solid rgba(255,255,255,0.08)",
+  background:"rgba(255,255,255,0.04)",
+  color:"#fff",
+  cursor:"pointer",
+  fontWeight:700
+};

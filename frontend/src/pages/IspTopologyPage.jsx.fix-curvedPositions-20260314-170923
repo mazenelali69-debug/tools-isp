@@ -1,0 +1,568 @@
+﻿import React, { useEffect, useState } from "react";
+import L from "leaflet";
+import { MapContainer, TileLayer, CircleMarker, Tooltip, useMap, Marker, Polyline } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+
+const OFFICE = [34.44654536, 35.85867849];
+
+const DEFAULT_NODE_META = {
+  "254": { label:"TP LINK IN Aviat", ip:"88.88.88.254", type:"core", lat:34.44654536, lng:35.85867849 },
+  "253": { label:"TP Link1 IN Cabinet", ip:"88.88.88.253", type:"tp", lat:34.4478, lng:35.8555 },
+  "252": { label:"TP Link2 IN Cabinet", ip:"88.88.88.252", type:"tp", lat:34.4478, lng:35.8622 },
+
+  "10":  { label:"IN C5C", ip:"88.88.88.10", type:"mk", lat:34.4447, lng:35.8587 },
+  "11":  { label:"IN Army Jabal", ip:"88.88.88.11", type:"mk", lat:34.4432, lng:35.8587 },
+  "12":  { label:"IN Home Fast Web", ip:"88.88.88.12", type:"mk", lat:34.4417, lng:35.8587 },
+  "13":  { label:"Finished Jabal", ip:"88.88.88.13", type:"mk", lat:34.4402, lng:35.8587 },
+
+  "9":   { label:"88.88.88.9", ip:"88.88.88.9", type:"mk", lat:34.4457, lng:35.8532 },
+  "4":   { label:"HexGR3 ON Redwan", ip:"88.88.88.4", type:"mk", lat:34.4442, lng:35.8554 },
+  "5":   { label:"HexGR3 ON Center Fadel", ip:"88.88.88.5", type:"mk", lat:34.4426, lng:35.8554 },
+
+  "251": { label:"TP link On fast web", ip:"88.88.88.251", type:"tp", lat:34.4447, lng:35.8613 },
+  "15":  { label:"HexGR3 ON Davo", ip:"88.88.88.15", type:"mk", lat:34.4426, lng:35.8613 },
+
+  "10254":   { label:"TP LINK IN Aviat VLAN 2", ip:"10.88.88.254", type:"core", lat:34.4483, lng:35.8622 },
+  "10111sfp":{ label:"HEX S", ip:"10.88.88.111", type:"mk", lat:34.4472, lng:35.8622 },
+  "10111e1": { label:"Office 1", ip:"10.88.88.111", type:"edge", lat:34.4458, lng:35.8611 },
+  "10111e2": { label:"Office 3", ip:"10.88.88.111", type:"edge", lat:34.4458, lng:35.8622 },
+  "10111e3": { label:"Rawda Street", ip:"10.88.88.111", type:"edge", lat:34.4458, lng:35.8633 }
+};
+
+const DEFAULT_LINKS = [
+  { id:"link-254-253", source:"254", target:"253" },
+  { id:"link-254-252", source:"254", target:"252" },
+  { id:"link-254-10", source:"254", target:"10" },
+  { id:"link-253-9", source:"253", target:"9" },
+  { id:"link-253-4", source:"253", target:"4" },
+  { id:"link-4-5", source:"4", target:"5" },
+  { id:"link-252-251", source:"252", target:"251" },
+  { id:"link-251-15", source:"251", target:"15" },
+  { id:"link-10-11", source:"10", target:"11" },
+  { id:"link-11-12", source:"11", target:"12" },
+  { id:"link-12-13", source:"12", target:"13" },
+  { id:"link-vlan2-hexs", source:"10254", target:"10111sfp" },
+  { id:"link-hexs-office1", source:"10111sfp", target:"10111e1" },
+  { id:"link-hexs-office3", source:"10111sfp", target:"10111e2" },
+  { id:"link-hexs-rawda", source:"10111sfp", target:"10111e3" }
+];
+
+const primaryNodeMetrics = {
+  "254": {
+    port: "27",
+    ifIndex: 49179,
+    rxOid: "1.3.6.1.2.1.31.1.1.1.6.49179",
+    txOid: "1.3.6.1.2.1.31.1.1.1.10.49179"
+  },
+  "10254": {
+    port: "gigabitEthernet 1/0/10",
+    ifIndex: 49162,
+    rxOid: "1.3.6.1.2.1.31.1.1.1.6.49162",
+    txOid: "1.3.6.1.2.1.31.1.1.1.10.49162"
+  }
+};
+
+const invisibleMarkerIcon = L.divIcon({
+  className: "drag-node-icon",
+  html: '<div style="width:26px;height:26px;border-radius:999px;background:transparent;"></div>',
+  iconSize: [26, 26],
+  iconAnchor: [13, 13]
+});
+
+function toneForTraffic(total) {
+  if (total >= 700) return { color:"#ff4d5e", text:"#ffd9de", badge:"rgba(58,12,18,.90)" };
+  if (total >= 250) return { color:"#ffc857", text:"#fff2c9", badge:"rgba(56,42,10,.90)" };
+  return { color:"#46d6ff", text:"#d9f8ff", badge:"rgba(10,34,44,.92)" };
+}
+
+function nodeStyle(type, selected, picked) {
+  if (picked) return { radius: 12, fillColor:"#ffcf5a", color:"#fff5cf", weight:2.5, fillOpacity:0.98 };
+  if (type === "core") return { radius: selected ? 11 : 9, fillColor:"#7edcff", color:"#f4fcff", weight:2.2, fillOpacity:0.96 };
+  if (type === "tp")   return { radius: selected ? 10 : 8, fillColor:"#58c8ff", color:"#f4fcff", weight:2.1, fillOpacity:0.96 };
+  if (type === "edge") return { radius: selected ? 9 : 7, fillColor:"#c997ff", color:"#fbf3ff", weight:2.0, fillOpacity:0.96 };
+  return { radius: selected ? 10 : 8, fillColor:"#4af0b9", color:"#f2fffb", weight:2.1, fillOpacity:0.96 };
+}
+
+function midpoint(a, b) {
+  return [(a.lat + b.lat) / 2, (a.lng + b.lng) / 2];
+}
+
+function ForceMapRefreshOnSelect({ center, locked }) {
+  const map = useMap();
+  useEffect(() => {
+    if (locked) return;
+    map.panTo(center, { animate: true, duration: 0.6 });
+  }, [center, map, locked]);
+  return null;
+}
+
+export default function IspTopologyPage() {
+  const [traffic, setTraffic] = useState({});
+  const [selectedId, setSelectedId] = useState("254");
+  const [mapKey, setMapKey] = useState(1);
+  const [locked, setLocked] = useState(false);
+  const [nodeMeta, setNodeMeta] = useState(DEFAULT_NODE_META);
+  const [links, setLinks] = useState(DEFAULT_LINKS);
+  const [editMode, setEditMode] = useState("move");
+  const [linkStart, setLinkStart] = useState(null);
+
+  useEffect(() => {
+    let stop = false;
+    const tick = async () => {
+      try {
+        const res = await fetch("/api/topology/snapshot");
+        const json = await res.json();
+        if (!stop && json?.ok && Array.isArray(json.data)) {
+          setTraffic(Object.fromEntries(json.data.map(x => [x.id, x])));
+        }
+      } catch {}
+    };
+    tick();
+    const timer = setInterval(tick, 3000);
+    return () => {
+      stop = true;
+      clearInterval(timer);
+    };
+  }, []);
+
+  useEffect(() => {
+    let stop = false;
+
+    const loadAll = async () => {
+      try {
+        const posRes = await fetch("/api/topology/positions");
+        const posJson = await posRes.json();
+        if (!stop && posJson?.ok && posJson.data) {
+          const merged = { ...DEFAULT_NODE_META };
+          Object.keys(posJson.data).forEach((id) => {
+            if (merged[id] && typeof posJson.data[id]?.lat === "number" && typeof posJson.data[id]?.lng === "number") {
+              merged[id] = { ...merged[id], lat: posJson.data[id].lat, lng: posJson.data[id].lng };
+            }
+          });
+          setNodeMeta(merged);
+        }
+
+        const linkRes = await fetch("/api/topology/links");
+        const linkJson = await linkRes.json();
+        if (!stop && linkJson?.ok && Array.isArray(linkJson.data) && linkJson.data.length > 0) {
+          setLinks(linkJson.data);
+        }
+      } catch {}
+    };
+
+    loadAll();
+    return () => { stop = true; };
+  }, []);
+
+  const updateNode = (id, lat, lng) => {
+    setNodeMeta(prev => ({
+      ...prev,
+      [id]: { ...prev[id], lat, lng }
+    }));
+  };
+
+  const saveLayout = async () => {
+    const payload = Object.fromEntries(
+      Object.entries(nodeMeta).map(([id, node]) => [id, { lat: node.lat, lng: node.lng }])
+    );
+
+    try {
+      await fetch("/api/topology/positions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      alert("Layout saved.");
+    } catch {
+      alert("Save failed.");
+    }
+  };
+
+  const saveLinks = async () => {
+    try {
+      await fetch("/api/topology/links", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(links)
+      });
+      alert("Links saved.");
+    } catch {
+      alert("Links save failed.");
+    }
+  };
+
+  const resetLayout = async () => {
+    setNodeMeta(DEFAULT_NODE_META);
+    try {
+      const payload = Object.fromEntries(
+        Object.entries(DEFAULT_NODE_META).map(([id, node]) => [id, { lat: node.lat, lng: node.lng }])
+      );
+      await fetch("/api/topology/positions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+    } catch {}
+    setMapKey(v => v + 1);
+  };
+
+  const resetLinks = async () => {
+    setLinks(DEFAULT_LINKS);
+    setLinkStart(null);
+    try {
+      await fetch("/api/topology/links", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(DEFAULT_LINKS)
+      });
+    } catch {}
+  };
+
+  const onNodeClick = (id) => {
+    setSelectedId(id);
+
+    if (locked) return;
+
+    if (editMode === "link") {
+      if (!linkStart) {
+        setLinkStart(id);
+        return;
+      }
+
+      if (linkStart === id) {
+        setLinkStart(null);
+        return;
+      }
+
+      const exists = links.some(x =>
+        (x.source === linkStart && x.target === id) ||
+        (x.source === id && x.target === linkStart)
+      );
+
+      if (!exists) {
+        setLinks(prev => [
+          ...prev,
+          {
+            id: `link-${linkStart}-${id}-${Date.now()}`,
+            source: linkStart,
+            target: id
+          }
+        ]);
+      }
+
+      setLinkStart(null);
+    }
+  };
+
+  const onLineClick = (id) => {
+    if (locked) return;
+    if (editMode !== "delete") return;
+    setLinks(prev => prev.filter(x => x.id !== id));
+  };
+
+  const selectedNode = nodeMeta[selectedId] || nodeMeta["254"];
+  const selectedTraffic =
+    Object.values(traffic).find(x => x.targetId === selectedId) ||
+    Object.values(traffic).find(x => x.sourceId === selectedId) ||
+    null;
+
+  const selectedPrimary = primaryNodeMetrics[selectedId] || null;
+  const selectedPortValue = selectedPrimary ? selectedPrimary.port : (selectedTraffic ? selectedTraffic.port : "-");
+  const selectedIfIndexValue = String(selectedPrimary ? selectedPrimary.ifIndex : (selectedTraffic ? selectedTraffic.ifIndex : "-"));
+  const selectedRxOidValue = selectedPrimary ? selectedPrimary.rxOid : (selectedTraffic ? selectedTraffic.rxOid : "-");
+  const selectedTxOidValue = selectedPrimary ? selectedPrimary.txOid : (selectedTraffic ? selectedTraffic.txOid : "-");
+  const selectedCenter = [selectedNode.lat, selectedNode.lng];
+
+  return (
+    <div style={{
+      minHeight:"100%",
+      padding:20,
+      background:"linear-gradient(180deg,#040912 0%,#070f18 100%)",
+      color:"#fff"
+    }}>
+      <style>{`
+        .leaflet-container {
+          background: #0b1220 !important;
+          font-family: Segoe UI, Arial, sans-serif;
+        }
+
+        .topology-map .leaflet-tile-pane {
+          filter: brightness(0.42) contrast(1.18) saturate(0.22) hue-rotate(180deg);
+        }
+
+        .topology-map .leaflet-overlay-pane {
+          pointer-events: auto;
+        }
+
+        .topology-map .leaflet-tooltip-pane {
+          pointer-events: none;
+        }
+
+        .topology-map .leaflet-control-zoom a {
+          background: rgba(5,10,18,.94);
+          color: #fff;
+          border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+
+        .traffic-badge {
+          background: rgba(4,10,18,.90);
+          border: 1px solid rgba(255,255,255,.08);
+          color: #e8f7ff;
+          border-radius: 999px;
+          padding: 2px 8px;
+          font-size: 10px;
+          font-weight: 800;
+          box-shadow: 0 8px 24px rgba(0,0,0,.35);
+          white-space: nowrap;
+          pointer-events: none !important;
+        }
+
+        .node-label {
+          color: #f7fbff;
+          font-size: 11px;
+          font-weight: 800;
+          text-shadow: 0 2px 8px rgba(0,0,0,.95);
+          white-space: nowrap;
+          pointer-events: none !important;
+        }
+
+        .node-ip {
+          color: #a6c3e6;
+          font-size: 10px;
+          font-weight: 700;
+          text-shadow: 0 2px 8px rgba(0,0,0,.95);
+          white-space: nowrap;
+          pointer-events: none !important;
+        }
+      `}</style>
+
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 340px", gap:16, alignItems:"start" }}>
+        <div style={{
+          border:"1px solid rgba(120,160,255,0.14)",
+          borderRadius:24,
+          overflow:"hidden",
+          background:"#06101a",
+          boxShadow:"0 24px 80px rgba(0,0,0,0.35)"
+        }}>
+          <div style={{
+            display:"flex",
+            justifyContent:"space-between",
+            alignItems:"center",
+            padding:"14px 16px",
+            borderBottom:"1px solid rgba(255,255,255,0.05)",
+            gap: 10,
+            flexWrap: "wrap"
+          }}>
+            <div style={{ fontSize:18, fontWeight:800 }}>⚡ NoComment Link Builder</div>
+            <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+              <button onClick={() => setLocked(v => !v)} style={btnStyle}>{locked ? "Unlock" : "Lock"}</button>
+              <button onClick={() => { setEditMode("move"); setLinkStart(null); }} style={editMode === "move" ? activeBtnStyle : btnStyle}>Move Mode</button>
+              <button onClick={() => { setEditMode("link"); setLinkStart(null); }} style={editMode === "link" ? activeBtnStyle : btnStyle}>Link Mode</button>
+              <button onClick={() => { setEditMode("delete"); setLinkStart(null); }} style={editMode === "delete" ? activeBtnStyle : btnStyle}>Delete Mode</button>
+              <button onClick={saveLayout} style={btnStyle}>Save Layout</button>
+              <button onClick={saveLinks} style={btnStyle}>Save Links</button>
+              <button onClick={resetLayout} style={btnStyle}>Reset Layout</button>
+              <button onClick={resetLinks} style={btnStyle}>Reset Links</button>
+              <button onClick={() => setMapKey(v => v + 1)} style={btnStyle}>Reset Map</button>
+            </div>
+          </div>
+
+          <div className="topology-map" style={{ height:820, position:"relative" }}>
+            <div style={{
+              position:"absolute",
+              inset:0,
+              background:"linear-gradient(180deg, rgba(8,14,24,0.28) 0%, rgba(5,10,18,0.34) 100%)",
+              pointerEvents:"none",
+              zIndex:340
+            }} />
+
+            <MapContainer
+              key={mapKey}
+              center={OFFICE}
+              zoom={15}
+              minZoom={13}
+              maxZoom={19}
+              zoomSnap={0.25}
+              scrollWheelZoom={!locked}
+              dragging={!locked}
+              doubleClickZoom={!locked}
+              boxZoom={!locked}
+              keyboard={!locked}
+              zoomControl={true}
+              style={{ width:"100%", height:"100%" }}
+            >
+              <ForceMapRefreshOnSelect center={selectedCenter} locked={locked} />
+              <TileLayer
+                attribution='&copy; OpenStreetMap contributors'
+                url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+
+              {links.map((link) => {
+                const a = nodeMeta[link.source];
+                const b = nodeMeta[link.target];
+                if (!a || !b) return null;
+
+                const t = traffic[link.id];
+                const tone = toneForTraffic(t?.totalMbps || 0);
+                const isSelected = selectedId === link.source || selectedId === link.target;
+
+                return (
+                  <React.Fragment key={link.id}>
+                    <Polyline
+                      positions={curvedPositions(a, b, 0.00018)}
+                      pathOptions={{
+                        color: tone.color,
+                        weight: isSelected ? 6 : 4,
+                        opacity: 0.9
+                      }}
+                      eventHandlers={{
+                        click: () => onLineClick(link.id)
+                      }}
+                    />
+                    {t ? (
+                      <CircleMarker
+                        center={midpoint(a, b)}
+                        radius={0.1}
+                        pathOptions={{ opacity:0, fillOpacity:0 }}
+                      >
+                        <Tooltip permanent direction="center" opacity={1} className="traffic-badge">
+                          {t.totalMbps.toFixed(1)} Mb
+                        </Tooltip>
+                      </CircleMarker>
+                    ) : null}
+                  </React.Fragment>
+                );
+              })}
+
+              {Object.entries(nodeMeta).map(([id, node]) => {
+                const style = nodeStyle(node.type, selectedId === id, linkStart === id);
+                return (
+                  <React.Fragment key={id}>
+                    <Marker
+                      position={[node.lat, node.lng]}
+                      draggable={!locked && editMode === "move"}
+                      icon={invisibleMarkerIcon}
+                      eventHandlers={{
+                        dragend: (e) => {
+                          const p = e.target.getLatLng();
+                          updateNode(id, p.lat, p.lng);
+                        },
+                        click: () => onNodeClick(id)
+                      }}
+                    />
+
+                    <CircleMarker
+                      center={[node.lat, node.lng]}
+                      radius={style.radius}
+                      pathOptions={{
+                        color: style.color,
+                        weight: style.weight,
+                        fillColor: style.fillColor,
+                        fillOpacity: style.fillOpacity
+                      }}
+                      eventHandlers={{ click: () => onNodeClick(id) }}
+                    >
+                      <Tooltip direction="top" offset={[0,-8]} opacity={1}>
+                        <div style={{ minWidth: 180 }}>
+                          <div style={{ fontWeight: 800 }}>{node.label}</div>
+                          <div>{node.ip}</div>
+                        </div>
+                      </Tooltip>
+                    </CircleMarker>
+
+                    <CircleMarker
+                      center={[node.lat - 0.00018, node.lng]}
+                      radius={0.1}
+                      pathOptions={{ opacity:0, fillOpacity:0 }}
+                    >
+                      <Tooltip permanent direction="bottom" offset={[0,0]} opacity={1} className="node-label">
+                        {node.label}
+                      </Tooltip>
+                    </CircleMarker>
+
+                    <CircleMarker
+                      center={[node.lat - 0.00035, node.lng]}
+                      radius={0.1}
+                      pathOptions={{ opacity:0, fillOpacity:0 }}
+                    >
+                      <Tooltip permanent direction="bottom" offset={[0,0]} opacity={1} className="node-ip">
+                        {node.ip}
+                      </Tooltip>
+                    </CircleMarker>
+                  </React.Fragment>
+                );
+              })}
+            </MapContainer>
+          </div>
+        </div>
+
+        <div style={{
+          border:"1px solid rgba(120,160,255,0.14)",
+          borderRadius:24,
+          padding:16,
+          background:"#07101a",
+          boxShadow:"0 24px 80px rgba(0,0,0,0.35)"
+        }}>
+          <div style={{ color:"#7fa7d8", fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>
+            Selected Node
+          </div>
+          <div style={{ fontSize:28, fontWeight:800 }}>{selectedNode.label}</div>
+          <div style={{ color:"#9bbce5", marginTop:6, marginBottom:16 }}>{selectedNode.ip}</div>
+
+          <InfoCard title="Mode" value={locked ? "LOCKED" : editMode.toUpperCase()} />
+          <InfoCard title="Link Start" value={linkStart || "-"} />
+          <InfoCard title="Links Count" value={String(links.length)} />
+          <InfoCard title="Type" value={selectedNode.type} />
+          <InfoCard title="Linked Traffic" value={selectedTraffic ? `${selectedTraffic.totalMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="RX" value={selectedTraffic ? `${selectedTraffic.rxMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="TX" value={selectedTraffic ? `${selectedTraffic.txMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="Port" value={selectedPortValue} />
+          <InfoCard title="ifIndex" value={selectedIfIndexValue} />
+          <InfoCard title="RX OID" value={selectedRxOidValue} mono />
+          <InfoCard title="TX OID" value={selectedTxOidValue} mono />
+          <InfoCard title="Coordinates" value={`${selectedNode.lat}, ${selectedNode.lng}`} mono />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InfoCard({ title, value, mono }) {
+  return (
+    <div style={{
+      border:"1px solid rgba(255,255,255,0.06)",
+      borderRadius:16,
+      padding:12,
+      background:"rgba(255,255,255,0.02)",
+      marginBottom:10
+    }}>
+      <div style={{ color:"#7fa7d8", fontSize:11, marginBottom:6 }}>{title}</div>
+      <div style={{
+        color:"#eef6ff",
+        fontSize: mono ? 11.5 : 15,
+        fontWeight: mono ? 500 : 700,
+        fontFamily: mono ? "Consolas, monospace" : "inherit",
+        lineHeight:1.5,
+        wordBreak:"break-all"
+      }}>
+        {value}
+      </div>
+    </div>
+  );
+}
+
+const btnStyle = {
+  padding:"8px 12px",
+  borderRadius:12,
+  border:"1px solid rgba(255,255,255,0.08)",
+  background:"rgba(255,255,255,0.04)",
+  color:"#fff",
+  cursor:"pointer",
+  fontWeight:700
+};
+
+const activeBtnStyle = {
+  ...btnStyle,
+  background:"rgba(70,214,255,0.20)",
+  border:"1px solid rgba(70,214,255,0.50)"
+};

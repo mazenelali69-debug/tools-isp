@@ -1,0 +1,441 @@
+﻿import React, { useMemo, useState } from "react";
+
+const nodes = [
+  { id:"up1", ip:"155.15.59.4",  label:"Transit A", role:"Upstream", layer:"Transport", status:"up", parent:null,   note:"Primary transport edge" },
+  { id:"up2", ip:"122.24.30.4",  label:"Transit B", role:"Upstream", layer:"Transport", status:"up", parent:null,   note:"Secondary transport edge" },
+
+  { id:"c1",  ip:"88.88.88.254", label:"Core SW 254", role:"Main Switch", layer:"Core", status:"up",      parent:"up1", note:"Main backbone core switch" },
+  { id:"c2",  ip:"88.88.88.253", label:"Core SW 253", role:"Main Switch", layer:"Core", status:"up",      parent:"up1", note:"Main backbone core switch" },
+  { id:"c3",  ip:"88.88.88.252", label:"Core SW 252", role:"Main Switch", layer:"Core", status:"up",      parent:"up2", note:"Main backbone core switch" },
+  { id:"c4",  ip:"88.88.88.251", label:"Core SW 251", role:"Main Switch", layer:"Core", status:"warning", parent:"up2", note:"Core switch, watch state" },
+  { id:"c5",  ip:"10.88.88.254", label:"Core SW 10.254", role:"Main Switch", layer:"Core", status:"up",   parent:"up2", note:"Private core side" },
+
+  { id:"r1",  ip:"88.88.88.250", label:"Branch 250", role:"Main Router", layer:"Branch", status:"up",      parent:"c1", note:"Main router / POP" },
+  { id:"r2",  ip:"88.88.88.249", label:"Branch 249", role:"Main Router", layer:"Branch", status:"up",      parent:"c1", note:"Main router / POP" },
+  { id:"r3",  ip:"88.88.88.1",   label:"Branch 1",   role:"Main Router", layer:"Branch", status:"up",      parent:"c2", note:"Main router / POP" },
+  { id:"r4",  ip:"88.88.88.2",   label:"Branch 2",   role:"Main Router", layer:"Branch", status:"up",      parent:"c2", note:"Main router / POP" },
+  { id:"r5",  ip:"88.88.88.4",   label:"Branch 4",   role:"Main Router", layer:"Branch", status:"up",      parent:"c3", note:"Main router / POP" },
+  { id:"r6",  ip:"88.88.88.5",   label:"Branch 5",   role:"Main Router", layer:"Branch", status:"warning", parent:"c3", note:"Main router / POP" },
+  { id:"r7",  ip:"88.88.88.6",   label:"Branch 6",   role:"Main Router", layer:"Branch", status:"up",      parent:"c4", note:"Main router / POP" },
+  { id:"r8",  ip:"88.88.88.7",   label:"Branch 7",   role:"Main Router", layer:"Branch", status:"up",      parent:"c4", note:"Main router / POP" },
+
+  { id:"r9",  ip:"88.88.88.9",   label:"Branch 9",   role:"Main Router", layer:"Edge", status:"up",      parent:"r2",  note:"Edge child / downstream" },
+  { id:"r10", ip:"88.88.88.10",  label:"Branch 10",  role:"Main Router", layer:"Edge", status:"up",      parent:"r3",  note:"Edge child / downstream" },
+  { id:"r11", ip:"88.88.88.11",  label:"Branch 11",  role:"Main Router", layer:"Edge", status:"up",      parent:"r3",  note:"Edge child / downstream" },
+  { id:"r12", ip:"88.88.88.12",  label:"Branch 12",  role:"Main Router", layer:"Edge", status:"up",      parent:"r5",  note:"Edge child / downstream" },
+  { id:"r13", ip:"88.88.88.13",  label:"Branch 13",  role:"Main Router", layer:"Edge", status:"up",      parent:"r5",  note:"Edge child / downstream" },
+  { id:"r14", ip:"88.88.88.14",  label:"Branch 14",  role:"Main Router", layer:"Edge", status:"down",    parent:"r6",  note:"Edge child / downstream" },
+  { id:"r15", ip:"88.88.88.15",  label:"Branch 15",  role:"Main Router", layer:"Edge", status:"up",      parent:"r7",  note:"Edge child / downstream" },
+  { id:"r16", ip:"10.88.88.111", label:"Branch 10.111", role:"Main Router", layer:"Edge", status:"up",   parent:"r8",  note:"Private branch edge" }
+];
+
+const layerOrder = ["Transport", "Core", "Branch", "Edge"];
+const layerY = {
+  Transport: 90,
+  Core: 240,
+  Branch: 430,
+  Edge: 620
+};
+
+function getStatusColor(status) {
+  if (status === "up") return "#35f2a1";
+  if (status === "warning") return "#f7c948";
+  if (status === "down") return "#ff6b81";
+  return "#7ea2d8";
+}
+
+function getNodeTheme(node) {
+  if (node.layer === "Transport") {
+    return { fill: "#f7c948", stroke: "#ffe08a", glow: "rgba(247,201,72,.22)", r: 14 };
+  }
+  if (node.layer === "Core") {
+    return { fill: "#25c8ff", stroke: "#8fe9ff", glow: "rgba(37,200,255,.20)", r: 15 };
+  }
+  if (node.layer === "Edge") {
+    return { fill: "#9b7bff", stroke: "#c7b7ff", glow: "rgba(155,123,255,.20)", r: 12 };
+  }
+  return { fill: "#35f2a1", stroke: "#a8ffdd", glow: "rgba(53,242,161,.16)", r: 13 };
+}
+
+const flowCss = `
+  .topology-flow-line {
+    stroke-dasharray: 6 16;
+    animation: topologyFlow 1.15s linear infinite;
+  }
+
+  .topology-flow-line.dim {
+    stroke-dasharray: 4 18;
+    animation-duration: 1.7s;
+    opacity: 0.8;
+  }
+
+  @keyframes topologyFlow {
+    from { stroke-dashoffset: 0; }
+    to   { stroke-dashoffset: -70; }
+  }
+`;
+
+function StatCard({ label, value, tone }) {
+  return (
+    <div style={{
+      minWidth: 92,
+      padding: "3px 8px",
+      borderRadius: 12,
+      background: tone,
+      border: "1px solid rgba(255,255,255,0.08)",
+      boxShadow: "0 10px 30px rgba(0,0,0,0.22)"
+    }}>
+      <div style={{ fontSize: 9, color: "#9fb5d8", marginBottom: 2, letterSpacing: 1, textTransform: "uppercase" }}>
+        {label}
+      </div>
+      <div style={{ fontSize: 13, fontWeight: 800, color: "#fff", lineHeight: 1 }}>
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function Pill({ children, bg, color }) {
+  return (
+    <div style={{
+      padding: "9px 13px",
+      borderRadius: 999,
+      background: bg,
+      border: "1px solid rgba(255,255,255,0.08)",
+      color,
+      fontWeight: 700,
+      fontSize: 13
+    }}>
+      {children}
+    </div>
+  );
+}
+
+function buildLayout(sourceNodes) {
+  const grouped = Object.fromEntries(layerOrder.map(layer => [layer, sourceNodes.filter(n => n.layer === layer)]));
+
+  const positioned = [];
+  const byId = {};
+
+  const transportGap = 260;
+  const coreGap = 170;
+  const branchGap = 150;
+  const edgeGap = 145;
+
+  grouped.Transport.forEach((n, i) => {
+    const x = 430 + (i * transportGap);
+    const item = { ...n, x, y: layerY.Transport };
+    positioned.push(item);
+    byId[item.id] = item;
+  });
+
+  grouped.Core.forEach((n, i) => {
+    const x = 260 + (i * coreGap);
+    const item = { ...n, x, y: layerY.Core };
+    positioned.push(item);
+    byId[item.id] = item;
+  });
+
+  grouped.Branch.forEach((n, i) => {
+    const x = 170 + (i * branchGap);
+    const item = { ...n, x, y: layerY.Branch };
+    positioned.push(item);
+    byId[item.id] = item;
+  });
+
+  grouped.Edge.forEach((n, i) => {
+    const x = 210 + (i * edgeGap);
+    const item = { ...n, x, y: layerY.Edge };
+    positioned.push(item);
+    byId[item.id] = item;
+  });
+
+  const links = positioned
+    .filter(n => n.parent)
+    .map(n => [n.parent, n.id]);
+
+  return { positioned, byId, links };
+}
+
+export default function IspTopologyPage() {
+  const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState("c2");
+
+  const { positioned, byId, links } = useMemo(() => buildLayout(nodes), []);
+
+  const filteredIds = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return new Set(positioned.map(n => n.id));
+    return new Set(
+      positioned
+        .filter(n =>
+          n.ip.toLowerCase().includes(q) ||
+          n.label.toLowerCase().includes(q) ||
+          n.role.toLowerCase().includes(q) ||
+          n.layer.toLowerCase().includes(q) ||
+          n.status.toLowerCase().includes(q)
+        )
+        .map(n => n.id)
+    );
+  }, [query, positioned]);
+
+  const visibleNodes = positioned.filter(n => filteredIds.has(n.id));
+  const visibleNodeIds = new Set(visibleNodes.map(n => n.id));
+  const visibleLinks = links.filter(([a, b]) => visibleNodeIds.has(a) && visibleNodeIds.has(b));
+  const selected = byId[selectedId] || visibleNodes[0] || positioned[0];
+
+  const totals = useMemo(() => {
+    return {
+      total: positioned.length,
+      transport: positioned.filter(n => n.layer === "Transport").length,
+      core: positioned.filter(n => n.layer === "Core").length,
+      branch: positioned.filter(n => n.layer === "Branch").length
+    };
+  }, [positioned]);
+
+  return (
+    <div style={{
+      minHeight: "100%",
+      padding: 22,
+      background:
+        "radial-gradient(circle at top left, rgba(0,170,255,0.14), transparent 28%), radial-gradient(circle at top right, rgba(120,80,255,0.10), transparent 24%), linear-gradient(180deg, #07111f 0%, #040b16 100%)",
+      color: "#fff"
+    }}>
+      <style>{flowCss}</style>
+
+      <div style={{ marginBottom: 18 }}>
+        <div style={{
+          fontSize: 12,
+          letterSpacing: 2,
+          textTransform: "uppercase",
+          color: "#7ea2d8",
+          marginBottom: 4
+        }}>
+          ISP Topology v1
+        </div>
+        <div style={{ fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>
+          Smart Backbone Map
+        </div>
+        <div style={{ marginTop: 10, color: "#a8bddf", fontSize: 14 }}>
+          Logical operational view — Upstream → Core → Branches → Edge
+        </div>
+      </div>
+
+      <div style={{
+        display: "flex",
+        gap: 12,
+        flexWrap: "wrap",
+        marginBottom: 16
+      }}>
+        <StatCard label="Total Nodes" value={totals.total} tone="rgba(255,255,255,0.03)" />
+        <StatCard label="Upstream" value={totals.transport} tone="rgba(247,201,72,0.10)" />
+        <StatCard label="Core" value={totals.core} tone="rgba(37,200,255,0.10)" />
+        <StatCard label="Branches" value={totals.branch} tone="rgba(53,242,161,0.10)" />
+      </div>
+
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "minmax(0, 1fr) 320px",
+        gap: 16,
+        alignItems: "start"
+      }}>
+        <div style={{
+          border: "1px solid rgba(120,160,255,0.18)",
+          borderRadius: 24,
+          overflow: "hidden",
+          background: "rgba(4, 11, 22, 0.70)",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.35)"
+        }}>
+          <div style={{
+            display: "flex",
+            gap: 12,
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: 16,
+            borderBottom: "1px solid rgba(255,255,255,0.06)"
+          }}>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <Pill bg="rgba(247,201,72,0.12)" color="#ffe08a">Upstream / Transport</Pill>
+              <Pill bg="rgba(37,200,255,0.12)" color="#8fe9ff">Core Switches</Pill>
+              <Pill bg="rgba(53,242,161,0.12)" color="#a8ffdd">Main Routers / Branches</Pill>
+            </div>
+
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search IP / label / role / status"
+              style={{
+                width: 280,
+                maxWidth: "100%",
+                padding: "12px 14px",
+                borderRadius: 12,
+                border: "1px solid rgba(255,255,255,0.10)",
+                background: "rgba(255,255,255,0.04)",
+                color: "#fff",
+                outline: "none"
+              }}
+            />
+          </div>
+
+          <div style={{ overflow: "auto" }}>
+            <div style={{ minWidth: 1120, padding: 14 }}>
+              <svg style={{cursor:"grab"}} width="1080" height="620" viewBox="0 0 1420 820" style={{ display: "block" }}>
+                <defs>
+                  <pattern id="grid" width="12" height="12" patternUnits="userSpaceOnUse">
+                    <path d="M 12 0 L 0 0 0 12" fill="none" stroke="rgba(120,160,255,0.045)" strokeWidth="0.7" />
+                  </pattern>
+                </defs>
+
+                <rect x="0" y="0" width="1420" height="820" fill="url(#grid)" rx="26" />
+
+                <text x="590" y="34" fill="#f8d66d" fontSize="13" fontWeight="700">UPSTREAM / TRANSPORT</text>
+                <text x="612" y="190" fill="#74dcff" fontSize="13" fontWeight="700">MAIN SWITCHES / CORE</text>
+                <text x="610" y="390" fill="#64f0b1" fontSize="13" fontWeight="700">MAIN ROUTERS / BRANCHES</text>
+                <text x="655" y="575" fill="#c7b7ff" fontSize="13" fontWeight="700">EDGE / DOWNSTREAM</text>
+
+                {visibleLinks.map((pair, i) => {
+                  const a = byId[pair[0]];
+                  const b = byId[pair[1]];
+                  const selectedLink = selected && (selected.id === a.id || selected.id === b.id);
+
+                  return (
+                    <g key={i}>
+                      <line
+                        x1={a.x}
+                        y1={a.y}
+                        x2={b.x}
+                        y2={b.y}
+                        stroke={selectedLink ? "rgba(121, 222, 255, 0.22)" : "rgba(80, 155, 255, 0.08)"}
+                        strokeWidth={selectedLink ? "6" : "4"}
+                        strokeLinecap="round"
+                      />
+                      <line
+                        x1={a.x}
+                        y1={a.y}
+                        x2={b.x}
+                        y2={b.y}
+                        stroke={selectedLink ? "rgba(180, 245, 255, 0.98)" : "rgba(120, 205, 255, 0.72)"}
+                        strokeWidth={selectedLink ? "2.8" : "1.9"}
+                        strokeLinecap="round"
+                      />
+                      <line
+                        className={selectedLink ? "topology-flow-line" : "topology-flow-line dim"}
+                        x1={a.x}
+                        y1={a.y}
+                        x2={b.x}
+                        y2={b.y}
+                        stroke={selectedLink ? "rgba(255,255,255,0.95)" : "rgba(120,240,255,0.70)"}
+                        strokeWidth={selectedLink ? "1.5" : "1.1"}
+                        strokeLinecap="round"
+                      />
+                    </g>
+                  );
+                })}
+
+                {visibleNodes.map((node) => {
+                  const t = getNodeTheme(node);
+                  const selectedNode = selected && selected.id === node.id;
+                  const statusColor = getStatusColor(node.status);
+
+                  return (
+                    <g
+                      key={node.id}
+                      onClick={() => setSelectedId(node.id)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <circle cx={node.x} cy={node.y} r={t.r + (selectedNode ? 11 : 7)} fill={selectedNode ? "rgba(255,255,255,0.12)" : t.glow} />
+                      <circle cx={node.x} cy={node.y} r={t.r} fill={t.fill} stroke={selectedNode ? "#ffffff" : t.stroke} strokeWidth={selectedNode ? 3 : 2} />
+                      <circle cx={node.x + t.r - 3} cy={node.y - t.r + 4} r="4.5" fill={statusColor} stroke="#07111f" strokeWidth="1.5" />
+
+                      <text
+                        x={node.x}
+                        y={node.y + 29}
+                        textAnchor="middle"
+                        fill="#ffffff"
+                        fontSize="12.5"
+                        fontWeight="700"
+                      >
+                        {node.label}
+                      </text>
+                      <text
+                        x={node.x}
+                        y={node.y + 42}
+                        textAnchor="middle"
+                        fill="#8fb0dc"
+                        fontSize="11"
+                      >
+                        {node.ip}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div style={{
+          border: "1px solid rgba(120,160,255,0.18)",
+          borderRadius: 24,
+          padding: 16,
+          background: "rgba(4, 11, 22, 0.70)",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.35)"
+        }}>
+          <div style={{
+            color: "#7ea2d8",
+            fontSize: 12,
+            textTransform: "uppercase",
+            letterSpacing: 2,
+            marginBottom: 8
+          }}>
+            Selected Device
+          </div>
+
+          <div style={{ fontSize: 26, fontWeight: 800 }}>
+            {selected ? selected.label : "No node"}
+          </div>
+
+          <div style={{ color: "#9fb5d8", marginTop: 6, marginBottom: 16 }}>
+            {selected?.ip || "-"}
+          </div>
+
+          <div style={{ display: "grid", gap: 10 }}>
+            <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 14, background: "rgba(255,255,255,0.02)" }}>
+              <div style={{ color: "#7ea2d8", fontSize: 12, marginBottom: 6 }}>Role</div>
+              <div style={{ fontSize: 16, fontWeight: 700 }}>{selected?.role || "-"}</div>
+            </div>
+
+            <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 14, background: "rgba(255,255,255,0.02)" }}>
+              <div style={{ color: "#7ea2d8", fontSize: 12, marginBottom: 6 }}>Layer</div>
+              <div style={{ fontSize: 16, fontWeight: 700 }}>{selected?.layer || "-"}</div>
+            </div>
+
+            <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 14, background: "rgba(255,255,255,0.02)" }}>
+              <div style={{ color: "#7ea2d8", fontSize: 12, marginBottom: 6 }}>Status</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 15, fontWeight: 700 }}>
+                <span style={{ width: 10, height: 10, borderRadius: 999, background: getStatusColor(selected?.status) }} />
+                {String(selected?.status || "-").toUpperCase()}
+              </div>
+            </div>
+
+            <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 14, background: "rgba(255,255,255,0.02)" }}>
+              <div style={{ color: "#7ea2d8", fontSize: 12, marginBottom: 6 }}>Parent Path</div>
+              <div style={{ fontSize: 14, color: "#d7e6ff", lineHeight: 1.5 }}>
+                {selected?.parent ? `${byId[selected.parent]?.label || selected.parent} → ${selected.label}` : "Top-level / upstream"}
+              </div>
+            </div>
+
+            <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 14, background: "rgba(255,255,255,0.02)" }}>
+              <div style={{ color: "#7ea2d8", fontSize: 12, marginBottom: 4 }}>Notes</div>
+              <div style={{ fontSize: 14, color: "#dbe7ff", lineHeight: 1.5 }}>
+                {selected?.note || "-"}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+

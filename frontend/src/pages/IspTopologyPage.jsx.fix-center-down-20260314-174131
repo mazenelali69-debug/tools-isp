@@ -181,7 +181,7 @@ export default function IspTopologyPage() {
   const [mode, setMode] = useState("move");
   const [linkStart, setLinkStart] = useState(null);
   const [zoom, setZoom] = useState(0.52);
-  const [offset, setOffset] = useState({ x: 170, y: 40 });
+  const [offset, setOffset] = useState({ x: 170, y: -230 });
 
   const dragRef = useRef({
     active:false,
@@ -320,7 +320,7 @@ export default function IspTopologyPage() {
   const resetLayout = async () => {
     setNodes(DEFAULT_NODES);
     setZoom(0.52);
-    setOffset({ x: 170, y: 40 });
+    setOffset({ x: 170, y: -230 });
     setLinkStart(null);
 
     try {
@@ -771,7 +771,6 @@ const activeBtnStyle = {
   background:"rgba(71,215,255,0.20)",
   border:"1px solid rgba(71,215,255,0.48)"
 };
-
 
 
 

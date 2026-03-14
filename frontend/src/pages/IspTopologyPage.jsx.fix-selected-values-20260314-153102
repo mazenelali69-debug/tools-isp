@@ -1,0 +1,355 @@
+﻿
+const primaryNodeMetrics = {
+  "254": {
+    port: "27",
+    ifIndex: 49179,
+    rxOid: "1.3.6.1.2.1.31.1.1.1.6.49179",
+    txOid: "1.3.6.1.2.1.31.1.1.1.10.49179"
+  }
+};
+import React, { useEffect, useMemo, useRef, useState } from "react";
+
+const nodes = [
+  { id:"254", label:"TP LINK IN Aviat", ip:"88.88.88.254", x:760, y:80, type:"core" },
+  { id:"253", label:"TP Link1 IN Cabinet", ip:"88.88.88.253", x:420, y:220, type:"tp" },
+  { id:"252", label:"TP Link2 IN Cabinet", ip:"88.88.88.252", x:1080, y:220, type:"tp" },
+
+  { id:"10", label:"IN C5C", ip:"88.88.88.10", x:760, y:220, type:"mk" },
+  { id:"11", label:"IN Army Jabal", ip:"88.88.88.11", x:760, y:370, type:"mk" },
+  { id:"12", label:"IN Home Fast Web", ip:"88.88.88.12", x:760, y:520, type:"mk" },
+  { id:"13", label:"Finshed Jabal", ip:"88.88.88.13", x:760, y:670, type:"mk" },
+
+  { id:"9", label:"88.88.88.9", ip:"88.88.88.9", x:260, y:370, type:"mk" },
+  { id:"4", label:"HexGR3 ON Redwan", ip:"88.88.88.4", x:420, y:370, type:"mk" },
+  { id:"5", label:"HexGR3 ON Center Fadel", ip:"88.88.88.5", x:420, y:520, type:"mk" },
+
+  { id:"251", label:"TP link On fast web", ip:"88.88.88.251", x:1080, y:370, type:"tp" },
+  { id:"15", label:"HexGR3 ON Davo", ip:"88.88.88.15", x:1080, y:520, type:"mk" },
+
+  { id:"10254", label:"TP LINK IN Aviat VLAN 2", ip:"10.88.88.254", x:1330, y:80, type:"core" },
+  { id:"10111sfp", label:"HEX S", ip:"10.88.88.111", x:1330, y:220, type:"mk" },
+  { id:"10111e1", label:"Office 1", ip:"10.88.88.111", x:1180, y:380, type:"edge" },
+  { id:"10111e2", label:"Office 3", ip:"10.88.88.111", x:1330, y:380, type:"edge" },
+  { id:"10111e3", label:"Rawda Street", ip:"10.88.88.111", x:1480, y:380, type:"edge" }
+];
+
+const links = [
+  { id:"link-254-253", source:"254", target:"253" },
+  { id:"link-254-252", source:"254", target:"252" },
+  { id:"link-254-10", source:"254", target:"10" },
+  { id:"link-253-9", source:"253", target:"9" },
+  { id:"link-253-4", source:"253", target:"4" },
+  { id:"link-4-5", source:"4", target:"5" },
+  { id:"link-252-251", source:"252", target:"251" },
+  { id:"link-251-15", source:"251", target:"15" },
+  { id:"link-10-11", source:"10", target:"11" },
+  { id:"link-11-12", source:"11", target:"12" },
+  { id:"link-12-13", source:"12", target:"13" },
+  { id:"link-vlan2-hexs", source:"10254", target:"10111sfp" },
+  { id:"link-hexs-office1", source:"10111sfp", target:"10111e1" },
+  { id:"link-hexs-office3", source:"10111sfp", target:"10111e2" },
+  { id:"link-hexs-rawda", source:"10111sfp", target:"10111e3" }
+];
+
+function nodeTheme(type) {
+  if (type === "core") return { fill:"#0e2138", stroke:"#67d3ff", glow:"rgba(103,211,255,.20)" };
+  if (type === "tp") return { fill:"#13263a", stroke:"#4bc0ff", glow:"rgba(75,192,255,.18)" };
+  if (type === "edge") return { fill:"#25193d", stroke:"#c08cff", glow:"rgba(192,140,255,.18)" };
+  return { fill:"#13253a", stroke:"#43f3b2", glow:"rgba(67,243,178,.18)" };
+}
+
+function loadTone(total) {
+  if (total >= 160) return { base:"rgba(255,82,82,.18)", flow:"#ff8d8d", line:"#ff5757" };
+  if (total >= 80) return { base:"rgba(255,193,7,.18)", flow:"#ffd76a", line:"#f5c542" };
+  return { base:"rgba(59,205,255,.16)", flow:"#7ee7ff", line:"#46cfff" };
+}
+
+export default function IspTopologyPage() {
+  const [selectedId, setSelectedId] = useState("254");
+  const [traffic, setTraffic] = useState({});
+  const [zoom, setZoom] = useState(0.9);
+  const [offset, setOffset] = useState({ x: -120, y: 10 });
+  const dragRef = useRef({ active:false, x:0, y:0, ox:0, oy:0 });
+
+  const byId = useMemo(() => Object.fromEntries(nodes.map(n => [n.id, n])), []);
+  const selected = byId[selectedId] || nodes[0];
+
+  useEffect(() => {
+    let stop = false;
+
+    const tick = async () => {
+      try {
+        const res = await fetch("/api/topology/snapshot");
+        const json = await res.json();
+        if (!stop && json?.ok && Array.isArray(json.data)) {
+          const map = Object.fromEntries(json.data.map(item => [item.id, item]));
+          setTraffic(map);
+        }
+      } catch {}
+    };
+
+    tick();
+    const timer = setInterval(tick, 3000);
+    return () => {
+      stop = true;
+      clearInterval(timer);
+    };
+  }, []);
+
+  const onWheel = (e) => {
+    e.preventDefault();
+    const factor = e.deltaY > 0 ? 0.92 : 1.08;
+    setZoom(v => Math.max(0.45, Math.min(1.8, v * factor)));
+  };
+
+  const onMouseDown = (e) => {
+    dragRef.current = {
+      active: true,
+      x: e.clientX,
+      y: e.clientY,
+      ox: offset.x,
+      oy: offset.y
+    };
+  };
+
+  const onMouseMove = (e) => {
+    if (!dragRef.current.active) return;
+    setOffset({
+      x: dragRef.current.ox + (e.clientX - dragRef.current.x),
+      y: dragRef.current.oy + (e.clientY - dragRef.current.y)
+    });
+  };
+
+  const onMouseUp = () => {
+    dragRef.current.active = false;
+  };
+
+  const selectedTraffic = Object.values(traffic).find(x => x.targetId === selectedId) ||
+    Object.values(traffic).find(x => x.sourceId === selectedId) || null;
+
+  return (
+    <div style={{
+      minHeight:"100%",
+      padding:20,
+      background:"linear-gradient(180deg,#050b14 0%,#07101c 100%)",
+      color:"#fff"
+    }}>
+      <style>{`
+        .topo-flow {
+          stroke-dasharray: 8 14;
+          animation: topoFlow 1.6s linear infinite;
+        }
+        @keyframes topoFlow {
+          from { stroke-dashoffset: 0; }
+          to { stroke-dashoffset: -44; }
+        }
+      `}</style>
+
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 320px", gap:16, alignItems:"start" }}>
+        <div style={{
+          border:"1px solid rgba(120,160,255,0.14)",
+          borderRadius:24,
+          overflow:"hidden",
+          background:"radial-gradient(circle at top, rgba(60,180,255,0.08), transparent 25%), #06101a",
+          boxShadow:"0 24px 80px rgba(0,0,0,0.35)"
+        }}>
+          <div style={{
+            display:"flex",
+            justifyContent:"space-between",
+            alignItems:"center",
+            padding:"14px 16px",
+            borderBottom:"1px solid rgba(255,255,255,0.05)"
+          }}>
+            <div style={{ fontSize:18, fontWeight:800 }}>⚡ NoComment Real Topology Engine</div>
+            <div style={{ display:"flex", gap:8 }}>
+              <button onClick={() => setZoom(z => Math.min(1.8, z + 0.1))} style={btnStyle}>+</button>
+              <button onClick={() => setZoom(z => Math.max(0.45, z - 0.1))} style={btnStyle}>-</button>
+              <button onClick={() => { setZoom(0.9); setOffset({ x:-120, y:10 }); }} style={btnStyle}>Reset</button>
+            </div>
+          </div>
+
+          <div
+            onWheel={onWheel}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseUp}
+            style={{ height:760, overflow:"hidden", cursor: dragRef.current.active ? "grabbing" : "grab" }}
+          >
+            <svg width="100%" height="100%" viewBox="0 0 1600 860" style={{ display:"block" }}>
+              <defs>
+                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(80,140,255,0.08)" strokeWidth="0.6" />
+                </pattern>
+                <pattern id="gridb" width="100" height="100" patternUnits="userSpaceOnUse">
+                  <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(80,140,255,0.12)" strokeWidth="0.9" />
+                </pattern>
+              </defs>
+
+              <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#grid)" />
+              <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#gridb)" />
+
+              <g transform={`translate(${offset.x},${offset.y}) scale(${zoom})`}>
+                {links.map((link) => {
+                  const a = byId[link.source];
+                  const b = byId[link.target];
+                  const t = traffic[link.id];
+                  const tone = loadTone(t?.totalMbps || 0);
+                  const isSelected = selectedId === a.id || selectedId === b.id;
+
+                  return (
+                    <g key={link.id}>
+                      <line
+                        x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+                        stroke={isSelected ? tone.base : "rgba(70,160,255,0.10)"}
+                        strokeWidth={isSelected ? 11 : 8}
+                        strokeLinecap="round"
+                      />
+                      <line
+                        x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+                        stroke={tone.line}
+                        strokeWidth={isSelected ? 3.2 : 2.2}
+                        strokeLinecap="round"
+                      />
+                      <line
+                        className="topo-flow"
+                        x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+                        stroke={tone.flow}
+                        strokeWidth={isSelected ? 1.8 : 1.2}
+                        strokeLinecap="round"
+                      />
+                      {t ? (
+                        <g>
+                          <rect
+                            x={(a.x + b.x)/2 - 34}
+                            y={(a.y + b.y)/2 - 12}
+                            rx="8"
+                            width="68"
+                            height="24"
+                            fill="rgba(4,13,22,0.88)"
+                            stroke="rgba(255,255,255,0.08)"
+                          />
+                          <text
+                            x={(a.x + b.x)/2}
+                            y={(a.y + b.y)/2 + 4}
+                            textAnchor="middle"
+                            fill="#dff6ff"
+                            fontSize="10"
+                            fontWeight="700"
+                          >
+                            {t.totalMbps.toFixed(1)} Mb
+                          </text>
+                        </g>
+                      ) : null}
+                    </g>
+                  );
+                })}
+
+                {nodes.map((node) => {
+                  const theme = nodeTheme(node.type);
+                  const isSelected = selectedId === node.id;
+                  return (
+                    <g key={node.id} onClick={() => setSelectedId(node.id)} style={{ cursor:"pointer" }}>
+                      <circle
+                        cx={node.x}
+                        cy={node.y}
+                        r={isSelected ? 26 : 22}
+                        fill={theme.glow}
+                      />
+                      <circle
+                        cx={node.x}
+                        cy={node.y}
+                        r={18}
+                        fill={theme.fill}
+                        stroke={isSelected ? "#ffffff" : theme.stroke}
+                        strokeWidth={isSelected ? 3 : 2}
+                      />
+                      <text
+                        x={node.x}
+                        y={node.y + 38}
+                        textAnchor="middle"
+                        fill="#f3f8ff"
+                        fontSize="12.5"
+                        fontWeight="700"
+                      >
+                        {node.label}
+                      </text>
+                      <text
+                        x={node.x}
+                        y={node.y + 54}
+                        textAnchor="middle"
+                        fill="#8db5e4"
+                        fontSize="10.5"
+                      >
+                        {node.ip}
+                      </text>
+                    </g>
+                  );
+                })}
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div style={{
+          border:"1px solid rgba(120,160,255,0.14)",
+          borderRadius:24,
+          padding:16,
+          background:"#07101a",
+          boxShadow:"0 24px 80px rgba(0,0,0,0.35)"
+        }}>
+          <div style={{ color:"#7fa7d8", fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>
+            Selected Node
+          </div>
+          <div style={{ fontSize:28, fontWeight:800 }}>{selected.label}</div>
+          <div style={{ color:"#9bbce5", marginTop:6, marginBottom:16 }}>{selected.ip}</div>
+
+          <InfoCard title="Type" value={selected.type} />
+          <InfoCard title="Linked Traffic" value={selectedTraffic ? `${selectedTraffic.totalMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="RX" value={selectedTraffic ? `${selectedTraffic.rxMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="TX" value={selectedTraffic ? `${selectedTraffic.txMbps.toFixed(2)} Mbps` : "-"} />
+          <InfoCard title="Port" value={selectedPortValue} />
+          <InfoCard title="ifIndex" value={selectedIfIndexValue} />
+          <InfoCard title="RX OID" value={selectedRxOidValue} mono />
+          <InfoCard title="TX OID" value={selectedTxOidValue} mono />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InfoCard({ title, value, mono }) {
+  return (
+    <div style={{
+      border:"1px solid rgba(255,255,255,0.06)",
+      borderRadius:16,
+      padding:12,
+      background:"rgba(255,255,255,0.02)",
+      marginBottom:10
+    }}>
+      <div style={{ color:"#7fa7d8", fontSize:11, marginBottom:6 }}>{title}</div>
+      <div style={{
+        color:"#eef6ff",
+        fontSize: mono ? 11.5 : 15,
+        fontWeight: mono ? 500 : 700,
+        fontFamily: mono ? "Consolas, monospace" : "inherit",
+        lineHeight:1.5,
+        wordBreak:"break-all"
+      }}>
+        {value}
+      </div>
+    </div>
+  );
+}
+
+const btnStyle = {
+  padding:"8px 12px",
+  borderRadius:12,
+  border:"1px solid rgba(255,255,255,0.08)",
+  background:"rgba(255,255,255,0.04)",
+  color:"#fff",
+  cursor:"pointer",
+  fontWeight:700
+};
+
+

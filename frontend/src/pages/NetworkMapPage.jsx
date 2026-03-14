@@ -73,16 +73,23 @@ function useMapData() {
     const pingState = new Map();
 
     async function loadTraffic() {
-      const next = await Promise.all(LINKS.map(async (t) => {
-        try {
-          const url = `/api/eth/snapshotput?ip=${encodeURIComponent(t.ip)}&community=${encodeURIComponent(t.community)}&ifIndex=${encodeURIComponent(t.ifIndex)}&ms=800`;
-          const res = await fetch(url, { cache: "no-store" });
-          const js = await res.json();
+      try {
+        const res = await fetch("/api/eth/snapshot", { cache: "no-store" });
+        const js = await res.json();
 
-          if (!res.ok || !js?.ok) throw new Error(js?.error || `HTTP ${res.status}`);
+        if (!res.ok || !js?.ok || !Array.isArray(js?.data)) {
+          throw new Error(js?.error || `HTTP ${res.status}`);
+        }
 
-          const rx = num(js?.rxMbps);
-          const tx = num(js?.txMbps);
+        const byId = new Map(
+          js.data.map((row) => [String(row?.id || "").toLowerCase(), row])
+        );
+
+        const next = LINKS.map((t) => {
+          const row = js.data.find(x => x.ip === t.ip);
+
+          const rx = num(row?.rxMbps);
+          const tx = num(row?.txMbps);
 
           return {
             id: t.id,
@@ -90,22 +97,26 @@ function useMapData() {
             txMbps: tx,
             totalMbps: rx + tx
           };
-        } catch {
-          return {
-            id: t.id,
-            rxMbps: 0,
-            txMbps: 0,
-            totalMbps: 0
-          };
-        }
-      }));
+        });
 
-      if (dead) return;
+        if (dead) return;
 
-      setRows(prev => prev.map(r => {
-        const m = next.find(x => x.id === r.id);
-        return m ? { ...r, ...m } : r;
-      }));
+        setRows(prev => prev.map(r => {
+          const m = next.find(x => x.id === r.id);
+          return m ? { ...r, ...m } : r;
+        }));
+      } catch (e) {
+        console.error("NetworkMap loadTraffic failed:", e?.message || e);
+
+        if (dead) return;
+
+        setRows(prev => prev.map(r => ({
+          ...r,
+          rxMbps: 0,
+          txMbps: 0,
+          totalMbps: 0
+        })));
+      }
     }
 
     async function loadPing() {
@@ -268,6 +279,9 @@ export default function NetworkMapPage() {
     </div>
   );
 }
+
+
+
 
 
 

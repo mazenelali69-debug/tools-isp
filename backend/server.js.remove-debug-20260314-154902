@@ -3318,7 +3318,13 @@ function topologyRead(link) {
     totalMbps,
     status,
     ts: now,
-    live: rxCounter !== null && txCounter !== null
+    live: rxCounter !== null && txCounter !== null,
+    debug: {
+      rxRaw: rxRead.raw,
+      txRaw: txRead.raw,
+      rxError: rxRead.error,
+      txError: txRead.error
+    }
   };
 }
 
@@ -3337,81 +3343,4 @@ app.get('/api/topology/snapshot', (_req, res) => {
 
 
 
-
-
-
-/* ============================
-   NODE POSITION SAVE ENGINE
-============================ */
-
-const POS_FILE = __dirname + "/data/node-positions.json";
-
-app.get("/api/topology/positions",(req,res)=>{
-  try{
-    const data = JSON.parse(fs.readFileSync(POS_FILE,"utf8"));
-    res.json({ok:true,data});
-  }catch{
-    res.json({ok:true,data:{}});
-  }
-});
-
-app.post("/api/topology/positions",(req,res)=>{
-  try{
-    fs.writeFileSync(POS_FILE,JSON.stringify(req.body,null,2));
-    res.json({ok:true});
-  }catch(e){
-    res.json({ok:false,error:String(e)});
-  }
-});
-
-
-/* ============================
-   TOPOLOGY LINK SAVE ENGINE
-============================ */
-
-const LINK_FILE = __dirname + "/data/topology-links.json";
-
-app.get("/api/topology/links",(req,res)=>{
-  try{
-    const data = JSON.parse(fs.readFileSync(LINK_FILE,"utf8"));
-    res.json({ok:true,data});
-  }catch{
-    res.json({ok:true,data:[]});
-  }
-});
-
-app.post("/api/topology/links",(req,res)=>{
-  try{
-    fs.writeFileSync(LINK_FILE,JSON.stringify(req.body,null,2));
-    res.json({ok:true});
-  }catch(e){
-    res.json({ok:false,error:String(e)});
-  }
-});
-
-
-/* ============================
-   TOPOLOGY LINK BUILDER API
-============================ */
-
-const TOPOLOGY_LINKS_FILE = __dirname + "/data/topology-links.json";
-
-app.get("/api/topology/links", (req, res) => {
-  try {
-    const data = JSON.parse(fs.readFileSync(TOPOLOGY_LINKS_FILE, "utf8"));
-    res.json({ ok: true, data: Array.isArray(data) ? data : [] });
-  } catch {
-    res.json({ ok: true, data: [] });
-  }
-});
-
-app.post("/api/topology/links", (req, res) => {
-  try {
-    const data = Array.isArray(req.body) ? req.body : [];
-    fs.writeFileSync(TOPOLOGY_LINKS_FILE, JSON.stringify(data, null, 2));
-    res.json({ ok: true });
-  } catch (e) {
-    res.json({ ok: false, error: String(e) });
-  }
-});
 
