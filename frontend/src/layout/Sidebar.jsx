@@ -1,4 +1,4 @@
-﻿import React, { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 const NAV = [
   { id: "dashboard", label: "Dashboard", icon: "◫" },
@@ -14,7 +14,7 @@ const NAV = [
   { id: "monitorstreet", label: "Monitor Street", icon: "◔" },
   { id: "networkmap", label: "Network Map", icon: "⌘" },
   { id: "isptopology", label: "ISP Topology", icon: "◉" },
-  { id: "settings", label: "Settings", icon: "⚙" }
+  { id: "weathertripoli", label: "Weather Tripoli", icon: "☁" }
 ];
 
 export default function Sidebar({ active, setActive }) {
