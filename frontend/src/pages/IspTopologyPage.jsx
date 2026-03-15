@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+﻿import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const DEFAULT_NODES = {
   "254": { id:"254", label:"TP LINK IN Aviat", ip:"88.88.88.254", type:"core", x:760, y:90 },
@@ -351,7 +351,6 @@ export default function IspTopologyPage() {
 
   const handleNodeMouseDown = (e, id) => {
     if (locked || mode !== "move") return;
-    e.preventDefault();
     e.stopPropagation();
 
     const node = nodes[id];
@@ -407,7 +406,6 @@ export default function IspTopologyPage() {
   };
 
   const handleWheel = (e) => {
-    e.preventDefault();
     const next = e.deltaY > 0 ? zoom * 0.92 : zoom * 1.08;
     setZoom(clamp(next, 0.45, 1.8));
   };
@@ -771,6 +769,7 @@ const activeBtnStyle = {
   background:"rgba(71,215,255,0.20)",
   border:"1px solid rgba(71,215,255,0.48)"
 };
+
 
 
 
