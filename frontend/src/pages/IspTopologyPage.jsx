@@ -199,22 +199,46 @@ export default function IspTopologyPage() {
 
     const loadAll = async () => {
       try {
-        const [posRes, linkRes] = await Promise.all([
+        const [nodesRes, posRes, linkRes] = await Promise.all([
+          fetch("/api/topology/nodes"),
           fetch("/api/topology/positions"),
           fetch("/api/topology/links")
         ]);
 
+        const nodesJson = await nodesRes.json();
         const posJson = await posRes.json();
         const linkJson = await linkRes.json();
 
-        if (!stop && posJson?.ok) {
-          setNodes(loadNodeMeta(posJson.data));
+        const baseNodes =
+          nodesJson?.ok && nodesJson?.data && typeof nodesJson.data === "object" && Object.keys(nodesJson.data).length > 0
+            ? nodesJson.data
+            : DEFAULT_NODES;
+
+        if (!stop) {
+          if (posJson?.ok) {
+            const merged = { ...baseNodes };
+            Object.keys(posJson.data || {}).forEach((id) => {
+              if (!merged[id]) return;
+              const x = Number(posJson.data[id]?.x);
+              const y = Number(posJson.data[id]?.y);
+              if (Number.isFinite(x) && Number.isFinite(y)) {
+                merged[id] = { ...merged[id], x, y };
+              }
+            });
+            setNodes(merged);
+          } else {
+            setNodes(baseNodes);
+          }
         }
 
         if (!stop && linkJson?.ok && Array.isArray(linkJson.data) && linkJson.data.length > 0) {
           setLinks(linkJson.data);
         }
-      } catch {}
+      } catch {
+        if (!stop) {
+          setNodes(DEFAULT_NODES);
+        }
+      }
     };
 
     loadAll();
@@ -769,6 +793,9 @@ const activeBtnStyle = {
   background:"rgba(71,215,255,0.20)",
   border:"1px solid rgba(71,215,255,0.48)"
 };
+
+
+
 
 
 

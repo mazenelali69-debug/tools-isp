@@ -3370,6 +3370,7 @@ app.post("/api/topology/positions",(req,res)=>{
 ============================ */
 
 const LINK_FILE = __dirname + "/data/topology-links.json";
+const TOPOLOGY_NODES_FILE = path.join(__dirname, "data", "topology-nodes.json");
 
 app.get("/api/topology/links",(req,res)=>{
   try{
@@ -3414,4 +3415,26 @@ app.post("/api/topology/links", (req, res) => {
     res.json({ ok: false, error: String(e) });
   }
 });
+
+app.get("/api/topology/nodes", async (req, res) => {
+  try {
+    const raw = await fs.promises.readFile(TOPOLOGY_NODES_FILE, "utf8");
+    const data = JSON.parse(raw || "{}");
+    res.json({ ok:true, data });
+  } catch (e) {
+    res.json({ ok:true, data:{} });
+  }
+});
+
+app.post("/api/topology/nodes", async (req, res) => {
+  try {
+    const data = req.body && typeof req.body === "object" ? req.body : {};
+    await fs.promises.writeFile(TOPOLOGY_NODES_FILE, JSON.stringify(data, null, 2), "utf8");
+    res.json({ ok:true });
+  } catch (e) {
+    res.status(500).json({ ok:false, error:String(e && e.message || e) });
+  }
+});
+
+
 
