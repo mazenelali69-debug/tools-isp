@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const DEFAULT_NODES = {
   "254": { id:"254", label:"TP LINK IN Aviat", ip:"88.88.88.254", type:"core", x:760, y:90 },
@@ -193,6 +193,7 @@ export default function IspTopologyPage() {
   });
 
   const workspaceRef = useRef(null);
+  const [draft, setDraft] = useState(null);
 
   useEffect(() => {
     let stop = false;
@@ -297,6 +298,118 @@ export default function IspTopologyPage() {
       window.removeEventListener("mouseup", onUp);
     };
   }, [locked, mode, zoom]);
+
+  useEffect(() => {
+    const node = nodes[selectedId];
+    if (!node) return;
+
+    setDraft({
+      id: String(node.id || ""),
+      label: String(node.label || ""),
+      ip: String(node.ip || ""),
+      type: String(node.type || "mk"),
+      x: Number(node.x || 0),
+      y: Number(node.y || 0),
+      port: String(node.port || ""),
+      ifIndex: String(node.ifIndex ?? ""),
+      rxOid: String(node.rxOid || ""),
+      txOid: String(node.txOid || "")
+    });
+  }, [selectedId, nodes]);
+
+  const updateDraft = (key, value) => {
+    setDraft(prev => prev ? { ...prev, [key]: value } : prev);
+  };
+
+  const saveNodes = async (nextNodes) => {
+    const payload = nextNodes || nodes;
+
+    try {
+      await fetch("/api/topology/nodes", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify(payload)
+      });
+      alert("Nodes saved.");
+    } catch {
+      alert("Save nodes failed.");
+    }
+  };
+
+  const saveDraftNode = async () => {
+    if (!draft || !draft.id) return;
+
+    const next = {
+      ...nodes,
+      [draft.id]: {
+        ...nodes[draft.id],
+        id: draft.id,
+        label: draft.label || draft.id,
+        ip: draft.ip || "",
+        type: draft.type || "mk",
+        x: Number(draft.x || 0),
+        y: Number(draft.y || 0),
+        port: draft.port || "",
+        ifIndex: draft.ifIndex === "" ? "" : Number.isFinite(Number(draft.ifIndex)) ? Number(draft.ifIndex) : draft.ifIndex,
+        rxOid: draft.rxOid || "",
+        txOid: draft.txOid || ""
+      }
+    };
+
+    setNodes(next);
+    await saveNodes(next);
+  };
+
+  const addNode = async () => {
+    const id = `node${Date.now()}`;
+    const newNode = {
+      id,
+      label:"New Node",
+      ip:"",
+      type:"mk",
+      x:760,
+      y:360,
+      port:"",
+      ifIndex:"",
+      rxOid:"",
+      txOid:""
+    };
+
+    const next = { ...nodes, [id]: newNode };
+    setNodes(next);
+    setSelectedId(id);
+    await saveNodes(next);
+  };
+
+  const deleteSelectedNode = async () => {
+    if (!selectedId || !nodes[selectedId]) return;
+
+    const next = { ...nodes };
+    delete next[selectedId];
+
+    const nextLinks = links.filter(x => x.source !== selectedId && x.target !== selectedId);
+
+    setNodes(next);
+    setLinks(nextLinks);
+    setSelectedId(Object.keys(next)[0] || "");
+    setLinkStart(null);
+
+    try {
+      await fetch("/api/topology/nodes", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify(next)
+      });
+
+      await fetch("/api/topology/links", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify(nextLinks)
+      });
+    } catch {
+      alert("Delete node failed.");
+    }
+  };
 
   const selectedNode = nodes[selectedId] || DEFAULT_NODES["254"];
 
@@ -504,6 +617,10 @@ export default function IspTopologyPage() {
               <button onClick={saveLinks} style={btnStyle}>Save Links</button>
               <button onClick={resetLayout} style={btnStyle}>Reset Layout</button>
               <button onClick={resetLinks} style={btnStyle}>Reset Links</button>
+              <button onClick={addNode} style={btnStyle}>Add Node</button>
+              <button onClick={saveDraftNode} style={btnStyle}>Save Node</button>
+              <button onClick={saveNodes} style={btnStyle}>Save All Nodes</button>
+              <button onClick={deleteSelectedNode} style={btnStyle}>Delete Node</button>
             </div>
           </div>
 
@@ -740,14 +857,27 @@ export default function IspTopologyPage() {
           boxShadow:"0 24px 80px rgba(0,0,0,0.35)"
         }}>
           <div style={{ color:"#7fa7d8", fontSize:8, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>
-            Selected Node
+            Node Editor
           </div>
 
-          <div style={{ fontSize:14, fontWeight:800 }}>{selectedNode.label}</div>
-          <div style={{ color:"#9bbce5", marginTop:6, marginBottom:16 }}>{selectedNode.ip}</div>
+          <div style={{ fontSize:14, fontWeight:800, marginBottom:10 }}>{selectedNode.label}</div>
 
-          <InfoCard title="IP" value={selectedNode.ip} mono />
           <InfoCard title="Live Speed" value={selectedTraffic ? `${selectedTraffic.totalMbps.toFixed(2)} Mbps` : "-"} />
+
+          {draft ? (
+            <div style={{ display:"grid", gap:8 }}>
+              <InputRow label="ID" value={draft.id} onChange={(v) => updateDraft("id", v)} />
+              <InputRow label="Name" value={draft.label} onChange={(v) => updateDraft("label", v)} />
+              <InputRow label="IP" value={draft.ip} onChange={(v) => updateDraft("ip", v)} />
+              <InputRow label="Type" value={draft.type} onChange={(v) => updateDraft("type", v)} />
+              <InputRow label="X" value={draft.x} onChange={(v) => updateDraft("x", v)} />
+              <InputRow label="Y" value={draft.y} onChange={(v) => updateDraft("y", v)} />
+              <InputRow label="Port" value={draft.port} onChange={(v) => updateDraft("port", v)} />
+              <InputRow label="IfIndex" value={draft.ifIndex} onChange={(v) => updateDraft("ifIndex", v)} />
+              <InputRow label="RX OID" value={draft.rxOid} onChange={(v) => updateDraft("rxOid", v)} />
+              <InputRow label="TX OID" value={draft.txOid} onChange={(v) => updateDraft("txOid", v)} />
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
@@ -778,6 +908,27 @@ function InfoCard({ title, value, mono }) {
   );
 }
 
+function InputRow({ label, value, onChange }) {
+  return (
+    <label style={{ display:"grid", gap:4 }}>
+      <div style={{ color:"#7fa7d8", fontSize:8 }}>{label}</div>
+      <input
+        value={value ?? ""}
+        onChange={(e) => onChange(e.target.value)}
+        style={{
+          width:"100%",
+          borderRadius:10,
+          border:"1px solid rgba(255,255,255,0.10)",
+          background:"rgba(255,255,255,0.04)",
+          color:"#eef6ff",
+          padding:"8px 10px",
+          outline:"none"
+        }}
+      />
+    </label>
+  );
+}
+
 const btnStyle = {
   padding:"6px 10px",
   borderRadius:10,
@@ -793,6 +944,13 @@ const activeBtnStyle = {
   background:"rgba(71,215,255,0.20)",
   border:"1px solid rgba(71,215,255,0.48)"
 };
+
+
+
+
+
+
+
 
 
 
