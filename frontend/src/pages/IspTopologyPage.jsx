@@ -177,6 +177,7 @@ export default function IspTopologyPage() {
   const [links, setLinks] = useState(DEFAULT_LINKS);
   const [traffic, setTraffic] = useState({});
   const [selectedId, setSelectedId] = useState("254");
+  const [selectedLink, setSelectedLink] = useState(null);
   const [locked, setLocked] = useState(false);
   const [mode, setMode] = useState("move");
   const [linkStart, setLinkStart] = useState(null);
@@ -362,22 +363,35 @@ export default function IspTopologyPage() {
 
   const addNode = async () => {
     const id = `node${Date.now()}`;
-    const newNode = {
-      id,
-      label:"New Node",
-      ip:"",
-      type:"mk",
-      x:760,
-      y:360,
-      port:"",
-      ifIndex:"",
-      rxOid:"",
-      txOid:""
-    };
+    const base = nodes[selectedId] || { x:760, y:360 };
+
+const newNode = {
+  id,
+  label:"New Node",
+  ip:"",
+  type:"mk",
+  x:base.x + 140,
+  y:base.y + 40,
+  port:"",
+  ifIndex:"",
+  rxOid:"",
+  txOid:""
+};
 
     const next = { ...nodes, [id]: newNode };
     setNodes(next);
-    setSelectedId(id);
+setSelectedId(id);
+
+if (selectedId && nodes[selectedId]) {
+  setLinks(prev => [
+    ...prev,
+    {
+      id:`link-${selectedId}-${id}-${Date.now()}`,
+      source:selectedId,
+      target:id
+    }
+  ]);
+}
     await saveNodes(next);
   };
 
@@ -538,6 +552,9 @@ export default function IspTopologyPage() {
   };
 
   const handleLineClick = (id) => {
+
+  const link = links.find(x => x.id === id);
+  if (link) setSelectedLink(link);
     if (locked || mode !== "delete") return;
     setLinks(prev => prev.filter(x => x.id !== id));
   };
@@ -869,7 +886,27 @@ export default function IspTopologyPage() {
               <InputRow label="ID" value={draft.id} onChange={(v) => updateDraft("id", v)} />
               <InputRow label="Name" value={draft.label} onChange={(v) => updateDraft("label", v)} />
               <InputRow label="IP" value={draft.ip} onChange={(v) => updateDraft("ip", v)} />
-              <InputRow label="Type" value={draft.type} onChange={(v) => updateDraft("type", v)} />
+              <label style={{ display:"grid", gap:4 }}>
+  <div style={{ color:"#7fa7d8", fontSize:8 }}>Type</div>
+  <select
+    value={draft.type}
+    onChange={(e)=>updateDraft("type",e.target.value)}
+    style={{
+      width:"100%",
+      borderRadius:10,
+      border:"1px solid rgba(255,255,255,0.10)",
+      background:"rgba(255,255,255,0.04)",
+      color:"#eef6ff",
+      padding:"8px 10px",
+      outline:"none"
+    }}
+  >
+    <option value="core">core</option>
+    <option value="tp">tp</option>
+    <option value="mk">mk</option>
+    <option value="edge">edge</option>
+  </select>
+</label>
               <InputRow label="X" value={draft.x} onChange={(v) => updateDraft("x", v)} />
               <InputRow label="Y" value={draft.y} onChange={(v) => updateDraft("y", v)} />
               <InputRow label="Port" value={draft.port} onChange={(v) => updateDraft("port", v)} />
