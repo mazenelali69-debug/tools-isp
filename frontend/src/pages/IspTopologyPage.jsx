@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const DEFAULT_NODES = {
   "254": { id:"254", label:"TP LINK IN Aviat", ip:"88.88.88.254", type:"core", x:760, y:90 },
@@ -57,8 +57,8 @@ const primaryNodeMetrics = {
   }
 };
 
-const WORKSPACE_W = 1500;
-const WORKSPACE_H = 720;
+const WORKSPACE_W = 2600;
+const WORKSPACE_H = 1200;
 
 function clamp(v, min, max) {
   return Math.max(min, Math.min(max, v));
@@ -467,7 +467,7 @@ export default function IspTopologyPage() {
             gap:10,
             flexWrap:"wrap"
           }}>
-            <div style={{ fontSize:14, fontWeight:800 }}>⚡ NoComment Ultimate Topology Builder</div>
+            <div style={{ fontSize:14, fontWeight:800 }}>? NoComment Ultimate Topology Builder</div>
 
             <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
               <button onClick={() => setLocked(v => !v)} style={locked ? activeBtnStyle : btnStyle}>
