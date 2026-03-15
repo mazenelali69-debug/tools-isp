@@ -702,7 +702,11 @@ if (selectedId && nodes[selectedId]) {
                   const b = nodes[link.target];
                   if (!a || !b) return null;
 
-                  const t = traffic[link.id];
+                  const t =
+                    traffic[link.id] ||
+                    traffic[link.source] ||
+                    traffic[link.target] ||
+                    null;
                   const tone = toneForTraffic(t?.totalMbps || 0);
                   const isSelected = selectedId === link.source || selectedId === link.target;
                   const path = curvedPath(a, b);
@@ -751,7 +755,7 @@ if (selectedId && nodes[selectedId]) {
                       </circle>
 
                       {t ? (
-                        <g style={{ animation:"badgeFloat 2.2s ease-in-out infinite" }}>
+                        <g key={`badge-${link.id}`} style={{ animation:"badgeFloat 2.2s ease-in-out infinite" }}>
                           <rect
                             x={mid.x - 31}
                             y={mid.y - 12}
@@ -778,14 +782,14 @@ if (selectedId && nodes[selectedId]) {
                 })}
               </svg>
 
-              {Object.values(nodes).map((node) => {
+              {Object.entries(nodes).map(([nodeKey, node]) => {
                 const selected = selectedId === node.id;
                 const picked = linkStart === node.id;
                 const theme = nodeTheme(node.type, selected, picked);
 
                 return (
                   <div
-                    key={node.id}
+                    key={nodeKey}
                     style={{
                       position:"absolute",
                       left:node.x,
