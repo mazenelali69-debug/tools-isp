@@ -6239,3 +6239,62 @@ html, body, #root {
   background: rgba(127,167,216,.35);
   border-radius: 999px;
 }
+
+/* ===== RESPONSIVE ENGINE (SAFE) ===== */
+
+html, body, #root {
+  height: 100%;
+}
+
+.ti-app{
+  display:flex;
+  height:100vh;
+  width:100%;
+  overflow:hidden;
+}
+
+.ti-main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+
+.ti-content{
+  flex:1;
+  overflow:auto;
+  width:100%;
+  padding:16px;
+}
+
+/* responsive container */
+.tools-container{
+  width: min(1900px,100%);
+  margin: 0 auto;
+}
+
+/* smart grid */
+.tools-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
+  gap:16px;
+}
+
+/* prevent overflow bugs */
+*{
+  min-width:0;
+}
+
+/* TV / very wide screens */
+@media (min-width:2000px){
+  .tools-container{
+    width:min(2200px,100%);
+  }
+}
+
+/* small screens */
+@media (max-width:900px){
+  .tools-grid{
+    grid-template-columns:1fr;
+  }
+}
