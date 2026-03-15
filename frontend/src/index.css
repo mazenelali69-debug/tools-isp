@@ -6191,3 +6191,51 @@ body{
 
 /* ===== END ===== */
 
+
+/* === APP SHELL SCROLL FIX === */
+html, body, #root {
+  height: 100%;
+}
+
+#root {
+  min-height: 100%;
+}
+
+.ti-app {
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.ti-main {
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.ti-content,
+.ti-content--tight {
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 28px;
+}
+
+/* smoother page scrolling */
+.ti-content::-webkit-scrollbar,
+.ti-content--tight::-webkit-scrollbar {
+  width: 10px;
+}
+
+.ti-content::-webkit-scrollbar-track,
+.ti-content--tight::-webkit-scrollbar-track {
+  background: rgba(255,255,255,.04);
+}
+
+.ti-content::-webkit-scrollbar-thumb,
+.ti-content--tight::-webkit-scrollbar-thumb {
+  background: rgba(127,167,216,.35);
+  border-radius: 999px;
+}

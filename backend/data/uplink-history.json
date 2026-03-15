@@ -1,221 +1,5 @@
 [
   {
-    "ts": "2026-03-13T21:38:20.580Z",
-    "rxMbps": 1.59,
-    "txMbps": 3.53,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_dragon_club",
-    "ip": "88.88.88.254",
-    "name": "To Dragon Club"
-  },
-  {
-    "ts": "2026-03-13T21:38:20.580Z",
-    "rxMbps": 26.12,
-    "txMbps": 141.38,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_c5c_jabal",
-    "ip": "88.88.88.254",
-    "name": "C5C Jabal"
-  },
-  {
-    "ts": "2026-03-13T21:38:20.580Z",
-    "rxMbps": 0.17,
-    "txMbps": 1.77,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_to_office",
-    "ip": "88.88.88.254",
-    "name": "To Office"
-  },
-  {
-    "ts": "2026-03-13T21:38:20.580Z",
-    "rxMbps": 14.22,
-    "txMbps": 127.05,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_pharmacy",
-    "ip": "88.88.88.253",
-    "name": "To Pharmacy Wahib"
-  },
-  {
-    "ts": "2026-03-13T21:38:20.580Z",
-    "rxMbps": 24.94,
-    "txMbps": 154.79,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_abou_taher",
-    "ip": "88.88.88.253",
-    "name": "To Abou Taher"
-  },
-  {
-    "ts": "2026-03-13T21:38:20.580Z",
-    "rxMbps": 28.43,
-    "txMbps": 166.87,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_fast_web",
-    "ip": "88.88.88.252",
-    "name": "To Office Fast Web"
-  },
-  {
-    "ts": "2026-03-13T21:38:20.580Z",
-    "rxMbps": 19.27,
-    "txMbps": 162.73,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_daraj_arid",
-    "ip": "88.88.88.251",
-    "name": "To Daraj El 3arid"
-  },
-  {
-    "ts": "2026-03-13T21:38:20.580Z",
-    "rxMbps": 5.17,
-    "txMbps": 96.35,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_rawda",
-    "ip": "10.88.88.111",
-    "name": "To Rawda"
-  },
-  {
-    "ts": "2026-03-13T21:39:20.603Z",
-    "rxMbps": 1.54,
-    "txMbps": 2.28,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_dragon_club",
-    "ip": "88.88.88.254",
-    "name": "To Dragon Club"
-  },
-  {
-    "ts": "2026-03-13T21:39:20.603Z",
-    "rxMbps": 34.03,
-    "txMbps": 143.88,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_c5c_jabal",
-    "ip": "88.88.88.254",
-    "name": "C5C Jabal"
-  },
-  {
-    "ts": "2026-03-13T21:39:20.603Z",
-    "rxMbps": 0.42,
-    "txMbps": 4.01,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_to_office",
-    "ip": "88.88.88.254",
-    "name": "To Office"
-  },
-  {
-    "ts": "2026-03-13T21:39:20.603Z",
-    "rxMbps": 18.14,
-    "txMbps": 110.78,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_pharmacy",
-    "ip": "88.88.88.253",
-    "name": "To Pharmacy Wahib"
-  },
-  {
-    "ts": "2026-03-13T21:39:20.603Z",
-    "rxMbps": 32.56,
-    "txMbps": 146.08,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_abou_taher",
-    "ip": "88.88.88.253",
-    "name": "To Abou Taher"
-  },
-  {
-    "ts": "2026-03-13T21:39:20.603Z",
-    "rxMbps": 64.3,
-    "txMbps": 184.16,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_fast_web",
-    "ip": "88.88.88.252",
-    "name": "To Office Fast Web"
-  },
-  {
-    "ts": "2026-03-13T21:39:20.603Z",
-    "rxMbps": 48.98,
-    "txMbps": 192.8,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_daraj_arid",
-    "ip": "88.88.88.251",
-    "name": "To Daraj El 3arid"
-  },
-  {
-    "ts": "2026-03-13T21:39:20.603Z",
-    "rxMbps": 4.42,
-    "txMbps": 83.29,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_rawda",
-    "ip": "10.88.88.111",
-    "name": "To Rawda"
-  },
-  {
-    "ts": "2026-03-13T21:40:20.585Z",
-    "rxMbps": 3.65,
-    "txMbps": 4.52,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_dragon_club",
-    "ip": "88.88.88.254",
-    "name": "To Dragon Club"
-  },
-  {
-    "ts": "2026-03-13T21:40:20.585Z",
-    "rxMbps": 23.63,
-    "txMbps": 158.05,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_c5c_jabal",
-    "ip": "88.88.88.254",
-    "name": "C5C Jabal"
-  },
-  {
-    "ts": "2026-03-13T21:40:20.585Z",
-    "rxMbps": 0.26,
-    "txMbps": 4.2,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_to_office",
-    "ip": "88.88.88.254",
-    "name": "To Office"
-  },
-  {
-    "ts": "2026-03-13T21:40:20.585Z",
-    "rxMbps": 14.32,
-    "txMbps": 132.49,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_pharmacy",
-    "ip": "88.88.88.253",
-    "name": "To Pharmacy Wahib"
-  },
-  {
-    "ts": "2026-03-13T21:40:20.585Z",
-    "rxMbps": 45.87,
-    "txMbps": 137.92,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_abou_taher",
-    "ip": "88.88.88.253",
-    "name": "To Abou Taher"
-  },
-  {
-    "ts": "2026-03-13T21:40:20.585Z",
-    "rxMbps": 74.24,
-    "txMbps": 166.96,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_fast_web",
-    "ip": "88.88.88.252",
-    "name": "To Office Fast Web"
-  },
-  {
-    "ts": "2026-03-13T21:40:20.585Z",
-    "rxMbps": 54.55,
-    "txMbps": 170.65,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_daraj_arid",
-    "ip": "88.88.88.251",
-    "name": "To Daraj El 3arid"
-  },
-  {
-    "ts": "2026-03-13T21:40:20.585Z",
-    "rxMbps": 4.89,
-    "txMbps": 82.72,
-    "source": "eth-snapshot-uplink",
-    "uplink": "uplink_rawda",
-    "ip": "10.88.88.111",
-    "name": "To Rawda"
-  },
-  {
     "ts": "2026-03-13T21:41:20.587Z",
     "rxMbps": 1.63,
     "txMbps": 3.79,
@@ -89992,6 +89776,222 @@
   },
   {
     "ts": "2026-03-15T13:54:06.006Z",
+    "rxMbps": 0,
+    "txMbps": 0,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_rawda",
+    "ip": "10.88.88.111",
+    "name": "To Rawda"
+  },
+  {
+    "ts": "2026-03-15T14:06:45.362Z",
+    "rxMbps": 4.61,
+    "txMbps": 5.47,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_dragon_club",
+    "ip": "88.88.88.254",
+    "name": "To Dragon Club"
+  },
+  {
+    "ts": "2026-03-15T14:06:45.362Z",
+    "rxMbps": 24.44,
+    "txMbps": 230.17,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_c5c_jabal",
+    "ip": "88.88.88.254",
+    "name": "C5C Jabal"
+  },
+  {
+    "ts": "2026-03-15T14:06:45.362Z",
+    "rxMbps": 0.52,
+    "txMbps": 4.44,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_to_office",
+    "ip": "88.88.88.254",
+    "name": "To Office"
+  },
+  {
+    "ts": "2026-03-15T14:06:45.362Z",
+    "rxMbps": 12.23,
+    "txMbps": 185.62,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_pharmacy",
+    "ip": "88.88.88.253",
+    "name": "To Pharmacy Wahib"
+  },
+  {
+    "ts": "2026-03-15T14:06:45.362Z",
+    "rxMbps": 14.45,
+    "txMbps": 179.05,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_abou_taher",
+    "ip": "88.88.88.253",
+    "name": "To Abou Taher"
+  },
+  {
+    "ts": "2026-03-15T14:06:45.362Z",
+    "rxMbps": 41.68,
+    "txMbps": 246.83,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_fast_web",
+    "ip": "88.88.88.252",
+    "name": "To Office Fast Web"
+  },
+  {
+    "ts": "2026-03-15T14:06:45.362Z",
+    "rxMbps": 22.86,
+    "txMbps": 190.5,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_daraj_arid",
+    "ip": "88.88.88.251",
+    "name": "To Daraj El 3arid"
+  },
+  {
+    "ts": "2026-03-15T14:06:45.362Z",
+    "rxMbps": 2.68,
+    "txMbps": 46.56,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_rawda",
+    "ip": "10.88.88.111",
+    "name": "To Rawda"
+  },
+  {
+    "ts": "2026-03-15T14:08:11.418Z",
+    "rxMbps": 3.97,
+    "txMbps": 5.87,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_dragon_club",
+    "ip": "88.88.88.254",
+    "name": "To Dragon Club"
+  },
+  {
+    "ts": "2026-03-15T14:08:11.418Z",
+    "rxMbps": 34.73,
+    "txMbps": 247.78,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_c5c_jabal",
+    "ip": "88.88.88.254",
+    "name": "C5C Jabal"
+  },
+  {
+    "ts": "2026-03-15T14:08:11.418Z",
+    "rxMbps": 0.73,
+    "txMbps": 12.31,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_to_office",
+    "ip": "88.88.88.254",
+    "name": "To Office"
+  },
+  {
+    "ts": "2026-03-15T14:08:11.418Z",
+    "rxMbps": 8.41,
+    "txMbps": 148.82,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_pharmacy",
+    "ip": "88.88.88.253",
+    "name": "To Pharmacy Wahib"
+  },
+  {
+    "ts": "2026-03-15T14:08:11.418Z",
+    "rxMbps": 13.26,
+    "txMbps": 113.62,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_abou_taher",
+    "ip": "88.88.88.253",
+    "name": "To Abou Taher"
+  },
+  {
+    "ts": "2026-03-15T14:08:11.418Z",
+    "rxMbps": 39.43,
+    "txMbps": 257.69,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_fast_web",
+    "ip": "88.88.88.252",
+    "name": "To Office Fast Web"
+  },
+  {
+    "ts": "2026-03-15T14:08:11.418Z",
+    "rxMbps": 14.82,
+    "txMbps": 177.78,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_daraj_arid",
+    "ip": "88.88.88.251",
+    "name": "To Daraj El 3arid"
+  },
+  {
+    "ts": "2026-03-15T14:08:11.418Z",
+    "rxMbps": 2.5,
+    "txMbps": 32.57,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_rawda",
+    "ip": "10.88.88.111",
+    "name": "To Rawda"
+  },
+  {
+    "ts": "2026-03-15T14:10:25.414Z",
+    "rxMbps": 4.95,
+    "txMbps": 6.36,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_dragon_club",
+    "ip": "88.88.88.254",
+    "name": "To Dragon Club"
+  },
+  {
+    "ts": "2026-03-15T14:10:25.414Z",
+    "rxMbps": 19.51,
+    "txMbps": 280.28,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_c5c_jabal",
+    "ip": "88.88.88.254",
+    "name": "C5C Jabal"
+  },
+  {
+    "ts": "2026-03-15T14:10:25.414Z",
+    "rxMbps": 0.15,
+    "txMbps": 0.43,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_to_office",
+    "ip": "88.88.88.254",
+    "name": "To Office"
+  },
+  {
+    "ts": "2026-03-15T14:10:25.414Z",
+    "rxMbps": 13.43,
+    "txMbps": 216.41,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_pharmacy",
+    "ip": "88.88.88.253",
+    "name": "To Pharmacy Wahib"
+  },
+  {
+    "ts": "2026-03-15T14:10:25.414Z",
+    "rxMbps": 13.08,
+    "txMbps": 186.13,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_abou_taher",
+    "ip": "88.88.88.253",
+    "name": "To Abou Taher"
+  },
+  {
+    "ts": "2026-03-15T14:10:25.414Z",
+    "rxMbps": 40.12,
+    "txMbps": 199.21,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_fast_web",
+    "ip": "88.88.88.252",
+    "name": "To Office Fast Web"
+  },
+  {
+    "ts": "2026-03-15T14:10:25.414Z",
+    "rxMbps": 13.72,
+    "txMbps": 166.09,
+    "source": "eth-snapshot-uplink",
+    "uplink": "uplink_daraj_arid",
+    "ip": "88.88.88.251",
+    "name": "To Daraj El 3arid"
+  },
+  {
+    "ts": "2026-03-15T14:10:25.414Z",
     "rxMbps": 0,
     "txMbps": 0,
     "source": "eth-snapshot-uplink",
