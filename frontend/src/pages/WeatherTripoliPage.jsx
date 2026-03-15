@@ -95,21 +95,18 @@ function severityStyle(kind) {
   if (kind === "hot") {
     return {
       bg: "linear-gradient(135deg, rgba(255,95,109,0.16), rgba(255,62,62,0.08))",
-      border: "1px solid rgba(255,92,92,0.24)",
-      glow: "0 0 0 1px rgba(255,92,92,0.05), 0 18px 38px rgba(255,72,72,0.10)"
+      border: "1px solid rgba(255,92,92,0.24)"
     };
   }
   if (kind === "warm") {
     return {
       bg: "linear-gradient(135deg, rgba(255,210,95,0.14), rgba(255,166,0,0.06))",
-      border: "1px solid rgba(255,196,92,0.22)",
-      glow: "0 0 0 1px rgba(255,196,92,0.05), 0 18px 38px rgba(255,184,72,0.08)"
+      border: "1px solid rgba(255,196,92,0.22)"
     };
   }
   return {
     bg: "linear-gradient(135deg, rgba(87,180,255,0.10), rgba(76,127,255,0.04))",
-    border: "1px solid rgba(120,160,255,0.14)",
-    glow: "0 0 0 1px rgba(120,160,255,0.04), 0 18px 38px rgba(25,46,89,0.20)"
+    border: "1px solid rgba(120,160,255,0.14)"
   };
 }
 
@@ -164,12 +161,8 @@ export default function WeatherTripoliPage() {
       tempC: data.hourly.temperature_2m?.[i],
       precipProb: data.hourly.precipitation_probability?.[i],
       precipMm: data.hourly.precipitation?.[i],
-      rainMm: data.hourly.rain?.[i],
-      showersMm: data.hourly.showers?.[i],
       weatherCode: data.hourly.weather_code?.[i],
-      windKmh: data.hourly.wind_speed_10m?.[i],
-      gustKmh: data.hourly.wind_gusts_10m?.[i],
-      cloudCover: data.hourly.cloud_cover?.[i]
+      windKmh: data.hourly.wind_speed_10m?.[i]
     }));
   }, [data]);
 
@@ -189,14 +182,10 @@ export default function WeatherTripoliPage() {
   }, [data]);
 
   const rainInfo = useMemo(() => {
-    if (!hourly.length) return { nextRainAt: null, rainStopsAt: null, strongestHour: null };
+    if (!hourly.length) return { nextRainAt: null, rainStopsAt: null };
 
     const rainy = hourly.find(h => Number(h.precipProb || 0) >= 35 || Number(h.precipMm || 0) > 0.1);
-    const strongest = [...hourly]
-      .slice(0, 24)
-      .sort((a, b) => (Number(b.precipMm || 0) + Number(b.precipProb || 0) / 100) - (Number(a.precipMm || 0) + Number(a.precipProb || 0) / 100))[0] || null;
-
-    if (!rainy) return { nextRainAt: null, rainStopsAt: null, strongestHour: strongest };
+    if (!rainy) return { nextRainAt: null, rainStopsAt: null };
 
     let stop = null;
     const startIndex = hourly.findIndex(h => h.time === rainy.time);
@@ -208,177 +197,234 @@ export default function WeatherTripoliPage() {
       }
     }
 
-    return { nextRainAt: rainy.time, rainStopsAt: stop, strongestHour: strongest };
+    return { nextRainAt: rainy.time, rainStopsAt: stop };
   }, [hourly]);
 
   if (!data) {
-    return (
-      <div style={pageStyle}>
-        <div style={{ color: "#eef6ff", fontSize: 22 }}>Loading Tripoli Weather Ultra...</div>
-      </div>
-    );
+    return <div style={pageStyle}>Loading Tripoli Weather...</div>;
   }
 
   if (err) {
-    return (
-      <div style={pageStyle}>
-        <div style={{ color: "#ffb4b4", fontSize: 18 }}>Weather load failed: {err}</div>
-      </div>
-    );
+    return <div style={{ ...pageStyle, color: "#ffb4b4" }}>Weather load failed: {err}</div>;
   }
 
   const current = data.current || {};
-  const mainSeverity = severity(Number(current.precipitation || 0) * 20, Number(current.precipitation || 0));
-  const mainTheme = severityStyle(mainSeverity);
 
   return (
     <div style={pageStyle}>
       <style>{`
-        .wt-scroll::-webkit-scrollbar { height: 10px; width: 10px; }
-        .wt-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); border-radius: 999px; }
-        .wt-scroll::-webkit-scrollbar-thumb { background: rgba(127,167,216,0.35); border-radius: 999px; }
-        .wt-glow {
-          position: absolute;
-          inset: auto;
-          pointer-events: none;
-          filter: blur(60px);
-          opacity: .55;
+        .wt-wrap {
+          width: 100%;
+          max-width: 1500px;
+          margin: 0 auto;
+          display: grid;
+          gap: 16px;
+        }
+
+        .wt-grid-hero {
+          display: grid;
+          grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr);
+          gap: 16px;
+        }
+
+        .wt-grid-main {
+          display: grid;
+          grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr);
+          gap: 16px;
+        }
+
+        .wt-hour-scroll::-webkit-scrollbar {
+          height: 10px;
+        }
+
+        .wt-hour-scroll::-webkit-scrollbar-track {
+          background: rgba(255,255,255,0.04);
+          border-radius: 999px;
+        }
+
+        .wt-hour-scroll::-webkit-scrollbar-thumb {
+          background: rgba(127,167,216,0.35);
+          border-radius: 999px;
+        }
+
+        @media (max-width: 1200px) {
+          .wt-grid-hero,
+          .wt-grid-main {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 700px) {
+          .wt-title {
+            font-size: 30px !important;
+          }
+
+          .wt-temp {
+            font-size: 54px !important;
+          }
+
+          .wt-summary-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
         }
       `}</style>
 
-      <div className="wt-glow" style={{ width: 240, height: 240, top: 40, right: 120, background: "rgba(76,127,255,0.16)" }} />
-      <div className="wt-glow" style={{ width: 220, height: 220, top: 120, left: 120, background: "rgba(84,214,255,0.11)" }} />
-      <div className="wt-glow" style={{ width: 180, height: 180, bottom: 60, right: 300, background: "rgba(255,170,80,0.12)" }} />
+      <div className="wt-wrap">
+        <div className="wt-grid-hero">
+          <section style={panelStyle}>
+            <div style={{ color: "#7fa7d8", fontSize: 12, letterSpacing: 2, textTransform: "uppercase" }}>
+              Weather Tripoli Ultra
+            </div>
 
-      <div style={{ display: "grid", gap: 16, position: "relative", zIndex: 1 }}>
-        <section style={{ ...heroStyle, background: mainTheme.bg, border: mainTheme.border, boxShadow: mainTheme.glow }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1.25fr .85fr", gap: 18, alignItems: "stretch" }}>
-            <div style={{ display: "grid", alignContent: "space-between", gap: 20 }}>
+            <div className="wt-title" style={{ fontSize: 42, fontWeight: 900, marginTop: 8 }}>
+              Tripoli, Lebanon
+            </div>
+
+            <div style={{ color: "#9bbce5", marginTop: 8 }}>
+              {weatherLabel(current.weather_code)} • Updated {updatedAt}
+            </div>
+
+            <div className="wt-summary-grid" style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+              gap: 12,
+              marginTop: 18
+            }}>
+              <MetricCard label="Feels Like" value={`${round(current.apparent_temperature)}°C`} />
+              <MetricCard label="Humidity" value={`${round(current.relative_humidity_2m)}%`} />
+              <MetricCard label="Wind" value={`${round(current.wind_speed_10m)} km/h`} />
+              <MetricCard label="Pressure" value={`${round(current.pressure_msl)} hPa`} />
+            </div>
+          </section>
+
+          <section style={{ ...panelStyle, display: "grid", alignContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", gap: 12 }}>
               <div>
-                <div style={{ color: "#8caed9", fontSize: 12, letterSpacing: 2, textTransform: "uppercase" }}>Weather Tripoli Ultra</div>
-                <div style={{ fontSize: 44, fontWeight: 900, lineHeight: 1.05, marginTop: 10 }}>Tripoli, Lebanon</div>
-                <div style={{ color: "#a8c3e6", marginTop: 10, fontSize: 16 }}>
-                  {weatherLabel(current.weather_code)} • Updated {updatedAt}
+                <div className="wt-temp" style={{ fontSize: 72, fontWeight: 900, lineHeight: .95 }}>
+                  {round(current.temperature_2m)}°C
+                </div>
+                <div style={{ color: "#9bbce5", marginTop: 8 }}>
+                  {weatherLabel(current.weather_code)}
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(120px,1fr))", gap: 12 }}>
-                <GlassMini title="Feels Like" value={`${round(current.apparent_temperature)}°C`} />
-                <GlassMini title="Humidity" value={`${round(current.relative_humidity_2m)}%`} />
-                <GlassMini title="Wind" value={`${round(current.wind_speed_10m)} km/h`} />
-                <GlassMini title="Pressure" value={`${round(current.pressure_msl)} hPa`} />
-              </div>
+              <div style={{ fontSize: 62 }}>{weatherIcon(current.weather_code)}</div>
             </div>
 
             <div style={{
-              borderRadius: 26,
-              padding: 22,
-              background: "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
-              border: "1px solid rgba(255,255,255,0.10)",
               display: "grid",
-              alignContent: "space-between"
+              gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+              gap: 10,
+              marginTop: 18
             }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
-                <div>
-                  <div style={{ fontSize: 70, fontWeight: 900, lineHeight: .95 }}>{round(current.temperature_2m)}°C</div>
-                  <div style={{ color: "#9bbce5", marginTop: 10 }}>{weatherLabel(current.weather_code)}</div>
-                </div>
-                <div style={{ fontSize: 62 }}>{weatherIcon(current.weather_code)}</div>
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginTop: 20 }}>
-                <GlassChip label="Direction" value={`${round(current.wind_direction_10m)}°`} />
-                <GlassChip label="Gust" value={`${round(current.wind_gusts_10m)} km/h`} />
-                <GlassChip label="Cloud" value={`${round(current.cloud_cover)}%`} />
-              </div>
+              <MiniChip label="Direction" value={`${round(current.wind_direction_10m)}°`} />
+              <MiniChip label="Gust" value={`${round(current.wind_gusts_10m)} km/h`} />
+              <MiniChip label="Cloud" value={`${round(current.cloud_cover)}%`} />
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
 
-        <section style={{ display: "grid", gridTemplateColumns: "1.3fr .9fr", gap: 16 }}>
-          <div style={panelStyle}>
+        <div className="wt-grid-main">
+          <section style={panelStyle}>
             <div style={sectionTitle}>Next 24 Hours</div>
-            <div className="wt-scroll" style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 8 }}>
+
+            <div className="wt-hour-scroll" style={{
+              display: "flex",
+              gap: 12,
+              overflowX: "auto",
+              paddingBottom: 8
+            }}>
               {next24.map((h) => {
-                const sev = severity(Number(h.precipProb || 0), Number(h.precipMm || 0));
-                const theme = severityStyle(sev);
+                const kind = severity(Number(h.precipProb || 0), Number(h.precipMm || 0));
+                const theme = severityStyle(kind);
+
                 return (
                   <div key={h.time} style={{
-                    minWidth: 120,
-                    borderRadius: 20,
-                    padding: 14,
+                    minWidth: 108,
+                    borderRadius: 18,
+                    padding: 12,
                     background: theme.bg,
                     border: theme.border,
-                    boxShadow: theme.glow
+                    flex: "0 0 auto"
                   }}>
                     <div style={{ color: "#9bbce5", fontSize: 12 }}>{fmtHour(h.time)}</div>
-                    <div style={{ fontSize: 28, marginTop: 8 }}>{weatherIcon(h.weatherCode)}</div>
-                    <div style={{ fontSize: 28, fontWeight: 900, marginTop: 8 }}>{round(h.tempC)}°</div>
-                    <div style={{ color: "#9bbce5", fontSize: 12, marginTop: 8 }}>{weatherLabel(h.weatherCode)}</div>
-                    <div style={{ marginTop: 10, display: "grid", gap: 4 }}>
-                      <small style={smallMeta}>Rain {round(h.precipProb)}%</small>
-                      <small style={smallMeta}>Precip {one(h.precipMm)} mm</small>
-                      <small style={smallMeta}>Wind {round(h.windKmh)} km/h</small>
+                    <div style={{ fontSize: 22, marginTop: 6 }}>{weatherIcon(h.weatherCode)}</div>
+                    <div style={{ fontSize: 24, fontWeight: 900, marginTop: 6 }}>{round(h.tempC)}°</div>
+                    <div style={{ color: "#9bbce5", fontSize: 11, marginTop: 6 }}>{weatherLabel(h.weatherCode)}</div>
+                    <div style={{ marginTop: 8, color: "#b7cae6", fontSize: 11, lineHeight: 1.55 }}>
+                      Rain {round(h.precipProb)}%
+                      <br />
+                      {one(h.precipMm)} mm
+                      <br />
+                      {round(h.windKmh)} km/h
                     </div>
                   </div>
                 );
               })}
             </div>
-          </div>
+          </section>
 
-          <div style={panelStyle}>
+          <section style={panelStyle}>
             <div style={sectionTitle}>Rain + Radar</div>
-            <div style={{ display: "grid", gap: 12 }}>
-              <GlassMetric title="Next Rain" value={rainInfo.nextRainAt ? fmtHour(rainInfo.nextRainAt) : "No near rain"} />
-              <GlassMetric title="Rain Stops" value={rainInfo.rainStopsAt ? fmtHour(rainInfo.rainStopsAt) : "-"} />
-              <GlassMetric title="Strongest Hour" value={rainInfo.strongestHour ? fmtHour(rainInfo.strongestHour.time) : "-"} />
+
+            <div style={{ display: "grid", gap: 10 }}>
+              <MetricCard label="Next Rain" value={rainInfo.nextRainAt ? fmtHour(rainInfo.nextRainAt) : "No near rain"} />
+              <MetricCard label="Rain Stops" value={rainInfo.rainStopsAt ? fmtHour(rainInfo.rainStopsAt) : "-"} />
+              <MetricCard label="Current Rain" value={`${one(current.precipitation)} mm`} />
             </div>
 
             <div style={{
-              marginTop: 16,
-              padding: 14,
-              borderRadius: 18,
-              background: "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
-              border: "1px solid rgba(255,255,255,0.08)"
+              marginTop: 14,
+              display: "grid",
+              gap: 10
             }}>
-              <div style={{ fontWeight: 900, marginBottom: 10 }}>Live Radar Links</div>
-              <div style={{ display: "grid", gap: 10 }}>
-                <a href="https://www.rainviewer.com/map.html" target="_blank" rel="noreferrer" style={radarBtnStyle}>RainViewer Radar</a>
-                <a href="https://www.windy.com/34.436/35.850?radar,34.436,35.850,8" target="_blank" rel="noreferrer" style={radarBtnStyle}>Windy Radar</a>
-                <a href="https://www.ventusky.com/?p=34.44;35.85;8&l=rain-3h" target="_blank" rel="noreferrer" style={radarBtnStyle}>Ventusky Rain Map</a>
-              </div>
+              <a href="https://www.rainviewer.com/map.html" target="_blank" rel="noreferrer" style={radarBtnStyle}>RainViewer Radar</a>
+              <a href="https://www.windy.com/34.436/35.850?radar,34.436,35.850,8" target="_blank" rel="noreferrer" style={radarBtnStyle}>Windy Radar</a>
+              <a href="https://www.ventusky.com/?p=34.44;35.85;8&l=rain-3h" target="_blank" rel="noreferrer" style={radarBtnStyle}>Ventusky Rain Map</a>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
 
         <section style={panelStyle}>
           <div style={sectionTitle}>10 Day Forecast</div>
-          <div style={{ display: "grid", gap: 10 }}>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
+            gap: 12
+          }}>
             {daily.map((d) => {
-              const sev = severity(Number(d.precipProbMax || 0), Number(d.precipMm || 0));
-              const theme = severityStyle(sev);
+              const kind = severity(Number(d.precipProbMax || 0), Number(d.precipMm || 0));
+              const theme = severityStyle(kind);
+
               return (
                 <div key={d.date} style={{
-                  display: "grid",
-                  gridTemplateColumns: "120px 70px 1.1fr 140px 110px 120px 120px",
-                  gap: 10,
-                  alignItems: "center",
-                  padding: "14px 16px",
                   borderRadius: 18,
+                  padding: 14,
                   background: theme.bg,
-                  border: theme.border,
-                  boxShadow: theme.glow
+                  border: theme.border
                 }}>
-                  <div style={{ fontWeight: 900 }}>{fmtDay(d.date)}</div>
-                  <div style={{ fontSize: 28 }}>{weatherIcon(d.weatherCode)}</div>
-                  <div>
-                    <div style={{ fontWeight: 800 }}>{weatherLabel(d.weatherCode)}</div>
-                    <div style={{ color: "#9bbce5", fontSize: 12 }}>Rain chance + wind summary</div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+                    <div style={{ fontWeight: 900 }}>{fmtDay(d.date)}</div>
+                    <div style={{ fontSize: 24 }}>{weatherIcon(d.weatherCode)}</div>
                   </div>
-                  <div style={{ fontWeight: 800 }}>{round(d.tempMaxC)}° / {round(d.tempMinC)}°</div>
-                  <div>{round(d.precipProbMax)}%</div>
-                  <div>{one(d.precipMm)} mm</div>
-                  <div>{round(d.windMaxKmh)} km/h</div>
+
+                  <div style={{ marginTop: 8, color: "#9bbce5", fontSize: 13 }}>
+                    {weatherLabel(d.weatherCode)}
+                  </div>
+
+                  <div style={{ marginTop: 12, fontSize: 28, fontWeight: 900 }}>
+                    {round(d.tempMaxC)}°
+                    <span style={{ fontSize: 16, color: "#9bbce5", marginLeft: 8 }}>
+                      {round(d.tempMinC)}°
+                    </span>
+                  </div>
+
+                  <div style={{ marginTop: 10, display: "grid", gap: 4, color: "#b7cae6", fontSize: 12 }}>
+                    <div>Rain chance: {round(d.precipProbMax)}%</div>
+                    <div>Precipitation: {one(d.precipMm)} mm</div>
+                    <div>Wind max: {round(d.windMaxKmh)} km/h</div>
+                  </div>
                 </div>
               );
             })}
@@ -389,21 +435,21 @@ export default function WeatherTripoliPage() {
   );
 }
 
-function GlassMini({ title, value }) {
+function MetricCard({ label, value }) {
   return (
     <div style={{
-      borderRadius: 18,
-      padding: 14,
+      borderRadius: 16,
+      padding: 12,
       background: "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))",
       border: "1px solid rgba(255,255,255,0.08)"
     }}>
-      <div style={{ color: "#8caed9", fontSize: 11, marginBottom: 6 }}>{title}</div>
-      <div style={{ fontSize: 22, fontWeight: 900 }}>{value}</div>
+      <div style={{ color: "#8caed9", fontSize: 11 }}>{label}</div>
+      <div style={{ fontSize: 22, fontWeight: 900, marginTop: 6 }}>{value}</div>
     </div>
   );
 }
 
-function GlassChip({ label, value }) {
+function MiniChip({ label, value }) {
   return (
     <div style={{
       borderRadius: 14,
@@ -417,37 +463,15 @@ function GlassChip({ label, value }) {
   );
 }
 
-function GlassMetric({ title, value }) {
-  return (
-    <div style={{
-      borderRadius: 16,
-      padding: 12,
-      background: "rgba(255,255,255,0.03)",
-      border: "1px solid rgba(255,255,255,0.08)"
-    }}>
-      <div style={{ color: "#8caed9", fontSize: 11 }}>{title}</div>
-      <div style={{ fontSize: 22, fontWeight: 900, marginTop: 6 }}>{value}</div>
-    </div>
-  );
-}
-
 const pageStyle = {
   minHeight: "100%",
   padding: 20,
   color: "#eef6ff",
-  background: "radial-gradient(circle at top right, rgba(38,55,112,0.25), transparent 24%), linear-gradient(180deg,#020814 0%,#07111c 50%,#030914 100%)",
-  position: "relative",
-  overflow: "hidden"
-};
-
-const heroStyle = {
-  borderRadius: 30,
-  padding: 22,
-  backdropFilter: "blur(18px)"
+  background: "radial-gradient(circle at top right, rgba(38,55,112,0.22), transparent 24%), linear-gradient(180deg,#020814 0%,#07111c 50%,#030914 100%)"
 };
 
 const panelStyle = {
-  borderRadius: 26,
+  borderRadius: 24,
   padding: 16,
   background: "linear-gradient(180deg, rgba(9,19,32,0.92), rgba(6,15,28,0.96))",
   border: "1px solid rgba(120,160,255,0.14)",
@@ -458,11 +482,6 @@ const sectionTitle = {
   fontSize: 20,
   fontWeight: 900,
   marginBottom: 14
-};
-
-const smallMeta = {
-  color: "#a8c3e6",
-  fontSize: 11
 };
 
 const radarBtnStyle = {
