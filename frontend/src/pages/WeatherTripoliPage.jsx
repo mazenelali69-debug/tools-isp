@@ -94,19 +94,22 @@ function severity(prob, mm) {
 function severityStyle(kind) {
   if (kind === "hot") {
     return {
-      bg: "linear-gradient(180deg, rgba(255,90,110,0.16), rgba(255,60,60,0.06))",
-      border: "1px solid rgba(255,92,92,0.24)"
+      bg: "linear-gradient(180deg, rgba(255,96,120,0.18), rgba(255,62,62,0.08))",
+      border: "1px solid rgba(255,92,92,0.28)",
+      accent: "#ff7a89"
     };
   }
   if (kind === "warm") {
     return {
-      bg: "linear-gradient(180deg, rgba(255,210,95,0.14), rgba(255,166,0,0.06))",
-      border: "1px solid rgba(255,196,92,0.22)"
+      bg: "linear-gradient(180deg, rgba(255,210,95,0.16), rgba(255,166,0,0.07))",
+      border: "1px solid rgba(255,196,92,0.24)",
+      accent: "#ffd05c"
     };
   }
   return {
-    bg: "linear-gradient(180deg, rgba(87,180,255,0.10), rgba(76,127,255,0.04))",
-    border: "1px solid rgba(120,160,255,0.14)"
+    bg: "linear-gradient(180deg, rgba(87,180,255,0.12), rgba(76,127,255,0.05))",
+    border: "1px solid rgba(120,160,255,0.16)",
+    accent: "#7edcff"
   };
 }
 
@@ -164,7 +167,7 @@ export default function WeatherTripoliPage() {
     }));
   }, [data]);
 
-  const next24 = useMemo(() => hourly.slice(0, 24), [hourly]);
+  const next18 = useMemo(() => hourly.slice(0, 18), [hourly]);
 
   const daily = useMemo(() => {
     if (!data?.daily?.time) return [];
@@ -180,10 +183,16 @@ export default function WeatherTripoliPage() {
   }, [data]);
 
   const rainInfo = useMemo(() => {
-    if (!hourly.length) return { nextRainAt: null, rainStopsAt: null };
+    if (!hourly.length) return { nextRainAt: null, rainStopsAt: null, strongest: null };
 
     const rainy = hourly.find(h => Number(h.precipProb || 0) >= 35 || Number(h.precipMm || 0) > 0.1);
-    if (!rainy) return { nextRainAt: null, rainStopsAt: null };
+    const strongest = [...hourly].slice(0, 24).sort((a, b) => {
+      const av = Number(a.precipMm || 0) * 10 + Number(a.precipProb || 0);
+      const bv = Number(b.precipMm || 0) * 10 + Number(b.precipProb || 0);
+      return bv - av;
+    })[0] || null;
+
+    if (!rainy) return { nextRainAt: null, rainStopsAt: null, strongest };
 
     let stop = null;
     const startIndex = hourly.findIndex(h => h.time === rainy.time);
@@ -195,11 +204,11 @@ export default function WeatherTripoliPage() {
       }
     }
 
-    return { nextRainAt: rainy.time, rainStopsAt: stop };
+    return { nextRainAt: rainy.time, rainStopsAt: stop, strongest };
   }, [hourly]);
 
   if (!data) {
-    return <div style={pageStyle}>Loading Tripoli Weather Luxury...</div>;
+    return <div style={pageStyle}>Loading Tripoli Weather Premium...</div>;
   }
 
   if (err) {
@@ -207,27 +216,28 @@ export default function WeatherTripoliPage() {
   }
 
   const current = data.current || {};
+  const currentTheme = severityStyle(severity(Number(current.precipitation || 0) * 20, Number(current.precipitation || 0)));
 
   return (
     <div style={pageStyle}>
       <style>{`
         .wt-wrap {
           width: 100%;
-          max-width: 1480px;
+          max-width: 1540px;
           margin: 0 auto;
           display: grid;
-          gap: 20px;
+          gap: 22px;
         }
 
         .wt-hero {
           display: grid;
-          grid-template-columns: minmax(0, 1.25fr) minmax(320px, .85fr);
+          grid-template-columns: minmax(0, 1.2fr) minmax(340px, .8fr);
           gap: 18px;
         }
 
-        .wt-main {
+        .wt-mid {
           display: grid;
-          grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+          grid-template-columns: minmax(0, 1.25fr) minmax(320px, .75fr);
           gap: 18px;
         }
 
@@ -236,49 +246,41 @@ export default function WeatherTripoliPage() {
         }
 
         .wt-hour-scroll::-webkit-scrollbar-track {
-          background: rgba(255,255,255,0.04);
+          background: rgba(255,255,255,.04);
           border-radius: 999px;
         }
 
         .wt-hour-scroll::-webkit-scrollbar-thumb {
-          background: rgba(127,167,216,0.35);
+          background: rgba(127,167,216,.35);
           border-radius: 999px;
         }
 
-        @media (max-width: 1180px) {
-          .wt-hero,
-          .wt-main {
+        @media (max-width: 1220px) {
+          .wt-hero, .wt-mid {
             grid-template-columns: 1fr;
           }
         }
 
         @media (max-width: 760px) {
-          .wt-title {
-            font-size: 30px !important;
-          }
-
-          .wt-temp {
-            font-size: 52px !important;
-          }
-
-          .wt-metrics {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-          }
-
-          .wt-radar {
-            grid-template-columns: 1fr !important;
-          }
+          .wt-title { font-size: 32px !important; }
+          .wt-big-temp { font-size: 56px !important; }
+          .wt-stats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+          .wt-daily-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
+      <div style={glowA} />
+      <div style={glowB} />
+      <div style={glowC} />
+
       <div className="wt-wrap">
         <section className="wt-hero">
-          <div style={panelStyle}>
+          <div style={heroLeftStyle}>
             <div style={{ color: "#8fb3df", fontSize: 12, letterSpacing: 2, textTransform: "uppercase" }}>
-              Weather Tripoli Luxury
+              Weather Final Premium
             </div>
 
-            <div className="wt-title" style={{ fontSize: 44, fontWeight: 900, marginTop: 10 }}>
+            <div className="wt-title" style={{ fontSize: 46, fontWeight: 900, marginTop: 10 }}>
               Tripoli, Lebanon
             </div>
 
@@ -286,11 +288,11 @@ export default function WeatherTripoliPage() {
               {weatherLabel(current.weather_code)} • Updated {updatedAt}
             </div>
 
-            <div className="wt-metrics" style={{
+            <div className="wt-stats" style={{
               display: "grid",
               gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
               gap: 12,
-              marginTop: 20
+              marginTop: 22
             }}>
               <MetricCard label="Feels Like" value={`${round(current.apparent_temperature)}°C`} />
               <MetricCard label="Humidity" value={`${round(current.relative_humidity_2m)}%`} />
@@ -299,10 +301,10 @@ export default function WeatherTripoliPage() {
             </div>
           </div>
 
-          <div style={heroTempStyle}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", gap: 16 }}>
+          <div style={{ ...heroRightStyle, background: currentTheme.bg, border: currentTheme.border }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", gap: 18 }}>
               <div>
-                <div className="wt-temp" style={{ fontSize: 76, fontWeight: 900, lineHeight: .95 }}>
+                <div className="wt-big-temp" style={{ fontSize: 80, fontWeight: 900, lineHeight: .92 }}>
                   {round(current.temperature_2m)}°C
                 </div>
                 <div style={{ color: "#9bbce5", marginTop: 10, fontSize: 16 }}>
@@ -310,7 +312,7 @@ export default function WeatherTripoliPage() {
                 </div>
               </div>
 
-              <div style={{ fontSize: 68 }}>{weatherIcon(current.weather_code)}</div>
+              <div style={{ fontSize: 70 }}>{weatherIcon(current.weather_code)}</div>
             </div>
 
             <div style={{
@@ -326,7 +328,7 @@ export default function WeatherTripoliPage() {
           </div>
         </section>
 
-        <section className="wt-main">
+        <section className="wt-mid">
           <div style={panelStyle}>
             <div style={sectionTitle}>Hourly Forecast</div>
 
@@ -336,22 +338,32 @@ export default function WeatherTripoliPage() {
               overflowX: "auto",
               paddingBottom: 10
             }}>
-              {next24.map((h) => {
-                const theme = severityStyle(severity(Number(h.precipProb || 0), Number(h.precipMm || 0)));
+              {next18.map((h) => {
+                const sev = severityStyle(severity(Number(h.precipProb || 0), Number(h.precipMm || 0)));
                 return (
                   <div key={h.time} style={{
-                    minWidth: 132,
+                    minWidth: 146,
                     padding: 14,
-                    borderRadius: 18,
-                    background: theme.bg,
-                    border: theme.border,
-                    flex: "0 0 auto"
+                    borderRadius: 20,
+                    background: sev.bg,
+                    border: sev.border,
+                    flex: "0 0 auto",
+                    boxShadow: "0 14px 30px rgba(0,0,0,.18)"
                   }}>
                     <div style={{ color: "#9bbce5", fontSize: 12 }}>{fmtHour(h.time)}</div>
-                    <div style={{ fontSize: 26, marginTop: 8 }}>{weatherIcon(h.weatherCode)}</div>
-                    <div style={{ fontSize: 26, fontWeight: 900, marginTop: 8 }}>{round(h.tempC)}°</div>
+                    <div style={{ fontSize: 28, marginTop: 8 }}>{weatherIcon(h.weatherCode)}</div>
+                    <div style={{ fontSize: 28, fontWeight: 900, marginTop: 8 }}>{round(h.tempC)}°</div>
                     <div style={{ color: "#9bbce5", fontSize: 12, marginTop: 8 }}>{weatherLabel(h.weatherCode)}</div>
-                    <div style={{ color: "#b9cde8", fontSize: 12, marginTop: 10, lineHeight: 1.6 }}>
+
+                    <div style={{ marginTop: 10, height: 6, borderRadius: 999, background: "rgba(255,255,255,.06)", overflow: "hidden" }}>
+                      <div style={{
+                        width: `${Math.min(100, Number(h.precipProb || 0))}%`,
+                        height: "100%",
+                        background: "linear-gradient(90deg,#4fdcff,#7f86ff)"
+                      }} />
+                    </div>
+
+                    <div style={{ color: "#b9cde8", fontSize: 12, marginTop: 10, lineHeight: 1.65 }}>
                       Rain {round(h.precipProb)}%
                       <br />
                       {one(h.precipMm)} mm
@@ -367,21 +379,14 @@ export default function WeatherTripoliPage() {
           <div style={panelStyle}>
             <div style={sectionTitle}>Rain + Radar</div>
 
-            <div className="wt-radar" style={{
-              display: "grid",
-              gridTemplateColumns: "1fr",
-              gap: 10
-            }}>
+            <div style={{ display: "grid", gap: 10 }}>
               <MetricCard label="Next Rain" value={rainInfo.nextRainAt ? fmtHour(rainInfo.nextRainAt) : "No near rain"} />
               <MetricCard label="Rain Stops" value={rainInfo.rainStopsAt ? fmtHour(rainInfo.rainStopsAt) : "-"} />
+              <MetricCard label="Strongest Hour" value={rainInfo.strongest ? fmtHour(rainInfo.strongest.time) : "-"} />
               <MetricCard label="Current Rain" value={`${one(current.precipitation)} mm`} />
             </div>
 
-            <div style={{
-              marginTop: 14,
-              display: "grid",
-              gap: 10
-            }}>
+            <div style={{ marginTop: 14, display: "grid", gap: 10 }}>
               <a href="https://www.rainviewer.com/map.html" target="_blank" rel="noreferrer" style={radarBtnStyle}>RainViewer Radar</a>
               <a href="https://www.windy.com/34.436/35.850?radar,34.436,35.850,8" target="_blank" rel="noreferrer" style={radarBtnStyle}>Windy Radar</a>
               <a href="https://www.ventusky.com/?p=34.44;35.85;8&l=rain-3h" target="_blank" rel="noreferrer" style={radarBtnStyle}>Ventusky Rain Map</a>
@@ -392,35 +397,44 @@ export default function WeatherTripoliPage() {
         <section style={panelStyle}>
           <div style={sectionTitle}>10 Day Forecast</div>
 
-          <div style={{
+          <div className="wt-daily-grid" style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
             gap: 14
           }}>
             {daily.map((d) => {
-              const theme = severityStyle(severity(Number(d.precipProbMax || 0), Number(d.precipMm || 0)));
+              const sev = severityStyle(severity(Number(d.precipProbMax || 0), Number(d.precipMm || 0)));
               return (
                 <div key={d.date} style={{
-                  borderRadius: 18,
+                  borderRadius: 20,
                   padding: 16,
-                  background: theme.bg,
-                  border: theme.border
+                  background: sev.bg,
+                  border: sev.border,
+                  boxShadow: "0 14px 28px rgba(0,0,0,.16)"
                 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
                     <div style={{ fontWeight: 900, fontSize: 16 }}>{fmtDay(d.date)}</div>
-                    <div style={{ fontSize: 28 }}>{weatherIcon(d.weatherCode)}</div>
+                    <div style={{ fontSize: 30 }}>{weatherIcon(d.weatherCode)}</div>
                   </div>
 
                   <div style={{ color: "#9bbce5", marginTop: 8, fontSize: 13 }}>
                     {weatherLabel(d.weatherCode)}
                   </div>
 
-                  <div style={{ marginTop: 12, display: "flex", alignItems: "end", gap: 10 }}>
-                    <div style={{ fontSize: 32, fontWeight: 900 }}>{round(d.tempMaxC)}°</div>
-                    <div style={{ color: "#9bbce5", fontSize: 18 }}>{round(d.tempMinC)}°</div>
+                  <div style={{ display: "flex", alignItems: "end", gap: 10, marginTop: 14 }}>
+                    <div style={{ fontSize: 34, fontWeight: 900 }}>{round(d.tempMaxC)}°</div>
+                    <div style={{ fontSize: 18, color: "#9bbce5" }}>{round(d.tempMinC)}°</div>
                   </div>
 
-                  <div style={{ marginTop: 12, color: "#b9cde8", fontSize: 12, lineHeight: 1.7 }}>
+                  <div style={{ marginTop: 12, height: 7, borderRadius: 999, background: "rgba(255,255,255,.06)", overflow: "hidden" }}>
+                    <div style={{
+                      width: `${Math.min(100, Number(d.precipProbMax || 0))}%`,
+                      height: "100%",
+                      background: "linear-gradient(90deg,#4fdcff,#7f86ff)"
+                    }} />
+                  </div>
+
+                  <div style={{ marginTop: 12, color: "#b9cde8", fontSize: 12, lineHeight: 1.75 }}>
                     Rain chance: {round(d.precipProbMax)}%
                     <br />
                     Precipitation: {one(d.precipMm)} mm
@@ -469,27 +483,35 @@ const pageStyle = {
   minHeight: "100%",
   padding: 20,
   color: "#eef6ff",
-  background: "radial-gradient(circle at top right, rgba(38,55,112,0.22), transparent 24%), linear-gradient(180deg,#020814 0%,#07111c 50%,#030914 100%)"
+  background: "radial-gradient(circle at top right, rgba(38,55,112,0.22), transparent 24%), linear-gradient(180deg,#020814 0%,#07111c 50%,#030914 100%)",
+  position: "relative",
+  overflow: "hidden"
+};
+
+const heroLeftStyle = {
+  borderRadius: 28,
+  padding: 20,
+  background: "linear-gradient(180deg, rgba(9,19,32,0.96), rgba(6,15,28,0.98))",
+  border: "1px solid rgba(120,160,255,0.14)",
+  boxShadow: "0 24px 80px rgba(0,0,0,0.35)"
+};
+
+const heroRightStyle = {
+  borderRadius: 28,
+  padding: 20,
+  boxShadow: "0 24px 80px rgba(0,0,0,0.35)"
 };
 
 const panelStyle = {
-  borderRadius: 24,
+  borderRadius: 26,
   padding: 18,
   background: "linear-gradient(180deg, rgba(9,19,32,0.92), rgba(6,15,28,0.96))",
   border: "1px solid rgba(120,160,255,0.14)",
   boxShadow: "0 24px 80px rgba(0,0,0,0.35)"
 };
 
-const heroTempStyle = {
-  borderRadius: 24,
-  padding: 18,
-  background: "linear-gradient(135deg, rgba(37,57,118,0.30), rgba(10,20,45,0.80))",
-  border: "1px solid rgba(120,160,255,0.18)",
-  boxShadow: "0 24px 80px rgba(0,0,0,0.35)"
-};
-
 const sectionTitle = {
-  fontSize: 22,
+  fontSize: 24,
   fontWeight: 900,
   marginBottom: 14
 };
@@ -503,4 +525,40 @@ const radarBtnStyle = {
   borderRadius: 14,
   padding: "12px 14px",
   background: "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))"
+};
+
+const glowA = {
+  position: "absolute",
+  top: 20,
+  right: 120,
+  width: 260,
+  height: 260,
+  borderRadius: "999px",
+  background: "rgba(84,120,255,0.12)",
+  filter: "blur(70px)",
+  pointerEvents: "none"
+};
+
+const glowB = {
+  position: "absolute",
+  top: 220,
+  left: 120,
+  width: 220,
+  height: 220,
+  borderRadius: "999px",
+  background: "rgba(76,219,255,0.08)",
+  filter: "blur(70px)",
+  pointerEvents: "none"
+};
+
+const glowC = {
+  position: "absolute",
+  bottom: 120,
+  right: 320,
+  width: 220,
+  height: 220,
+  borderRadius: "999px",
+  background: "rgba(255,183,78,0.08)",
+  filter: "blur(70px)",
+  pointerEvents: "none"
 };
