@@ -29,18 +29,32 @@ function fmtDay(iso) {
   }
 }
 
-function mm(v) {
-  return Number(v || 0).toFixed(1);
-}
-
 function round(v) {
   return Math.round(Number(v || 0));
 }
 
-function weatherText(code) {
+function one(v) {
+  return Number(v || 0).toFixed(1);
+}
+
+function weatherIcon(code) {
+  if (code === 0) return "☀️";
+  if (code === 1 || code === 2) return "🌤️";
+  if (code === 3) return "☁️";
+  if (code === 45 || code === 48) return "🌫️";
+  if (code >= 51 && code <= 57) return "🌦️";
+  if (code >= 61 && code <= 67) return "🌧️";
+  if (code >= 71 && code <= 77) return "❄️";
+  if (code >= 80 && code <= 82) return "🌦️";
+  if (code >= 85 && code <= 86) return "🌨️";
+  if (code >= 95) return "⛈️";
+  return "🌡️";
+}
+
+function weatherLabel(code) {
   const map = {
-    0: "Clear",
-    1: "Mostly clear",
+    0: "Clear sky",
+    1: "Mainly clear",
     2: "Partly cloudy",
     3: "Overcast",
     45: "Fog",
@@ -68,10 +82,38 @@ function weatherText(code) {
     96: "Thunderstorm hail",
     99: "Heavy thunderstorm hail"
   };
-  return map[code] || `Code ${code}`;
+  return map[code] || "Weather";
 }
 
-function makeOpenMeteoUrl() {
+function severity(prob, mm) {
+  if (prob >= 70 || mm >= 3) return "hot";
+  if (prob >= 35 || mm >= 0.5) return "warm";
+  return "cool";
+}
+
+function severityStyle(kind) {
+  if (kind === "hot") {
+    return {
+      bg: "linear-gradient(135deg, rgba(255,95,109,0.16), rgba(255,62,62,0.08))",
+      border: "1px solid rgba(255,92,92,0.24)",
+      glow: "0 0 0 1px rgba(255,92,92,0.05), 0 18px 38px rgba(255,72,72,0.10)"
+    };
+  }
+  if (kind === "warm") {
+    return {
+      bg: "linear-gradient(135deg, rgba(255,210,95,0.14), rgba(255,166,0,0.06))",
+      border: "1px solid rgba(255,196,92,0.22)",
+      glow: "0 0 0 1px rgba(255,196,92,0.05), 0 18px 38px rgba(255,184,72,0.08)"
+    };
+  }
+  return {
+    bg: "linear-gradient(135deg, rgba(87,180,255,0.10), rgba(76,127,255,0.04))",
+    border: "1px solid rgba(120,160,255,0.14)",
+    glow: "0 0 0 1px rgba(120,160,255,0.04), 0 18px 38px rgba(25,46,89,0.20)"
+  };
+}
+
+function makeUrl() {
   return (
     "https://api.open-meteo.com/v1/forecast" +
     `?latitude=${LAT}&longitude=${LON}` +
@@ -85,27 +127,24 @@ function makeOpenMeteoUrl() {
 
 export default function WeatherTripoliPage() {
   const [data, setData] = useState(null);
-  const [err, setErr] = useState("");
-  const [loading, setLoading] = useState(true);
   const [updatedAt, setUpdatedAt] = useState("");
+  const [err, setErr] = useState("");
 
   useEffect(() => {
     let dead = false;
 
     async function load() {
       try {
-        const r = await fetch(makeOpenMeteoUrl(), { cache: "no-store" });
+        const r = await fetch(makeUrl(), { cache: "no-store" });
         const j = await r.json();
         if (!dead) {
           setData(j);
-          setErr("");
-          setLoading(false);
           setUpdatedAt(new Date().toLocaleString("en-GB"));
+          setErr("");
         }
       } catch (e) {
         if (!dead) {
           setErr(String(e?.message || e));
-          setLoading(false);
         }
       }
     }
@@ -140,19 +179,24 @@ export default function WeatherTripoliPage() {
     if (!data?.daily?.time) return [];
     return data.daily.time.map((date, i) => ({
       date,
+      weatherCode: data.daily.weather_code?.[i],
       tempMaxC: data.daily.temperature_2m_max?.[i],
       tempMinC: data.daily.temperature_2m_min?.[i],
       precipMm: data.daily.precipitation_sum?.[i],
       precipProbMax: data.daily.precipitation_probability_max?.[i],
-      windMaxKmh: data.daily.wind_speed_10m_max?.[i],
-      weatherCode: data.daily.weather_code?.[i]
+      windMaxKmh: data.daily.wind_speed_10m_max?.[i]
     }));
   }, [data]);
 
   const rainInfo = useMemo(() => {
-    if (!hourly.length) return { nextRainAt: null, rainStopsAt: null };
+    if (!hourly.length) return { nextRainAt: null, rainStopsAt: null, strongestHour: null };
+
     const rainy = hourly.find(h => Number(h.precipProb || 0) >= 35 || Number(h.precipMm || 0) > 0.1);
-    if (!rainy) return { nextRainAt: null, rainStopsAt: null };
+    const strongest = [...hourly]
+      .slice(0, 24)
+      .sort((a, b) => (Number(b.precipMm || 0) + Number(b.precipProb || 0) / 100) - (Number(a.precipMm || 0) + Number(a.precipProb || 0) / 100))[0] || null;
+
+    if (!rainy) return { nextRainAt: null, rainStopsAt: null, strongestHour: strongest };
 
     let stop = null;
     const startIndex = hourly.findIndex(h => h.time === rainy.time);
@@ -164,98 +208,144 @@ export default function WeatherTripoliPage() {
       }
     }
 
-    return { nextRainAt: rainy.time, rainStopsAt: stop };
+    return { nextRainAt: rainy.time, rainStopsAt: stop, strongestHour: strongest };
   }, [hourly]);
 
-  if (loading) {
+  if (!data) {
     return (
-      <div style={{ minHeight: "100%", padding: 24, background: "linear-gradient(180deg,#030914 0%,#07101a 100%)", color: "#eef6ff" }}>
-        Loading Tripoli Weather Pro...
+      <div style={pageStyle}>
+        <div style={{ color: "#eef6ff", fontSize: 22 }}>Loading Tripoli Weather Ultra...</div>
       </div>
     );
   }
 
   if (err) {
     return (
-      <div style={{ minHeight: "100%", padding: 24, background: "linear-gradient(180deg,#030914 0%,#07101a 100%)", color: "#ffb4b4" }}>
-        Weather load failed: {err}
+      <div style={pageStyle}>
+        <div style={{ color: "#ffb4b4", fontSize: 18 }}>Weather load failed: {err}</div>
       </div>
     );
   }
 
-  const current = data?.current || {};
+  const current = data.current || {};
+  const mainSeverity = severity(Number(current.precipitation || 0) * 20, Number(current.precipitation || 0));
+  const mainTheme = severityStyle(mainSeverity);
 
   return (
-    <div style={{ minHeight: "100%", padding: 20, background: "linear-gradient(180deg,#030914 0%,#07101a 100%)", color: "#eef6ff" }}>
-      <div style={{ display: "grid", gap: 16 }}>
-        <section style={panelStyle}>
-          <div style={{ color: "#7fa7d8", fontSize: 12, letterSpacing: 2, textTransform: "uppercase" }}>Weather Tripoli Pro Max</div>
-          <div style={{ fontSize: 28, fontWeight: 900, marginTop: 8 }}>Tripoli, Lebanon</div>
-          <div style={{ color: "#9bbce5", marginTop: 6 }}>
-            {weatherText(current.weather_code)} • Updated {updatedAt}
-          </div>
+    <div style={pageStyle}>
+      <style>{`
+        .wt-scroll::-webkit-scrollbar { height: 10px; width: 10px; }
+        .wt-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); border-radius: 999px; }
+        .wt-scroll::-webkit-scrollbar-thumb { background: rgba(127,167,216,0.35); border-radius: 999px; }
+        .wt-glow {
+          position: absolute;
+          inset: auto;
+          pointer-events: none;
+          filter: blur(60px);
+          opacity: .55;
+        }
+      `}</style>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(120px, 1fr))", gap: 12, marginTop: 16 }}>
-            <StatCard label="Temperature" value={`${round(current.temperature_2m)}°C`} />
-            <StatCard label="Feels Like" value={`${round(current.apparent_temperature)}°C`} />
-            <StatCard label="Wind" value={`${round(current.wind_speed_10m)} km/h`} />
-            <StatCard label="Humidity" value={`${round(current.relative_humidity_2m)}%`} />
-            <StatCard label="Pressure" value={`${round(current.pressure_msl)} hPa`} />
-          </div>
+      <div className="wt-glow" style={{ width: 240, height: 240, top: 40, right: 120, background: "rgba(76,127,255,0.16)" }} />
+      <div className="wt-glow" style={{ width: 220, height: 220, top: 120, left: 120, background: "rgba(84,214,255,0.11)" }} />
+      <div className="wt-glow" style={{ width: 180, height: 180, bottom: 60, right: 300, background: "rgba(255,170,80,0.12)" }} />
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(150px, 1fr))", gap: 12, marginTop: 12 }}>
-            <MiniInfo label="Wind Direction" value={`${round(current.wind_direction_10m)}°`} />
-            <MiniInfo label="Wind Gust" value={`${round(current.wind_gusts_10m)} km/h`} />
-            <MiniInfo label="Next Rain" value={rainInfo.nextRainAt ? fmtHour(rainInfo.nextRainAt) : "No near rain"} />
-            <MiniInfo label="Rain Stops" value={rainInfo.rainStopsAt ? fmtHour(rainInfo.rainStopsAt) : "-"} />
+      <div style={{ display: "grid", gap: 16, position: "relative", zIndex: 1 }}>
+        <section style={{ ...heroStyle, background: mainTheme.bg, border: mainTheme.border, boxShadow: mainTheme.glow }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1.25fr .85fr", gap: 18, alignItems: "stretch" }}>
+            <div style={{ display: "grid", alignContent: "space-between", gap: 20 }}>
+              <div>
+                <div style={{ color: "#8caed9", fontSize: 12, letterSpacing: 2, textTransform: "uppercase" }}>Weather Tripoli Ultra</div>
+                <div style={{ fontSize: 44, fontWeight: 900, lineHeight: 1.05, marginTop: 10 }}>Tripoli, Lebanon</div>
+                <div style={{ color: "#a8c3e6", marginTop: 10, fontSize: 16 }}>
+                  {weatherLabel(current.weather_code)} • Updated {updatedAt}
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(120px,1fr))", gap: 12 }}>
+                <GlassMini title="Feels Like" value={`${round(current.apparent_temperature)}°C`} />
+                <GlassMini title="Humidity" value={`${round(current.relative_humidity_2m)}%`} />
+                <GlassMini title="Wind" value={`${round(current.wind_speed_10m)} km/h`} />
+                <GlassMini title="Pressure" value={`${round(current.pressure_msl)} hPa`} />
+              </div>
+            </div>
+
+            <div style={{
+              borderRadius: 26,
+              padding: 22,
+              background: "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
+              border: "1px solid rgba(255,255,255,0.10)",
+              display: "grid",
+              alignContent: "space-between"
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
+                <div>
+                  <div style={{ fontSize: 70, fontWeight: 900, lineHeight: .95 }}>{round(current.temperature_2m)}°C</div>
+                  <div style={{ color: "#9bbce5", marginTop: 10 }}>{weatherLabel(current.weather_code)}</div>
+                </div>
+                <div style={{ fontSize: 62 }}>{weatherIcon(current.weather_code)}</div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginTop: 20 }}>
+                <GlassChip label="Direction" value={`${round(current.wind_direction_10m)}°`} />
+                <GlassChip label="Gust" value={`${round(current.wind_gusts_10m)} km/h`} />
+                <GlassChip label="Cloud" value={`${round(current.cloud_cover)}%`} />
+              </div>
+            </div>
           </div>
         </section>
 
-        <section style={{ display: "grid", gridTemplateColumns: "1.35fr 1fr", gap: 16 }}>
+        <section style={{ display: "grid", gridTemplateColumns: "1.3fr .9fr", gap: 16 }}>
           <div style={panelStyle}>
-            <div style={sectionTitle}>Hourly Rain + Wind (next 24h)</div>
-            <div style={{ display: "grid", gap: 8, maxHeight: 460, overflow: "auto", paddingRight: 4 }}>
-              {next24.map((h) => (
-                <div key={h.time} style={hourRowStyle(Number(h.precipProb || 0), Number(h.precipMm || 0))}>
-                  <div style={{ fontWeight: 800 }}>{fmtHour(h.time)}</div>
-                  <div>{round(h.tempC)}°C</div>
-                  <div>{round(h.precipProb)}% rain</div>
-                  <div>{mm(h.precipMm)} mm</div>
-                  <div>{round(h.windKmh)} km/h</div>
-                  <div style={{ color: "#9bbce5" }}>{weatherText(h.weatherCode)}</div>
-                </div>
-              ))}
+            <div style={sectionTitle}>Next 24 Hours</div>
+            <div className="wt-scroll" style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 8 }}>
+              {next24.map((h) => {
+                const sev = severity(Number(h.precipProb || 0), Number(h.precipMm || 0));
+                const theme = severityStyle(sev);
+                return (
+                  <div key={h.time} style={{
+                    minWidth: 120,
+                    borderRadius: 20,
+                    padding: 14,
+                    background: theme.bg,
+                    border: theme.border,
+                    boxShadow: theme.glow
+                  }}>
+                    <div style={{ color: "#9bbce5", fontSize: 12 }}>{fmtHour(h.time)}</div>
+                    <div style={{ fontSize: 28, marginTop: 8 }}>{weatherIcon(h.weatherCode)}</div>
+                    <div style={{ fontSize: 28, fontWeight: 900, marginTop: 8 }}>{round(h.tempC)}°</div>
+                    <div style={{ color: "#9bbce5", fontSize: 12, marginTop: 8 }}>{weatherLabel(h.weatherCode)}</div>
+                    <div style={{ marginTop: 10, display: "grid", gap: 4 }}>
+                      <small style={smallMeta}>Rain {round(h.precipProb)}%</small>
+                      <small style={smallMeta}>Precip {one(h.precipMm)} mm</small>
+                      <small style={smallMeta}>Wind {round(h.windKmh)} km/h</small>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
           <div style={panelStyle}>
-            <div style={sectionTitle}>Radar</div>
-            <div style={{ color: "#9bbce5", lineHeight: 1.7 }}>
-              This page is running frontend-only for safety.
-              <br />
-              Radar live links are ready below.
+            <div style={sectionTitle}>Rain + Radar</div>
+            <div style={{ display: "grid", gap: 12 }}>
+              <GlassMetric title="Next Rain" value={rainInfo.nextRainAt ? fmtHour(rainInfo.nextRainAt) : "No near rain"} />
+              <GlassMetric title="Rain Stops" value={rainInfo.rainStopsAt ? fmtHour(rainInfo.rainStopsAt) : "-"} />
+              <GlassMetric title="Strongest Hour" value={rainInfo.strongestHour ? fmtHour(rainInfo.strongestHour.time) : "-"} />
             </div>
 
-            <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
-              <a href="https://www.rainviewer.com/map.html" target="_blank" rel="noreferrer" style={radarBtnStyle}>
-                Open RainViewer Radar
-              </a>
-              <a href="https://www.windy.com/34.436/35.850?radar,34.436,35.850,8" target="_blank" rel="noreferrer" style={radarBtnStyle}>
-                Open Windy Radar
-              </a>
-              <a href="https://www.ventusky.com/?p=34.44;35.85;8&l=rain-3h" target="_blank" rel="noreferrer" style={radarBtnStyle}>
-                Open Ventusky Rain Map
-              </a>
-            </div>
-
-            <div style={{ marginTop: 16, borderRadius: 16, padding: 14, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-              <div style={{ fontWeight: 800, marginBottom: 8 }}>Quick Summary</div>
-              <div style={{ color: "#9bbce5", lineHeight: 1.7 }}>
-                Current rain: {mm(current.precipitation)} mm
-                <br />
-                Cloud cover: {round(current.cloud_cover)}%
-                <br />
-                Weather code: {current.weather_code}
+            <div style={{
+              marginTop: 16,
+              padding: 14,
+              borderRadius: 18,
+              background: "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+              border: "1px solid rgba(255,255,255,0.08)"
+            }}>
+              <div style={{ fontWeight: 900, marginBottom: 10 }}>Live Radar Links</div>
+              <div style={{ display: "grid", gap: 10 }}>
+                <a href="https://www.rainviewer.com/map.html" target="_blank" rel="noreferrer" style={radarBtnStyle}>RainViewer Radar</a>
+                <a href="https://www.windy.com/34.436/35.850?radar,34.436,35.850,8" target="_blank" rel="noreferrer" style={radarBtnStyle}>Windy Radar</a>
+                <a href="https://www.ventusky.com/?p=34.44;35.85;8&l=rain-3h" target="_blank" rel="noreferrer" style={radarBtnStyle}>Ventusky Rain Map</a>
               </div>
             </div>
           </div>
@@ -263,17 +353,35 @@ export default function WeatherTripoliPage() {
 
         <section style={panelStyle}>
           <div style={sectionTitle}>10 Day Forecast</div>
-          <div style={{ display: "grid", gap: 8 }}>
-            {daily.map((d) => (
-              <div key={d.date} style={dayRowStyle(Number(d.precipProbMax || 0))}>
-                <div style={{ fontWeight: 800 }}>{fmtDay(d.date)}</div>
-                <div>{weatherText(d.weatherCode)}</div>
-                <div>{round(d.tempMaxC)}° / {round(d.tempMinC)}°</div>
-                <div>{round(d.precipProbMax)}% rain</div>
-                <div>{mm(d.precipMm)} mm</div>
-                <div>{round(d.windMaxKmh)} km/h</div>
-              </div>
-            ))}
+          <div style={{ display: "grid", gap: 10 }}>
+            {daily.map((d) => {
+              const sev = severity(Number(d.precipProbMax || 0), Number(d.precipMm || 0));
+              const theme = severityStyle(sev);
+              return (
+                <div key={d.date} style={{
+                  display: "grid",
+                  gridTemplateColumns: "120px 70px 1.1fr 140px 110px 120px 120px",
+                  gap: 10,
+                  alignItems: "center",
+                  padding: "14px 16px",
+                  borderRadius: 18,
+                  background: theme.bg,
+                  border: theme.border,
+                  boxShadow: theme.glow
+                }}>
+                  <div style={{ fontWeight: 900 }}>{fmtDay(d.date)}</div>
+                  <div style={{ fontSize: 28 }}>{weatherIcon(d.weatherCode)}</div>
+                  <div>
+                    <div style={{ fontWeight: 800 }}>{weatherLabel(d.weatherCode)}</div>
+                    <div style={{ color: "#9bbce5", fontSize: 12 }}>Rain chance + wind summary</div>
+                  </div>
+                  <div style={{ fontWeight: 800 }}>{round(d.tempMaxC)}° / {round(d.tempMinC)}°</div>
+                  <div>{round(d.precipProbMax)}%</div>
+                  <div>{one(d.precipMm)} mm</div>
+                  <div>{round(d.windMaxKmh)} km/h</div>
+                </div>
+              );
+            })}
           </div>
         </section>
       </div>
@@ -281,93 +389,81 @@ export default function WeatherTripoliPage() {
   );
 }
 
-function StatCard({ label, value }) {
+function GlassMini({ title, value }) {
   return (
     <div style={{
-      border: "1px solid rgba(255,255,255,0.08)",
       borderRadius: 18,
       padding: 14,
-      background: "rgba(255,255,255,0.03)"
+      background: "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))",
+      border: "1px solid rgba(255,255,255,0.08)"
     }}>
-      <div style={{ color: "#7fa7d8", fontSize: 11, marginBottom: 6 }}>{label}</div>
+      <div style={{ color: "#8caed9", fontSize: 11, marginBottom: 6 }}>{title}</div>
       <div style={{ fontSize: 22, fontWeight: 900 }}>{value}</div>
     </div>
   );
 }
 
-function MiniInfo({ label, value }) {
+function GlassChip({ label, value }) {
   return (
     <div style={{
-      border: "1px solid rgba(255,255,255,0.07)",
       borderRadius: 14,
       padding: 10,
-      background: "rgba(255,255,255,0.02)"
+      background: "rgba(255,255,255,0.04)",
+      border: "1px solid rgba(255,255,255,0.08)"
     }}>
-      <div style={{ color: "#7fa7d8", fontSize: 10, marginBottom: 5 }}>{label}</div>
-      <div style={{ fontWeight: 800 }}>{value}</div>
+      <div style={{ color: "#8caed9", fontSize: 10 }}>{label}</div>
+      <div style={{ fontWeight: 800, marginTop: 4 }}>{value}</div>
     </div>
   );
 }
 
+function GlassMetric({ title, value }) {
+  return (
+    <div style={{
+      borderRadius: 16,
+      padding: 12,
+      background: "rgba(255,255,255,0.03)",
+      border: "1px solid rgba(255,255,255,0.08)"
+    }}>
+      <div style={{ color: "#8caed9", fontSize: 11 }}>{title}</div>
+      <div style={{ fontSize: 22, fontWeight: 900, marginTop: 6 }}>{value}</div>
+    </div>
+  );
+}
+
+const pageStyle = {
+  minHeight: "100%",
+  padding: 20,
+  color: "#eef6ff",
+  background: "radial-gradient(circle at top right, rgba(38,55,112,0.25), transparent 24%), linear-gradient(180deg,#020814 0%,#07111c 50%,#030914 100%)",
+  position: "relative",
+  overflow: "hidden"
+};
+
+const heroStyle = {
+  borderRadius: 30,
+  padding: 22,
+  backdropFilter: "blur(18px)"
+};
+
 const panelStyle = {
-  border: "1px solid rgba(120,160,255,0.14)",
-  borderRadius: 24,
+  borderRadius: 26,
   padding: 16,
-  background: "#06101a",
+  background: "linear-gradient(180deg, rgba(9,19,32,0.92), rgba(6,15,28,0.96))",
+  border: "1px solid rgba(120,160,255,0.14)",
   boxShadow: "0 24px 80px rgba(0,0,0,0.35)"
 };
 
 const sectionTitle = {
-  fontSize: 16,
+  fontSize: 20,
   fontWeight: 900,
-  marginBottom: 12
+  marginBottom: 14
 };
 
-function hourRowStyle(prob, mmVal) {
-  const hot = prob >= 60 || mmVal >= 1.5;
-  const warm = !hot && (prob >= 30 || mmVal >= 0.2);
-
-  return {
-    display: "grid",
-    gridTemplateColumns: "80px 80px 100px 90px 90px 1fr",
-    gap: 10,
-    padding: "10px 12px",
-    borderRadius: 14,
-    background: hot
-      ? "rgba(255,84,104,0.12)"
-      : warm
-      ? "rgba(255,200,92,0.10)"
-      : "rgba(255,255,255,0.03)",
-    border: hot
-      ? "1px solid rgba(255,84,104,0.18)"
-      : warm
-      ? "1px solid rgba(255,200,92,0.16)"
-      : "1px solid rgba(255,255,255,0.05)"
-  };
-}
-
-function dayRowStyle(prob) {
-  const hot = prob >= 60;
-  const warm = !hot && prob >= 30;
-
-  return {
-    display: "grid",
-    gridTemplateColumns: "110px 180px 140px 110px 90px 110px",
-    gap: 10,
-    padding: "12px 14px",
-    borderRadius: 14,
-    background: hot
-      ? "rgba(255,84,104,0.12)"
-      : warm
-      ? "rgba(255,200,92,0.10)"
-      : "rgba(255,255,255,0.03)",
-    border: hot
-      ? "1px solid rgba(255,84,104,0.18)"
-      : warm
-      ? "1px solid rgba(255,200,92,0.16)"
-      : "1px solid rgba(255,255,255,0.05)"
-  };
-}
+const smallMeta = {
+  color: "#a8c3e6",
+  fontSize: 11
+};
 
 const radarBtnStyle = {
   display: "block",
@@ -377,5 +473,5 @@ const radarBtnStyle = {
   border: "1px solid rgba(255,255,255,0.08)",
   borderRadius: 14,
   padding: "12px 14px",
-  background: "rgba(255,255,255,0.04)"
+  background: "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))"
 };
