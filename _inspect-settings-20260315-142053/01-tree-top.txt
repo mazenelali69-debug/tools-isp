@@ -1,0 +1,85 @@
+=== TOP LEVEL ===
+
+Mode   Length   LastWriteTime         Name                                                
+----   ------   -------------         ----                                                
+d--h--          3/15/2026 2:17:00 PM  .git                                                
+d-----          3/2/2026 8:14:56 PM   .vite                                               
+d-----          3/10/2026 1:44:49 PM  android                                             
+d-----          3/15/2026 12:36:16 PM backend                                             
+d-----          3/7/2026 5:29:42 PM   data                                                
+d-----          3/14/2026 2:47:10 PM  frontend                                            
+d-----          3/10/2026 1:20:15 PM  node_modules                                        
+d-----          3/2/2026 8:46:22 PM   ops                                                 
+d-----          3/2/2026 11:41:14 AM  viewer                                              
+d-----          3/9/2026 8:54:49 PM   _DASHBOARD_CLEANUP                                  
+d-----          3/9/2026 9:37:08 PM   _DASHBOARD_EDIT_20260309-213708                     
+d-----          3/9/2026 10:29:23 PM  _DASH_8_GAUGES                                      
+d-----          3/9/2026 10:35:22 PM  _DASH_BOTTOM_FIX_20260309-223522                    
+d-----          3/9/2026 10:23:34 PM  _DASH_FULLWIDTH_TOPBUSY                             
+d-----          3/9/2026 10:15:56 PM  _DASH_GRAFANA_WIDE_20260309-221556                  
+d-----          3/9/2026 9:24:48 PM   _DASH_HEATBAR_BACKUP                                
+d-----          3/9/2026 9:27:34 PM   _DASH_HEATBAR_FIX                                   
+d-----          3/9/2026 9:50:04 PM   _DASH_TOPBUSY_TRUESTYLE                             
+d-----          3/9/2026 9:35:58 PM   _GAUGE_PATCH                                        
+d-----          3/15/2026 2:20:53 PM  _inspect-settings-20260315-142053                   
+d-----          3/9/2026 9:09:20 PM   _NETWORK_MAP_BACKUP                                 
+d-----          3/9/2026 9:04:47 PM   _PROJECT_BACKUP_20260309-210447                     
+d-----          3/11/2026 4:12:41 PM  _SAVES                                              
+d-----          3/9/2026 10:08:30 PM  _TOPBUSY_HEATSTRIP_RESET                            
+d-----          3/9/2026 10:04:24 PM  _TOPBUSY_TRUE_RESET                                 
+d-----          3/9/2026 9:58:35 PM   _TOPBUSY_WIDER_METRIC                               
+d-----          3/9/2026 9:45:08 PM   _TOP_BUSY_STYLE_FIX                                 
+-a---- 1048     3/14/2026 12:20:07 PM .gitignore                                          
+-a---- 14       3/2/2026 8:12:59 PM   .run-pids-tools-isp.txt                             
+-a---- 91519250 3/5/2026 12:14:10 PM  backup-liveping-20260305-121244.zip                 
+-a---- 15553    3/1/2026 2:31:13 PM   C                                                   
+-a---- 94       3/10/2026 1:22:01 PM  capacitor.config.json                               
+-a---- 453      2/27/2026 2:38:22 PM  ecosystem.config.js                                 
+-a---- 289      2/27/2026 2:24:56 PM  ecosystem.frontend.config.js                        
+-a---- 108331   3/7/2026 12:11:47 PM  ETH_DIAG2_20260307-121136.txt                       
+-a---- 2355     3/7/2026 12:09:43 PM  ETH_DIAG_20260307-120942.txt                        
+-a---- 5335     3/10/2026 7:38:24 PM  fix-tplink-jetstream.ps1                            
+-a---- 478820   3/5/2026 12:11:45 PM  LIVEPING_PROJECT_SCAN.txt                           
+-a---- 99       3/3/2026 12:17:54 PM  neighbors-ranges.txt                                
+-a---- 38390    3/10/2026 1:23:15 PM  package-lock.json                                   
+-a---- 128      3/10/2026 1:23:15 PM  package.json                                        
+-a---- 855      2/27/2026 2:07:05 PM  RUN-ALL-tools-isp.ps1                               
+-a---- 31021808 3/3/2026 1:47:58 PM   tools-isp-export-20260303-134754.zip                
+-a---- 471596   3/9/2026 12:57:47 PM  tools-isp-source-20260309-125746.zip                
+-a---- 2244036  3/9/2026 12:58:42 PM  tools-isp-source-dump-20260309-125746.txt           
+-a---- 31969    3/10/2026 7:26:05 PM  TPLink_Diag_20260310_192523.txt                     
+-a---- 3600     3/9/2026 9:09:21 PM   _APP_NETWORKMAP_FIX_20260309-211158.jsx             
+-a---- 33241288 3/1/2026 2:31:13 PM   _backup-frontend-STABLE-20260228-144433.zip         
+-a---- 1199761  3/9/2026 7:31:48 PM   _CHATGPT_AUDIT_20260309-193017.zip                  
+-a---- 11745    3/9/2026 8:55:40 PM   _DASH_FIX_20260309-205656.jsx                       
+-a---- 12754    3/9/2026 9:37:08 PM   _DASH_REMOVE_BOTTOM_20260309-213904.jsx             
+-a---- 12759    3/9/2026 9:39:04 PM   _DASH_REMOVE_BOTTOM_FIX_20260309-214012.jsx         
+-a---- 20467    3/9/2026 11:59:23 PM  _DASH_SERVICEPING_UPLINKSTYLE_20260310-001311.jsx   
+-a---- 123375   3/9/2026 10:29:24 PM  _DPG_STYLE_FIX_20260309-235546.css                  
+-a---- 20522    3/9/2026 11:51:52 PM  _DPG_TRUE_SHAPE_20260309-235923.jsx                 
+-a---- 12453    3/9/2026 10:15:56 PM  _FIX_GRAFANA_ROW_20260309-221704.jsx                
+-a---- 12453    3/9/2026 10:15:56 PM  _FIX_GRAFANA_ROW_REGEX_20260309-221756.jsx          
+-a---- 20520    3/9/2026 10:35:23 PM  _FIX_GRAFANA_ROW_REGEX_20260309-234254.jsx          
+-a---- 11654    3/9/2026 9:59:25 PM   _FIX_HEATBAR_MAX_20260309-220041.jsx                
+-a---- 11652    3/9/2026 9:58:36 PM   _FIX_MAX_UNDEFINED_20260309-215925.jsx              
+-a---- 20520    3/9/2026 10:35:23 PM  _FIX_RENDER_SERVICEPING_20260309-234741.jsx         
+-a---- 20522    3/9/2026 11:47:41 PM  _INSERT_SERVICEPING_20260309-234924.jsx             
+-a---- 129148   3/9/2026 11:55:46 PM  _METRICS_BAR_RESIZE_20260310-003400.css             
+-a---- 132274   3/10/2026 12:38:43 AM _METRICS_ONE_LINE_20260310-004223.css               
+-a---- 130680   3/10/2026 12:34:00 AM _METRICS_ULTRA_THIN_20260310-003843.css             
+-a---- 68695    3/11/2026 3:54:21 PM  _NOC_ALERTS_MULTI_20260310-083132.js                
+-a---- 25038    3/10/2026 12:28:00 AM _PING_GAUGES_SHRINK_REMOVE_TITLE_20260310-005101.jsx
+-a---- 20524    3/9/2026 11:49:25 PM  _RECOVER_AND_RENDER_SERVICEPING_20260309-235152.jsx 
+-a---- 25874    3/10/2026 12:22:24 AM _REMOVE_FULL_BOXES_20260310-002515.jsx              
+-a---- 26555    3/10/2026 12:15:01 AM _REMOVE_HEALTH_OPERATIONS_20260310-002224.jsx       
+-a---- 25935    3/10/2026 12:25:15 AM _REMOVE_HERO_HEALTH_EXACT_20260310-002800.jsx       
+-a---- 110155   3/9/2026 9:53:59 PM   _TOPBUSY_LINEWIDTH_20260309-215541.css              
+-a---- 107628   3/9/2026 9:50:04 PM   _TOPBUSY_SIZE_TUNE_20260309-215359.css              
+-a---- 1062     3/10/2026 10:12:50 AM _WELCOME_CENTER_GLASS_20260310-101727.html          
+-a---- 24794    3/10/2026 12:51:01 AM _WELCOME_TOAST_20260310-100705.jsx                  
+-a---- 67259    3/11/2026 3:54:21 PM  _WHATSAPP_ALERT_PATCH_20260310-014535.js            
+-a---- 68695    3/11/2026 3:54:21 PM  _WHATSAPP_ALERT_PATCH_20260310-081235.js            
+-a---- 68695    3/11/2026 3:54:21 PM  _WHATSAPP_ALERT_PATCH_20260310-081323.js            
+
+
+
