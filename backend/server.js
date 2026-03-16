@@ -17,6 +17,7 @@ const { execFile } = require("child_process");
 const express = require("express");
 const http = require("http");
 const cors = require("cors");
+const session = require("express-session");
 const { Server } = require("socket.io");
 const snmp = require("net-snmp");
 const { v4: uuidv4 } = require("uuid");
@@ -25,8 +26,11 @@ process.on("uncaughtException", (err) => console.error("?? UncaughtException:", 
 process.on("unhandledRejection", (err) => console.error("?? UnhandledRejection:", err));
 
 const historyRouter = require("./routes/history");
+const authRouter = require("./routes/auth");
 const { appendUplinkHistory } = require("./lib/historyStore");
 const app = express();
+
+app.set("trust proxy", 1);
 
 // =====================================
 // CALLMEBOT_WHATSAPP_HELPER_START
@@ -3435,6 +3439,7 @@ app.post("/api/topology/nodes", async (req, res) => {
     res.status(500).json({ ok:false, error:String(e && e.message || e) });
   }
 });
+
 
 
 
