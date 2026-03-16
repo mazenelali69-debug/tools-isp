@@ -1,4 +1,4 @@
-import AviatHistoryPage from "./pages/AviatHistoryPage.jsx";
+﻿import AviatHistoryPage from "./pages/AviatHistoryPage.jsx";
 import IspTopologyPage from "./pages/IspTopologyPage.jsx";
 import React, { useMemo, useState, useEffect } from "react";
 import HistoryPage from "./pages/HistoryPage";
@@ -13,7 +13,7 @@ import LivePingPage from "./pages/LivePingPage";
 import MonitorStreetPage from "./pages/MonitorStreetPage";
 import NetworkMapPage from "./pages/NetworkMapPage";
 import TpLinkJetstreamPage from "./pages/TpLinkJetstreamPage";
-import WeatherTripoliPage from "./pages/WeatherTripoliPage.jsx";
+import WeatherTripoliPageV3 from "./pages/WeatherTripoliPageV3.jsx";
 
 const STORAGE_KEY = "toolsisp_windows_v1";
 
@@ -47,7 +47,7 @@ export default function App() {
       ip: type === "ping" ? "88.88.88.10" : undefined,
       community: type === "monitor" ? "public" : undefined,
       title:
-        type === "ping" ? "Ping ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â 88.88.88.10" :
+        type === "ping" ? "Ping ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â 88.88.88.10" :
         type === "monitor" ? "Monitor" :
         "Note",
       x: 140 + (windows.length * 18),
@@ -123,11 +123,12 @@ export default function App() {
       ) : active === "isptopology" ? (
         <IspTopologyPage />
       ) : active === "weathertripoli" ? (
-        <WeatherTripoliPage />
+        <WeatherTripoliPageV3 />
       ) : (
         <DashboardPage windows={windows} setWindows={setWindows} />
       )}
     </AppShell>
   );
 }
+
 
