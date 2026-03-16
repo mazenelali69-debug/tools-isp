@@ -125,10 +125,96 @@ function makeUrl() {
   );
 }
 
+
+/* WEATHER_ACCURACY_ENGINE_V1 */
+
+
+/* WEATHER_FUSION_ENGINE_V1 */
+
+function fuseTemperature(openMeteoTemp, metTemp){
+  if (metTemp === null || metTemp === undefined) return openMeteoTemp
+  return Math.round((Number(openMeteoTemp || 0) + Number(metTemp || 0)) / 2)
+}
+
+function fuseRain(openRain, metRain){
+  if (metRain === null || metRain === undefined) return openRain
+
+  const avg = (Number(openRain || 0) + Number(metRain || 0)) / 2
+
+  if (avg >= 5) return "Heavy Rain"
+  if (avg >= 1) return "Rain Likely"
+  if (avg > 0) return "Light Rain"
+  return "No Rain"
+}
+
+function computeWeatherConfidence(current) {
+  let score = 0
+
+  if (current.temperature_2m !== undefined) score += 25
+  if (current.wind_speed_10m !== undefined) score += 25
+  if (current.relative_humidity_2m !== undefined) score += 25
+  if (current.pressure_msl !== undefined) score += 25
+
+  if (score >= 90) return { label: "High", color: "#32d296" }
+  if (score >= 60) return { label: "Medium", color: "#ffd166" }
+  return { label: "Low", color: "#ff6b6b" }
+}
+
+function computeRainRisk(current) {
+  const rain = Number(current.precipitation || 0)
+
+  if (rain >= 5) return "Heavy Rain"
+  if (rain >= 1) return "Rain Likely"
+  if (rain > 0) return "Light Rain"
+  return "No Rain"
+}
+
+
+/* WEATHER_PROVIDER_METNORWAY */
+
+async function fetchMetNorway(lat, lon) {
+  try {
+
+    const url = `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${lat}&lon=${lon}`
+
+    const res = await fetch(url, {
+      headers:{
+        "User-Agent":"tools-isp-weather"
+      }
+    })
+
+    const data = await res.json()
+
+    const series = data?.properties?.timeseries || []
+    const first = series[0] || null
+    const now = first?.data?.instant?.details || {}
+
+    const next1h = first?.data?.next_1_hours?.details || {}
+    const next6h = first?.data?.next_6_hours?.details || {}
+
+    const rain1h = Number(next1h.precipitation_amount || 0)
+    const rain6h = Number(next6h.precipitation_amount || 0)
+    const rainEstimate = rain1h > 0 ? rain1h : (rain6h > 0 ? rain6h / 6 : 0)
+
+    return {
+      temperature: now.air_temperature,
+      humidity: now.relative_humidity,
+      pressure: now.air_pressure_at_sea_level,
+      wind: now.wind_speed,
+      precipitation: rainEstimate
+    }
+
+  } catch(e){
+    console.log("MET Norway error",e)
+    return null
+  }
+}
+
 export default function WeatherTripoliPage() {
   const [data, setData] = useState(null);
   const [updatedAt, setUpdatedAt] = useState("");
   const [err, setErr] = useState("");
+  const [metData, setMetData] = useState(null);
 
   useEffect(() => {
     let dead = false;
@@ -224,7 +310,15 @@ export default function WeatherTripoliPage() {
     return <div style={{ ...pageStyle, color: "#ffb4b4" }}>Weather load failed: {err}</div>;
   }
 
-  const current = data.current || {};
+  const current = data.current
+
+const confidence = computeWeatherConfidence(current)
+const rainRisk = fuseRain(Number(current.precipitation || 0), Number(metData?.precipitation || 0))
+
+const weatherSource = metData ? "Open-Meteo + MET Norway" : "Open-Meteo Model Blend"
+const sourceCheckedAt = new Date().toLocaleTimeString()
+const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
+ || {};
   const currentTheme = severityStyle(severity(Number(current.precipitation || 0) * 20, Number(current.precipitation || 0)));
 
   const liveBadge = (() => {
@@ -504,7 +598,7 @@ export default function WeatherTripoliPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", gap: 18 }}>
               <div>
                 <div className="wt-big-temp" style={{ fontSize: 80, fontWeight: 900, lineHeight: .92 }}>
-                  {round(current.temperature_2m)}°C
+                  {fusedTemp}°C
                 </div>
                 <div style={{ color: "#9bbce5", marginTop: 10, fontSize: 16 }}>
                   {weatherLabel(current.weather_code)}
@@ -761,6 +855,20 @@ const glowC = {
   filter: "blur(70px)",
   pointerEvents: "none"
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
