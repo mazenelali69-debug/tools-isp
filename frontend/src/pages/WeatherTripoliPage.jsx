@@ -38,17 +38,17 @@ function one(v) {
 }
 
 function weatherIcon(code) {
-  if (code === 0) return "â˜€ï¸";
-  if (code === 1 || code === 2) return "ðŸŒ¤ï¸";
-  if (code === 3) return "â˜ï¸";
-  if (code === 45 || code === 48) return "ðŸŒ«ï¸";
-  if (code >= 51 && code <= 57) return "ðŸŒ¦ï¸";
-  if (code >= 61 && code <= 67) return "ðŸŒ§ï¸";
-  if (code >= 71 && code <= 77) return "â„ï¸";
-  if (code >= 80 && code <= 82) return "ðŸŒ¦ï¸";
-  if (code >= 85 && code <= 86) return "ðŸŒ¨ï¸";
-  if (code >= 95) return "â›ˆï¸";
-  return "ðŸŒ¡ï¸";
+  if (code === 0) return "\u2600\uFE0F";
+  if (code === 1 || code === 2) return "\uD83C\uDF24\uFE0F";
+  if (code === 3) return "\u2601\uFE0F";
+  if (code === 45 || code === 48) return "\uD83C\uDF2B\uFE0F";
+  if (code >= 51 && code <= 57) return "\uD83C\uDF26\uFE0F";
+  if (code >= 61 && code <= 67) return "\uD83C\uDF27\uFE0F";
+  if (code >= 71 && code <= 77) return "\u2744\uFE0F";
+  if (code >= 80 && code <= 82) return "\uD83C\uDF26\uFE0F";
+  if (code >= 85 && code <= 86) return "\uD83C\uDF28\uFE0F";
+  if (code >= 95) return "\u26C8\uFE0F";
+  return "\uD83C\uDF21\uFE0F";
 }
 
 function weatherLabel(code) {
@@ -167,7 +167,16 @@ export default function WeatherTripoliPage() {
     }));
   }, [data]);
 
-  const next18 = useMemo(() => hourly.slice(0, 18), [hourly]);
+    const next18 = useMemo(() => {
+    if (!hourly.length) return [];
+    const now = new Date();
+    const idx = hourly.findIndex(h => {
+      const d = new Date(h.time);
+      return d >= now;
+    });
+    const start = idx >= 0 ? idx : 0;
+    return hourly.slice(start, start + 18);
+  }, [hourly]);
 
   const daily = useMemo(() => {
     if (!data?.daily?.time) return [];
@@ -475,7 +484,7 @@ export default function WeatherTripoliPage() {
             </div>
 
             <div style={{ color: "#9bbce5", marginTop: 10, fontSize: 16 }}>
-              {weatherLabel(current.weather_code)} â€¢ Updated {updatedAt}
+              {weatherLabel(current.weather_code)} • Updated {updatedAt}
             </div>
 
             <div className="wt-stats" style={{
@@ -484,7 +493,7 @@ export default function WeatherTripoliPage() {
               gap: 12,
               marginTop: 22
             }}>
-              <MetricCard label="Feels Like" value={`${round(current.apparent_temperature)}Â°C`} />
+              <MetricCard label="Feels Like" value={`${round(current.apparent_temperature)}°C`} />
               <MetricCard label="Humidity" value={`${round(current.relative_humidity_2m)}%`} />
               <MetricCard label="Wind" value={`${round(current.wind_speed_10m)} km/h`} />
               <MetricCard label="Pressure" value={`${round(current.pressure_msl)} hPa`} />
@@ -495,7 +504,7 @@ export default function WeatherTripoliPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", gap: 18 }}>
               <div>
                 <div className="wt-big-temp" style={{ fontSize: 80, fontWeight: 900, lineHeight: .92 }}>
-                  {round(current.temperature_2m)}Â°C
+                  {round(current.temperature_2m)}°C
                 </div>
                 <div style={{ color: "#9bbce5", marginTop: 10, fontSize: 16 }}>
                   {weatherLabel(current.weather_code)}
@@ -511,7 +520,7 @@ export default function WeatherTripoliPage() {
               gap: 10,
               marginTop: 18
             }}>
-              <MiniChip label="Direction" value={`${round(current.wind_direction_10m)}Â°`} />
+              <MiniChip label="Direction" value={`${round(current.wind_direction_10m)}°`} />
               <MiniChip label="Gust" value={`${round(current.wind_gusts_10m)} km/h`} />
               <MiniChip label="Cloud" value={`${round(current.cloud_cover)}%`} />
             </div>
@@ -542,7 +551,7 @@ export default function WeatherTripoliPage() {
                   }}>
                     <div style={{ color: "#9bbce5", fontSize: 12 }}>{fmtHour(h.time)}</div>
                     <div style={{ fontSize: 28, marginTop: 8 }}>{weatherIcon(h.weatherCode)}</div>
-                    <div style={{ fontSize: 28, fontWeight: 900, marginTop: 8 }}>{round(h.tempC)}Â°</div>
+                    <div style={{ fontSize: 28, fontWeight: 900, marginTop: 8 }}>{round(h.tempC)}°</div>
                     <div style={{ color: "#9bbce5", fontSize: 12, marginTop: 8 }}>{weatherLabel(h.weatherCode)}</div>
 
                     <div style={{ marginTop: 10, height: 6, borderRadius: 999, background: "rgba(255,255,255,.06)", overflow: "hidden" }}>
@@ -612,8 +621,8 @@ export default function WeatherTripoliPage() {
                   </div>
 
                   <div style={{ display: "flex", alignItems: "end", gap: 10, marginTop: 14 }}>
-                    <div style={{ fontSize: 34, fontWeight: 900 }}>{round(d.tempMaxC)}Â°</div>
-                    <div style={{ fontSize: 18, color: "#9bbce5" }}>{round(d.tempMinC)}Â°</div>
+                    <div style={{ fontSize: 34, fontWeight: 900 }}>{round(d.tempMaxC)}°</div>
+                    <div style={{ fontSize: 18, color: "#9bbce5" }}>{round(d.tempMinC)}°</div>
                   </div>
 
                   <div style={{ marginTop: 12, height: 7, borderRadius: 999, background: "rgba(255,255,255,.06)", overflow: "hidden" }}>
@@ -752,4 +761,6 @@ const glowC = {
   filter: "blur(70px)",
   pointerEvents: "none"
 };
+
+
 
