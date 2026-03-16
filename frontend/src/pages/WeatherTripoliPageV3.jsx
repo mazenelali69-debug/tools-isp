@@ -3,13 +3,13 @@ import WeatherTripoliPage from "./WeatherTripoliPage.jsx";
 
 export default function WeatherTripoliPageV3() {
   return (
-    <div className="weather-v4-shell">
+    <div className="weather-v5-shell">
       <style>{`
-        .weather-v4-shell{
+        .weather-v5-shell{
           width:100%;
         }
 
-        .weather-v4-command{
+        .weather-v5-command{
           width:100%;
           max-width:1720px;
           margin:0 auto 14px auto;
@@ -18,7 +18,7 @@ export default function WeatherTripoliPageV3() {
           gap:12px;
         }
 
-        .weather-v4-chip{
+        .weather-v5-chip{
           border-radius:18px;
           padding:12px 14px;
           border:1px solid rgba(255,255,255,.08);
@@ -28,7 +28,7 @@ export default function WeatherTripoliPageV3() {
           box-shadow:0 14px 40px rgba(0,0,0,.18);
         }
 
-        .weather-v4-chip-label{
+        .weather-v5-chip-label{
           font-size:10px;
           letter-spacing:.8px;
           text-transform:uppercase;
@@ -37,26 +37,82 @@ export default function WeatherTripoliPageV3() {
           margin-bottom:6px;
         }
 
-        .weather-v4-chip-value{
+        .weather-v5-chip-value{
           font-size:14px;
           color:#f2f7ff;
           font-weight:900;
           line-height:1.2;
         }
 
-        .weather-v4-shell .wt-wrap{
+        .weather-v5-alert{
+          width:100%;
+          max-width:1720px;
+          margin:0 auto 14px auto;
+          border-radius:18px;
+          padding:14px 16px;
+          border:1px solid rgba(255,255,255,.08);
+          background:
+            radial-gradient(300px 100px at 0% 0%, rgba(255,120,120,.12), transparent 60%),
+            linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+          box-shadow:0 14px 40px rgba(0,0,0,.18);
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          gap:12px;
+        }
+
+        .weather-v5-alert-left{
+          display:flex;
+          flex-direction:column;
+          gap:6px;
+        }
+
+        .weather-v5-alert-kicker{
+          font-size:10px;
+          letter-spacing:.8px;
+          text-transform:uppercase;
+          color:#9fc2ea;
+          font-weight:900;
+        }
+
+        .weather-v5-alert-title{
+          font-size:18px;
+          font-weight:1000;
+          color:#fff;
+        }
+
+        .weather-v5-alert-sub{
+          font-size:13px;
+          color:#b8cceb;
+          font-weight:700;
+        }
+
+        .weather-v5-alert-badge{
+          padding:10px 14px;
+          border-radius:999px;
+          font-size:12px;
+          font-weight:1000;
+          letter-spacing:.8px;
+          text-transform:uppercase;
+          color:#fff;
+          background:linear-gradient(180deg, rgba(255,90,90,.24), rgba(255,90,90,.12));
+          border:1px solid rgba(255,120,120,.26);
+          white-space:nowrap;
+        }
+
+        .weather-v5-shell .wt-wrap{
           width:100% !important;
           max-width:1720px !important;
           gap:18px !important;
         }
 
-        .weather-v4-shell .wt-hero,
-        .weather-v4-shell .wt-mid{
+        .weather-v5-shell .wt-hero,
+        .weather-v5-shell .wt-mid{
           gap:16px !important;
           align-items:stretch !important;
         }
 
-        .weather-v4-shell .wt-livebox{
+        .weather-v5-shell .wt-livebox{
           position:relative !important;
           overflow:hidden !important;
           border-radius:32px !important;
@@ -74,7 +130,7 @@ export default function WeatherTripoliPageV3() {
           backdrop-filter:blur(14px) !important;
         }
 
-        .weather-v4-shell .wt-livebox::before{
+        .weather-v5-shell .wt-livebox::before{
           content:"WEATHER COMMAND";
           position:absolute;
           top:14px;
@@ -86,7 +142,7 @@ export default function WeatherTripoliPageV3() {
           opacity:.9;
         }
 
-        .weather-v4-shell .wt-livebox::after{
+        .weather-v5-shell .wt-livebox::after{
           content:"";
           position:absolute;
           inset:auto 0 0 0;
@@ -95,15 +151,7 @@ export default function WeatherTripoliPageV3() {
           opacity:.95;
         }
 
-        .weather-v4-shell .wt-livebox-title{
-          font-size:12px !important;
-          letter-spacing:.9px !important;
-          color:#8fb6ea !important;
-          text-transform:uppercase !important;
-          font-weight:900 !important;
-        }
-
-        .weather-v4-shell .wt-livebox-temp{
+        .weather-v5-shell .wt-livebox-temp{
           font-size:108px !important;
           line-height:.92 !important;
           letter-spacing:-3px !important;
@@ -114,57 +162,37 @@ export default function WeatherTripoliPageV3() {
             0 0 24px rgba(255,255,255,.06);
         }
 
-        .weather-v4-shell .wt-livebox-label{
+        .weather-v5-shell .wt-livebox-label{
           font-size:26px !important;
           font-weight:1000 !important;
           color:#eef6ff !important;
         }
 
-        .weather-v4-shell .wt-livebox-sub{
+        .weather-v5-shell .wt-livebox-sub{
           font-size:15px !important;
           color:#a9c7ec !important;
           opacity:.96 !important;
         }
 
-        .weather-v4-shell .wt-livebox-badge{
-          background:linear-gradient(180deg, rgba(255,72,90,.20), rgba(255,72,90,.10)) !important;
-          border-color:rgba(255,95,112,.36) !important;
-          box-shadow:0 0 0 1px rgba(255,95,112,.12), 0 10px 30px rgba(255,72,90,.12) !important;
-          font-weight:1000 !important;
-          transform:translateY(2px);
-        }
-
-        .weather-v4-shell .wt-livebox-grid{
+        .weather-v5-shell .wt-livebox-grid{
           gap:14px !important;
           margin-top:24px !important;
         }
 
-        .weather-v4-shell .wt-livebox-kpi{
+        .weather-v5-shell .wt-livebox-kpi{
           border-radius:20px !important;
           padding:16px !important;
           background:linear-gradient(180deg, rgba(7,18,36,.54), rgba(7,14,28,.34)) !important;
           border:1px solid rgba(255,255,255,.08) !important;
-          box-shadow:inset 0 1px 0 rgba(255,255,255,.04) !important;
         }
 
-        .weather-v4-shell .wt-livebox-kpi-label{
-          font-size:10px !important;
-          letter-spacing:.8px !important;
-          color:#89abd2 !important;
-        }
-
-        .weather-v4-shell .wt-livebox-kpi-value{
+        .weather-v5-shell .wt-livebox-kpi-value{
           font-size:28px !important;
           line-height:1.05 !important;
           font-weight:1000 !important;
         }
 
-        .weather-v4-shell .wt-live-side{
-          gap:16px !important;
-          grid-template-rows:auto auto 1fr;
-        }
-
-        .weather-v4-shell .wt-live-side-card{
+        .weather-v5-shell .wt-live-side-card{
           position:relative !important;
           overflow:hidden !important;
           border-radius:26px !important;
@@ -176,42 +204,7 @@ export default function WeatherTripoliPageV3() {
           box-shadow:0 22px 60px rgba(0,0,0,.24) !important;
         }
 
-        .weather-v4-shell .wt-live-side-card::after{
-          content:"";
-          position:absolute;
-          inset:auto 0 0 0;
-          height:1px;
-          background:linear-gradient(90deg, rgba(0,0,0,0), rgba(90,160,255,.7), rgba(0,0,0,0));
-          opacity:.8;
-        }
-
-        .weather-v4-shell .wt-live-side-title{
-          font-size:11px !important;
-          letter-spacing:.75px !important;
-          text-transform:uppercase !important;
-          font-weight:900 !important;
-          color:#93b8e7 !important;
-        }
-
-        .weather-v4-shell .wt-live-side-big{
-          font-size:34px !important;
-          line-height:1 !important;
-          letter-spacing:-1px !important;
-          font-weight:1000 !important;
-          color:#ffffff !important;
-          text-shadow:0 8px 30px rgba(120,170,255,.10);
-        }
-
-        .weather-v4-shell .wt-live-side-note{
-          font-size:13px !important;
-          color:#a7c2e6 !important;
-        }
-
-        .weather-v4-shell .wt-mid > div:last-child{
-          position:relative !important;
-        }
-
-        .weather-v4-shell .wt-mid > div:last-child::before{
+        .weather-v5-shell .wt-mid > div:last-child::before{
           content:"RAIN OPS";
           position:absolute;
           top:-10px;
@@ -228,16 +221,11 @@ export default function WeatherTripoliPageV3() {
           backdrop-filter:blur(8px);
         }
 
-        .weather-v4-shell .wt-mid > div:last-child > div,
-        .weather-v4-shell .wt-hero > div:last-child > div{
-          border-radius:20px !important;
+        .weather-v5-shell .wt-mid > div:last-child{
+          position:relative !important;
         }
 
-        .weather-v4-shell .wt-hour-scroll{
-          padding-bottom:10px !important;
-        }
-
-        .weather-v4-shell .wt-hour-scroll > div{
+        .weather-v5-shell .wt-hour-scroll > div{
           min-width:182px !important;
           border-radius:24px !important;
           padding:16px !important;
@@ -246,18 +234,10 @@ export default function WeatherTripoliPageV3() {
             linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)) !important;
           border:1px solid rgba(255,255,255,.10) !important;
           box-shadow:0 18px 46px rgba(0,0,0,.18) !important;
-          transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease !important;
           position:relative !important;
         }
 
-        .weather-v4-shell .wt-hour-scroll > div:hover{
-          transform:translateY(-2px) !important;
-          border-color:rgba(120,190,255,.24) !important;
-          box-shadow:0 24px 54px rgba(0,0,0,.24) !important;
-        }
-
-        .weather-v4-shell .wt-hour-scroll > div:first-child{
-          transform:translateY(-1px);
+        .weather-v5-shell .wt-hour-scroll > div:first-child{
           border-color:rgba(255,214,102,.40) !important;
           background:
             radial-gradient(260px 100px at 100% 0%, rgba(255,196,0,.14), transparent 60%),
@@ -267,7 +247,7 @@ export default function WeatherTripoliPageV3() {
             0 28px 60px rgba(0,0,0,.24) !important;
         }
 
-        .weather-v4-shell .wt-hour-scroll > div:first-child::after{
+        .weather-v5-shell .wt-hour-scroll > div:first-child::after{
           content:"LIVE";
           position:absolute;
           top:12px;
@@ -279,100 +259,73 @@ export default function WeatherTripoliPageV3() {
           opacity:.95;
         }
 
-        .weather-v4-shell .wt-hour-scroll > div > div:first-child{
-          font-size:12px !important;
-          color:#8fb3df !important;
-          font-weight:800 !important;
-        }
-
-        .weather-v4-shell .wt-hour-scroll > div > div:nth-child(2){
-          font-size:38px !important;
-          margin-top:10px !important;
-        }
-
-        .weather-v4-shell .wt-hour-scroll > div > div:nth-child(3){
-          font-size:15px !important;
-          font-weight:1000 !important;
-          margin-top:8px !important;
-          color:#fff !important;
-          min-height:38px !important;
-        }
-
-        .weather-v4-shell .wt-hour-scroll > div > div:nth-child(5),
-        .weather-v4-shell .wt-hour-scroll > div > div:nth-child(6),
-        .weather-v4-shell .wt-hour-scroll > div > div:nth-child(7){
-          font-size:12px !important;
-          color:#b2c7e8 !important;
-        }
-
         @media (max-width: 1220px){
-          .weather-v4-command{
+          .weather-v5-command{
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
 
-          .weather-v4-shell .wt-livebox-temp{
+          .weather-v5-shell .wt-livebox-temp{
             font-size:82px !important;
           }
         }
 
         @media (max-width: 760px){
-          .weather-v4-command{
+          .weather-v5-command{
             grid-template-columns: 1fr;
           }
 
-          .weather-v4-shell .wt-wrap{
-            gap:14px !important;
+          .weather-v5-alert{
+            flex-direction:column;
+            align-items:flex-start;
           }
 
-          .weather-v4-shell .wt-livebox{
+          .weather-v5-shell .wt-livebox{
             padding:18px !important;
             border-radius:24px !important;
           }
 
-          .weather-v4-shell .wt-livebox-temp{
+          .weather-v5-shell .wt-livebox-temp{
             font-size:62px !important;
             letter-spacing:-2px !important;
           }
 
-          .weather-v4-shell .wt-livebox-label{
-            font-size:19px !important;
-          }
-
-          .weather-v4-shell .wt-livebox-kpi-value{
-            font-size:22px !important;
-          }
-
-          .weather-v4-shell .wt-live-side-big{
-            font-size:28px !important;
-          }
-
-          .weather-v4-shell .wt-hour-scroll > div{
+          .weather-v5-shell .wt-hour-scroll > div{
             min-width:154px !important;
             border-radius:20px !important;
           }
         }
       `}</style>
 
-      <div className="weather-v4-command">
-        <div className="weather-v4-chip">
-          <div className="weather-v4-chip-label">Data Source</div>
-          <div className="weather-v4-chip-value">Open-Meteo + MET Norway</div>
+      <div className="weather-v5-command">
+        <div className="weather-v5-chip">
+          <div className="weather-v5-chip-label">Data Source</div>
+          <div className="weather-v5-chip-value">Open-Meteo + MET Norway</div>
         </div>
 
-        <div className="weather-v4-chip">
-          <div className="weather-v4-chip-label">Engine</div>
-          <div className="weather-v4-chip-value">Fusion V1 Active</div>
+        <div className="weather-v5-chip">
+          <div className="weather-v5-chip-label">Engine</div>
+          <div className="weather-v5-chip-value">Fusion V1 Active</div>
         </div>
 
-        <div className="weather-v4-chip">
-          <div className="weather-v4-chip-label">Mode</div>
-          <div className="weather-v4-chip-value">Command Center</div>
+        <div className="weather-v5-chip">
+          <div className="weather-v5-chip-label">Mode</div>
+          <div className="weather-v5-chip-value">Command Center</div>
         </div>
 
-        <div className="weather-v4-chip">
-          <div className="weather-v4-chip-label">Status</div>
-          <div className="weather-v4-chip-value">Live Weather Board</div>
+        <div className="weather-v5-chip">
+          <div className="weather-v5-chip-label">Status</div>
+          <div className="weather-v5-chip-value">Live Weather Board</div>
         </div>
+      </div>
+
+      <div className="weather-v5-alert">
+        <div className="weather-v5-alert-left">
+          <div className="weather-v5-alert-kicker">Weather Operations Alert</div>
+          <div className="weather-v5-alert-title">Tripoli live weather board is running in fusion mode</div>
+          <div className="weather-v5-alert-sub">Source blend active • Rain monitoring enabled • Command center mode</div>
+        </div>
+
+        <div className="weather-v5-alert-badge">LIVE OPS</div>
       </div>
 
       <WeatherTripoliPage />

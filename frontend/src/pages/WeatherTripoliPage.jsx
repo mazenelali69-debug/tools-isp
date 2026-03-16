@@ -147,6 +147,17 @@ function fuseRain(openRain, metRain){
   return "No Rain"
 }
 
+
+function computeAlertLevel(current) {
+  const wind = Number(current.wind_speed_10m || 0)
+  const rain = Number(current.precipitation || 0)
+  const gust = Number(current.wind_gusts_10m || 0)
+
+  if (rain >= 5 || gust >= 60) return { label: "Severe", color: "#ff6b6b" }
+  if (rain >= 1 || wind >= 35) return { label: "Watch", color: "#ffd166" }
+  return { label: "Stable", color: "#32d296" }
+}
+
 function computeWeatherConfidence(current) {
   let score = 0
 
@@ -313,6 +324,7 @@ export default function WeatherTripoliPage() {
   const current = data.current
 
 const confidence = computeWeatherConfidence(current)
+const alertLevel = computeAlertLevel(current)
 const rainRisk = fuseRain(Number(current.precipitation || 0), Number(metData?.precipitation || 0))
 
 const weatherSource = metData ? "Open-Meteo + MET Norway" : "Open-Meteo Model Blend"
@@ -855,6 +867,8 @@ const glowC = {
   filter: "blur(70px)",
   pointerEvents: "none"
 };
+
+
 
 
 
