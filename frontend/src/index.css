@@ -648,7 +648,7 @@ hr, .tools-divider{
 }
 
 /* TOOLSISP_NO_SCROLL_v1 - prevent page scroll so fixed windows drag/resize stays sane */
-html, body { overflow: hidden !important; height: 100% !important; }
+html, body { overflow-x: hidden !important; overflow-y: auto !important; height: 100% !important; }
 
 
 /* =========================
@@ -6239,3 +6239,4 @@ html, body, #root {
   background: rgba(127,167,216,.35);
   border-radius: 999px;
 }
+

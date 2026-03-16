@@ -565,3 +565,67 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
 
 
 
+
+
+
+
+/* AI_RESPONSIVE_ENGINE_V1 */
+.ti-app, .appShell{
+  width:100%;
+  min-width:0;
+}
+
+.ti-main, .appMain{
+  flex:1 1 auto;
+  min-width:0;
+  width:100%;
+}
+
+.ti-content, .appContent{
+  width:100%;
+  min-width:0;
+  overflow-x:auto;
+}
+
+@media (max-width: 980px){
+  .ti-app, .appShell{
+    display:block !important;
+  }
+
+  .ti-side, .side{
+    width:100% !important;
+    min-width:0 !important;
+    border-right:none !important;
+    border-bottom:1px solid rgba(255,255,255,.08) !important;
+  }
+
+  .ti-main, .appMain{
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+  .ti-topbar, .topbar{
+    height:auto !important;
+    min-height:52px !important;
+    padding:10px 12px !important;
+    gap:10px !important;
+    flex-wrap:wrap !important;
+  }
+
+  .ti-topbar__actions{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    gap:8px !important;
+    width:100% !important;
+  }
+
+  .ti-content, .appContent{
+    padding:10px !important;
+  }
+}
+
+@media (min-width: 1600px){
+  .ti-content, .appContent{
+    padding:18px 20px !important;
+  }
+}
