@@ -2,13 +2,13 @@
 .appShell{ display:flex; min-height:100vh; width:100%; }
 
 .side{
-  width:240px; flex:0 0 240px;
+  width:240px; min-width:240px;
   border-right:1px solid rgba(255,255,255,.08);
   background: rgba(10,12,16,.55);
   backdrop-filter: blur(10px);
   display:flex; flex-direction:column;
 }
-.side--collapsed{ width:64px; flex:0 0 64px; }
+.side--collapsed{ width:64px; min-width:64px; }
 
 .sideHead{ display:flex; align-items:center; justify-content:space-between; padding:12px 10px; gap:10px; }
 .sideBrand{ display:flex; align-items:center; gap:10px; min-width:0; }
@@ -224,7 +224,7 @@
   position:absolute; inset:-7px;
   border-radius:999px;
   opacity:.0;
-  transform: scale(.75);
+  
   transition: opacity .18s ease;
 }
 .lpCard.ok .lpDot{
@@ -246,9 +246,9 @@
   background: radial-gradient(circle, rgba(255,90,120,.35), rgba(0,0,0,0) 70%);
 }
 @keyframes lpPulse{
-  0%{ transform: scale(.75); opacity:.35; }
-  60%{ transform: scale(1.05); opacity:.15; }
-  100%{ transform: scale(.75); opacity:.35; }
+  0%{  opacity:.35; }
+  60%{  opacity:.15; }
+  100%{  opacity:.35; }
 }
 
 /* Metrics */
@@ -562,4 +562,6 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
   background: rgba(0,0,0,.18);
 }
 /* ETH-UI-END */
+
+
 
