@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+﻿import React, { useEffect, useMemo, useState } from "react";
 
 const LAT = 34.4367;
 const LON = 35.8497;
@@ -38,17 +38,17 @@ function one(v) {
 }
 
 function weatherIcon(code) {
-  if (code === 0) return "☀️";
-  if (code === 1 || code === 2) return "🌤️";
-  if (code === 3) return "☁️";
-  if (code === 45 || code === 48) return "🌫️";
-  if (code >= 51 && code <= 57) return "🌦️";
-  if (code >= 61 && code <= 67) return "🌧️";
-  if (code >= 71 && code <= 77) return "❄️";
-  if (code >= 80 && code <= 82) return "🌦️";
-  if (code >= 85 && code <= 86) return "🌨️";
-  if (code >= 95) return "⛈️";
-  return "🌡️";
+  if (code === 0) return "â˜€ï¸";
+  if (code === 1 || code === 2) return "ðŸŒ¤ï¸";
+  if (code === 3) return "â˜ï¸";
+  if (code === 45 || code === 48) return "ðŸŒ«ï¸";
+  if (code >= 51 && code <= 57) return "ðŸŒ¦ï¸";
+  if (code >= 61 && code <= 67) return "ðŸŒ§ï¸";
+  if (code >= 71 && code <= 77) return "â„ï¸";
+  if (code >= 80 && code <= 82) return "ðŸŒ¦ï¸";
+  if (code >= 85 && code <= 86) return "ðŸŒ¨ï¸";
+  if (code >= 95) return "â›ˆï¸";
+  return "ðŸŒ¡ï¸";
 }
 
 function weatherLabel(code) {
@@ -218,6 +218,18 @@ export default function WeatherTripoliPage() {
   const current = data.current || {};
   const currentTheme = severityStyle(severity(Number(current.precipitation || 0) * 20, Number(current.precipitation || 0)));
 
+  const liveBadge = (() => {
+    const wind = Number(current.wind_speed_10m || 0);
+    const rain = Number(current.rain || current.showers || current.precipitation || 0);
+    const cloud = Number(current.cloud_cover || 0);
+    if (rain >= 1) return "rain live";
+    if (wind >= 28) return "wind alert";
+    if (cloud <= 20) return "clear live";
+    return "live";
+  })();
+
+  const strongestHour = rainInfo?.strongest || null;
+
   return (
     <div style={pageStyle}>
       <style>{`
@@ -267,6 +279,184 @@ export default function WeatherTripoliPage() {
           .wt-stats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
           .wt-daily-grid { grid-template-columns: 1fr !important; }
         }
+
+        /* SAFE_WEATHER_LIVEBOX_V1 */
+        .wt-livebox {
+          position: relative;
+          overflow: hidden;
+          border-radius: 28px;
+          padding: 24px;
+          border: 1px solid rgba(120,190,255,.18);
+          background:
+            radial-gradient(700px 320px at 15% 10%, rgba(87,180,255,.18), transparent 55%),
+            radial-gradient(500px 240px at 85% 20%, rgba(100,255,210,.10), transparent 55%),
+            linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+          box-shadow: 0 24px 80px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.06);
+          backdrop-filter: blur(14px);
+        }
+
+        .wt-livebox::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,.04), transparent);
+          pointer-events: none;
+        }
+
+        .wt-livebox-top {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 16px;
+          margin-bottom: 22px;
+        }
+
+        .wt-livebox-title {
+          font-size: 13px;
+          color: #9fc2ea;
+          font-weight: 900;
+          letter-spacing: .55px;
+          text-transform: uppercase;
+        }
+
+        .wt-livebox-temp {
+          font-size: 78px;
+          line-height: .94;
+          font-weight: 1000;
+          letter-spacing: -2px;
+          margin: 10px 0 8px;
+          color: #fff;
+        }
+
+        .wt-livebox-label {
+          font-size: 20px;
+          font-weight: 900;
+          color: #eef6ff;
+        }
+
+        .wt-livebox-sub {
+          color: #9bbce5;
+          font-size: 14px;
+          margin-top: 8px;
+        }
+
+        .wt-livebox-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 12px;
+          border-radius: 999px;
+          background: rgba(255,70,70,.14);
+          border: 1px solid rgba(255,70,70,.24);
+          color: #ffd7d7;
+          font-size: 12px;
+          font-weight: 900;
+          letter-spacing: .6px;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+
+        .wt-livebox-badge::before {
+          content: "";
+          width: 8px;
+          height: 8px;
+          border-radius: 999px;
+          background: #ff5f70;
+          box-shadow: 0 0 12px rgba(255,95,112,.65);
+        }
+
+        .wt-livebox-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 12px;
+          margin-top: 22px;
+        }
+
+        .wt-livebox-kpi {
+          border-radius: 18px;
+          padding: 14px;
+          border: 1px solid rgba(255,255,255,.10);
+          background: rgba(6,14,28,.32);
+        }
+
+        .wt-livebox-kpi-label {
+          font-size: 11px;
+          color: #90afd6;
+          text-transform: uppercase;
+          letter-spacing: .55px;
+          margin-bottom: 8px;
+          font-weight: 800;
+        }
+
+        .wt-livebox-kpi-value {
+          font-size: 24px;
+          font-weight: 900;
+          color: #fff;
+        }
+
+        .wt-live-side {
+          display: grid;
+          gap: 14px;
+        }
+
+        .wt-live-side-card {
+          border-radius: 22px;
+          padding: 18px;
+          border: 1px solid rgba(255,255,255,.10);
+          background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+          box-shadow: 0 18px 50px rgba(0,0,0,.22);
+        }
+
+        .wt-live-side-title {
+          font-size: 12px;
+          color: #9fc2ea;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: .5px;
+          margin-bottom: 10px;
+        }
+
+        .wt-live-side-big {
+          font-size: 28px;
+          font-weight: 1000;
+          color: #fff;
+        }
+
+        .wt-live-side-note {
+          color: #9bbce5;
+          font-size: 13px;
+          margin-top: 6px;
+        }
+
+        @media (max-width: 1220px) {
+          .wt-livebox-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 760px) {
+          .wt-livebox {
+            padding: 18px;
+            border-radius: 22px;
+          }
+
+          .wt-livebox-top {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .wt-livebox-temp {
+            font-size: 56px;
+          }
+
+          .wt-livebox-label {
+            font-size: 17px;
+          }
+
+          .wt-livebox-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
       `}</style>
 
       <div style={glowA} />
@@ -285,7 +475,7 @@ export default function WeatherTripoliPage() {
             </div>
 
             <div style={{ color: "#9bbce5", marginTop: 10, fontSize: 16 }}>
-              {weatherLabel(current.weather_code)} • Updated {updatedAt}
+              {weatherLabel(current.weather_code)} â€¢ Updated {updatedAt}
             </div>
 
             <div className="wt-stats" style={{
@@ -294,7 +484,7 @@ export default function WeatherTripoliPage() {
               gap: 12,
               marginTop: 22
             }}>
-              <MetricCard label="Feels Like" value={`${round(current.apparent_temperature)}°C`} />
+              <MetricCard label="Feels Like" value={`${round(current.apparent_temperature)}Â°C`} />
               <MetricCard label="Humidity" value={`${round(current.relative_humidity_2m)}%`} />
               <MetricCard label="Wind" value={`${round(current.wind_speed_10m)} km/h`} />
               <MetricCard label="Pressure" value={`${round(current.pressure_msl)} hPa`} />
@@ -305,7 +495,7 @@ export default function WeatherTripoliPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", gap: 18 }}>
               <div>
                 <div className="wt-big-temp" style={{ fontSize: 80, fontWeight: 900, lineHeight: .92 }}>
-                  {round(current.temperature_2m)}°C
+                  {round(current.temperature_2m)}Â°C
                 </div>
                 <div style={{ color: "#9bbce5", marginTop: 10, fontSize: 16 }}>
                   {weatherLabel(current.weather_code)}
@@ -321,7 +511,7 @@ export default function WeatherTripoliPage() {
               gap: 10,
               marginTop: 18
             }}>
-              <MiniChip label="Direction" value={`${round(current.wind_direction_10m)}°`} />
+              <MiniChip label="Direction" value={`${round(current.wind_direction_10m)}Â°`} />
               <MiniChip label="Gust" value={`${round(current.wind_gusts_10m)} km/h`} />
               <MiniChip label="Cloud" value={`${round(current.cloud_cover)}%`} />
             </div>
@@ -352,7 +542,7 @@ export default function WeatherTripoliPage() {
                   }}>
                     <div style={{ color: "#9bbce5", fontSize: 12 }}>{fmtHour(h.time)}</div>
                     <div style={{ fontSize: 28, marginTop: 8 }}>{weatherIcon(h.weatherCode)}</div>
-                    <div style={{ fontSize: 28, fontWeight: 900, marginTop: 8 }}>{round(h.tempC)}°</div>
+                    <div style={{ fontSize: 28, fontWeight: 900, marginTop: 8 }}>{round(h.tempC)}Â°</div>
                     <div style={{ color: "#9bbce5", fontSize: 12, marginTop: 8 }}>{weatherLabel(h.weatherCode)}</div>
 
                     <div style={{ marginTop: 10, height: 6, borderRadius: 999, background: "rgba(255,255,255,.06)", overflow: "hidden" }}>
@@ -422,8 +612,8 @@ export default function WeatherTripoliPage() {
                   </div>
 
                   <div style={{ display: "flex", alignItems: "end", gap: 10, marginTop: 14 }}>
-                    <div style={{ fontSize: 34, fontWeight: 900 }}>{round(d.tempMaxC)}°</div>
-                    <div style={{ fontSize: 18, color: "#9bbce5" }}>{round(d.tempMinC)}°</div>
+                    <div style={{ fontSize: 34, fontWeight: 900 }}>{round(d.tempMaxC)}Â°</div>
+                    <div style={{ fontSize: 18, color: "#9bbce5" }}>{round(d.tempMinC)}Â°</div>
                   </div>
 
                   <div style={{ marginTop: 12, height: 7, borderRadius: 999, background: "rgba(255,255,255,.06)", overflow: "hidden" }}>
@@ -562,3 +752,4 @@ const glowC = {
   filter: "blur(70px)",
   pointerEvents: "none"
 };
+
