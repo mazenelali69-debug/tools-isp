@@ -130,7 +130,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     sameSite: "lax",
-    secure: String(process.env.ENTRA_COOKIE_SECURE || "false").ToLower() === "true",
+    secure: String(process.env.ENTRA_COOKIE_SECURE || "false").toLowerCase() === "true",
     maxAge: 12 * 60 * 60 * 1000
   }
 }));
@@ -3474,6 +3474,7 @@ app.post("/api/topology/nodes", async (req, res) => {
     res.status(500).json({ ok:false, error:String(e && e.message || e) });
   }
 });
+
 
 
 
