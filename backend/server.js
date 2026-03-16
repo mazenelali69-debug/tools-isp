@@ -120,6 +120,41 @@ function recordUplinkHistorySample(payload) {
 app.use("/api/history", historyRouter);
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
+
+app.use(session({
+  name: "toolsisp.sid",
+  secret: process.env.SESSION_SECRET || "change-this-session-secret",
+  resave: false,
+  saveUninitialized: false,
+  rolling: true,
+  cookie: {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: String(process.env.ENTRA_COOKIE_SECURE || "false").ToLower() === "true",
+    maxAge: 12 * 60 * 60 * 1000
+  }
+}));
+
+app.use("/auth", authRouter);
+
+app.get("/api/me", (req, res) => {
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ ok: false, authenticated: false });
+  }
+
+  return res.json({
+    ok: true,
+    authenticated: true,
+    user: {
+      username: req.session.user.username,
+      name: req.session.user.name,
+      tenantId: req.session.user.tenantId,
+      oid: req.session.user.oid,
+      roles: req.session.user.roles || []
+    }
+  });
+});
+
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: true, credentials: true } });
 
@@ -3439,6 +3474,7 @@ app.post("/api/topology/nodes", async (req, res) => {
     res.status(500).json({ ok:false, error:String(e && e.message || e) });
   }
 });
+
 
 
 
