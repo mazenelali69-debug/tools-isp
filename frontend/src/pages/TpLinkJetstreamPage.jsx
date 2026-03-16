@@ -1,10 +1,42 @@
-﻿import React, { useEffect, useMemo, useState } from "react";
+﻿import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const POLL_MS = 4000;
 
 function num(v) {
   const n = Number(v);
   return Number.isFinite(n) ? n : 0;
+}
+
+function stableSignature(payload) {
+  try {
+    const list = Array.isArray(payload?.switches) ? payload.switches : [];
+    return JSON.stringify({
+      vlan1559Status: payload?.vlan1559Status ?? "",
+      switches: list.map((s) => ({
+        ok: !!s?.ok,
+        ip: s?.ip ?? "",
+        sysName: s?.sysName ?? "",
+        sysUpTime: num(s?.sysUpTime),
+        memoryPercent: num(s?.memoryPercent),
+        portsTotal: num(s?.portsTotal),
+        portsUp: num(s?.portsUp),
+        portsDown: num(s?.portsDown),
+        vlan1559Status: s?.vlan1559Status ?? "",
+        traffic: {
+          rxMbps: num(s?.traffic?.rxMbps),
+          txMbps: num(s?.traffic?.txMbps)
+        },
+        ethPort: {
+          rxPct: num(s?.ethPort?.rxPct),
+          txPct: num(s?.ethPort?.txPct),
+          label: s?.ethPort?.label ?? "",
+          index: num(s?.ethPort?.index)
+        }
+      }))
+    });
+  } catch {
+    return "";
+  }
 }
 
 function uptimeText(ticks) {
@@ -49,7 +81,7 @@ function gaugeTone(ratio, mode) {
   return { fill: "#7ed36f", text: "#92ea82" };
 }
 
-function GaugeCard({ title, value, display, max = 100, mode = "rx" }) {
+const GaugeCard = React.memo(function GaugeCard({ title, value, display, max = 100, mode = "rx" }) {
   const safeMax = Math.max(1, num(max));
   const n = num(value);
   const ratio = Math.max(0, Math.min(1, n / safeMax));
@@ -99,9 +131,9 @@ function GaugeCard({ title, value, display, max = 100, mode = "rx" }) {
       </div>
     </div>
   );
-}
+});
 
-function SegBar({ title, value, max, unit = "%", valueColor = "#5aa1ff" }) {
+const SegBar = React.memo(function SegBar({ title, value, max, unit = "%", valueColor = "#5aa1ff" }) {
   const n = num(value);
   const safeMax = Math.max(1, num(max));
   const segments = 28;
@@ -143,9 +175,9 @@ function SegBar({ title, value, max, unit = "%", valueColor = "#5aa1ff" }) {
       </div>
     </div>
   );
-}
+});
 
-function UptimeCard({ uptime, liveTrafficMbps }) {
+const UptimeCard = React.memo(function UptimeCard({ uptime, liveTrafficMbps }) {
   return (
     <div style={{ display: "grid", gridTemplateRows: "1fr auto", gap: 4 }}>
       <div style={{ ...panelStyle(), padding: 10, minHeight: 138 }}>
@@ -174,9 +206,9 @@ function UptimeCard({ uptime, liveTrafficMbps }) {
       </div>
     </div>
   );
-}
+});
 
-function DeviceCard({ item, index }) {
+const DeviceCard = React.memo(function DeviceCard({ item, index }) {
   const rxMbps = num(item?.traffic?.rxMbps);
   const txMbps = num(item?.traffic?.txMbps);
   const totalMbps = rxMbps + txMbps;
@@ -243,11 +275,13 @@ function DeviceCard({ item, index }) {
       </div>
     </div>
   );
-}
+});
 
 export default function TpLinkJetstreamPage() {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
+  const lastSigRef = useRef("");
+  const inFlightRef = useRef(false);
 
   useEffect(() => {
     let dead = false;
@@ -324,4 +358,5 @@ export default function TpLinkJetstreamPage() {
     </div>
   );
 }
+
 
