@@ -1,754 +1,415 @@
-﻿import React, { useEffect, useMemo, useRef, useState } from "react";
+﻿import React, { useEffect, useMemo, useState } from "react";
 
-const RANGE_OPTIONS = [
-  { key: "all", label: "All" },
-  { key: "1h", label: "1h" },
-  { key: "6h", label: "6h" },
-  { key: "24h", label: "24h" },
-  { key: "7d", label: "7d" }
-];
+const shell = {
+  minHeight: "100%",
+  color: "#eaf2ff",
+};
 
-const STATIC_UPLINK_OPTIONS = [
-  { value: "", label: "All uplinks" },
-  { value: "uplink_dragon_club", label: "To Dragon Club" },
-  { value: "uplink_c5c_jabal", label: "C5C Jabal" },
-  { value: "uplink_to_office", label: "To Office" },
-  { value: "uplink_pharmacy", label: "To Pharmacy Wahib" },
-  { value: "uplink_abou_taher", label: "To Abou Taher" },
-  { value: "uplink_fast_web", label: "To Office Fast Web" },
-  { value: "uplink_daraj_arid", label: "To Daraj El 3arid" },
-  { value: "uplink_rawda", label: "To Rawda" }
-];
+const panel = {
+  background: "linear-gradient(180deg, rgba(10,18,34,0.96), rgba(8,14,28,0.98))",
+  border: "1px solid rgba(120,160,255,0.18)",
+  borderRadius: 22,
+  boxShadow: "0 18px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03)",
+};
 
-function num(v) {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : 0;
-}
+const softCard = {
+  ...panel,
+  padding: 18,
+};
+
+const labelStyle = {
+  fontSize: 12,
+  fontWeight: 700,
+  letterSpacing: "0.08em",
+  textTransform: "uppercase",
+  opacity: 0.72,
+};
+
+const valueStyle = {
+  fontSize: 34,
+  fontWeight: 900,
+  lineHeight: 1.05,
+  letterSpacing: "-0.02em",
+};
 
 function fmtMbps(v) {
-  return num(v).toFixed(2);
+  const n = Number(v);
+  if (!Number.isFinite(n)) return "-";
+  return n.toFixed(n >= 100 ? 0 : 2) + " Mbps";
 }
 
-function formatTs(ts) {
+function fmtTime(ts) {
   if (!ts) return "-";
-  try {
-    return new Date(ts).toLocaleString();
-  } catch {
-    return ts;
-  }
+  const d = new Date(ts);
+  if (Number.isNaN(d.getTime())) return String(ts);
+  return d.toLocaleString();
 }
 
 function buildHistoryUrl(range, q, uplink) {
   const params = new URLSearchParams();
-  params.set("limit", "300");
-
-  if (range && range !== "all") params.set("range", range);
-  if (uplink && uplink.trim()) params.set("uplink", uplink.trim());
-  if (q && q.trim()) params.set("q", q.trim());
-
+  if (range) params.set("range", range);
+  if (q) params.set("q", q);
+  if (uplink && uplink !== "all") params.set("uplink", uplink);
   return `/api/history/uplink?${params.toString()}`;
 }
 
-function FilterButton({ active, children, onClick }) {
+function Sparkline({ items }) {
+  const width = 1200;
+  const height = 270;
+  const pad = 18;
+
+  const safe = Array.isArray(items) ? items : [];
+  const data = safe.map((x, i) => ({
+    i,
+    rx: Number(x?.rxMbps ?? x?.rx ?? 0),
+    tx: Number(x?.txMbps ?? x?.tx ?? 0),
+  }));
+
+  const maxVal = Math.max(1, ...data.flatMap(d => [d.rx, d.tx]));
+  const xStep = data.length > 1 ? (width - pad * 2) / (data.length - 1) : 0;
+
+  const linePath = (key) => {
+    if (!data.length) return "";
+    return data.map((d, idx) => {
+      const x = pad + idx * xStep;
+      const y = height - pad - ((d[key] / maxVal) * (height - pad * 2));
+      return `${idx === 0 ? "M" : "L"} ${x} ${y}`;
+    }).join(" ");
+  };
+
+  const areaPath = (key) => {
+    if (!data.length) return "";
+    const top = data.map((d, idx) => {
+      const x = pad + idx * xStep;
+      const y = height - pad - ((d[key] / maxVal) * (height - pad * 2));
+      return `${idx === 0 ? "M" : "L"} ${x} ${y}`;
+    }).join(" ");
+    const lastX = pad + (data.length - 1) * xStep;
+    const baseY = height - pad;
+    return `${top} L ${lastX} ${baseY} L ${pad} ${baseY} Z`;
+  };
+
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      style={{
-        padding: "8px 12px",
-        borderRadius: 10,
-        border: active ? "1px solid rgba(122,162,255,.55)" : "1px solid rgba(255,255,255,.10)",
-        background: active ? "rgba(122,162,255,.14)" : "rgba(255,255,255,.03)",
-        color: "#fff",
-        cursor: "pointer",
-        fontSize: 13,
-        fontWeight: active ? 700 : 600
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-
-function UplinkPicker({ value, options, onChange }) {
-  const [open, setOpen] = useState(false);
-  const boxRef = useRef(null);
-
-  const current = options.find(x => x.value === value) || options[0] || { value: "", label: "All uplinks" };
-
-  useEffect(() => {
-    function onDoc(e) {
-      if (!boxRef.current) return;
-      if (!boxRef.current.contains(e.target)) setOpen(false);
-    }
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
-  }, []);
-
-  return (
-    <div ref={boxRef} style={{ position: "relative", minWidth: 190 }}>
-      <button
-        type="button"
-        onClick={() => setOpen(v => !v)}
-        style={{
-          width: "100%",
-          padding: "9px 12px",
-          borderRadius: 10,
-          border: "1px solid rgba(255,255,255,.12)",
-          background: "linear-gradient(180deg, rgba(18,28,42,.95), rgba(11,18,29,.95))",
-          color: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 10,
-          cursor: "pointer",
-          fontWeight: 700
-        }}
-      >
-        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-          {current.label}
-        </span>
-        <span style={{ opacity: 0.72 }}>▼</span>
-      </button>
-
-      {open ? (
-        <div
-          style={{
-            position: "absolute",
-            top: "calc(100% + 6px)",
-            left: 0,
-            right: 0,
-            zIndex: 50,
-            borderRadius: 12,
-            overflow: "hidden",
-            border: "1px solid rgba(255,255,255,.12)",
-            background: "linear-gradient(180deg, rgba(15,23,36,.98), rgba(9,14,24,.98))",
-            boxShadow: "0 18px 38px rgba(0,0,0,.35)",
-            maxHeight: 320,
-            overflowY: "auto"
-          }}
-        >
-          {options.map(opt => {
-            const active = opt.value === value;
-            return (
-              <button
-                key={opt.value || "all"}
-                type="button"
-                onClick={() => {
-                  onChange(opt.value);
-                  setOpen(false);
-                }}
-                style={{
-                  width: "100%",
-                  textAlign: "left",
-                  padding: "10px 12px",
-                  border: "none",
-                  borderBottom: "1px solid rgba(255,255,255,.06)",
-                  background: active ? "rgba(122,162,255,.16)" : "transparent",
-                  color: "#fff",
-                  cursor: "pointer",
-                  fontWeight: active ? 800 : 600
-                }}
-              >
-                {opt.label}
-              </button>
-            );
-          })}
+    <div style={{ ...panel, padding: 18 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+        <div>
+          <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: "-0.02em" }}>Traffic History</div>
+          <div style={{ opacity: 0.68, marginTop: 4 }}>Recent combined uplink RX / TX trend</div>
         </div>
-      ) : null}
+        <div style={{ display: "flex", gap: 16, fontWeight: 800 }}>
+          <span style={{ color: "#63ffa3" }}>RX</span>
+          <span style={{ color: "#78a9ff" }}>TX</span>
+        </div>
+      </div>
+
+      <div style={{ width: "100%", overflow: "hidden", borderRadius: 18 }}>
+        <svg viewBox={`0 0 ${width} ${height}`} style={{ width: "100%", height: "auto", display: "block" }}>
+          <defs>
+            <linearGradient id="rxFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(99,255,163,0.30)" />
+              <stop offset="100%" stopColor="rgba(99,255,163,0.02)" />
+            </linearGradient>
+            <linearGradient id="txFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(120,169,255,0.30)" />
+              <stop offset="100%" stopColor="rgba(120,169,255,0.02)" />
+            </linearGradient>
+          </defs>
+
+          {[0.2,0.4,0.6,0.8].map((g) => {
+            const y = height - pad - ((height - pad * 2) * g);
+            return <line key={g} x1={pad} y1={y} x2={width-pad} y2={y} stroke="rgba(255,255,255,0.08)" strokeWidth="1" />;
+          })}
+
+          <path d={areaPath("tx")} fill="url(#txFill)" />
+          <path d={areaPath("rx")} fill="url(#rxFill)" />
+          <path d={linePath("tx")} fill="none" stroke="#78a9ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          <path d={linePath("rx")} fill="none" stroke="#63ffa3" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
     </div>
   );
 }
 
-function HistoryChart({ items }) {
-  const [hoverIdx, setHoverIdx] = useState(null);
-
-  const grouped = useMemo(() => {
-    const map = new Map();
-
-    for (const row of items) {
-      const ts = String(row?.ts || "");
-      if (!ts) continue;
-
-      const prev = map.get(ts) || { ts, rx: 0, tx: 0 };
-      prev.rx += num(row?.rxMbps);
-      prev.tx += num(row?.txMbps);
-      map.set(ts, prev);
-    }
-
-    return Array.from(map.values())
-      .sort((a, b) => new Date(a.ts).getTime() - new Date(b.ts).getTime())
-      .slice(-120);
-  }, [items]);
-
-  const width = 1000;
-  const height = 250;
-  const padL = 42;
-  const padR = 20;
-  const padT = 16;
-  const padB = 28;
-
-  const rxVals = grouped.map(x => num(x.rx));
-  const txVals = grouped.map(x => num(x.tx));
-  const maxVal = Math.max(1, ...rxVals, ...txVals, 1);
-
-  function makeCoords(values) {
-    return values.map((v, i) => {
-      const x = values.length <= 1
-        ? padL
-        : padL + (i * (width - padL - padR)) / (values.length - 1);
-      const y = height - padB - ((v / maxVal) * (height - padT - padB));
-      return { x, y, v };
-    });
-  }
-
-  function areaPath(points) {
-    if (!points.length) return "";
-    const first = points[0];
-    const last = points[points.length - 1];
-    const line = points.map(p => `${p.x},${p.y}`).join(" L ");
-    return `M ${first.x} ${height - padB} L ${line} L ${last.x} ${height - padB} Z`;
-  }
-
-  const rxPts = makeCoords(rxVals);
-  const txPts = makeCoords(txVals);
-  const rxLine = rxPts.map(p => `${p.x},${p.y}`).join(" ");
-  const txLine = txPts.map(p => `${p.x},${p.y}`).join(" ");
-  const hoverRow = hoverIdx !== null ? grouped[hoverIdx] : null;
-  const hoverX = hoverIdx !== null ? (txPts[hoverIdx]?.x ?? rxPts[hoverIdx]?.x ?? null) : null;
-
-  function handleMove(e) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const usableW = Math.max(1, rect.width);
-    if (!grouped.length) return;
-    const idx = Math.max(0, Math.min(grouped.length - 1, Math.round((x / usableW) * (grouped.length - 1))));
-    setHoverIdx(idx);
-  }
-
+function SummaryCard({ label, value, sub, color }) {
   return (
-    <div
-      style={{
-        border: "1px solid rgba(255,255,255,0.10)",
-        borderRadius: 16,
-        padding: 12,
-        background: "linear-gradient(180deg, rgba(12,22,36,.86), rgba(8,14,24,.86))"
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: 12,
-          marginBottom: 10
-        }}
-      >
-        <div>
-          <div style={{ fontWeight: 800, fontSize: 14 }}>Traffic History</div>
-          <div style={{ opacity: 0.62, fontSize: 11 }}>
-            Recent combined uplink RX / TX trend
-          </div>
-        </div>
-
-        <div style={{ display: "flex", gap: 14, fontSize: 12, fontWeight: 800 }}>
-          <span style={{ color: "#67e87a" }}>RX</span>
-          <span style={{ color: "#78a8ff" }}>TX</span>
-        </div>
-      </div>
-
-      <div style={{ position: "relative" }}>
-        <svg
-          viewBox={`0 0 ${width} ${height}`}
-          preserveAspectRatio="none"
-          style={{
-            width: "100%",
-            height: 250,
-            display: "block",
-            borderRadius: 12,
-            cursor: "crosshair"
-          }}
-          onMouseMove={handleMove}
-          onMouseLeave={() => setHoverIdx(null)}
-        >
-          <defs>
-            <linearGradient id="historyAreaRx" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="rgba(103,232,122,0.24)" />
-              <stop offset="100%" stopColor="rgba(103,232,122,0.02)" />
-            </linearGradient>
-            <linearGradient id="historyAreaTx" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="rgba(120,168,255,0.24)" />
-              <stop offset="100%" stopColor="rgba(120,168,255,0.02)" />
-            </linearGradient>
-          </defs>
-
-          {[0, 0.25, 0.5, 0.75, 1].map((r, i) => {
-            const y = height - padB - ((height - padT - padB) * r);
-            return (
-              <line
-                key={i}
-                x1={padL}
-                y1={y}
-                x2={width - padR}
-                y2={y}
-                stroke="rgba(255,255,255,0.07)"
-                strokeWidth="1"
-              />
-            );
-          })}
-
-          <path d={areaPath(txPts)} fill="url(#historyAreaTx)" />
-          <path d={areaPath(rxPts)} fill="url(#historyAreaRx)" />
-
-          <polyline
-            points={txLine}
-            fill="none"
-            stroke="#78a8ff"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <polyline
-            points={rxLine}
-            fill="none"
-            stroke="#67e87a"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-
-          {hoverRow && hoverX !== null ? (
-            <>
-              <line
-                x1={hoverX}
-                y1={padT}
-                x2={hoverX}
-                y2={height - padB}
-                stroke="rgba(255,255,255,0.35)"
-                strokeDasharray="5 4"
-                strokeWidth="1.4"
-              />
-              <circle cx={txPts[hoverIdx]?.x || 0} cy={txPts[hoverIdx]?.y || 0} r="5.2" fill="#78a8ff" />
-              <circle cx={rxPts[hoverIdx]?.x || 0} cy={rxPts[hoverIdx]?.y || 0} r="5.2" fill="#67e87a" />
-            </>
-          ) : null}
-        </svg>
-
-        {hoverRow ? (
-          <div
-            style={{
-              position: "absolute",
-              right: 12,
-              top: 10,
-              minWidth: 180,
-              padding: 10,
-              borderRadius: 12,
-              border: "1px solid rgba(255,255,255,.10)",
-              background: "rgba(8,12,18,.96)",
-              boxShadow: "0 14px 28px rgba(0,0,0,.28)",
-              pointerEvents: "none"
-            }}
-          >
-            <div style={{ fontSize: 11, opacity: 0.72, marginBottom: 6 }}>
-              {formatTs(hoverRow.ts)}
-            </div>
-            <div style={{ color: "#67e87a", fontWeight: 800, marginBottom: 4 }}>
-              RX: {fmtMbps(hoverRow.rx)} Mbps
-            </div>
-            <div style={{ color: "#78a8ff", fontWeight: 800 }}>
-              TX: {fmtMbps(hoverRow.tx)} Mbps
-            </div>
-          </div>
-        ) : (
-          <div
-            style={{
-              position: "absolute",
-              right: 12,
-              top: 10,
-              padding: "8px 10px",
-              borderRadius: 10,
-              border: "1px solid rgba(255,255,255,.08)",
-              background: "rgba(8,12,18,.72)",
-              fontSize: 11,
-              opacity: 0.72,
-              pointerEvents: "none"
-            }}
-          >
-            Move mouse over chart
-          </div>
-        )}
-      </div>
+    <div style={{ ...softCard, minHeight: 122 }}>
+      <div style={labelStyle}>{label}</div>
+      <div style={{ ...valueStyle, color: color || "#ffffff", marginTop: 10 }}>{value}</div>
+      <div style={{ marginTop: 10, opacity: 0.66, fontSize: 13 }}>{sub}</div>
     </div>
   );
 }
 
 export default function HistoryPage() {
   const [range, setRange] = useState("all");
-  const [search, setSearch] = useState("");
-  const [uplink, setUplink] = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const [appliedSearch, setAppliedSearch] = useState("");
-  const [showTable, setShowTable] = useState(false);
+  const [uplink, setUplink] = useState("all");
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
 
-  const [state, setState] = useState({
-    loading: true,
-    ok: false,
-    count: 0,
-    items: [],
-    error: "",
-    filters: {
-      range: null,
-      q: "",
-      uplink: ""
-    }
-  });
-
-  useEffect(() => {
-    let dead = false;
-
-    async function load() {
-      try {
-        const url = buildHistoryUrl(range, appliedSearch, uplink);
-        const res = await fetch(url, {
-          headers: { Accept: "application/json" },
-          cache: "no-store"
-        });
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-
-        if (!dead) {
-          setState({
-            loading: false,
-            ok: !!data?.ok,
-            count: Number(data?.count || 0),
-            items: Array.isArray(data?.items) ? data.items : [],
-            error: "",
-            filters: {
-              range: data?.filters?.range ?? null,
-              q: data?.filters?.q ?? "",
-              uplink: data?.filters?.uplink ?? ""
-            }
-          });
-        }
-      } catch (err) {
-        if (!dead) {
-          setState({
-            loading: false,
-            ok: false,
-            count: 0,
-            items: [],
-            error: err?.message || "Failed to load history",
-            filters: { range: null, q: "", uplink: "" }
-          });
-        }
-      }
-    }
-
-    load();
-    const t = setInterval(load, 10000);
-    return () => {
-      dead = true;
-      clearInterval(t);
-    };
-  }, [range, appliedSearch, uplink]);
-
-  function applySearch() {
-    const q = search.trim();
-    setAppliedSearch(q);
-
-    if (q) {
-      setUplink("");
+  async function loadData(currentRange, currentSearch, currentUplink) {
+    try {
+      setLoading(true);
+      setErr("");
+      const url = buildHistoryUrl(currentRange, currentSearch, currentUplink);
+      const r = await fetch(url, { cache: "no-store" });
+      const j = await r.json();
+      if (!r.ok || !j?.ok) throw new Error(j?.error || "Failed to load history");
+      const data = Array.isArray(j?.data) ? j.data : [];
+      setRows(data);
+    } catch (e) {
+      setRows([]);
+      setErr(String(e?.message || e || "Unknown history error"));
+    } finally {
+      setLoading(false);
     }
   }
 
-  const latest = useMemo(() => {
-    return state.items.length ? state.items[state.items.length - 1] : null;
-  }, [state.items]);
+  useEffect(() => {
+    loadData(range, appliedSearch, uplink);
+  }, [range, appliedSearch, uplink]);
 
-  const effectiveUplinkOptions = useMemo(() => {
-    const seen = new Set();
-    const out = [];
+  const latest = rows.length ? rows[rows.length - 1] : null;
 
-    for (const opt of STATIC_UPLINK_OPTIONS) {
-      if (!seen.has(opt.value)) {
-        seen.add(opt.value);
-        out.push(opt);
-      }
+  const stats = useMemo(() => {
+    const rx = Number(latest?.rxMbps ?? latest?.rx ?? 0);
+    const tx = Number(latest?.txMbps ?? latest?.tx ?? 0);
+    return {
+      status: err ? "ERROR" : loading ? "LOADING" : "OK",
+      rows: rows.length,
+      rx,
+      tx,
+      ts: latest?.ts || latest?.time || latest?.timestamp || null,
+      target: latest?.name || latest?.uplink || latest?.source || latest?.ip || "-",
+    };
+  }, [rows, latest, err, loading]);
+
+  const uniqueUplinks = useMemo(() => {
+    const map = new Map();
+    for (const r of rows) {
+      const key = r?.uplink || r?.name || r?.source || r?.ip;
+      if (key) map.set(String(key), String(key));
     }
-
-    for (const row of state.items) {
-      const value = String(row?.uplink || "").trim();
-      const label = String(row?.name || row?.uplink || "").trim();
-      if (!value || seen.has(value)) continue;
-      seen.add(value);
-      out.push({ value, label: label || value });
-    }
-
-    return out;
-  }, [state.items]);
-
-  const filterSummary = useMemo(() => {
-    const bits = [];
-    bits.push(`range: ${range}`);
-    if (uplink) bits.push(`uplink: ${uplink}`);
-    if (appliedSearch) bits.push(`search: ${appliedSearch}`);
-    return bits.join(" • ");
-  }, [range, uplink, appliedSearch]);
+    return ["all", ...Array.from(map.values())];
+  }, [rows]);
 
   return (
-    <div style={{ padding: 12 }}>
-      <h1 style={{ margin: 0, fontSize: 24 }}>Uplink History</h1>
-      <p style={{ marginTop: 6, opacity: 0.8, fontSize: 13 }}>
-        History of saved uplink samples. Search works on stored history rows only.
-      </p>
-
+    <div style={shell}>
       <div
         style={{
-          display: "flex",
-          gap: 10,
-          flexWrap: "wrap",
-          alignItems: "center",
-          marginTop: 14,
-          marginBottom: 12,
-          padding: 12,
-          borderRadius: 14,
-          border: "1px solid rgba(255,255,255,0.08)",
-          background: "rgba(255,255,255,0.02)"
+          padding: 26,
+          display: "grid",
+          gap: 18,
+          background:
+            "radial-gradient(circle at top right, rgba(80,90,255,0.18), transparent 26%), radial-gradient(circle at top left, rgba(0,255,200,0.08), transparent 20%)",
         }}
       >
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          {RANGE_OPTIONS.map(opt => (
-            <FilterButton
-              key={opt.key}
-              active={range === opt.key}
-              onClick={() => setRange(opt.key)}
-            >
-              {opt.label}
-            </FilterButton>
-          ))}
+        <div style={{ ...panel, padding: 24 }}>
+          <div style={{ fontSize: 15, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.58 }}>
+            NoComment Work Tools
+          </div>
+          <div style={{ fontSize: 46, fontWeight: 900, letterSpacing: "-0.04em", marginTop: 10 }}>
+            Uplink History
+          </div>
+          <div style={{ marginTop: 8, opacity: 0.7, maxWidth: 900, fontSize: 15 }}>
+            Luxury monitoring view for stored uplink samples with cleaner controls, richer summary cards, and premium chart presentation.
+          </div>
         </div>
 
-        <UplinkPicker
-          value={uplink}
-          options={effectiveUplinkOptions}
-          onChange={setUplink}
-        />
-
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") applySearch();
-          }}
-          placeholder="Search IP / uplink / name / source"
-          style={{
-            width: 230,
-            maxWidth: "100%",
-            padding: "9px 12px",
-            borderRadius: 10,
-            border: "1px solid rgba(255,255,255,0.12)",
-            background: "rgba(255,255,255,0.04)",
-            color: "#fff",
-            outline: "none"
-          }}
-        />
-
-        <button
-          type="button"
-          onClick={applySearch}
-          style={{
-            padding: "9px 12px",
-            borderRadius: 10,
-            border: "1px solid rgba(255,255,255,0.12)",
-            background: "rgba(255,255,255,0.06)",
-            color: "#fff",
-            cursor: "pointer",
-            fontWeight: 700
-          }}
-        >
-          Apply
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setSearch("");
-            setAppliedSearch("");
-            setUplink("");
-          }}
-          style={{
-            padding: "9px 12px",
-            borderRadius: 10,
-            border: "1px solid rgba(255,255,255,0.10)",
-            background: "rgba(255,255,255,0.03)",
-            color: "#fff",
-            cursor: "pointer",
-            fontWeight: 700
-          }}
-        >
-          Clear
-        </button>
-      </div>
-
-      <div
-        style={{
-          marginTop: -2,
-          marginBottom: 10,
-          fontSize: 12,
-          opacity: 0.72
-        }}
-      >
-        Active filters: {filterSummary}
-      </div>
-
-      {state.loading ? (
-        <div style={{ padding: 16 }}>Loading history…</div>
-      ) : state.error ? (
-        <div style={{ color: "#ff8a8a", padding: 16 }}>
-          History fetch failed: {state.error}
-        </div>
-      ) : (
-        <>
+        <div style={{ ...panel, padding: 18 }}>
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
-              gap: 10,
-              marginBottom: 12
+              gridTemplateColumns: "repeat(12, minmax(0, 1fr))",
+              gap: 12,
+              alignItems: "center",
             }}
           >
-            {[
-              { title: "Status", value: state.ok ? "OK" : "Not ready", color: "#67e87a" },
-              { title: "Rows", value: String(state.count), color: "#fff" },
-              { title: "Latest RX", value: latest ? `${fmtMbps(latest.rxMbps)} Mbps` : "-", color: "#67e87a" },
-              { title: "Latest TX", value: latest ? `${fmtMbps(latest.txMbps)} Mbps` : "-", color: "#78a8ff" },
-              { title: "Range", value: range, color: "#fff" }
-            ].map((card) => (
-              <div
-                key={card.title}
-                style={{
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  borderRadius: 14,
-                  padding: 12,
-                  background: "linear-gradient(180deg, rgba(12,22,36,.86), rgba(8,14,24,.86))"
-                }}
-              >
-                <div style={{ fontSize: 11, opacity: 0.65, marginBottom: 8 }}>{card.title}</div>
-                <div style={{ fontWeight: 900, fontSize: 18, color: card.color }}>{card.value}</div>
-              </div>
-            ))}
-          </div>
-
-          {state.items.length === 0 ? (
-            <div
-              style={{
-                border: "1px solid rgba(255,255,255,0.12)",
-                borderRadius: 14,
-                padding: 18,
-                background: "rgba(255,255,255,0.03)"
-              }}
-            >
-              <div style={{ fontSize: 18, fontWeight: 800, marginBottom: 8 }}>
-                No history found
-              </div>
-              <div style={{ opacity: 0.78, lineHeight: 1.6 }}>
-                No rows matched the current filters.
+            <div style={{ gridColumn: "span 3" }}>
+              <div style={labelStyle}>Range</div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
+                {["all", "1h", "6h", "24h", "7d"].map((x) => (
+                  <button
+                    key={x}
+                    onClick={() => setRange(x)}
+                    style={{
+                      padding: "10px 14px",
+                      borderRadius: 14,
+                      border: x === range ? "1px solid rgba(140,180,255,0.55)" : "1px solid rgba(255,255,255,0.10)",
+                      background: x === range ? "rgba(90,120,255,0.22)" : "rgba(255,255,255,0.04)",
+                      color: "#fff",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                    }}
+                  >
+                    {x}
+                  </button>
+                ))}
               </div>
             </div>
-          ) : (
-            <>
-              <HistoryChart items={state.items} />
 
-              <div
+            <div style={{ gridColumn: "span 3" }}>
+              <div style={labelStyle}>Uplink</div>
+              <select
+                value={uplink}
+                onChange={(e) => setUplink(e.target.value)}
                 style={{
-                  border: "1px solid rgba(255,255,255,0.10)",
+                  width: "100%",
+                  marginTop: 8,
+                  height: 46,
                   borderRadius: 14,
-                  padding: 12,
-                  marginTop: 10,
-                  marginBottom: 10,
-                  background: "linear-gradient(180deg, rgba(12,22,36,.68), rgba(8,14,24,.68))"
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  background: "rgba(255,255,255,0.05)",
+                  color: "#fff",
+                  padding: "0 14px",
+                  fontWeight: 700,
                 }}
               >
-                <div style={{ opacity: 0.65, marginBottom: 6, fontSize: 12 }}>Latest sample</div>
-                <div style={{ fontWeight: 800 }}>
-                  {latest
-                    ? `${formatTs(latest.ts)} • ${latest.name || latest.uplink || "-"} • RX ${fmtMbps(latest.rxMbps)} Mbps • TX ${fmtMbps(latest.txMbps)} Mbps`
-                    : "-"}
-                </div>
-              </div>
+                {uniqueUplinks.map((x) => (
+                  <option key={x} value={x} style={{ color: "#111" }}>
+                    {x === "all" ? "All uplinks" : x}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-              <div
+            <div style={{ gridColumn: "span 4" }}>
+              <div style={labelStyle}>Search</div>
+              <input
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Search IP / uplink / name / source"
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: 12,
-                  marginBottom: 8
+                  width: "100%",
+                  marginTop: 8,
+                  height: 46,
+                  borderRadius: 14,
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  background: "rgba(255,255,255,0.05)",
+                  color: "#fff",
+                  padding: "0 14px",
+                  fontWeight: 700,
+                  outline: "none",
+                }}
+              />
+            </div>
+
+            <div style={{ gridColumn: "span 2", display: "flex", gap: 10, alignSelf: "end" }}>
+              <button
+                onClick={() => setAppliedSearch(searchInput.trim())}
+                style={{
+                  flex: 1,
+                  height: 46,
+                  borderRadius: 14,
+                  border: "1px solid rgba(140,180,255,0.45)",
+                  background: "linear-gradient(180deg, rgba(102,129,255,0.35), rgba(59,83,214,0.30))",
+                  color: "#fff",
+                  fontWeight: 900,
+                  cursor: "pointer",
                 }}
               >
-                <div style={{ opacity: 0.75, fontSize: 13 }}>Detailed rows</div>
+                Apply
+              </button>
+              <button
+                onClick={() => {
+                  setSearchInput("");
+                  setAppliedSearch("");
+                  setUplink("all");
+                  setRange("all");
+                }}
+                style={{
+                  flex: 1,
+                  height: 46,
+                  borderRadius: 14,
+                  border: "1px solid rgba(255,255,255,0.10)",
+                  background: "rgba(255,255,255,0.05)",
+                  color: "#fff",
+                  fontWeight: 900,
+                  cursor: "pointer",
+                }}
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
 
-                <button
-                  type="button"
-                  onClick={() => setShowTable(v => !v)}
-                  style={{
-                    padding: "8px 12px",
-                    borderRadius: 10,
-                    border: "1px solid rgba(255,255,255,0.12)",
-                    background: "rgba(255,255,255,0.05)",
-                    color: "#fff",
-                    cursor: "pointer",
-                    fontWeight: 700
-                  }}
-                >
-                  {showTable ? "Hide table" : "Show table"}
-                </button>
-              </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: 14 }}>
+          <SummaryCard label="Status" value={stats.status} sub={err ? err : "History page online"} color={stats.status === "OK" ? "#63ffa3" : stats.status === "LOADING" ? "#ffd76a" : "#ff7f96"} />
+          <SummaryCard label="Rows" value={String(stats.rows)} sub="Stored history rows loaded" />
+          <SummaryCard label="Latest RX" value={fmtMbps(stats.rx)} sub="Most recent receive throughput" color="#63ffa3" />
+          <SummaryCard label="Latest TX" value={fmtMbps(stats.tx)} sub="Most recent transmit throughput" color="#78a9ff" />
+          <SummaryCard label="Range" value={String(range)} sub={uplink === "all" ? "All uplinks selected" : `Filtered uplink: ${uplink}`} />
+        </div>
 
-              {showTable ? (
-                <div
-                  style={{
-                    border: "1px solid rgba(255,255,255,0.12)",
-                    borderRadius: 12,
-                    padding: 12,
-                    overflowX: "auto"
-                  }}
-                >
-                  <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 760 }}>
-                    <thead>
-                      <tr>
-                        <th style={{ textAlign: "left", padding: "8px 6px" }}>Time</th>
-                        <th style={{ textAlign: "left", padding: "8px 6px" }}>RX</th>
-                        <th style={{ textAlign: "left", padding: "8px 6px" }}>TX</th>
-                        <th style={{ textAlign: "left", padding: "8px 6px" }}>Uplink</th>
-                        <th style={{ textAlign: "left", padding: "8px 6px" }}>IP</th>
-                        <th style={{ textAlign: "left", padding: "8px 6px" }}>Name</th>
-                        <th style={{ textAlign: "left", padding: "8px 6px" }}>Source</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[...state.items].slice().reverse().map((row, idx) => (
-                        <tr
-                          key={`${row.ts || "row"}-${idx}`}
-                          style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-                        >
-                          <td style={{ padding: "8px 6px" }}>{formatTs(row.ts)}</td>
-                          <td style={{ padding: "8px 6px", color: "#67e87a", fontWeight: 700 }}>{fmtMbps(row.rxMbps)}</td>
-                          <td style={{ padding: "8px 6px", color: "#78a8ff", fontWeight: 700 }}>{fmtMbps(row.txMbps)}</td>
-                          <td style={{ padding: "8px 6px" }}>{row.uplink || "-"}</td>
-                          <td style={{ padding: "8px 6px" }}>{row.ip || "-"}</td>
-                          <td style={{ padding: "8px 6px" }}>{row.name || "-"}</td>
-                          <td style={{ padding: "8px 6px" }}>{row.source || "-"}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : null}
-            </>
-          )}
-        </>
-      )}
+        <Sparkline items={rows} />
+
+        <div style={{ ...panel, padding: 18 }}>
+          <div style={labelStyle}>Latest sample</div>
+          <div style={{ marginTop: 10, fontSize: 18, fontWeight: 800 }}>
+            {fmtTime(stats.ts)} • To {stats.target} • RX {fmtMbps(stats.rx)} • TX {fmtMbps(stats.tx)}
+          </div>
+        </div>
+
+        <div style={{ ...panel, padding: 18 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+            <div>
+              <div style={{ fontSize: 22, fontWeight: 900 }}>Detailed rows</div>
+              <div style={{ opacity: 0.64, marginTop: 4 }}>Premium compact table for audit and troubleshooting</div>
+            </div>
+            <div style={{ opacity: 0.68, fontWeight: 800 }}>
+              {loading ? "Loading..." : `${rows.length} row(s)`}
+            </div>
+          </div>
+
+          <div style={{ overflowX: "auto", borderRadius: 16, border: "1px solid rgba(255,255,255,0.08)" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 980 }}>
+              <thead>
+                <tr style={{ background: "rgba(255,255,255,0.05)" }}>
+                  {["Time", "Target", "RX", "TX", "IP", "Source"].map((h) => (
+                    <th
+                      key={h}
+                      style={{
+                        textAlign: "left",
+                        padding: "14px 16px",
+                        fontSize: 12,
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        color: "rgba(255,255,255,0.68)",
+                        borderBottom: "1px solid rgba(255,255,255,0.08)",
+                      }}
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} style={{ padding: 22, opacity: 0.72 }}>
+                      {err ? err : "No history rows found for the current filter."}
+                    </td>
+                  </tr>
+                ) : (
+                  rows.slice().reverse().map((r, idx) => (
+                    <tr key={idx} style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                      <td style={{ padding: "14px 16px" }}>{fmtTime(r?.ts || r?.time || r?.timestamp)}</td>
+                      <td style={{ padding: "14px 16px", fontWeight: 800 }}>{r?.name || r?.uplink || r?.target || "-"}</td>
+                      <td style={{ padding: "14px 16px", color: "#63ffa3", fontWeight: 800 }}>{fmtMbps(r?.rxMbps ?? r?.rx)}</td>
+                      <td style={{ padding: "14px 16px", color: "#78a9ff", fontWeight: 800 }}>{fmtMbps(r?.txMbps ?? r?.tx)}</td>
+                      <td style={{ padding: "14px 16px" }}>{r?.ip || "-"}</td>
+                      <td style={{ padding: "14px 16px" }}>{r?.source || "-"}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
