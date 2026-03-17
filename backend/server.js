@@ -3688,7 +3688,7 @@ function cleanHistoryRows(rows) {
   });
 }
 
-function smartSampleRows(rows, limit) {
+function smartSampleRows(filteredRows, limit) {
   const arr = Array.isArray(rows) ? rows : [];
   const max = Number(limit || 0);
 
@@ -3722,16 +3722,55 @@ function smartLimitForRange(range) {
 }
 
 
+
+function getRangeMs(range) {
+  switch (String(range || "").trim()) {
+    case "5m": return 5 * 60 * 1000;
+    case "30m": return 30 * 60 * 1000;
+    case "60m": return 60 * 60 * 1000;
+    case "24h": return 24 * 60 * 60 * 1000;
+    case "30d": return 30 * 24 * 60 * 60 * 1000;
+    default: return 60 * 60 * 1000;
+  }
+}
+
+function applyTimeFilter(rows, range) {
+  const now = Date.now();
+  const cutoff = now - getRangeMs(range);
+
+  return (Array.isArray(rows) ? rows : []).filter(r => {
+    const ts = Number(r?.ts || 0);
+    return ts >= cutoff && ts <= now;
+  });
+}
+
+
 /* MONITOR_STREET_HISTORY_ENDPOINT_START */
+
+function normalizeRange(r) {
+  switch (String(r || "").trim()) {
+    case "5m": return "5m";
+    case "30m": return "1h";     // map to old 1 hour bucket
+    case "60m": return "1h";
+    case "24h": return "24h";
+    case "30d": return "7d";     // or whatever old max was
+    default: return r;
+  }
+}
+
 app.get("/api/history/monitor-street", async (req, res) => {
   try {
-    const range = String(req.query.range || "24h");
+    let range = String(req.query.range || "24h");
+range = normalizeRange(range);
     const q = String(req.query.q || "");
     const target = String(req.query.target || "");
     const requestedLimit = Number(req.query.limit || 0);
 
     const rows = flattenMonitorHistory(range, q, target);
-    const rawCount = rows.length;
+
+// CLEAN RANGE FILTER (SAFE)
+const filteredRows = applyTimeFilter(rows, req.query.range);
+    const rawCount = filteredRows.length;
 
     const cleaned = cleanHistoryRows(rows).sort((a, b) => Number(a.ts || 0) - Number(b.ts || 0));
 
@@ -3804,6 +3843,8 @@ setTimeout(() => {
   setInterval(pollMonitorStreetHistoryOnce, 30000);
 }, 5000);
 /* MONITOR_STREET_HISTORY_POLLER_END */
+
+
 
 
 
