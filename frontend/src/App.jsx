@@ -14,6 +14,7 @@ import MonitorStreetPage from "./pages/MonitorStreetPage";
 import NetworkMapPage from "./pages/NetworkMapPage";
 import TpLinkJetstreamPage from "./pages/TpLinkJetstreamPage";
 import WeatherTripoliPageV3 from "./pages/WeatherTripoliPageV3.jsx";
+import Workspace from "./workspace/Workspace";
 
 const STORAGE_KEY = "toolsisp_windows_v1";
 
@@ -47,7 +48,7 @@ export default function App() {
       ip: type === "ping" ? "88.88.88.10" : undefined,
       community: type === "monitor" ? "public" : undefined,
       title:
-        type === "ping" ? "Ping ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â 88.88.88.10" :
+        type === "ping" ? "Ping - 88.88.88.10" :
         type === "monitor" ? "Monitor" :
         "Note",
       x: 140 + (windows.length * 18),
@@ -97,7 +98,7 @@ export default function App() {
   return (
     <AppShell active={active} setActive={setActive} actions={actions}>
       {active === "dashboard" ? (
-        <DashboardPage windows={windows} setWindows={setWindows} />
+        <Workspace windows={windows} setWindows={setWindows}><DashboardPage windows={windows} setWindows={setWindows} /></Workspace>
       ) : active === "tplinkjetstream" ? (
         <TpLinkJetstreamPage />
       ) : active === "neighbors" ? (
@@ -125,10 +126,13 @@ export default function App() {
       ) : active === "weathertripoli" ? (
         <WeatherTripoliPageV3 />
       ) : (
-        <DashboardPage windows={windows} setWindows={setWindows} />
+        <Workspace windows={windows} setWindows={setWindows}><DashboardPage windows={windows} setWindows={setWindows} /></Workspace>
       )}
     </AppShell>
   );
 }
+
+
+
 
 

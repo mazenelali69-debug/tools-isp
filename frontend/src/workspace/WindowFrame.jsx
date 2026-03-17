@@ -69,7 +69,9 @@ export default function WindowFrame({ win, onFocus, onClose, onChange, children 
     const dx = e.clientX - d.startX;
     const dy = e.clientY - d.startY;
 
-    const vw = document.documentElement.clientWidth; const vh = document.documentElement.clientHeight;
+    const sidebar = document.querySelector('.sidebar');
+const sidebarWidth = sidebar ? sidebar.getBoundingClientRect().width : 0;
+const vw = document.documentElement.clientWidth - sidebarWidth; const vh = document.documentElement.clientHeight;
     const nx = clamp(d.baseX + dx, 0, vw - 80);
     const ny = clamp(d.baseY + dy, 0, vh - 60);
 
@@ -135,7 +137,7 @@ export default function WindowFrame({ win, onFocus, onClose, onChange, children 
             onClick={(e)=>{ e.stopPropagation(); onClose?.(); }}
             title="Close"
           >
-            ✕
+            ?
           </button>
         </div>
       </div>
@@ -148,4 +150,5 @@ export default function WindowFrame({ win, onFocus, onClose, onChange, children 
     </div>
   );
 }
+
 

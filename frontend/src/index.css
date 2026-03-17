@@ -573,7 +573,7 @@ hr, .tools-divider{
   top: 0;
   z-index: 5;
   background: rgba(8, 15, 30, 0.85);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(0px);
   padding-bottom: 8px;
 }
 
@@ -6238,5 +6238,293 @@ html, body, #root {
 .ti-content--tight::-webkit-scrollbar-thumb {
   background: rgba(127,167,216,.35);
   border-radius: 999px;
+}
+
+
+/* =========================
+   TOOLS-ISP MODERN UI V2
+   ========================= */
+
+.ti-app{
+  background: radial-gradient(circle at 20% 0%, rgba(80,120,255,.15), transparent 40%),
+              radial-gradient(circle at 80% 0%, rgba(120,80,255,.12), transparent 40%),
+              #0b0f17;
+}
+
+/* ===== TOP BAR ===== */
+.ti-topbar{
+  backdrop-filter: blur(0px);
+  background: linear-gradient(180deg, rgba(10,14,22,.96), rgba(10,14,22,.92));
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 12px 40px rgba(0,0,0,.4);
+}
+
+.ti-topbar__eyebrow{
+  font-size: 10px;
+  letter-spacing: .2em;
+  opacity: .6;
+}
+
+.ti-topbar__title{
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -.02em;
+  background: linear-gradient(90deg,#4f8cff,#9d7bff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== BUTTONS ===== */
+.ti-btn{
+  border-radius: 14px;
+  padding: 10px 18px;
+  font-weight: 800;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.04);
+  transition: all .2s ease;
+}
+
+.ti-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.3);
+}
+
+.ti-btn--primary{
+  background: linear-gradient(135deg,#4f8cff,#7a5cff);
+  border: none;
+  color: #fff;
+}
+
+/* ===== CONTENT ===== */
+.ti-content{
+  padding: 20px;
+}
+
+/* ===== WORKSPACE WINDOWS ===== */
+.wsPanel{
+  border-radius: 16px;
+  background: rgba(20,24,40,.85);
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 20px 50px rgba(0,0,0,.5);
+}
+
+.wsOverlay{
+  backdrop-filter: blur(0px);
+}
+
+/* ===== NOTE ===== */
+.wsNote{
+  background: rgba(10,12,22,.9);
+  border-radius: 14px;
+  padding: 14px;
+  color: #fff;
+}
+
+/* =========================
+   END MODERN UI
+   ========================= */
+
+
+
+/* =========================
+   SAFE BOX STYLE V1
+   ========================= */
+
+/* do NOT touch layout/position/resize */
+.wsWin{
+  background: linear-gradient(180deg, rgba(11,18,32,.96), rgba(8,13,24,.96)) !important;
+  border: 1px solid rgba(120,160,255,.14) !important;
+  border-radius: 16px !important;
+  box-shadow:
+    0 18px 48px rgba(0,0,0,.38),
+    inset 0 1px 0 rgba(255,255,255,.03) !important;
+}
+
+/* title/header only */
+.wsWin .wsHead,
+.wsWin .wsTitleBar,
+.wsWin .wsHeader,
+.wsWin .wsTop,
+.wsWin [class~="wsHead"],
+.wsWin [class~="wsTitleBar"],
+.wsWin [class~="wsHeader"]{
+  background: linear-gradient(180deg, rgba(18,28,50,.82), rgba(12,18,34,.78)) !important;
+  border-bottom: 1px solid rgba(255,255,255,.07) !important;
+}
+
+/* body cards/panels */
+.wsPanel{
+  background: rgba(13,20,34,.58) !important;
+  border: 1px solid rgba(255,255,255,.07) !important;
+  border-radius: 14px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.03) !important;
+}
+
+/* labels/text */
+.wsWin label,
+.wsWin .wsHint,
+.wsWin .label,
+.wsWin [class*="label"],
+.wsWin [class*="Hint"]{
+  color: rgba(223,232,255,.82) !important;
+  font-weight: 700 !important;
+}
+
+/* inputs */
+.wsWin input,
+.wsWin select,
+.wsWin textarea{
+  background: rgba(19,28,46,.94) !important;
+  color: #eef4ff !important;
+  border: 1px solid rgba(120,160,255,.16) !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+.wsWin input::placeholder,
+.wsWin textarea::placeholder{
+  color: rgba(210,220,245,.38) !important;
+}
+
+.wsWin input:focus,
+.wsWin select:focus,
+.wsWin textarea:focus{
+  outline: none !important;
+  border-color: rgba(104,149,255,.42) !important;
+  box-shadow: 0 0 0 2px rgba(87,128,255,.10) !important;
+}
+
+/* buttons */
+.wsWin button{
+  border-radius: 10px !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  background: linear-gradient(180deg, rgba(27,38,66,.92), rgba(18,26,44,.92)) !important;
+  color: #eef4ff !important;
+  font-weight: 800 !important;
+  box-shadow: 0 8px 18px rgba(0,0,0,.18) !important;
+}
+
+.wsWin button:hover{
+  border-color: rgba(120,160,255,.28) !important;
+  background: linear-gradient(180deg, rgba(35,48,78,.96), rgba(22,31,52,.96)) !important;
+}
+
+.wsWin button:disabled{
+  opacity: .5 !important;
+  box-shadow: none !important;
+}
+
+/* close button look only */
+.wsWin .wsClose,
+.wsWin button[title="Close"],
+.wsWin [aria-label="Close"]{
+  border-radius: 999px !important;
+}
+
+/* note box only */
+.wsNote{
+  min-height: 180px !important;
+  background: rgba(16,24,40,.94) !important;
+  color: #eef4ff !important;
+  border: 1px solid rgba(120,160,255,.14) !important;
+  border-radius: 12px !important;
+}
+
+/* hint/footer text inside window */
+.wsWin small,
+.wsWin .tip,
+.wsWin .wsTip,
+.wsWin [class*="tip"]{
+  color: rgba(215,225,245,.60) !important;
+}
+
+/* =========================
+   END SAFE BOX STYLE V1
+   ========================= */
+
+
+/* ===== REAL WINDOW STYLE FIX ===== */
+
+.wsWin{
+  background: linear-gradient(180deg, #0b1324, #070c18) !important;
+  border: 1px solid rgba(120,160,255,.25) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 25px 70px rgba(0,0,0,.6) !important;
+  backdrop-filter: none !important;
+}
+
+/* header */
+.wsWinHead{
+  background: rgba(20,30,50,.95) !important;
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+  font-weight: 800;
+}
+
+/* body */
+.wsWinBody{
+  padding: 14px !important;
+  background: transparent !important;
+}
+
+/* inputs */
+.wsWin input,
+.wsWin select{
+  background: #020617 !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  border-radius: 8px;
+  color: #fff;
+}
+
+/* buttons */
+.wsWin button{
+  background: #1e293b !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  border-radius: 10px;
+  transition: .2s;
+}
+
+.wsWin button:hover{
+  background: #334155 !important;
+}
+
+
+/* ===== FIX FAKE GLASS OVERLAY ===== */
+
+.wsOverlay{
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+/* ===== FORCE WINDOW ABOVE EVERYTHING ===== */
+
+.wsWin{
+  position: absolute !important;
+  z-index: 9999 !important;
+}
+
+/* ===== REAL DEPTH ===== */
+
+.wsWin{
+  background: linear-gradient(180deg, #0b1324, #070c18) !important;
+  border: 1px solid rgba(120,160,255,.35) !important;
+  border-radius: 16px !important;
+  box-shadow: 
+    0 10px 30px rgba(0,0,0,.6),
+    0 0 0 1px rgba(255,255,255,.05) inset !important;
+}
+
+/* ===== HEADER STRONG ===== */
+
+.wsWinHead{
+  background: linear-gradient(180deg, #111827, #0b1220) !important;
+  border-bottom: 1px solid rgba(255,255,255,.1) !important;
+  font-size: 14px;
+  letter-spacing: .03em;
+}
+
+/* ===== REMOVE OLD FAKE STYLES ===== */
+
+.wsWin *{
+  backdrop-filter: none !important;
 }
 

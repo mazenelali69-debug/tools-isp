@@ -9,19 +9,19 @@ export default function AppShell({ active, setActive, actions, children }) {
       <div className="ti-main">
         <header className="ti-topbar ti-topbar--tight">
           <div className="ti-topbar__left">
-            <div className="ti-topbar__eyebrow">Mission Control</div>
-            <div className="ti-topbar__title">Network Operations Workspace</div>
+            <div className="ti-topbar__eyebrow">NOC Command Center</div>
+            <div className="ti-topbar__title">Live Operations Workspace</div>
           </div>
 
           <div className="ti-topbar__actions">
             <button type="button" className="ti-btn ti-btn--ghost" onClick={actions?.onNewPing}>
-              New Ping
+              + Ping
             </button>
             <button type="button" className="ti-btn ti-btn--ghost" onClick={actions?.onNewMonitor}>
-              New Monitor
+              + Monitor
             </button>
             <button type="button" className="ti-btn ti-btn--primary" onClick={actions?.onNewNote}>
-              New Note
+              + Note
             </button>
           </div>
         </header>
@@ -33,3 +33,4 @@ export default function AppShell({ active, setActive, actions, children }) {
     </div>
   );
 }
+
