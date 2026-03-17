@@ -629,3 +629,78 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
     padding:18px 20px !important;
   }
 }
+
+/* ===== NOCOMMENT GLOW ===== */
+.nocGlow{
+  font-size: inherit; /* نفس الحجم */
+  font-weight: inherit;
+  letter-spacing: .08em;
+
+  color: #9ecbff;
+
+  animation: nocGlowPulse 3s ease-in-out infinite;
+}
+
+@keyframes nocGlowPulse{
+  0%{
+    text-shadow: 0 0 4px rgba(120,160,255,.2);
+    opacity:.85;
+  }
+  50%{
+    text-shadow:
+      0 0 10px rgba(120,160,255,.7),
+      0 0 20px rgba(120,160,255,.4);
+    opacity:1;
+  }
+  100%{
+    text-shadow: 0 0 4px rgba(120,160,255,.2);
+    opacity:.85;
+  }
+}
+
+/* ===== NOC SINGLE LINE BRAND ===== */
+.nocGlow{
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: .04em;
+  color: #9ecbff;
+  white-space: nowrap;
+  animation: nocGlowPulse 3s ease-in-out infinite;
+}
+
+@keyframes nocGlowPulse{
+  0%{
+    text-shadow: 0 0 4px rgba(120,160,255,.2);
+    opacity:.85;
+  }
+  50%{
+    text-shadow:
+      0 0 10px rgba(120,160,255,.7),
+      0 0 20px rgba(120,160,255,.35);
+    opacity:1;
+  }
+  100%{
+    text-shadow: 0 0 4px rgba(120,160,255,.2);
+    opacity:.85;
+  }
+}
+
+.nocGlow{
+  white-space: nowrap;
+  color: #9ecbff;
+  animation: nocGlowPulse 3s ease-in-out infinite;
+}
+
+@keyframes nocGlowPulse{
+  0%{ opacity:.7 }
+  50%{ opacity:1; text-shadow:0 0 10px rgba(120,160,255,.6); }
+  100%{ opacity:.7 }
+}
+
+
+/* ===== HIDE TOPBAR TITLE ===== */
+.ti-topbar__title{
+  display: none !important;
+}
+/* ===== END HIDE TOPBAR TITLE ===== */
+

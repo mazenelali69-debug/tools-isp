@@ -136,9 +136,7 @@ const vw = document.documentElement.clientWidth - sidebarWidth; const vh = docum
             className="wsWinBtn"
             onClick={(e)=>{ e.stopPropagation(); onClose?.(); }}
             title="Close"
-          >
-            ?
-          </button>
+          >✕</button>
         </div>
       </div>
 
@@ -150,5 +148,7 @@ const vw = document.documentElement.clientWidth - sidebarWidth; const vh = docum
     </div>
   );
 }
+
+
 
 

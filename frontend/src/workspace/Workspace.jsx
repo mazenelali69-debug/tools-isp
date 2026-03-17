@@ -72,7 +72,7 @@ export default function Workspace({ windows, setWindows, children }) {
                   className="wsNote"
                   value={w.note ?? ""}
                   onChange={(e)=> update(w.id, { note: e.target.value })}
-                  placeholder="اكتب ملاحظاتك…"
+                  placeholder="Write your notes..."
                 />
               </div>
             )}
@@ -82,6 +82,7 @@ export default function Workspace({ windows, setWindows, children }) {
     </div>
   );
 }
+
 
 
 

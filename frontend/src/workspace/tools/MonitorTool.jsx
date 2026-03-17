@@ -304,9 +304,11 @@ export default function MonitorTool({ win, onChange }) {
 
       <div className="wsMonFoot">
         <div className="wsMonHint">
-          Tip: حمّل interfaces، اختار ifIndex، بعدين Start. بيجيك live Mbps.
+          
         </div>
       </div>
     </div>
   );
 }
+
+

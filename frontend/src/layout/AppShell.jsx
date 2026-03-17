@@ -9,8 +9,8 @@ export default function AppShell({ active, setActive, actions, children }) {
       <div className="ti-main">
         <header className="ti-topbar ti-topbar--tight">
           <div className="ti-topbar__left">
-            <div className="ti-topbar__eyebrow">NOC Command Center</div>
-            <div className="ti-topbar__title">Live Operations Workspace</div>
+            <div className="ti-topbar__eyebrow"><span className="nocGlow">NocoMment Work tools • WhatsApp 70411518 • mazenelali69@gmail.com</span></div>
+            
           </div>
 
           <div className="ti-topbar__actions">
@@ -33,4 +33,8 @@ export default function AppShell({ active, setActive, actions, children }) {
     </div>
   );
 }
+
+
+
+
 
