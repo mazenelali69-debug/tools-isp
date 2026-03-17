@@ -355,6 +355,8 @@ export default function HistoryPage() {
   const [rawRows, setRawRows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
+  const [page, setPage] = useState(1);
+  const pageSize = 25;
 
   async function loadData(currentRange, currentSearch) {
     try {
@@ -447,6 +449,10 @@ export default function HistoryPage() {
     return [{ value: "all", label: "All interfaces" }, ...Array.from(map.values())];
   }, [rawRows]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [range, selectedKey, appliedSearch]);
+
   const filteredRows = useMemo(() => {
     let rows = Array.isArray(rawRows) ? rawRows : [];
 
@@ -467,6 +473,13 @@ export default function HistoryPage() {
 
     return filterRowsByRange(rows, range);
   }, [rawRows, selectedKey, appliedSearch, range]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredRows.length / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const pagedRows = useMemo(() => {
+    const start = (safePage - 1) * pageSize;
+    return filteredRows.slice(start, start + pageSize);
+  }, [filteredRows, safePage]);
 
   const latest = filteredRows.length ? filteredRows[filteredRows.length - 1] : null;
 
@@ -659,8 +672,9 @@ export default function HistoryPage() {
               <div style={{ fontSize: 22, fontWeight: 900 }}>Detailed rows</div>
               <div style={{ opacity: 0.64, marginTop: 4 }}>Unified table for uplink history + monitor interfaces with smart row limiting</div>
             </div>
-            <div style={{ opacity: 0.68, fontWeight: 800 }}>
-              {loading ? "Loading..." : `${filteredRows.length} row(s)`}
+            <div style={{ opacity: 0.68, fontWeight: 800, display: "flex", gap: 14, alignItems: "center" }}>
+              <span>{loading ? "Loading..." : `${filteredRows.length} row(s)`}</span>
+              <span>Page {safePage} of {totalPages}</span>
             </div>
           </div>
 
@@ -694,7 +708,7 @@ export default function HistoryPage() {
                     </td>
                   </tr>
                 ) : (
-                  filteredRows.slice().reverse().map((r, idx) => (
+                  pagedRows.slice().reverse().map((r, idx) => (
                     <tr
                       key={r.kind + ":" + r.displayName + ":" + idx}
                       style={{
@@ -715,11 +729,65 @@ export default function HistoryPage() {
               </tbody>
             </table>
           </div>
+
+          <div
+            style={{
+              marginTop: 14,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 12,
+              flexWrap: "wrap",
+            }}
+          >
+            <div style={{ opacity: 0.68, fontSize: 14 }}>
+              Showing {filteredRows.length === 0 ? 0 : (((safePage - 1) * pageSize) + 1)} to {Math.min(safePage * pageSize, filteredRows.length)} of {filteredRows.length}
+            </div>
+
+            <div style={{ display: "flex", gap: 10 }}>
+              <button
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={safePage <= 1}
+                style={{
+                  height: 40,
+                  padding: "0 16px",
+                  borderRadius: 12,
+                  border: "1px solid rgba(255,255,255,0.10)",
+                  background: safePage <= 1 ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.06)",
+                  color: "#fff",
+                  fontWeight: 800,
+                  cursor: safePage <= 1 ? "not-allowed" : "pointer",
+                  opacity: safePage <= 1 ? 0.45 : 1,
+                }}
+              >
+                Prev
+              </button>
+
+              <button
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={safePage >= totalPages}
+                style={{
+                  height: 40,
+                  padding: "0 16px",
+                  borderRadius: 12,
+                  border: "1px solid rgba(140,180,255,0.35)",
+                  background: safePage >= totalPages ? "rgba(255,255,255,0.03)" : "linear-gradient(180deg, rgba(102,129,255,0.30), rgba(59,83,214,0.24))",
+                  color: "#fff",
+                  fontWeight: 800,
+                  cursor: safePage >= totalPages ? "not-allowed" : "pointer",
+                  opacity: safePage >= totalPages ? 0.45 : 1,
+                }}
+              >
+                Next
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
 
 
 
