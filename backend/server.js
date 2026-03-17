@@ -617,9 +617,9 @@ async function handleInterfaces(req, res){
 
   try {
     let rows = await tryTable();
-    if (filteredRows.length === 0) rows = await tryByIndex();
+    if (rows.length === 0) rows = await tryByIndex();
 
-    if (filteredRows.length === 0) {
+    if (rows.length === 0) {
       return res.status(502).json({
         ok: false,
         error: "SNMP reachable (sysDescr works) but interfaces not accessible. RouterOS SNMP view/permissions likely block IF-MIB."
@@ -1137,7 +1137,7 @@ app.post("/api/interfaces-cli",(req,res)=>{
     }
 
     rows.sort((a,b)=>a.ifIndex-b.ifIndex);
-    return res.json({ ok:true, count: filteredRows.length, interfaces: rows });
+    return res.json({ ok:true, count: rows.length, interfaces: rows });
   });
 });
 
@@ -2817,7 +2817,7 @@ async function nocRunCycle() {
       }
     }
 
-    return { ok: true, checked: filteredRows.length, time: new Date().toISOString() };
+    return { ok: true, checked: rows.length, time: new Date().toISOString() };
   } catch (err) {
     console.error("[NOC][RUN]", err?.message || err);
     return { ok: false, error: String(err?.message || err) };
@@ -3044,7 +3044,7 @@ app.get("/api/aviat/history", (req, res) => {
     return res.json({
       ok: true,
       range,
-      count: filteredRows.length,
+      count: rows.length,
       data: rows
     });
   } catch (err) {
@@ -3580,7 +3580,7 @@ function monitorRangeMs(range) {
 
 function appendMonitorHistorySamples(rows) {
   try {
-    if (!Array.isArray(rows) || filteredRows.length === 0) return;
+    if (!Array.isArray(rows) || rows.length === 0) return;
     const store = readMonitorHistoryStore();
     const nowIso = new Date().toISOString();
 
@@ -3663,32 +3663,7 @@ function flattenMonitorHistory(range, q, target) {
 
 
 
-
-function cleanHistoryRows(rows) {
-  const arr = Array.isArray(rows) ? rows : [];
-
-  return arr.filter((r) => {
-    if (!r) return false;
-
-    const rx = Number(r?.rxMbps);
-    const tx = Number(r?.txMbps);
-    const ts = Number(r?.ts);
-
-    if (!Number.isFinite(rx) || !Number.isFinite(tx)) return false;
-    if (!Number.isFinite(ts)) return false;
-
-    // ignore dead empty samples
-    if (rx === 0 && tx === 0) return false;
-
-    // ignore absurd spikes
-    if (rx < 0 || tx < 0) return false;
-    if (rx > 10000 || tx > 10000) return false;
-
-    return true;
-  });
-}
-
-function smartSampleRows(filteredRows, limit) {
+function smartSampleRows(rows, limit) {
   const arr = Array.isArray(rows) ? rows : [];
   const max = Number(limit || 0);
 
@@ -3722,54 +3697,31 @@ function smartLimitForRange(range) {
 }
 
 
-
-function getRangeMs(range) {
-  switch (String(range || "").trim()) {
-    case "5m": return 5 * 60 * 1000;
-    case "30m": return 30 * 60 * 1000;
-    case "60m": return 60 * 60 * 1000;
-    case "24h": return 24 * 60 * 60 * 1000;
-    case "30d": return 30 * 24 * 60 * 60 * 1000;
-    default: return 60 * 60 * 1000;
-  }
-}
-
-function applyTimeFilter(rows, range) {
-  const now = Date.now();
-  const cutoff = now - getRangeMs(range);
-
-  return (Array.isArray(rows) ? rows : []).filter(r => {
-    const ts = Number(r?.ts || 0);
-    return ts >= cutoff && ts <= now;
-  });
-}
-
-
 /* MONITOR_STREET_HISTORY_ENDPOINT_START */
 app.get("/api/history/monitor-street", async (req, res) => {
   try {
-    const requestedRange = String(req.query.range || "24h");
+    const range = String(req.query.range || "24h");
     const q = String(req.query.q || "");
     const target = String(req.query.target || "");
     const requestedLimit = Number(req.query.limit || 0);
 
-    const rows = flattenMonitorHistory(requestedRange, q, target);
-    const filteredRows = applyTimeFilter(rows, requestedRange);
+    const rows = flattenMonitorHistory(range, q, target);
+    const rawCount = rows.length;
 
     const limit = Number.isFinite(requestedLimit) && requestedLimit > 0
       ? requestedLimit
-      : smartLimitForRange(requestedRange);
+      : smartLimitForRange(range);
 
-    const sampledRows = smartSampleRows(filteredRows, limit);
+    const sampled = smartSampleRows(rows, limit);
 
     return res.json({
       ok: true,
-      range: requestedRange,
-      rawCount: filteredRows.length,
-      count: sampledRows.length,
+      range,
+      rawCount,
+      count: sampled.length,
       limit,
-      sampled: filteredRows.length > sampledRows.length,
-      items: sampledRows
+      sampled: rawCount > sampled.length,
+      items: sampled
     });
   } catch (e) {
     return res.status(500).json({
@@ -3810,7 +3762,7 @@ async function collectMonitorStreetSnapshotForHistory() {
 async function pollMonitorStreetHistoryOnce() {
   try {
     const rows = await collectMonitorStreetSnapshotForHistory();
-    if (Array.isArray(rows) && filteredRows.length > 0) {
+    if (Array.isArray(rows) && rows.length > 0) {
       appendMonitorHistorySamples(rows);
     }
   } catch (e) {
@@ -3824,12 +3776,5 @@ setTimeout(() => {
   setInterval(pollMonitorStreetHistoryOnce, 30000);
 }, 5000);
 /* MONITOR_STREET_HISTORY_POLLER_END */
-
-
-
-
-
-
-
 
 
