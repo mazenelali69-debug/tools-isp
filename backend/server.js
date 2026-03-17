@@ -3476,7 +3476,57 @@ app.post("/api/topology/nodes", async (req, res) => {
 });
 
 
+// =====================================
+// TOOLS_ISP_OPEN_WHATSAPP_ALERT_START
+// =====================================
+const TOOLS_ISP_OPEN_ALERT_COOLDOWN_MS = 2 * 60 * 1000;
+const toolsIspOpenAlertSeen = new Map();
 
+app.use(async (req, res, next) => {
+  try {
+    if (req.method !== "GET") {
+      return next();
+    }
 
+    const p = String(req.path || "");
+    const isOpen =
+      p === "/" ||
+      p === "/index.html";
 
+    if (!isOpen) {
+      return next();
+    }
+
+    const ip =
+      String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() ||
+      String(req.headers["x-real-ip"] || "").trim() ||
+      req.socket?.remoteAddress ||
+      req.ip ||
+      "unknown";
+
+    const now = Date.now();
+    const last = toolsIspOpenAlertSeen.get(ip) || 0;
+
+    if ((now - last) >= TOOLS_ISP_OPEN_ALERT_COOLDOWN_MS) {
+      toolsIspOpenAlertSeen.set(ip, now);
+
+      const msg =
+        "TOOLS-ISP OPEN ALERT`n" +
+        "Time: " + new Date().toLocaleString() + "`n" +
+        "IP: " + ip + "`n" +
+        "Path: " + p;
+
+      sendWhatsAppAlert(String(msg)).catch((err) => {
+        console.error("OPEN ALERT ERROR:", err && err.message ? err.message : err);
+      });
+    }
+  } catch (err) {
+    console.error("OPEN ALERT MIDDLEWARE ERROR:", err && err.message ? err.message : err);
+  }
+
+  next();
+});
+// =====================================
+// TOOLS_ISP_OPEN_WHATSAPP_ALERT_END
+// =====================================
 
