@@ -3530,3 +3530,203 @@ app.use(async (req, res, next) => {
 // TOOLS_ISP_OPEN_WHATSAPP_ALERT_END
 // =====================================
 
+
+
+/* MONITOR_STREET_HISTORY_START */
+const MONITOR_HISTORY_FILE = path.join(__dirname, "data", "monitor-street-history.json");
+const MONITOR_HISTORY_LIMIT_PER_TARGET = 4000;
+
+function ensureMonitorHistoryFile() {
+  try {
+    if (!fs.existsSync(MONITOR_HISTORY_FILE)) {
+      fs.writeFileSync(MONITOR_HISTORY_FILE, "{}", "utf8");
+    }
+  } catch (e) {
+    console.error("monitor history file init failed", e);
+  }
+}
+
+function readMonitorHistoryStore() {
+  try {
+    ensureMonitorHistoryFile();
+    const raw = fs.readFileSync(MONITOR_HISTORY_FILE, "utf8");
+    const json = JSON.parse(raw || "{}");
+    return json && typeof json === "object" ? json : {};
+  } catch (e) {
+    console.error("read monitor history failed", e);
+    return {};
+  }
+}
+
+function writeMonitorHistoryStore(store) {
+  try {
+    ensureMonitorHistoryFile();
+    fs.writeFileSync(MONITOR_HISTORY_FILE, JSON.stringify(store, null, 2), "utf8");
+  } catch (e) {
+    console.error("write monitor history failed", e);
+  }
+}
+
+function monitorRangeMs(range) {
+  switch (String(range || "").trim()) {
+    case "5m": return 5 * 60 * 1000;
+    case "30m": return 30 * 60 * 1000;
+    case "60m": return 60 * 60 * 1000;
+    case "24h": return 24 * 60 * 60 * 1000;
+    case "30d": return 30 * 24 * 60 * 60 * 1000;
+    default: return 24 * 60 * 60 * 1000;
+  }
+}
+
+function appendMonitorHistorySamples(rows) {
+  try {
+    if (!Array.isArray(rows) || rows.length === 0) return;
+    const store = readMonitorHistoryStore();
+    const nowIso = new Date().toISOString();
+
+    for (const item of rows) {
+      const key = String(item?.id || item?.name || item?.ip || "").trim();
+      if (!key) continue;
+
+      if (!Array.isArray(store[key])) {
+        store[key] = [];
+      }
+
+      store[key].push({
+        id: item?.id || key,
+        name: item?.name || key,
+        ip: item?.ip || "",
+        source: item?.source || "",
+        uplink: item?.uplink || "",
+        ifName: item?.ifName || "",
+        rxMbps: Number(item?.rxMbps || 0),
+        txMbps: Number(item?.txMbps || 0),
+        pingMs: item?.pingMs ?? null,
+        packetLoss: item?.packetLoss ?? 0,
+        ts: item?.ts || nowIso
+      });
+
+      if (store[key].length > MONITOR_HISTORY_LIMIT_PER_TARGET) {
+        store[key] = store[key].slice(-MONITOR_HISTORY_LIMIT_PER_TARGET);
+      }
+    }
+
+    writeMonitorHistoryStore(store);
+  } catch (e) {
+    console.error("append monitor history failed", e);
+  }
+}
+
+function flattenMonitorHistory(range, q, target) {
+  const store = readMonitorHistoryStore();
+  const now = Date.now();
+  const minMs = now - monitorRangeMs(range);
+  const qText = String(q || "").trim().toLowerCase();
+  const targetText = String(target || "").trim().toLowerCase();
+
+  const rows = [];
+
+  for (const [key, arr] of Object.entries(store)) {
+    if (!Array.isArray(arr)) continue;
+
+    for (const item of arr) {
+      const tsMs = new Date(item?.ts || 0).getTime();
+      if (!Number.isFinite(tsMs) || tsMs < minMs) continue;
+
+      const hay = [
+        key,
+        item?.id,
+        item?.name,
+        item?.ip,
+        item?.source,
+        item?.uplink,
+        item?.ifName
+      ].join(" ").toLowerCase();
+
+      if (qText && !hay.includes(qText)) continue;
+      if (targetText && !(String(item?.id || "").toLowerCase() === targetText || String(item?.name || "").toLowerCase() === targetText || String(key).toLowerCase() === targetText)) {
+        continue;
+      }
+
+      rows.push({
+        ...item,
+        kind: "interface",
+        kindLabel: "Interface"
+      });
+    }
+  }
+
+  rows.sort((a, b) => new Date(a.ts).getTime() - new Date(b.ts).getTime());
+  return rows;
+}
+/* MONITOR_STREET_HISTORY_END */
+
+
+/* MONITOR_STREET_HISTORY_ENDPOINT_START */
+app.get("/api/history/monitor-street", async (req, res) => {
+  try {
+    const range = String(req.query.range || "24h");
+    const q = String(req.query.q || "");
+    const target = String(req.query.target || "");
+
+    const rows = flattenMonitorHistory(range, q, target);
+
+    return res.json({
+      ok: true,
+      count: rows.length,
+      items: rows
+    });
+  } catch (e) {
+    return res.status(500).json({
+      ok: false,
+      error: String(e?.message || e || "monitor street history failed")
+    });
+  }
+});
+/* MONITOR_STREET_HISTORY_ENDPOINT_END */
+
+
+/* MONITOR_STREET_HISTORY_POLLER_START */
+async function collectMonitorStreetSnapshotForHistory() {
+  try {
+    if (typeof buildMonitorStreetSnapshot === "function") {
+      const rows = await buildMonitorStreetSnapshot();
+      return Array.isArray(rows) ? rows : [];
+    }
+
+    if (typeof getMonitorStreetSnapshot === "function") {
+      const rows = await getMonitorStreetSnapshot();
+      return Array.isArray(rows) ? rows : [];
+    }
+
+    const baseUrl = process.env.MONITOR_HISTORY_SELF_URL || "http://127.0.0.1:9090";
+    const response = await fetch(baseUrl + "/api/monitor-street/snapshot", { cache: "no-store" });
+    const json = await response.json();
+    if (!response.ok || !json?.ok) {
+      throw new Error(json?.error || "snapshot fetch failed");
+    }
+    return Array.isArray(json?.data) ? json.data : [];
+  } catch (e) {
+    console.error("collect monitor street snapshot failed", e);
+    return [];
+  }
+}
+
+async function pollMonitorStreetHistoryOnce() {
+  try {
+    const rows = await collectMonitorStreetSnapshotForHistory();
+    if (Array.isArray(rows) && rows.length > 0) {
+      appendMonitorHistorySamples(rows);
+    }
+  } catch (e) {
+    console.error("poll monitor street history failed", e);
+  }
+}
+
+ensureMonitorHistoryFile();
+setTimeout(() => {
+  pollMonitorStreetHistoryOnce();
+  setInterval(pollMonitorStreetHistoryOnce, 30000);
+}, 5000);
+/* MONITOR_STREET_HISTORY_POLLER_END */
+
