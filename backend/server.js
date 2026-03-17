@@ -3663,6 +3663,31 @@ function flattenMonitorHistory(range, q, target) {
 
 
 
+
+function cleanHistoryRows(rows) {
+  const arr = Array.isArray(rows) ? rows : [];
+
+  return arr.filter((r) => {
+    if (!r) return false;
+
+    const rx = Number(r?.rxMbps);
+    const tx = Number(r?.txMbps);
+    const ts = Number(r?.ts);
+
+    if (!Number.isFinite(rx) || !Number.isFinite(tx)) return false;
+    if (!Number.isFinite(ts)) return false;
+
+    // ignore dead empty samples
+    if (rx === 0 && tx === 0) return false;
+
+    // ignore absurd spikes
+    if (rx < 0 || tx < 0) return false;
+    if (rx > 10000 || tx > 10000) return false;
+
+    return true;
+  });
+}
+
 function smartSampleRows(rows, limit) {
   const arr = Array.isArray(rows) ? rows : [];
   const max = Number(limit || 0);
@@ -3708,19 +3733,22 @@ app.get("/api/history/monitor-street", async (req, res) => {
     const rows = flattenMonitorHistory(range, q, target);
     const rawCount = rows.length;
 
+    const cleaned = cleanHistoryRows(rows).sort((a, b) => Number(a.ts || 0) - Number(b.ts || 0));
+
     const limit = Number.isFinite(requestedLimit) && requestedLimit > 0
       ? requestedLimit
       : smartLimitForRange(range);
 
-    const sampled = smartSampleRows(rows, limit);
+    const sampled = smartSampleRows(cleaned, limit);
 
     return res.json({
       ok: true,
       range,
       rawCount,
+      cleanedCount: cleaned.length,
       count: sampled.length,
       limit,
-      sampled: rawCount > sampled.length,
+      sampled: cleaned.length > sampled.length,
       items: sampled
     });
   } catch (e) {
@@ -3776,5 +3804,6 @@ setTimeout(() => {
   setInterval(pollMonitorStreetHistoryOnce, 30000);
 }, 5000);
 /* MONITOR_STREET_HISTORY_POLLER_END */
+
 
 
