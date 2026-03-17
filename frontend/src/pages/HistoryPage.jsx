@@ -58,11 +58,23 @@ function fmtTime(ts) {
   return d.toLocaleString();
 }
 
-function buildHistoryUrl(range, q) {
+function buildHistoryUrl(range, q, limit) {
   const params = new URLSearchParams();
   if (range) params.set("range", range);
   if (q) params.set("q", q);
+  if (limit) params.set("limit", String(limit));
   return `/api/history/uplink?${params.toString()}`;
+}
+
+function smartFrontendLimit(range) {
+  switch (String(range || "").trim()) {
+    case "5m": return 300;
+    case "30m": return 400;
+    case "60m": return 500;
+    case "24h": return 500;
+    case "30d": return 800;
+    default: return 500;
+  }
 }
 
 function normalizeUplinkRows(input) {
@@ -349,9 +361,11 @@ export default function HistoryPage() {
       setLoading(true);
       setErr("");
 
+      const smartLimit = smartFrontendLimit(currentRange);
+
       const [historyResp, streetResp] = await Promise.allSettled([
-        fetch(buildHistoryUrl(currentRange, currentSearch), { cache: "no-store" }),
-        fetch("/api/history/monitor-street?range=" + encodeURIComponent(currentRange) + "&q=" + encodeURIComponent(currentSearch || ""), { cache: "no-store" }),
+        fetch(buildHistoryUrl(currentRange, currentSearch, smartLimit), { cache: "no-store" }),
+        fetch("/api/history/monitor-street?range=" + encodeURIComponent(currentRange) + "&q=" + encodeURIComponent(currentSearch || "") + "&limit=" + encodeURIComponent(smartLimit), { cache: "no-store" }),
       ]);
 
       let uplinkRows = [];
@@ -643,7 +657,7 @@ export default function HistoryPage() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
             <div>
               <div style={{ fontSize: 22, fontWeight: 900 }}>Detailed rows</div>
-              <div style={{ opacity: 0.64, marginTop: 4 }}>Unified table for uplink history + monitor interfaces</div>
+              <div style={{ opacity: 0.64, marginTop: 4 }}>Unified table for uplink history + monitor interfaces with smart row limiting</div>
             </div>
             <div style={{ opacity: 0.68, fontWeight: 800 }}>
               {loading ? "Loading..." : `${filteredRows.length} row(s)`}
@@ -706,5 +720,6 @@ export default function HistoryPage() {
     </div>
   );
 }
+
 
 

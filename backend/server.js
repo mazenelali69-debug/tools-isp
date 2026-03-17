@@ -3662,19 +3662,66 @@ function flattenMonitorHistory(range, q, target) {
 /* MONITOR_STREET_HISTORY_END */
 
 
+
+function smartSampleRows(rows, limit) {
+  const arr = Array.isArray(rows) ? rows : [];
+  const max = Number(limit || 0);
+
+  if (!Number.isFinite(max) || max <= 0) return arr;
+  if (arr.length <= max) return arr;
+
+  const step = Math.ceil(arr.length / max);
+  const out = [];
+
+  for (let i = 0; i < arr.length; i += step) {
+    out.push(arr[i]);
+  }
+
+  const last = arr[arr.length - 1];
+  if (out.length === 0 || out[out.length - 1] !== last) {
+    out.push(last);
+  }
+
+  return out.slice(-max);
+}
+
+function smartLimitForRange(range) {
+  switch (String(range || "").trim()) {
+    case "5m": return 300;
+    case "30m": return 400;
+    case "60m": return 500;
+    case "24h": return 500;
+    case "30d": return 800;
+    default: return 500;
+  }
+}
+
+
 /* MONITOR_STREET_HISTORY_ENDPOINT_START */
 app.get("/api/history/monitor-street", async (req, res) => {
   try {
     const range = String(req.query.range || "24h");
     const q = String(req.query.q || "");
     const target = String(req.query.target || "");
+    const requestedLimit = Number(req.query.limit || 0);
 
     const rows = flattenMonitorHistory(range, q, target);
+    const rawCount = rows.length;
+
+    const limit = Number.isFinite(requestedLimit) && requestedLimit > 0
+      ? requestedLimit
+      : smartLimitForRange(range);
+
+    const sampled = smartSampleRows(rows, limit);
 
     return res.json({
       ok: true,
-      count: rows.length,
-      items: rows
+      range,
+      rawCount,
+      count: sampled.length,
+      limit,
+      sampled: rawCount > sampled.length,
+      items: sampled
     });
   } catch (e) {
     return res.status(500).json({
@@ -3729,4 +3776,5 @@ setTimeout(() => {
   setInterval(pollMonitorStreetHistoryOnce, 30000);
 }, 5000);
 /* MONITOR_STREET_HISTORY_POLLER_END */
+
 
