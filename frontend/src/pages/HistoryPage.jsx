@@ -351,7 +351,7 @@ export default function HistoryPage() {
 
       const [historyResp, streetResp] = await Promise.allSettled([
         fetch(buildHistoryUrl(currentRange, currentSearch), { cache: "no-store" }),
-        fetch("/api/monitor-street/snapshot", { cache: "no-store" }),
+        fetch("/api/history/monitor-street?range=" + encodeURIComponent(currentRange) + "&q=" + encodeURIComponent(currentSearch || ""), { cache: "no-store" }),
       ]);
 
       let uplinkRows = [];
@@ -383,13 +383,21 @@ export default function HistoryPage() {
         const r = streetResp.value;
         const j = await r.json();
         if (!r.ok || !j?.ok) {
-          errors.push(j?.error || "Monitor Street snapshot failed");
+          errors.push(j?.error || "Monitor Street history failed");
         } else {
-          const data = Array.isArray(j?.data) ? j.data : [];
+          const data = Array.isArray(j?.items)
+            ? j.items
+            : Array.isArray(j?.data)
+            ? j.data
+            : Array.isArray(j?.rows)
+            ? j.rows
+            : Array.isArray(j?.history)
+            ? j.history
+            : [];
           interfaceRows = normalizeInterfaceRows(data);
         }
       } else {
-        errors.push("Monitor Street snapshot request failed");
+        errors.push("Monitor Street history request failed");
       }
 
       const merged = [...uplinkRows, ...interfaceRows].sort((a, b) => (a.__ms || 0) - (b.__ms || 0));
@@ -481,7 +489,7 @@ export default function HistoryPage() {
             Unified History
           </div>
           <div style={{ marginTop: 8, opacity: 0.7, maxWidth: 980, fontSize: 15 }}>
-            One shared history page that mixes uplink traffic with Monitor Street interface rows inside the same controls.
+            One shared history page that mixes uplink traffic with real Monitor Street interface history inside the same controls.
           </div>
         </div>
 
@@ -698,4 +706,5 @@ export default function HistoryPage() {
     </div>
   );
 }
+
 
