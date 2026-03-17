@@ -187,6 +187,7 @@ function HistoryChart({ items }) {
   };
 
   const hoverItem = hoverIndex == null ? null : data[hoverIndex];
+const hasEnoughPoints = data.length >= 2;
 
   function handleMove(e) {
     if (!wrapRef.current || data.length === 0) return;
@@ -241,6 +242,25 @@ function HistoryChart({ items }) {
             <div style={{ fontSize: 22, fontWeight: 900 }}>No rows for this filter</div>
             <div style={{ marginTop: 8, fontSize: 14, opacity: 0.7 }}>
               Try another time window, target, or search.
+            </div>
+          </div>
+        ) : !hasEnoughPoints ? (
+          <div
+            style={{
+              minHeight: 270,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+              color: "rgba(255,255,255,0.72)",
+              border: "1px dashed rgba(255,255,255,0.08)",
+              borderRadius: 20,
+              background: "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))",
+            }}
+          >
+            <div style={{ fontSize: 22, fontWeight: 900 }}>Need more samples</div>
+            <div style={{ marginTop: 8, fontSize: 14, opacity: 0.7 }}>
+              This target currently has only one point, so the chart line cannot be drawn yet.
             </div>
           </div>
         ) : (
@@ -678,3 +698,4 @@ export default function HistoryPage() {
     </div>
   );
 }
+
