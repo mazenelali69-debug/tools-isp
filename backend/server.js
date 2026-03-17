@@ -617,9 +617,9 @@ async function handleInterfaces(req, res){
 
   try {
     let rows = await tryTable();
-    if (rows.length === 0) rows = await tryByIndex();
+    if (filteredRows.length === 0) rows = await tryByIndex();
 
-    if (rows.length === 0) {
+    if (filteredRows.length === 0) {
       return res.status(502).json({
         ok: false,
         error: "SNMP reachable (sysDescr works) but interfaces not accessible. RouterOS SNMP view/permissions likely block IF-MIB."
@@ -1137,7 +1137,7 @@ app.post("/api/interfaces-cli",(req,res)=>{
     }
 
     rows.sort((a,b)=>a.ifIndex-b.ifIndex);
-    return res.json({ ok:true, count: rows.length, interfaces: rows });
+    return res.json({ ok:true, count: filteredRows.length, interfaces: rows });
   });
 });
 
@@ -2817,7 +2817,7 @@ async function nocRunCycle() {
       }
     }
 
-    return { ok: true, checked: rows.length, time: new Date().toISOString() };
+    return { ok: true, checked: filteredRows.length, time: new Date().toISOString() };
   } catch (err) {
     console.error("[NOC][RUN]", err?.message || err);
     return { ok: false, error: String(err?.message || err) };
@@ -3044,7 +3044,7 @@ app.get("/api/aviat/history", (req, res) => {
     return res.json({
       ok: true,
       range,
-      count: rows.length,
+      count: filteredRows.length,
       data: rows
     });
   } catch (err) {
@@ -3580,7 +3580,7 @@ function monitorRangeMs(range) {
 
 function appendMonitorHistorySamples(rows) {
   try {
-    if (!Array.isArray(rows) || rows.length === 0) return;
+    if (!Array.isArray(rows) || filteredRows.length === 0) return;
     const store = readMonitorHistoryStore();
     const nowIso = new Date().toISOString();
 
@@ -3746,49 +3746,30 @@ function applyTimeFilter(rows, range) {
 
 
 /* MONITOR_STREET_HISTORY_ENDPOINT_START */
-
-function normalizeRange(r) {
-  switch (String(r || "").trim()) {
-    case "5m": return "5m";
-    case "30m": return "1h";     // map to old 1 hour bucket
-    case "60m": return "1h";
-    case "24h": return "24h";
-    case "30d": return "7d";     // or whatever old max was
-    default: return r;
-  }
-}
-
 app.get("/api/history/monitor-street", async (req, res) => {
   try {
-    let range = String(req.query.range || "24h");
-range = normalizeRange(range);
+    const requestedRange = String(req.query.range || "24h");
     const q = String(req.query.q || "");
     const target = String(req.query.target || "");
     const requestedLimit = Number(req.query.limit || 0);
 
-    const rows = flattenMonitorHistory(range, q, target);
-
-// CLEAN RANGE FILTER (SAFE)
-const filteredRows = applyTimeFilter(rows, req.query.range);
-    const rawCount = filteredRows.length;
-
-    const cleaned = cleanHistoryRows(rows).sort((a, b) => Number(a.ts || 0) - Number(b.ts || 0));
+    const rows = flattenMonitorHistory(requestedRange, q, target);
+    const filteredRows = applyTimeFilter(rows, requestedRange);
 
     const limit = Number.isFinite(requestedLimit) && requestedLimit > 0
       ? requestedLimit
-      : smartLimitForRange(range);
+      : smartLimitForRange(requestedRange);
 
-    const sampled = smartSampleRows(cleaned, limit);
+    const sampledRows = smartSampleRows(filteredRows, limit);
 
     return res.json({
       ok: true,
-      range,
-      rawCount,
-      cleanedCount: cleaned.length,
-      count: sampled.length,
+      range: requestedRange,
+      rawCount: filteredRows.length,
+      count: sampledRows.length,
       limit,
-      sampled: cleaned.length > sampled.length,
-      items: sampled
+      sampled: filteredRows.length > sampledRows.length,
+      items: sampledRows
     });
   } catch (e) {
     return res.status(500).json({
@@ -3829,7 +3810,7 @@ async function collectMonitorStreetSnapshotForHistory() {
 async function pollMonitorStreetHistoryOnce() {
   try {
     const rows = await collectMonitorStreetSnapshotForHistory();
-    if (Array.isArray(rows) && rows.length > 0) {
+    if (Array.isArray(rows) && filteredRows.length > 0) {
       appendMonitorHistorySamples(rows);
     }
   } catch (e) {
@@ -3843,6 +3824,10 @@ setTimeout(() => {
   setInterval(pollMonitorStreetHistoryOnce, 30000);
 }, 5000);
 /* MONITOR_STREET_HISTORY_POLLER_END */
+
+
+
+
 
 
 
