@@ -383,7 +383,7 @@ const oper = String(opS).trim();
     // only sample on first pass when we have no previous counters yet
     if(!prev){
       try{
-        const th = await measureIfThroughput(ip, comm, idx, 250);
+        const th = await measureIfThroughput(ip, comm, idx, 1000);
         if(th && th.ok){
           rxMbps = Math.round(th.rxMbps * 100) / 100;
           txMbps = Math.round(th.txMbps * 100) / 100;
@@ -3580,6 +3580,38 @@ function monitorRangeMs(range) {
   }
 }
 
+function sanitizeMbpsPair(rx, tx, prevRx, prevTx) {
+  let rxN = Number(rx);
+  let txN = Number(tx);
+  let prevRxN = Number(prevRx);
+  let prevTxN = Number(prevTx);
+
+  if (!Number.isFinite(rxN)) rxN = 0;
+  if (!Number.isFinite(txN)) txN = 0;
+
+  if (rxN < 0) rxN = 0;
+  if (txN < 0) txN = 0;
+
+  const hardCap = 350;
+  if (rxN > hardCap) rxN = 0;
+  if (txN > hardCap) txN = 0;
+
+  const spikeFactor = 4;
+
+  if (Number.isFinite(prevRxN) && prevRxN > 0 && rxN > (prevRxN * spikeFactor)) {
+    rxN = prevRxN;
+  }
+
+  if (Number.isFinite(prevTxN) && prevTxN > 0 && txN > (prevTxN * spikeFactor)) {
+    txN = prevTxN;
+  }
+
+  return {
+    rxMbps: Math.round(rxN * 100) / 100,
+    txMbps: Math.round(txN * 100) / 100
+  };
+}
+
 function appendMonitorHistorySamples(rows) {
   try {
     if (!Array.isArray(rows) || rows.length === 0) return;
@@ -3594,6 +3626,14 @@ function appendMonitorHistorySamples(rows) {
         store[key] = [];
       }
 
+      const prev = store[key].length ? store[key][store[key].length - 1] : null;
+      const sane = sanitizeMbpsPair(
+        item?.rxMbps,
+        item?.txMbps,
+        prev?.rxMbps,
+        prev?.txMbps
+      );
+
       store[key].push({
         id: item?.id || key,
         name: item?.name || key,
@@ -3601,8 +3641,8 @@ function appendMonitorHistorySamples(rows) {
         source: item?.source || "",
         uplink: item?.uplink || "",
         ifName: item?.ifName || "",
-        rxMbps: Number(item?.rxMbps || 0),
-        txMbps: Number(item?.txMbps || 0),
+        rxMbps: sane.rxMbps,
+        txMbps: sane.txMbps,
         pingMs: item?.pingMs ?? null,
         packetLoss: item?.packetLoss ?? 0,
         ts: item?.ts || nowIso
@@ -3778,6 +3818,9 @@ setTimeout(() => {
   setInterval(pollMonitorStreetHistoryOnce, 30000);
 }, 5000);
 /* MONITOR_STREET_HISTORY_POLLER_END */
+
+
+
 
 
 

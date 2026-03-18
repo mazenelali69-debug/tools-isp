@@ -365,7 +365,7 @@ export default function HistoryPage() {
       setLoading(true);
       setErr("");
 
-      const smartLimit = smartFrontendLimit(currentRange);
+      const smartLimit = 1000;
 
       const [historyResp, streetResp] = await Promise.allSettled([
         fetch(buildHistoryUrl(currentRange, currentSearch, smartLimit), { cache: "no-store" }),
@@ -491,7 +491,7 @@ setAllRows((prev) => {
       );
     }
 
-    return filterRowsByRange(rows, range);
+    return rows;
   }, [rawRows, selectedSource, selectedKey, appliedSearch, range]);
 
   const totalPages = Math.max(1, Math.ceil(filteredRows.length / pageSize));
@@ -807,6 +807,8 @@ setAllRows((prev) => {
     </div>
   );
 }
+
+
 
 
 
