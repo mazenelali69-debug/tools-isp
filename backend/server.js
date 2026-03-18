@@ -3549,8 +3549,10 @@ function ensureMonitorHistoryFile() {
 function readMonitorHistoryStore() {
   try {
     ensureMonitorHistoryFile();
-    const raw = fs.readFileSync(MONITOR_HISTORY_FILE, "utf8");
-    const json = JSON.parse(raw || "{}");
+    let raw = fs.readFileSync(MONITOR_HISTORY_FILE, "utf8");
+    raw = String(raw || "").replace(/^\uFEFF/, "").trim();
+    if (!raw) raw = "{}";
+    const json = JSON.parse(raw);
     return json && typeof json === "object" ? json : {};
   } catch (e) {
     console.error("read monitor history failed", e);
@@ -3776,5 +3778,6 @@ setTimeout(() => {
   setInterval(pollMonitorStreetHistoryOnce, 30000);
 }, 5000);
 /* MONITOR_STREET_HISTORY_POLLER_END */
+
 
 
