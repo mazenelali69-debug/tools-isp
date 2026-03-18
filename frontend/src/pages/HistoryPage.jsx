@@ -353,6 +353,8 @@ export default function HistoryPage() {
   const [appliedSearch, setAppliedSearch] = useState("");
   const [selectedKey, setSelectedKey] = useState("all");
   const [rawRows, setRawRows] = useState([]);
+  const [allRows, setAllRows] = useState([]);
+  const [selectedSource, setSelectedSource] = useState("all");
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
   const [page, setPage] = useState(1);
@@ -418,6 +420,13 @@ export default function HistoryPage() {
 
       const merged = [...uplinkRows, ...interfaceRows].sort((a, b) => (a.__ms || 0) - (b.__ms || 0));
       setRawRows(merged);
+setAllRows((prev) => {
+  const map = new Map();
+  [...prev, ...merged].forEach(r => {
+    map.set(r.selectorKey, r);
+  });
+  return Array.from(map.values());
+});
 
       if (errors.length && merged.length === 0) {
         throw new Error(errors.join(" | "));
@@ -438,7 +447,7 @@ export default function HistoryPage() {
 
   const selectorItems = useMemo(() => {
     const map = new Map();
-    for (const r of rawRows) {
+    for (const r of allRows) {
       if (!map.has(r.selectorKey)) {
         map.set(r.selectorKey, {
           value: r.selectorKey,
@@ -446,15 +455,26 @@ export default function HistoryPage() {
         });
       }
     }
-    return [{ value: "all", label: "All interfaces" }, ...Array.from(map.values())];
-  }, [rawRows]);
+    return [{ value: "all", label: "All targets" }, ...Array.from(map.values())];
+  }, [allRows]);
+
+  useEffect(() => {
+    const exists = selectorItems.some((x) => x.value === selectedKey);
+    if (!exists) {
+      setSelectedKey("all");
+    }
+  }, [selectorItems, selectedKey]);
 
   useEffect(() => {
     setPage(1);
-  }, [range, selectedKey, appliedSearch]);
+  }, [range, selectedKey, selectedSource, appliedSearch]);
 
   const filteredRows = useMemo(() => {
     let rows = Array.isArray(rawRows) ? rawRows : [];
+
+    if (selectedSource !== "all") {
+      rows = rows.filter((r) => r.kind === selectedSource);
+    }
 
     if (selectedKey !== "all") {
       rows = rows.filter((r) => r.selectorKey === selectedKey);
@@ -472,7 +492,7 @@ export default function HistoryPage() {
     }
 
     return filterRowsByRange(rows, range);
-  }, [rawRows, selectedKey, appliedSearch, range]);
+  }, [rawRows, selectedSource, selectedKey, appliedSearch, range]);
 
   const totalPages = Math.max(1, Math.ceil(filteredRows.length / pageSize));
   const safePage = Math.min(page, totalPages);
@@ -587,7 +607,7 @@ export default function HistoryPage() {
               </select>
             </div>
 
-            <div style={{ gridColumn: "span 4" }}>
+            <div style={{ gridColumn: "span 2" }}>
               <div style={labelStyle}>Search</div>
               <input
                 value={searchInput}
@@ -787,6 +807,14 @@ export default function HistoryPage() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
 
 
 
