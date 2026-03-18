@@ -148,7 +148,29 @@ function SummaryCard({ label, value, sub, color }) {
   );
 }
 
-function HistoryChart({ items }) {
+
+function pulseOpacity(value, maxValue) {
+  const v = Number(value || 0);
+  const m = Math.max(1, Number(maxValue || 1));
+  const ratio = Math.max(0, Math.min(1, v / m));
+  return (0.18 + (ratio * 0.52)).toFixed(3);
+}
+
+function pulseDuration(value, maxValue) {
+  const v = Number(value || 0);
+  const m = Math.max(1, Number(maxValue || 1));
+  const ratio = Math.max(0, Math.min(1, v / m));
+  return (2.4 - (ratio * 1.2)).toFixed(2) + "s";
+}
+
+function pulseScale(value, maxValue) {
+  const v = Number(value || 0);
+  const m = Math.max(1, Number(maxValue || 1));
+  const ratio = Math.max(0, Math.min(1, v / m));
+  return (1 + ratio * 0.035).toFixed(3);
+}
+
+function HistoryChart({ items, stacked = false }) {
   const wrapRef = useRef(null);
   const width = 1200;
   const height = 270;
@@ -159,26 +181,49 @@ function HistoryChart({ items }) {
 
   const data = useMemo(() => {
     const safe = Array.isArray(items) ? items : [];
-    return safe.map((x, i) => ({
-      i,
-      raw: x,
-      rx: num(x?.rxValue ?? x?.rxMbps ?? x?.rx),
-      tx: num(x?.txValue ?? x?.txMbps ?? x?.tx),
-      time: x?.__dt || parseTs(x),
-      label: x?.displayName || x?.name || x?.uplink || x?.source || x?.ip || "-",
-      kindLabel: x?.kindLabel || "-",
-    }));
+    return safe.map((x, i) => {
+      const rx = num(x?.rxValue ?? x?.rxMbps ?? x?.rx);
+      const tx = num(x?.txValue ?? x?.txMbps ?? x?.tx);
+      return {
+        i,
+        raw: x,
+        rx,
+        tx,
+        total: Math.max(0, rx) + Math.max(0, tx),
+        time: x?.__dt || parseTs(x),
+        label: x?.displayName || x?.name || x?.uplink || x?.source || x?.ip || "-",
+        kindLabel: x?.kindLabel || "-",
+      };
+    });
   }, [items]);
 
-  const maxVal = Math.max(1, ...data.flatMap((d) => [d.rx, d.tx]));
+  const hasEnoughPoints = data.length >= 2;
+const maxStacked = Math.max(
+  1,
+  ...data.map((d) => Math.max(0, d.rx) + Math.max(0, d.tx))
+);
+  const hoverItem = hoverIndex == null ? null : data[hoverIndex];
+
+  const maxVal = useMemo(() => {
+    if (!data.length) return 1;
+    if (stacked) {
+      return Math.max(1, ...data.map((d) => d.total));
+    }
+    return Math.max(1, ...data.flatMap((d) => [d.rx, d.tx]));
+  }, [data, stacked]);
+
   const xStep = data.length > 1 ? (width - pad * 2) / (data.length - 1) : 0;
+  const innerWidth = width - pad * 2;
+  const innerHeight = height - pad * 2;
+  const barSlot = data.length > 0 ? innerWidth / data.length : innerWidth;
+  const barWidth = Math.max(8, Math.min(42, barSlot * 0.9));
 
   const linePath = (key) => {
     if (!data.length) return "";
     return data
       .map((d, idx) => {
         const x = pad + idx * xStep;
-        const y = height - pad - ((d[key] / maxVal) * (height - pad * 2));
+        const y = height - pad - ((d[key] / maxVal) * innerHeight);
         return `${idx === 0 ? "M" : "L"} ${x} ${y}`;
       })
       .join(" ");
@@ -189,28 +234,37 @@ function HistoryChart({ items }) {
     const top = data
       .map((d, idx) => {
         const x = pad + idx * xStep;
-        const y = height - pad - ((d[key] / maxVal) * (height - pad * 2));
+        const y = height - pad - ((d[key] / maxVal) * innerHeight);
         return `${idx === 0 ? "M" : "L"} ${x} ${y}`;
       })
       .join(" ");
+
     const lastX = pad + (data.length - 1) * xStep;
     const baseY = height - pad;
     return `${top} L ${lastX} ${baseY} L ${pad} ${baseY} Z`;
   };
 
-  const hoverItem = hoverIndex == null ? null : data[hoverIndex];
-const hasEnoughPoints = data.length >= 2;
-
   function handleMove(e) {
     if (!wrapRef.current || data.length === 0) return;
+
     const rect = wrapRef.current.getBoundingClientRect();
     const relX = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
-    const ratio = rect.width > 0 ? relX / rect.width : 0;
-    const idx = Math.max(0, Math.min(data.length - 1, Math.round(ratio * (data.length - 1))));
+    const relY = Math.max(0, Math.min(rect.height, e.clientY - rect.top));
+
+    let idx = 0;
+
+    if (stacked) {
+      const ratio = rect.width > 0 ? relX / rect.width : 0;
+      idx = Math.max(0, Math.min(data.length - 1, Math.floor(ratio * data.length)));
+    } else {
+      const ratio = rect.width > 0 ? relX / rect.width : 0;
+      idx = Math.max(0, Math.min(data.length - 1, Math.round(ratio * (data.length - 1))));
+    }
+
     setHoverIndex(idx);
     setHoverBox({
       x: relX,
-      y: Math.max(12, e.clientY - rect.top - 18),
+      y: Math.max(12, relY - 18),
     });
   }
 
@@ -223,7 +277,9 @@ const hasEnoughPoints = data.length >= 2;
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
         <div>
           <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: "-0.02em" }}>Traffic History</div>
-          <div style={{ opacity: 0.68, marginTop: 4 }}>Unified view for uplinks + monitor interfaces</div>
+          <div style={{ opacity: 0.68, marginTop: 4 }}>
+            {stacked ? "Top traffic stacked bars with live pulse for all targets" : "Unified view for uplinks + monitor interfaces"}
+          </div>
         </div>
         <div style={{ display: "flex", gap: 16, fontWeight: 800 }}>
           <span style={{ color: "#63ffa3" }}>RX</span>
@@ -272,13 +328,46 @@ const hasEnoughPoints = data.length >= 2;
           >
             <div style={{ fontSize: 22, fontWeight: 900 }}>Need more samples</div>
             <div style={{ marginTop: 8, fontSize: 14, opacity: 0.7 }}>
-              This target currently has only one point, so the chart line cannot be drawn yet.
+              This target currently has only one point, so the chart cannot be drawn yet.
             </div>
           </div>
         ) : (
           <>
             <svg viewBox={`0 0 ${width} ${height}`} style={{ width: "100%", height: "auto", display: "block" }}>
+<defs>
+  <style>{`
+    @keyframes trafficPulse {
+      0%   { opacity: .72; transform: scaleY(1); }
+      50%  { opacity: 1; transform: scaleY(1.03); }
+      100% { opacity: .72; transform: scaleY(1); }
+    }
+  `}</style>
+  <linearGradient id="rxBar" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stopColor="#ffe082"/>
+    <stop offset="100%" stopColor="#f6d04d"/>
+  </linearGradient>
+
+  <linearGradient id="txBar" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stopColor="#ff9e80"/>
+    <stop offset="100%" stopColor="#ff7a59"/>
+  </linearGradient>
+  <linearGradient id="rxBarFill" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stopColor="#ffe082" />
+    <stop offset="100%" stopColor="#e0b93f" />
+  </linearGradient>
+  <linearGradient id="txBarFill" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stopColor="#ff9a76" />
+    <stop offset="100%" stopColor="#f06d4f" />
+  </linearGradient>
+</defs>
               <defs>
+  <style>{`
+    @keyframes trafficPulse {
+      0%   { opacity: .72; transform: scaleY(1); }
+      50%  { opacity: 1; transform: scaleY(1.03); }
+      100% { opacity: .72; transform: scaleY(1); }
+    }
+  `}</style>
                 <linearGradient id="rxFill" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="rgba(99,255,163,0.30)" />
                   <stop offset="100%" stopColor="rgba(99,255,163,0.02)" />
@@ -287,26 +376,113 @@ const hasEnoughPoints = data.length >= 2;
                   <stop offset="0%" stopColor="rgba(120,169,255,0.30)" />
                   <stop offset="100%" stopColor="rgba(120,169,255,0.02)" />
                 </linearGradient>
-              </defs>
+                <linearGradient id="rxBarFill" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stopColor="#ffe082" />
+    <stop offset="100%" stopColor="#e0b93f" />
+  </linearGradient>
+  <linearGradient id="txBarFill" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stopColor="#ff9a76" />
+    <stop offset="100%" stopColor="#f06d4f" />
+  </linearGradient>
+</defs>
 
               {[0.2, 0.4, 0.6, 0.8].map((g) => {
-                const y = height - pad - ((height - pad * 2) * g);
-                return <line key={g} x1={pad} y1={y} x2={width - pad} y2={y} stroke="rgba(255,255,255,0.08)" strokeWidth="1" />;
+                const y = height - pad - (innerHeight * g);
+                return (
+                  <line
+                    key={g}
+                    x1={pad}
+                    y1={y}
+                    x2={width - pad}
+                    y2={y}
+                    stroke="rgba(255,255,255,0.08)"
+                    strokeWidth="1"
+                  />
+                );
               })}
 
-              <path d={areaPath("tx")} fill="url(#txFill)" />
-              <path d={areaPath("rx")} fill="url(#rxFill)" />
-              <path d={linePath("tx")} fill="none" stroke="#78a9ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-              <path d={linePath("rx")} fill="none" stroke="#63ffa3" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              {stacked ? (
+                <>
+                  {data.map((d, idx) => {
+                    const xCenter = pad + (idx * barSlot) + (barSlot / 2);
+                    const x = xCenter - (barWidth / 2);
 
-              {hoverIndex != null && data[hoverIndex] ? (() => {
-                const x = pad + hoverIndex * xStep;
-                return (
-                  <g>
-                    <line x1={x} y1={pad} x2={x} y2={height - pad} stroke="rgba(255,255,255,0.20)" strokeDasharray="4 4" />
-                  </g>
-                );
-              })() : null}
+                    const rxH = (Math.max(0, d.rx) / maxVal) * innerHeight;
+                    const txH = (Math.max(0, d.tx) / maxVal) * innerHeight;
+
+                    const rxY = height - pad - rxH;
+                    const txY = rxY - txH;
+
+                    const isHover = hoverIndex === idx;
+
+                    return (
+                      <g key={idx}>
+                        {isHover ? (
+                          <rect
+                            x={x - 2}
+                            y={pad}
+                            width={barWidth + 4}
+                            height={innerHeight}
+                            rx="8"
+                            fill="rgba(255,255,255,0.06)"
+                          />
+                        ) : null}
+
+                        <rect
+                          x={x}
+                          y={rxY}
+                          width={barWidth}
+                          height={Math.max(2, rxH)}
+                          rx="4"
+                          fill="url(#rxBar)"
+                          opacity={0.95}
+                        />
+                        <rect
+                          x={x}
+                          y={txY}
+                          width={barWidth}
+                          height={Math.max(2, txH)}
+                          rx="4"
+                          fill="url(#txBar)"
+                          opacity={0.95}
+                        />
+                      </g>
+                    );
+                  })}
+
+                  {hoverIndex != null && data[hoverIndex] ? (() => {
+                    const xCenter = pad + (hoverIndex * barSlot) + (barSlot / 2);
+                    return (
+                      <g>
+                        <line
+                          x1={xCenter}
+                          y1={pad}
+                          x2={xCenter}
+                          y2={height - pad}
+                          stroke="rgba(255,255,255,0.18)"
+                          strokeDasharray="4 4"
+                        />
+                      </g>
+                    );
+                  })() : null}
+                </>
+              ) : (
+                <>
+                  <path d={areaPath("tx")} fill="url(#txFill)" />
+                  <path d={areaPath("rx")} fill="url(#rxFill)" />
+                  <path d={linePath("tx")} fill="none" stroke="#78a9ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d={linePath("rx")} fill="none" stroke="#63ffa3" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+
+                  {hoverIndex != null && data[hoverIndex] ? (() => {
+                    const x = pad + hoverIndex * xStep;
+                    return (
+                      <g>
+                        <line x1={x} y1={pad} x2={x} y2={height - pad} stroke="rgba(255,255,255,0.20)" strokeDasharray="4 4" />
+                      </g>
+                    );
+                  })() : null}
+                </>
+              )}
             </svg>
 
             {hoverItem ? (
@@ -335,8 +511,13 @@ const hasEnoughPoints = data.length >= 2;
                   {fmtTime(hoverItem.time)}
                 </div>
                 <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
-                  <div style={{ color: "#63ffa3", fontWeight: 800 }}>RX: {fmtMbps(hoverItem.rx)}</div>
-                  <div style={{ color: "#78a9ff", fontWeight: 800 }}>TX: {fmtMbps(hoverItem.tx)}</div>
+                  <div style={{ color: stacked ? "#f6d04d" : "#63ffa3", fontWeight: 800 }}>RX: {fmtMbps(hoverItem.rx)}</div>
+                  <div style={{ color: stacked ? "#ff7a59" : "#78a9ff", fontWeight: 800 }}>TX: {fmtMbps(hoverItem.tx)}</div>
+                  {stacked ? (
+                    <div style={{ color: "#ffffff", opacity: 0.88, fontWeight: 700 }}>
+                      TOTAL: {fmtMbps(hoverItem.total)}
+                    </div>
+                  ) : null}
                 </div>
               </div>
             ) : null}
@@ -347,7 +528,7 @@ const hasEnoughPoints = data.length >= 2;
   );
 }
 
-export default function HistoryPage() {
+function HistoryPage() {
   const [range, setRange] = useState("5m");
   const [searchInput, setSearchInput] = useState("");
   const [appliedSearch, setAppliedSearch] = useState("");
@@ -534,6 +715,7 @@ setAllRows((prev) => {
     return rows.filter((r) => allowed.has(String(r?.selectorKey || "").trim()));
   }, [filteredRows, selectedKey, range]);
 
+  console.log("DEBUG selectedKey =", selectedKey);
   const latest = filteredRows.length ? filteredRows[filteredRows.length - 1] : null;
 
   const stats = useMemo(() => {
@@ -710,7 +892,7 @@ setAllRows((prev) => {
           <SummaryCard label="Latest Type" value={stats.kindLabel} sub={stats.target} />
         </div>
 
-        <HistoryChart items={chartRows} />
+        <HistoryChart items={chartRows} stacked={!selectedKey || selectedKey === "all"} />
 
         <div style={{ ...panel, padding: 18 }}>
           <div style={labelStyle}>Latest sample</div>
@@ -841,14 +1023,7 @@ setAllRows((prev) => {
   );
 }
 
-
-
-
-
-
-
-
-
+export default HistoryPage;
 
 
 
