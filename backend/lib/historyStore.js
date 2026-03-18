@@ -36,10 +36,14 @@ function normalizeText(v) {
 
 function parseRangeToMs(range) {
   switch (String(range || "").trim().toLowerCase()) {
+    case "5m": return 5 * 60 * 1000;
+    case "30m": return 30 * 60 * 1000;
+    case "60m":
     case "1h": return 1 * 60 * 60 * 1000;
     case "6h": return 6 * 60 * 60 * 1000;
     case "24h": return 24 * 60 * 60 * 1000;
     case "7d": return 7 * 24 * 60 * 60 * 1000;
+    case "30d": return 30 * 24 * 60 * 60 * 1000;
     default: return 0;
   }
 }
@@ -127,4 +131,5 @@ module.exports = {
   parseRangeToMs,
   filterUplinkHistory
 };
+
 
