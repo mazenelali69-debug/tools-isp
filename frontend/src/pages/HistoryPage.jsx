@@ -501,6 +501,39 @@ setAllRows((prev) => {
     return filteredRows.slice(start, start + pageSize);
   }, [filteredRows, safePage]);
 
+  const chartRows = useMemo(() => {
+    const rows = Array.isArray(filteredRows) ? filteredRows : [];
+
+    if (selectedKey !== "all") {
+      return rows;
+    }
+
+    const topN = range === "24h" || range === "30d" ? 8 : 5;
+    const scoreMap = new Map();
+
+    for (const r of rows) {
+      const key = String(r?.selectorKey || "").trim();
+      if (!key) continue;
+
+      const rx = Number(r?.rxValue ?? r?.rxMbps ?? r?.rx ?? 0);
+      const tx = Number(r?.txValue ?? r?.txMbps ?? r?.tx ?? 0);
+      const total = Math.max(0, rx) + Math.max(0, tx);
+
+      if (!scoreMap.has(key) || total > scoreMap.get(key)) {
+        scoreMap.set(key, total);
+      }
+    }
+
+    const allowed = new Set(
+      Array.from(scoreMap.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, topN)
+        .map((x) => x[0])
+    );
+
+    return rows.filter((r) => allowed.has(String(r?.selectorKey || "").trim()));
+  }, [filteredRows, selectedKey, range]);
+
   const latest = filteredRows.length ? filteredRows[filteredRows.length - 1] : null;
 
   const stats = useMemo(() => {
@@ -677,7 +710,7 @@ setAllRows((prev) => {
           <SummaryCard label="Latest Type" value={stats.kindLabel} sub={stats.target} />
         </div>
 
-        <HistoryChart items={filteredRows} />
+        <HistoryChart items={chartRows} />
 
         <div style={{ ...panel, padding: 18 }}>
           <div style={labelStyle}>Latest sample</div>
@@ -807,6 +840,10 @@ setAllRows((prev) => {
     </div>
   );
 }
+
+
+
+
 
 
 
