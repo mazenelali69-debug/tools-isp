@@ -12,12 +12,7 @@ import {
 } from "recharts";
 
 const RANGES = ["5m", "30m", "1h", "1d", "30d"];
-const VIEWS = [
-  { key: "all", label: "All", accent: "#a78bfa" },
-  { key: "uplink", label: "Uplink", accent: "#63e6ff" },
-  { key: "switchB", label: "Switch B", accent: "#8dff8a" },
-  { key: "switchA", label: "Switch A", accent: "#ffbf66" }
-];
+const VIEWS = ["all", "uplink", "switchB", "switchA"];
 
 function num(v) {
   const n = Number(v);
@@ -112,9 +107,6 @@ function RangeBtn({ active, children, onClick }) {
       type="button"
       onClick={onClick}
       style={{
-        position: "relative",
-        zIndex: 8,
-        pointerEvents: "auto",
         padding: "8px 13px",
         borderRadius: 12,
         border: active ? "1px solid rgba(110,168,255,.52)" : "1px solid rgba(255,255,255,.10)",
@@ -141,22 +133,17 @@ function ViewBtn({ active, children, onClick, accent }) {
       type="button"
       onClick={onClick}
       style={{
-        position: "relative",
-        zIndex: 20,
-        pointerEvents: "auto",
-        padding: "11px 16px",
+        padding: "10px 14px",
         borderRadius: 14,
         border: active ? `1px solid ${accent}` : "1px solid rgba(255,255,255,.10)",
         background: active ? "rgba(255,255,255,.08)" : "rgba(255,255,255,.03)",
         color: "#fff",
         cursor: "pointer",
-        fontWeight: 900,
+        fontWeight: 800,
         fontSize: 12,
-        minWidth: 96,
-        boxShadow: active ? `0 0 0 1px ${accent}22, 0 10px 24px ${accent}18` : "none",
-        transition: "transform .15s ease, box-shadow .15s ease, border-color .15s ease"
+        minWidth: 88,
+        boxShadow: active ? `0 0 0 1px ${accent}22, 0 10px 24px ${accent}18` : "none"
       }}
-      onMouseDown={(e) => e.stopPropagation()}
     >
       {children}
     </button>
@@ -229,37 +216,7 @@ function StatusPill({ ok, text }) {
   );
 }
 
-function LegendPill({ label, color }) {
-  return (
-    <div
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 8,
-        padding: "8px 12px",
-        borderRadius: 999,
-        background: "rgba(255,255,255,.04)",
-        border: "1px solid rgba(255,255,255,.08)",
-        fontSize: 11,
-        fontWeight: 900,
-        color: "#fff"
-      }}
-    >
-      <span
-        style={{
-          width: 9,
-          height: 9,
-          borderRadius: 999,
-          background: color,
-          boxShadow: `0 0 12px ${color}`
-        }}
-      />
-      {label}
-    </div>
-  );
-}
-
-function CustomTooltip({ active, payload, label, mode }) {
+function CustomTooltip({ active, payload, label }) {
   if (!active || !payload || !payload.length) return null;
   const row = payload[0]?.payload || {};
   return (
@@ -275,7 +232,7 @@ function CustomTooltip({ active, payload, label, mode }) {
       }}
     >
       <div style={{ fontSize: 10, marginBottom: 9, opacity: 0.75 }}>{label}</div>
-      {mode === "all" ? (
+      {row.uplinkTotal !== undefined ? (
         <>
           <div style={{ color: "#63e6ff", fontWeight: 900, fontSize: 11, marginBottom: 5 }}>Uplink: {fmtMbps(row.uplinkTotal)}</div>
           <div style={{ color: "#8dff8a", fontWeight: 900, fontSize: 11, marginBottom: 5 }}>Switch B: {fmtMbps(row.switchBTotal)}</div>
@@ -292,10 +249,9 @@ function CustomTooltip({ active, payload, label, mode }) {
   );
 }
 
-function MiniPanel({ title, subtitle, rows, accent }) {
+function MiniPanel({ title, subtitle, rows, accent, areaColor }) {
   const stats = calcStats(rows, "totalMbps");
   const utilization = Math.min(100, (num(stats.current) / 1000) * 100);
-  const gradId = `g_${title.replace(/\s+/g, "_")}`;
 
   return (
     <div style={cardStyle({ padding: 16 })}>
@@ -347,7 +303,7 @@ function MiniPanel({ title, subtitle, rows, accent }) {
               width: utilization + "%",
               height: "100%",
               borderRadius: 999,
-              background: `linear-gradient(90deg, ${accent}, rgba(255,255,255,.85))`,
+              background: `linear-gradient(90deg, ${accent}, ${areaColor})`,
               boxShadow: `0 0 18px ${accent}55`
             }}
           />
@@ -358,20 +314,19 @@ function MiniPanel({ title, subtitle, rows, accent }) {
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={rows} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
             <defs>
-              <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={accent} stopOpacity={0.40} />
-                <stop offset="100%" stopColor={accent} stopOpacity={0.01} />
+              <linearGradient id={`g_${title.replace(/\s+/g, "_")}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={accent} stopOpacity={0.45} />
+                <stop offset="100%" stopColor={accent} stopOpacity={0.02} />
               </linearGradient>
             </defs>
-            <Tooltip content={<CustomTooltip mode="single" />} />
+            <Tooltip content={<CustomTooltip />} />
             <Area
               type="monotone"
               dataKey="totalMbps"
               stroke={accent}
               strokeWidth={2.3}
-              fill={`url(#${gradId})`}
+              fill={`url(#g_${title.replace(/\s+/g, "_")})`}
               isAnimationActive={false}
-              dot={false}
             />
           </AreaChart>
         </ResponsiveContainer>
@@ -492,7 +447,6 @@ export default function AviatHistoryPage() {
 
   const livePolling = pollingMsForRange(range) > 0;
   const statusOk = !err;
-  const currentViewLabel = VIEWS.find(v => v.key === view)?.label || view;
 
   return (
     <div
@@ -520,7 +474,7 @@ export default function AviatHistoryPage() {
           }}
         />
 
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap", position: "relative", zIndex: 2 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
           <div style={{ minWidth: 280 }}>
             <div style={{ fontSize: 11, color: "#7ddfff", fontWeight: 900, letterSpacing: ".18em", marginBottom: 10 }}>
               NOC LUXURY EDITION
@@ -543,7 +497,7 @@ export default function AviatHistoryPage() {
             </div>
           </div>
 
-          <div style={{ display: "grid", gap: 10, alignContent: "start", justifyItems: "end", position: "relative", zIndex: 30 }}>
+          <div style={{ display: "grid", gap: 10, alignContent: "start" }}>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
               {RANGES.map((rg) => (
                 <RangeBtn key={rg} active={rg === range} onClick={() => setRange(rg)}>
@@ -552,17 +506,11 @@ export default function AviatHistoryPage() {
               ))}
             </div>
 
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end", position: "relative", zIndex: 30 }}>
-              {VIEWS.map((v) => (
-                <ViewBtn
-                  key={v.key}
-                  active={view === v.key}
-                  onClick={() => setView(v.key)}
-                  accent={v.accent}
-                >
-                  {v.label}
-                </ViewBtn>
-              ))}
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
+              <ViewBtn active={view === "all"} onClick={() => setView("all")} accent="#a78bfa">All</ViewBtn>
+              <ViewBtn active={view === "uplink"} onClick={() => setView("uplink")} accent="#63e6ff">Uplink</ViewBtn>
+              <ViewBtn active={view === "switchB"} onClick={() => setView("switchB")} accent="#8dff8a">Switch B</ViewBtn>
+              <ViewBtn active={view === "switchA"} onClick={() => setView("switchA")} accent="#ffbf66">Switch A</ViewBtn>
             </div>
           </div>
         </div>
@@ -577,7 +525,7 @@ export default function AviatHistoryPage() {
         }}
       >
         <KPI label="Samples Loaded" value={String(baseRows.length)} sub={`Raw: ${items.length}`} accent="#63e6ff" />
-        <KPI label="Current View Total" value={fmtMbps(currentTotal)} sub={currentViewLabel} accent={healthColor(currentTotal)} />
+        <KPI label="Current View Total" value={fmtMbps(currentTotal)} sub={view.toUpperCase()} accent={healthColor(currentTotal)} />
         <KPI label="Range Peak" value={fmtMbps(peakTotal)} sub="Combined Max" accent="#ffbf66" />
         <KPI label="Range Average" value={fmtMbps(avgTotal)} sub="Combined Avg" accent="#58f7c2" />
         <KPI label="Latest Uplink" value={fmtCompact(latest?.uplink?.totalMbps || 0)} sub="Radio1 Backbone" accent="#63e6ff" />
@@ -605,23 +553,10 @@ export default function AviatHistoryPage() {
           <div>
             <div style={{ fontSize: 21, fontWeight: 950, lineHeight: 1 }}>Traffic Intelligence Core</div>
             <div style={{ fontSize: 11, opacity: 0.58, marginTop: 5 }}>
-              {view === "all" ? "Unified traffic timeline with stronger line styling and live legend balance." : `Focused view for ${currentViewLabel}.`}
+              {view === "all" ? "Combined visibility across backbone and both switch paths." : `Focused view for ${view}.`}
             </div>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {view === "all" ? (
-              <>
-                <LegendPill label="Uplink" color="#63e6ff" />
-                <LegendPill label="Switch B" color="#8dff8a" />
-                <LegendPill label="Switch A" color="#ffbf66" />
-              </>
-            ) : (
-              <>
-                <LegendPill label="RX Solid" color="#63e6ff" />
-                <LegendPill label="TX Dashed" color="#58f7c2" />
-                <LegendPill label="Total Core" color="#a78bfa" />
-              </>
-            )}
             <div style={{ padding: "7px 12px", borderRadius: 999, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", fontSize: 11, fontWeight: 800 }}>
               Point Cap: {maxPointsForRange(range)}
             </div>
@@ -649,68 +584,19 @@ export default function AviatHistoryPage() {
                 tickLine={{ stroke: "rgba(255,255,255,.08)" }}
                 tickFormatter={(v) => fmtShort(v)}
               />
-              <Tooltip content={<CustomTooltip mode={view} />} />
+              <Tooltip content={<CustomTooltip />} />
 
               {view === "all" ? (
                 <>
-                  <Line
-                    type="monotone"
-                    dataKey="uplinkTotal"
-                    stroke="#63e6ff"
-                    strokeWidth={3}
-                    dot={{ r: 0 }}
-                    activeDot={{ r: 5, stroke: "#63e6ff", strokeWidth: 2, fill: "#0a1020" }}
-                    isAnimationActive={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="switchBTotal"
-                    stroke="#8dff8a"
-                    strokeWidth={3}
-                    dot={{ r: 0 }}
-                    activeDot={{ r: 5, stroke: "#8dff8a", strokeWidth: 2, fill: "#0a1020" }}
-                    isAnimationActive={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="switchATotal"
-                    stroke="#ffbf66"
-                    strokeWidth={3}
-                    dot={{ r: 0 }}
-                    activeDot={{ r: 5, stroke: "#ffbf66", strokeWidth: 2, fill: "#0a1020" }}
-                    isAnimationActive={false}
-                  />
+                  <Line type="monotone" dataKey="uplinkTotal" stroke="#63e6ff" strokeWidth={2.5} dot={false} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="switchBTotal" stroke="#8dff8a" strokeWidth={2.3} dot={false} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="switchATotal" stroke="#ffbf66" strokeWidth={2.3} dot={false} isAnimationActive={false} />
                 </>
               ) : (
                 <>
-                  <Line
-                    type="monotone"
-                    dataKey="rxMbps"
-                    stroke="#63e6ff"
-                    strokeWidth={3}
-                    dot={{ r: 0 }}
-                    activeDot={{ r: 5, stroke: "#63e6ff", strokeWidth: 2, fill: "#0a1020" }}
-                    isAnimationActive={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="txMbps"
-                    stroke="#58f7c2"
-                    strokeWidth={2.4}
-                    strokeDasharray="8 6"
-                    dot={{ r: 0 }}
-                    activeDot={{ r: 4, stroke: "#58f7c2", strokeWidth: 2, fill: "#0a1020" }}
-                    isAnimationActive={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="totalMbps"
-                    stroke="#a78bfa"
-                    strokeWidth={3.3}
-                    dot={{ r: 0 }}
-                    activeDot={{ r: 5, stroke: "#a78bfa", strokeWidth: 2, fill: "#0a1020" }}
-                    isAnimationActive={false}
-                  />
+                  <Line type="monotone" dataKey="rxMbps" stroke="#63e6ff" strokeWidth={2} dot={false} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="txMbps" stroke="#58f7c2" strokeWidth={2} dot={false} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="totalMbps" stroke="#a78bfa" strokeWidth={2.6} dot={false} isAnimationActive={false} />
                 </>
               )}
             </LineChart>
@@ -731,18 +617,21 @@ export default function AviatHistoryPage() {
           subtitle="Radio1 • Main Internet Source • 3 Gbps"
           rows={uplinkRows}
           accent="#63e6ff"
+          areaColor="#1e90ff"
         />
         <MiniPanel
           title="SWITCH B"
           subtitle="88.88.88.254 • VLAN1559 • TenGigE1/1"
           rows={switchBRows}
           accent="#8dff8a"
+          areaColor="#58f7c2"
         />
         <MiniPanel
           title="SWITCH A"
           subtitle="10.88.88.254 • VLAN2430 • TenGigE1/2"
           rows={switchARows}
           accent="#ffbf66"
+          areaColor="#ff8a66"
         />
       </div>
 
@@ -762,7 +651,7 @@ export default function AviatHistoryPage() {
           </div>
           <div style={{ padding: 12, borderRadius: 14, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
             <div style={{ fontSize: 10, opacity: 0.56, marginBottom: 5 }}>Render Mode</div>
-            <div style={{ fontSize: 12, fontWeight: 900 }}>Luxury Timeline</div>
+            <div style={{ fontSize: 12, fontWeight: 900 }}>Point-Capped Luxury</div>
           </div>
         </div>
       </div>
