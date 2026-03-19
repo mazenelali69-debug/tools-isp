@@ -2866,7 +2866,7 @@ app.get("/api/vlan1559-status", (req, res) => {
 // =====================================
 const AVIAT_HISTORY_PATH = path.join(__dirname, "data", "aviat-history.json");
 const AVIAT_HISTORY_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
-const AVIAT_HISTORY_INTERVAL_MS = 10000;
+const AVIAT_HISTORY_INTERVAL_MS = 5000;
 const AVIAT_SNMP_IP = "155.15.59.4";
 const AVIAT_SNMP_COMMUNITY = "public";
 
@@ -3000,15 +3000,39 @@ async function aviatSampleHistoryOnce() {
       aviatMeasurePair(AVIAT_LINKS.switchA, 1000)
     ]);
 
+    const uplinkHistory = {
+      ...uplink,
+      rxMbps: Number((aviatNum(uplink.rxMbps)).toFixed(2)),
+      txMbps: Number((aviatNum(uplink.txMbps)).toFixed(2)),
+      totalMbps: Number((aviatNum(uplink.totalMbps)).toFixed(2))
+    };
+
+    const switchBHistory = {
+      ...switchB,
+      rxMbps: Number((aviatNum(switchB.txMbps)).toFixed(2)),
+      txMbps: Number((aviatNum(switchB.rxMbps)).toFixed(2))
+    };
+    switchBHistory.totalMbps = Number((aviatNum(switchBHistory.rxMbps) + aviatNum(switchBHistory.txMbps)).toFixed(2));
+
+    const switchAHistory = {
+      ...switchA,
+      rxMbps: Number((aviatNum(switchA.txMbps)).toFixed(2)),
+      txMbps: Number((aviatNum(switchA.rxMbps)).toFixed(2))
+    };
+    switchAHistory.totalMbps = Number((aviatNum(switchAHistory.rxMbps) + aviatNum(switchAHistory.txMbps)).toFixed(2));
+
+    const combinedRx = Number((aviatNum(switchAHistory.rxMbps) + aviatNum(switchBHistory.rxMbps)).toFixed(2));
+    const combinedTx = Number((aviatNum(switchAHistory.txMbps) + aviatNum(switchBHistory.txMbps)).toFixed(2));
+
     const sample = {
       ts: Date.now(),
-      uplink,
-      switchB,
-      switchA,
+      uplink: uplinkHistory,
+      switchB: switchBHistory,
+      switchA: switchAHistory,
       combined: {
-        rxMbps: Number((aviatNum(uplink.rxMbps)).toFixed(2)),
-        txMbps: Number((aviatNum(uplink.txMbps)).toFixed(2)),
-        totalMbps: Number((aviatNum(uplink.totalMbps)).toFixed(2))
+        rxMbps: combinedRx,
+        txMbps: combinedTx,
+        totalMbps: Number((combinedRx + combinedTx).toFixed(2))
       }
     };
 
@@ -3592,11 +3616,11 @@ function sanitizeMbpsPair(rx, tx, prevRx, prevTx) {
   if (rxN < 0) rxN = 0;
   if (txN < 0) txN = 0;
 
-  const hardCap = 350;
+  const hardCap = 2000;
   if (rxN > hardCap) rxN = 0;
   if (txN > hardCap) txN = 0;
 
-  const spikeFactor = 4;
+  const spikeFactor = 100;
 
   if (Number.isFinite(prevRxN) && prevRxN > 0 && rxN > (prevRxN * spikeFactor)) {
     rxN = prevRxN;
@@ -3778,23 +3802,26 @@ app.get("/api/history/monitor-street", async (req, res) => {
 /* MONITOR_STREET_HISTORY_POLLER_START */
 async function collectMonitorStreetSnapshotForHistory() {
   try {
-    if (typeof buildMonitorStreetSnapshot === "function") {
-      const rows = await buildMonitorStreetSnapshot();
-      return Array.isArray(rows) ? rows : [];
-    }
-
-    if (typeof getMonitorStreetSnapshot === "function") {
-      const rows = await getMonitorStreetSnapshot();
-      return Array.isArray(rows) ? rows : [];
-    }
-
     const baseUrl = process.env.MONITOR_HISTORY_SELF_URL || "http://127.0.0.1:9090";
     const response = await fetch(baseUrl + "/api/monitor-street/snapshot", { cache: "no-store" });
     const json = await response.json();
+
     if (!response.ok || !json?.ok) {
       throw new Error(json?.error || "snapshot fetch failed");
     }
-    return Array.isArray(json?.data) ? json.data : [];
+
+    const rows = Array.isArray(json?.data) ? json.data : [];
+
+    return rows.map((item) => ({
+      ...item,
+      id: item?.id || "",
+      name: item?.name || item?.id || "",
+      ip: item?.ip || "",
+      ifName: item?.ifName || "",
+      rxMbps: Number(item?.rxMbps || 0),
+      txMbps: Number(item?.txMbps || 0),
+      ts: item?.ts || new Date().toISOString()
+    }));
   } catch (e) {
     console.error("collect monitor street snapshot failed", e);
     return [];
@@ -3818,6 +3845,289 @@ setTimeout(() => {
   setInterval(pollMonitorStreetHistoryOnce, 30000);
 }, 5000);
 /* MONITOR_STREET_HISTORY_POLLER_END */
+
+// ===== UNIFIED_HISTORY_ROUTE_START =====
+function unifiedHistoryRangeMs(range) {
+  switch (String(range || "").trim()) {
+    case "5m": return 5 * 60 * 1000;
+    case "30m": return 30 * 60 * 1000;
+    case "60m": return 60 * 60 * 1000;
+    case "24h": return 24 * 60 * 60 * 1000;
+    case "30d": return 30 * 24 * 60 * 60 * 1000;
+    default: return 5 * 60 * 1000;
+  }
+}
+
+function unifiedHistoryParseTs(v) {
+  if (typeof v === "number" && Number.isFinite(v)) return v;
+  if (typeof v === "string" && /^\d+$/.test(v)) return Number(v);
+  const ms = new Date(v).getTime();
+  return Number.isFinite(ms) ? ms : 0;
+}
+
+function unifiedHistoryNormalizeUplink(rows) {
+  const arr = Array.isArray(rows) ? rows : [];
+  return arr.map((r, idx) => {
+    const ts = unifiedHistoryParseTs(r?.ts);
+    const rx = Number(r?.rxMbps ?? r?.rx ?? 0);
+    const tx = Number(r?.txMbps ?? r?.tx ?? 0);
+    const target = String(r?.name || r?.uplink || r?.source || r?.ip || `uplink-${idx}`);
+    return {
+      ts,
+      source: "uplink",
+      type: "uplink",
+      target,
+      targetId: `uplink:${String(r?.uplink || r?.id || target)}`,
+      rx,
+      tx,
+      ip: r?.ip || "",
+      ping: null,
+      loss: null,
+      capacity: null,
+      utilization: null,
+      status: "up",
+      rawSource: r?.source || "eth-snapshot-uplink"
+    };
+  }).filter(x => Number.isFinite(x.ts) && x.ts > 0);
+}
+
+function unifiedHistoryNormalizeMonitor(rows) {
+  const arr = Array.isArray(rows) ? rows : [];
+  return arr.map((r, idx) => {
+    const ts = unifiedHistoryParseTs(r?.ts);
+    const rx = Number(r?.rxMbps ?? r?.rx ?? 0);
+    const tx = Number(r?.txMbps ?? r?.tx ?? 0);
+    const target = String(r?.name || r?.id || r?.ifName || r?.ip || `interface-${idx}`);
+    const packetLoss = Number(r?.packetLoss ?? r?.loss ?? 0);
+    return {
+      ts,
+      source: "monitor",
+      type: "interface",
+      target,
+      targetId: `monitor:${String(r?.id || target)}`,
+      rx,
+      tx,
+      ip: r?.ip || "",
+      ping: Number.isFinite(Number(r?.pingMs)) ? Number(r?.pingMs) : null,
+      loss: Number.isFinite(packetLoss) ? packetLoss : null,
+      capacity: null,
+      utilization: null,
+      status: "up",
+      rawSource: r?.source || "monitor-street",
+      ifName: r?.ifName || ""
+    };
+  }).filter(x => Number.isFinite(x.ts) && x.ts > 0);
+}
+
+function unifiedHistoryNormalizeAviat(rows) {
+  const arr = Array.isArray(rows) ? rows : [];
+  const AVIAT_IP_SAFE = (typeof AVIAT_SNMP_IP !== "undefined" && AVIAT_SNMP_IP) ? AVIAT_SNMP_IP : "155.15.59.4";
+
+  function pushPart(out, ts, partKey, part, capacityMbps, type) {
+    if (!part || typeof part !== "object") return;
+    const rx = Number(part?.rxMbps ?? part?.rx ?? 0);
+    const tx = Number(part?.txMbps ?? part?.tx ?? 0);
+    const total = Number(part?.totalMbps ?? (rx + tx));
+    const capacity = Number(capacityMbps);
+    const utilization = capacity > 0 ? Number(((total / capacity) * 100).toFixed(2)) : null;
+    out.push({
+      ts,
+      source: "aviat",
+      type,
+      target: String(part?.name || partKey),
+      targetId: `aviat:${partKey}`,
+      rx,
+      tx,
+      ip: part?.ip || AVIAT_IP_SAFE,
+      ping: null,
+      loss: null,
+      capacity: Number.isFinite(capacity) ? capacity : null,
+      utilization,
+      status: part?.status || (partKey === "combined" ? "up" : "up"),
+      rawSource: "/api/aviat/history"
+    });
+  }
+
+  const out = [];
+  for (const row of arr) {
+    const ts = unifiedHistoryParseTs(row?.ts);
+    if (!Number.isFinite(ts) || ts <= 0) continue;
+
+    pushPart(out, ts, "uplink",  row?.uplink,  3000, "wireless");
+    pushPart(out, ts, "switchA", row?.switchA, 1000, "wireless");
+    pushPart(out, ts, "switchB", row?.switchB, 1000, "wireless");
+
+    if (row?.combined && typeof row.combined === "object") {
+      const rx = Number(row?.combined?.rxMbps ?? 0);
+      const tx = Number(row?.combined?.txMbps ?? 0);
+      const total = Number(row?.combined?.totalMbps ?? (rx + tx));
+      const capacity = 3000;
+      out.push({
+        ts,
+        source: "aviat",
+        type: "wireless",
+        target: "Combined",
+        targetId: "aviat:combined",
+        rx,
+        tx,
+        ip: AVIAT_IP_SAFE,
+        ping: null,
+        loss: null,
+        capacity,
+        utilization: capacity > 0 ? Number(((total / capacity) * 100).toFixed(2)) : null,
+        status: "up",
+        rawSource: "/api/aviat/history"
+      });
+    }
+  }
+  return out;
+}
+
+function unifiedHistoryFilter(rows, opts = {}) {
+  let out = Array.isArray(rows) ? rows.slice() : [];
+  const now = Date.now();
+  const minTs = now - unifiedHistoryRangeMs(opts?.range);
+  out = out.filter(r => Number(r?.ts) >= minTs);
+
+  const source = String(opts?.source || "").trim().toLowerCase();
+  if (source && source !== "all") {
+    out = out.filter(r => String(r?.source || "").toLowerCase() === source);
+  }
+
+  const target = String(opts?.target || "").trim().toLowerCase();
+  if (target && target !== "all") {
+    out = out.filter(r =>
+      String(r?.targetId || "").toLowerCase() === target ||
+      String(r?.target || "").toLowerCase() === target
+    );
+  }
+
+  const q = String(opts?.q || "").trim().toLowerCase();
+  if (q) {
+    out = out.filter(r =>
+      String(r?.target || "").toLowerCase().includes(q) ||
+      String(r?.type || "").toLowerCase().includes(q) ||
+      String(r?.source || "").toLowerCase().includes(q) ||
+      String(r?.ip || "").toLowerCase().includes(q) ||
+      String(r?.status || "").toLowerCase().includes(q)
+    );
+  }
+
+  out.sort((a, b) => Number(a?.ts || 0) - Number(b?.ts || 0));
+
+  const limit = Math.max(100, Math.min(50000, Number(opts?.limit || 0) || 0));
+  if (limit > 0 && out.length > limit) {
+    out = out.slice(-limit);
+  }
+
+  return out;
+}
+
+app.get("/api/history/unified", async (req, res) => {
+  try {
+    const range = String(req.query.range || "5m").trim();
+    const q = String(req.query.q || "").trim();
+    const target = String(req.query.target || "all").trim();
+    const source = String(req.query.source || "all").trim();
+    const limit = Math.max(100, Math.min(50000, Number(req.query.limit || 5000) || 5000));
+
+    const baseUrl = process.env.HISTORY_UNIFIED_SELF_URL || "http://127.0.0.1:9090";
+
+    const [uplinkResp, monitorResp, aviatResp] = await Promise.allSettled([
+      fetch(`${baseUrl}/api/history/uplink?range=${encodeURIComponent(range)}&limit=${encodeURIComponent(limit)}`, { cache: "no-store" }),
+      fetch(`${baseUrl}/api/history/monitor-street?range=${encodeURIComponent(range)}&limit=${encodeURIComponent(limit)}`, { cache: "no-store" }),
+      fetch(`${baseUrl}/api/aviat/history?range=${encodeURIComponent(range)}`, { cache: "no-store" })
+    ]);
+
+    let uplinkRows = [];
+    let monitorRows = [];
+    let aviatRows = [];
+    const errors = [];
+
+    if (uplinkResp.status === "fulfilled") {
+      const jr = await uplinkResp.value.json();
+      const src = Array.isArray(jr?.items) ? jr.items : Array.isArray(jr?.data) ? jr.data : Array.isArray(jr?.history) ? jr.history : [];
+      uplinkRows = unifiedHistoryNormalizeUplink(src);
+    } else {
+      errors.push("uplink fetch failed");
+    }
+
+    if (monitorResp.status === "fulfilled") {
+      const jr = await monitorResp.value.json();
+      const src = Array.isArray(jr?.items) ? jr.items : Array.isArray(jr?.data) ? jr.data : Array.isArray(jr?.history) ? jr.history : [];
+      monitorRows = unifiedHistoryNormalizeMonitor(src);
+    } else {
+      errors.push("monitor fetch failed");
+    }
+
+    if (aviatResp.status === "fulfilled") {
+      const jr = await aviatResp.value.json();
+      const src = Array.isArray(jr?.data) ? jr.data : Array.isArray(jr?.items) ? jr.items : Array.isArray(jr?.history) ? jr.history : [];
+      aviatRows = unifiedHistoryNormalizeAviat(src);
+    } else {
+      errors.push("aviat fetch failed");
+    }
+
+    const merged = [...uplinkRows, ...monitorRows, ...aviatRows];
+    const items = unifiedHistoryFilter(merged, { range, q, target, source, limit });
+
+    return res.json({
+      ok: true,
+      range,
+      filters: { range, q, target, source, limit },
+      counts: {
+        total: merged.length,
+        uplink: uplinkRows.length,
+        monitor: monitorRows.length,
+        aviat: aviatRows.length,
+        filtered: items.length
+      },
+      errors,
+      items
+    });
+  } catch (e) {
+    return res.status(500).json({
+      ok: false,
+      error: String(e?.message || e || "unified history failed")
+    });
+  }
+});
+// ===== UNIFIED_HISTORY_ROUTE_END =====
+
+// ===== UPLINK_REAL_HISTORY_POLLER_START =====
+let __uplinkRealHistoryPollBusy = false;
+
+async function pollUplinkRealHistoryOnce() {
+  if (__uplinkRealHistoryPollBusy) return;
+  __uplinkRealHistoryPollBusy = true;
+
+  try {
+    const baseUrl = process.env.UPLINK_HISTORY_SELF_URL || "http://127.0.0.1:9090";
+    const r = await fetch(`${baseUrl}/api/eth/snapshot`, { cache: "no-store" });
+    if (!r.ok) {
+      throw new Error(`uplink snapshot poll failed: HTTP ${r.status}`);
+    }
+    await r.json().catch(() => null);
+  } catch (e) {
+    console.error("[UPLINK-REAL-HISTORY][POLL]", e?.message || e);
+  } finally {
+    __uplinkRealHistoryPollBusy = false;
+  }
+}
+
+if (!global.__uplinkRealHistoryPollerStarted) {
+  global.__uplinkRealHistoryPollerStarted = true;
+
+  setTimeout(() => {
+    pollUplinkRealHistoryOnce().catch(err => console.error("[UPLINK-REAL-HISTORY][BOOT]", err?.message || err));
+  }, 2000);
+
+  setInterval(() => {
+    pollUplinkRealHistoryOnce().catch(err => console.error("[UPLINK-REAL-HISTORY][LOOP]", err?.message || err));
+  }, 10000);
+}
+// ===== UPLINK_REAL_HISTORY_POLLER_END =====
+
 
 
 

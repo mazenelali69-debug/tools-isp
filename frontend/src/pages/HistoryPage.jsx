@@ -1,37 +1,5 @@
 ﻿import React, { useEffect, useMemo, useRef, useState } from "react";
 
-const shell = {
-  minHeight: "100%",
-  color: "#eaf2ff",
-};
-
-const panel = {
-  background: "linear-gradient(180deg, rgba(10,18,34,0.96), rgba(8,14,28,0.98))",
-  border: "1px solid rgba(120,160,255,0.18)",
-  borderRadius: 24,
-  boxShadow: "0 18px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03)",
-};
-
-const softCard = {
-  ...panel,
-  padding: 20,
-};
-
-const labelStyle = {
-  fontSize: 12,
-  fontWeight: 700,
-  letterSpacing: "0.08em",
-  textTransform: "uppercase",
-  opacity: 0.72,
-};
-
-const valueStyle = {
-  fontSize: 36,
-  fontWeight: 900,
-  lineHeight: 1.05,
-  letterSpacing: "-0.02em",
-};
-
 function num(v) {
   const n = Number(v);
   return Number.isFinite(n) ? n : 0;
@@ -40,641 +8,572 @@ function num(v) {
 function fmtMbps(v) {
   const n = num(v);
   if (n >= 1000) return (n / 1000).toFixed(2) + " Gbps";
-  return n.toFixed(n >= 100 ? 0 : 2) + " Mbps";
+  return n.toFixed(2) + " Mbps";
 }
 
-function parseTs(row) {
-  const raw = row?.ts || row?.time || row?.timestamp || row?.createdAt || null;
-  if (!raw) return null;
-  const d = new Date(raw);
-  if (!Number.isNaN(d.getTime())) return d;
-  return null;
+function fmtPct(v) {
+  const n = num(v);
+  return n.toFixed(2) + "%";
 }
 
-function fmtTime(ts) {
-  if (!ts) return "-";
-  const d = ts instanceof Date ? ts : new Date(ts);
-  if (Number.isNaN(d.getTime())) return String(ts);
+function parseTs(v) {
+  if (typeof v === "number" && Number.isFinite(v)) return v;
+  if (typeof v === "string" && /^\d+$/.test(v)) return Number(v);
+  const ms = new Date(v).getTime();
+  return Number.isFinite(ms) ? ms : 0;
+}
+
+function fmtTime(v) {
+  const ms = parseTs(v);
+  if (!ms) return "-";
+  const d = new Date(ms);
   return d.toLocaleString();
 }
 
-function buildHistoryUrl(range, q, limit) {
-  const params = new URLSearchParams();
-  if (range) params.set("range", range);
-  if (q) params.set("q", q);
-  if (limit) params.set("limit", String(limit));
-  return `/api/history/uplink?${params.toString()}`;
+function shortTime(v, range) {
+  const ms = parseTs(v);
+  if (!ms) return "";
+  const d = new Date(ms);
+  if (range === "24h" || range === "30d") {
+    return `${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getDate()).padStart(2, "0")} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  }
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}:${String(d.getSeconds()).padStart(2, "0")}`;
 }
 
-function smartFrontendLimit(range) {
+function minSpanMsForRange(range) {
   switch (String(range || "").trim()) {
-    case "5m": return 300;
-    case "30m": return 400;
-    case "60m": return 500;
-    case "24h": return 500;
-    case "30d": return 800;
-    default: return 500;
+    case "5m": return 5 * 60 * 1000;
+    case "30m": return 30 * 60 * 1000;
+    case "60m": return 60 * 60 * 1000;
+    case "24h": return 24 * 60 * 60 * 1000;
+    case "30d": return 30 * 24 * 60 * 60 * 1000;
+    default: return 5 * 60 * 1000;
   }
 }
-
-function normalizeUplinkRows(input) {
-  const arr = Array.isArray(input) ? input : [];
-  return arr.map((r, idx) => {
-    const dt = parseTs(r);
-    const name = String(r?.name || r?.uplink || r?.source || r?.ip || `uplink-${idx}`);
-    return {
-      ...r,
-      kind: "uplink",
-      kindLabel: "Uplink",
-      displayName: name,
-      selectorKey: `uplink:${name}`,
-      rxValue: num(r?.rxMbps ?? r?.rx),
-      txValue: num(r?.txMbps ?? r?.tx),
-      __dt: dt,
-      __ms: dt ? dt.getTime() : 0,
-      __idx: idx,
-    };
-  });
+function bucketTs(ms, range) {
+  const n = parseTs(ms);
+  if (!n) return 0;
+  let size = 30000;
+  if (range === "30m") size = 60000;
+  else if (range === "60m") size = 120000;
+  else if (range === "24h") size = 900000;
+  else if (range === "30d") size = 6 * 60 * 60 * 1000;
+  return Math.floor(n / size) * size;
 }
 
-function normalizeInterfaceRows(input) {
-  const arr = Array.isArray(input) ? input : [];
-  const now = new Date();
-  return arr.map((r, idx) => {
-    const dt = parseTs(r) || now;
-    const name = String(r?.name || r?.id || r?.ip || `interface-${idx}`);
-    return {
-      ...r,
-      kind: "interface",
-      kindLabel: "Interface",
-      displayName: name,
-      selectorKey: `interface:${name}`,
-      rxValue: num(r?.rxMbps ?? r?.rx),
-      txValue: num(r?.txMbps ?? r?.tx),
-      __dt: dt,
-      __ms: dt.getTime(),
-      __idx: idx,
-    };
-  });
+function sourceTone(source) {
+  if (source === "uplink") return "#63ffa3";
+  if (source === "monitor") return "#78a9ff";
+  if (source === "aviat") return "#ffd76a";
+  return "#ffffff";
 }
 
-function filterRowsByRange(rows, range) {
-  if (!Array.isArray(rows) || rows.length === 0) return [];
-  const latestMs = Math.max(...rows.map((r) => r.__ms || 0), 0);
-  if (!latestMs) return rows;
-
-  const map = {
-    "5m": 5 * 60 * 1000,
-    "30m": 30 * 60 * 1000,
-    "60m": 60 * 60 * 1000,
-    "24h": 24 * 60 * 60 * 1000,
-    "30d": 30 * 24 * 60 * 60 * 1000,
-  };
-
-  const win = map[range];
-  if (!win) return rows;
-
-  const minMs = latestMs - win;
-  return rows.filter((r) => (r.__ms || 0) >= minMs);
+function targetTone(key) {
+  const str = String(key || "");
+  let h = 0;
+  for (let i = 0; i < str.length; i += 1) h = ((h * 31) + str.charCodeAt(i)) >>> 0;
+  const tones = ["#63ffa3", "#78a9ff", "#ffd76a", "#ff9f7a", "#d395ff", "#7ce7ff", "#f36ca6", "#b6f06d"];
+  return tones[h % tones.length];
 }
 
-function SummaryCard({ label, value, sub, color }) {
+function SummaryCard({ label, value, sub, color = "#ffffff" }) {
   return (
-    <div style={{ ...softCard, minHeight: 128 }}>
-      <div style={labelStyle}>{label}</div>
-      <div style={{ ...valueStyle, color: color || "#ffffff", marginTop: 10 }}>{value}</div>
-      <div style={{ marginTop: 10, opacity: 0.66, fontSize: 13 }}>{sub}</div>
+    <div
+      style={{
+        border: "1px solid rgba(255,255,255,0.08)",
+        background: "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03))",
+        borderRadius: 18,
+        padding: 18,
+        boxShadow: "0 12px 28px rgba(0,0,0,0.22)"
+      }}
+    >
+      <div style={{ opacity: 0.7, fontSize: 12, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>{label}</div>
+      <div style={{ marginTop: 10, fontSize: 28, fontWeight: 900, color }}>{value}</div>
+      <div style={{ marginTop: 8, opacity: 0.72, fontSize: 13 }}>{sub}</div>
     </div>
   );
 }
 
+function buildSeries(rows, range, targetFilter) {
+  const src = Array.isArray(rows) ? rows : [];
+  const withTs = src
+    .map((r) => ({
+      ...r,
+      __ts: parseTs(r?.ts),
+      __bucket: bucketTs(r?.ts, range),
+      __rx: num(r?.rx),
+      __tx: num(r?.tx)
+    }))
+    .filter((r) => r.__ts > 0);
 
-function pulseOpacity(value, maxValue) {
-  const v = Number(value || 0);
-  const m = Math.max(1, Number(maxValue || 1));
-  const ratio = Math.max(0, Math.min(1, v / m));
-  return (0.18 + (ratio * 0.52)).toFixed(3);
-}
-
-function pulseDuration(value, maxValue) {
-  const v = Number(value || 0);
-  const m = Math.max(1, Number(maxValue || 1));
-  const ratio = Math.max(0, Math.min(1, v / m));
-  return (2.4 - (ratio * 1.2)).toFixed(2) + "s";
-}
-
-function pulseScale(value, maxValue) {
-  const v = Number(value || 0);
-  const m = Math.max(1, Number(maxValue || 1));
-  const ratio = Math.max(0, Math.min(1, v / m));
-  return (1 + ratio * 0.035).toFixed(3);
-}
-
-function HistoryChart({ items, stacked = false }) {
-  const wrapRef = useRef(null);
-  const width = 1200;
-  const height = 270;
-  const pad = 18;
-
-  const [hoverIndex, setHoverIndex] = useState(null);
-  const [hoverBox, setHoverBox] = useState({ x: 0, y: 0 });
-
-  const data = useMemo(() => {
-    const safe = Array.isArray(items) ? items : [];
-    return safe.map((x, i) => {
-      const rx = num(x?.rxValue ?? x?.rxMbps ?? x?.rx);
-      const tx = num(x?.txValue ?? x?.txMbps ?? x?.tx);
-      return {
-        i,
-        raw: x,
-        rx,
-        tx,
-        total: Math.max(0, rx) + Math.max(0, tx),
-        time: x?.__dt || parseTs(x),
-        label: x?.displayName || x?.name || x?.uplink || x?.source || x?.ip || "-",
-        kindLabel: x?.kindLabel || "-",
+  if (targetFilter && targetFilter !== "all") {
+    const grouped = new Map();
+    for (const r of withTs) {
+      const key = r.__bucket;
+      const prev = grouped.get(key) || {
+        ts: r.__bucket,
+        label: shortTime(r.__bucket, range),
+        rxSum: 0,
+        txSum: 0,
+        count: 0,
+        rx: 0,
+        tx: 0
       };
-    });
-  }, [items]);
-
-  const hasEnoughPoints = data.length >= 2;
-const maxStacked = Math.max(
-  1,
-  ...data.map((d) => Math.max(0, d.rx) + Math.max(0, d.tx))
-);
-  const hoverItem = hoverIndex == null ? null : data[hoverIndex];
-
-  const maxVal = useMemo(() => {
-    if (!data.length) return 1;
-    if (stacked) {
-      return Math.max(1, ...data.map((d) => d.total));
+      prev.rxSum += r.__rx;
+      prev.txSum += r.__tx;
+      prev.count += 1;
+      prev.rx = prev.count > 0 ? (prev.rxSum / prev.count) : 0;
+      prev.tx = prev.count > 0 ? (prev.txSum / prev.count) : 0;
+      grouped.set(key, prev);
     }
-    return Math.max(1, ...data.flatMap((d) => [d.rx, d.tx]));
-  }, [data, stacked]);
-
-  const xStep = data.length > 1 ? (width - pad * 2) / (data.length - 1) : 0;
-  const innerWidth = width - pad * 2;
-  const innerHeight = height - pad * 2;
-  const barSlot = data.length > 0 ? innerWidth / data.length : innerWidth;
-  const barWidth = Math.max(8, Math.min(42, barSlot * 0.9));
-
-  const linePath = (key) => {
-    if (!data.length) return "";
-    return data
-      .map((d, idx) => {
-        const x = pad + idx * xStep;
-        const y = height - pad - ((d[key] / maxVal) * innerHeight);
-        return `${idx === 0 ? "M" : "L"} ${x} ${y}`;
-      })
-      .join(" ");
-  };
-
-  const areaPath = (key) => {
-    if (!data.length) return "";
-    const top = data
-      .map((d, idx) => {
-        const x = pad + idx * xStep;
-        const y = height - pad - ((d[key] / maxVal) * innerHeight);
-        return `${idx === 0 ? "M" : "L"} ${x} ${y}`;
-      })
-      .join(" ");
-
-    const lastX = pad + (data.length - 1) * xStep;
-    const baseY = height - pad;
-    return `${top} L ${lastX} ${baseY} L ${pad} ${baseY} Z`;
-  };
-
-  function handleMove(e) {
-    if (!wrapRef.current || data.length === 0) return;
-
-    const rect = wrapRef.current.getBoundingClientRect();
-    const relX = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
-    const relY = Math.max(0, Math.min(rect.height, e.clientY - rect.top));
-
-    let idx = 0;
-
-    if (stacked) {
-      const ratio = rect.width > 0 ? relX / rect.width : 0;
-      idx = Math.max(0, Math.min(data.length - 1, Math.floor(ratio * data.length)));
-    } else {
-      const ratio = rect.width > 0 ? relX / rect.width : 0;
-      idx = Math.max(0, Math.min(data.length - 1, Math.round(ratio * (data.length - 1))));
-    }
-
-    setHoverIndex(idx);
-    setHoverBox({
-      x: relX,
-      y: Math.max(12, relY - 18),
-    });
+    return [{
+      key: targetFilter,
+      label: src[0]?.target || targetFilter,
+      color: targetTone(targetFilter),
+      source: src[0]?.source || "mixed",
+      points: [...grouped.values()].sort((a, b) => a.ts - b.ts)
+    }];
   }
 
-  function handleLeave() {
-    setHoverIndex(null);
+  const scoreMap = new Map();
+  for (const r of withTs) {
+    const key = r?.targetId || r?.target || "unknown";
+    const prev = scoreMap.get(key) || {
+      key,
+      label: r?.target || key,
+      score: 0,
+      source: r?.source || "mixed"
+    };
+    prev.score += r.__rx + r.__tx;
+    scoreMap.set(key, prev);
+  }
+
+  const topKeys = [...scoreMap.values()]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, range === "24h" || range === "30d" ? 6 : 4)
+    .map((x) => x.key);
+
+  const keep = new Set(topKeys);
+  const byTarget = new Map();
+
+  for (const r of withTs) {
+    const key = r?.targetId || r?.target || "unknown";
+    if (!keep.has(key)) continue;
+
+    if (!byTarget.has(key)) {
+      byTarget.set(key, {
+        key,
+        label: r?.target || key,
+        color: targetTone(key),
+        source: r?.source || "mixed",
+        pointsMap: new Map()
+      });
+    }
+
+    const series = byTarget.get(key);
+    const point = series.pointsMap.get(r.__bucket) || {
+      ts: r.__bucket,
+      label: shortTime(r.__bucket, range),
+      rxSum: 0,
+      txSum: 0,
+      count: 0,
+      rx: 0,
+      tx: 0
+    };
+    point.rxSum += r.__rx;
+    point.txSum += r.__tx;
+    point.count += 1;
+    point.rx = point.count > 0 ? (point.rxSum / point.count) : 0;
+    point.tx = point.count > 0 ? (point.txSum / point.count) : 0;
+    series.pointsMap.set(r.__bucket, point);
+  }
+
+  return [...byTarget.values()]
+    .map((s) => ({
+      key: s.key,
+      label: s.label,
+      color: s.color,
+      source: s.source,
+      points: [...s.pointsMap.values()].sort((a, b) => a.ts - b.ts)
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+}
+
+function HistoryChart({ rows, range, selectedTarget, hiddenSeries, onToggleSeries }) {
+  const wrapRef = useRef(null);
+  const [hover, setHover] = useState(null);
+
+  const rawSeries = useMemo(() => buildSeries(rows, range, selectedTarget), [rows, range, selectedTarget]);
+  const series = useMemo(() => rawSeries.filter((s) => !hiddenSeries?.[s.key]), [rawSeries, hiddenSeries]);
+
+  const width = 1200;
+  const height = 330;
+  const padL = 54;
+  const padR = 24;
+  const padT = 20;
+  const padB = 40;
+
+  const allPoints = series.flatMap((s) => s.points.map((p) => ({ ...p, seriesKey: s.key, color: s.color, labelName: s.label })));
+  const maxVal = Math.max(1, ...allPoints.map((p) => Math.max(num(p.rx), num(p.tx))));
+  const tsValues = allPoints.map((p) => p.ts).filter((v) => Number.isFinite(v) && v > 0);
+  const rawMinTs = tsValues.length ? Math.min(...tsValues) : 0;
+  const rawMaxTs = tsValues.length ? Math.max(...tsValues) : 1;
+
+  const minSpan = minSpanMsForRange(range);
+  let minTs = rawMinTs;
+  let maxTs = rawMaxTs;
+
+  if ((maxTs - minTs) < minSpan) {
+    maxTs = rawMaxTs;
+    minTs = Math.max(0, maxTs - minSpan);
+  }
+
+  function x(ts) {
+    const span = Math.max(1, Number(maxTs || 0) - Number(minTs || 0));
+    return padL + ((ts - minTs) / span) * (width - padL - padR);
+  }
+
+  function y(v) {
+    return padT + (1 - (num(v) / maxVal)) * (height - padT - padB);
+  }
+
+  function linePath(points, keyName) {
+    return points.map((p, idx) => `${idx === 0 ? "M" : "L"} ${x(p.ts).toFixed(2)} ${y(keyName === "rx" ? p.rx : p.tx).toFixed(2)}`).join(" ");
+  }
+
+  const gridVals = [0, 0.25, 0.5, 0.75, 1].map((r) => Number((maxVal * r).toFixed(2)));
+
+  if (!allPoints.length) {
+    return (
+      <div
+        style={{
+          border: "1px solid rgba(255,255,255,0.08)",
+          background: "rgba(255,255,255,0.03)",
+          borderRadius: 18,
+          padding: 24
+        }}
+      >
+        <div style={{ fontSize: 22, fontWeight: 900 }}>No rows for this filter</div>
+        <div style={{ opacity: 0.72, marginTop: 10 }}>Try another range, target, source, or search.</div>
+      </div>
+    );
   }
 
   return (
-    <div style={{ ...panel, padding: 20 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+    <div
+      ref={wrapRef}
+      style={{
+        position: "relative",
+        border: "1px solid rgba(255,255,255,0.08)",
+        background: "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+        borderRadius: 18,
+        padding: 18,
+        overflow: "hidden"
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "center", marginBottom: 12 }}>
         <div>
-          <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: "-0.02em" }}>Traffic History</div>
-          <div style={{ opacity: 0.68, marginTop: 4 }}>
-            {stacked ? "Top traffic stacked bars with live pulse for all targets" : "Unified view for uplinks + monitor interfaces"}
+          <div style={{ fontSize: 22, fontWeight: 900 }}>Unified Traffic Timeline</div>
+          <div style={{ opacity: 0.72, marginTop: 4 }}>
+            {selectedTarget !== "all"
+              ? "Selected target history with RX/TX lines"
+              : "Top targets across the selected chart mode with clean multi-series lines"}
           </div>
         </div>
-        <div style={{ display: "flex", gap: 16, fontWeight: 800 }}>
-          <span style={{ color: "#63ffa3" }}>RX</span>
-          <span style={{ color: "#78a9ff" }}>TX</span>
-        </div>
-      </div>
-
-      <div
-        ref={wrapRef}
-        onMouseMove={handleMove}
-        onMouseLeave={handleLeave}
-        style={{ width: "100%", overflow: "hidden", borderRadius: 20, minHeight: 270, position: "relative" }}
-      >
-        {data.length === 0 ? (
-          <div
-            style={{
-              minHeight: 270,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-              color: "rgba(255,255,255,0.72)",
-              border: "1px dashed rgba(255,255,255,0.08)",
-              borderRadius: 20,
-              background: "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))",
-            }}
-          >
-            <div style={{ fontSize: 22, fontWeight: 900 }}>No rows for this filter</div>
-            <div style={{ marginTop: 8, fontSize: 14, opacity: 0.7 }}>
-              Try another time window, target, or search.
-            </div>
-          </div>
-        ) : !hasEnoughPoints ? (
-          <div
-            style={{
-              minHeight: 270,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-              color: "rgba(255,255,255,0.72)",
-              border: "1px dashed rgba(255,255,255,0.08)",
-              borderRadius: 20,
-              background: "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))",
-            }}
-          >
-            <div style={{ fontSize: 22, fontWeight: 900 }}>Need more samples</div>
-            <div style={{ marginTop: 8, fontSize: 14, opacity: 0.7 }}>
-              This target currently has only one point, so the chart cannot be drawn yet.
-            </div>
-          </div>
-        ) : (
-          <>
-            <svg viewBox={`0 0 ${width} ${height}`} style={{ width: "100%", height: "auto", display: "block" }}>
-<defs>
-  <style>{`
-    @keyframes trafficPulse {
-      0%   { opacity: .72; transform: scaleY(1); }
-      50%  { opacity: 1; transform: scaleY(1.03); }
-      100% { opacity: .72; transform: scaleY(1); }
-    }
-  `}</style>
-  <linearGradient id="rxBar" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0%" stopColor="#ffe082"/>
-    <stop offset="100%" stopColor="#f6d04d"/>
-  </linearGradient>
-
-  <linearGradient id="txBar" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0%" stopColor="#ff9e80"/>
-    <stop offset="100%" stopColor="#ff7a59"/>
-  </linearGradient>
-  <linearGradient id="rxBarFill" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0%" stopColor="#ffe082" />
-    <stop offset="100%" stopColor="#e0b93f" />
-  </linearGradient>
-  <linearGradient id="txBarFill" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0%" stopColor="#ff9a76" />
-    <stop offset="100%" stopColor="#f06d4f" />
-  </linearGradient>
-</defs>
-              <defs>
-  <style>{`
-    @keyframes trafficPulse {
-      0%   { opacity: .72; transform: scaleY(1); }
-      50%  { opacity: 1; transform: scaleY(1.03); }
-      100% { opacity: .72; transform: scaleY(1); }
-    }
-  `}</style>
-                <linearGradient id="rxFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="rgba(99,255,163,0.30)" />
-                  <stop offset="100%" stopColor="rgba(99,255,163,0.02)" />
-                </linearGradient>
-                <linearGradient id="txFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="rgba(120,169,255,0.30)" />
-                  <stop offset="100%" stopColor="rgba(120,169,255,0.02)" />
-                </linearGradient>
-                <linearGradient id="rxBarFill" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0%" stopColor="#ffe082" />
-    <stop offset="100%" stopColor="#e0b93f" />
-  </linearGradient>
-  <linearGradient id="txBarFill" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0%" stopColor="#ff9a76" />
-    <stop offset="100%" stopColor="#f06d4f" />
-  </linearGradient>
-</defs>
-
-              {[0.2, 0.4, 0.6, 0.8].map((g) => {
-                const y = height - pad - (innerHeight * g);
-                return (
-                  <line
-                    key={g}
-                    x1={pad}
-                    y1={y}
-                    x2={width - pad}
-                    y2={y}
-                    stroke="rgba(255,255,255,0.08)"
-                    strokeWidth="1"
-                  />
-                );
-              })}
-
-              {stacked ? (
-                <>
-                  {data.map((d, idx) => {
-                    const xCenter = pad + (idx * barSlot) + (barSlot / 2);
-                    const x = xCenter - (barWidth / 2);
-
-                    const rxH = (Math.max(0, d.rx) / maxVal) * innerHeight;
-                    const txH = (Math.max(0, d.tx) / maxVal) * innerHeight;
-
-                    const rxY = height - pad - rxH;
-                    const txY = rxY - txH;
-
-                    const isHover = hoverIndex === idx;
-
-                    return (
-                      <g key={idx}>
-                        {isHover ? (
-                          <rect
-                            x={x - 2}
-                            y={pad}
-                            width={barWidth + 4}
-                            height={innerHeight}
-                            rx="8"
-                            fill="rgba(255,255,255,0.06)"
-                          />
-                        ) : null}
-
-                        <rect
-                          x={x}
-                          y={rxY}
-                          width={barWidth}
-                          height={Math.max(2, rxH)}
-                          rx="4"
-                          fill="url(#rxBar)"
-                          opacity={0.95}
-                        />
-                        <rect
-                          x={x}
-                          y={txY}
-                          width={barWidth}
-                          height={Math.max(2, txH)}
-                          rx="4"
-                          fill="url(#txBar)"
-                          opacity={0.95}
-                        />
-                      </g>
-                    );
-                  })}
-
-                  {hoverIndex != null && data[hoverIndex] ? (() => {
-                    const xCenter = pad + (hoverIndex * barSlot) + (barSlot / 2);
-                    return (
-                      <g>
-                        <line
-                          x1={xCenter}
-                          y1={pad}
-                          x2={xCenter}
-                          y2={height - pad}
-                          stroke="rgba(255,255,255,0.18)"
-                          strokeDasharray="4 4"
-                        />
-                      </g>
-                    );
-                  })() : null}
-                </>
-              ) : (
-                <>
-                  <path d={areaPath("tx")} fill="url(#txFill)" />
-                  <path d={areaPath("rx")} fill="url(#rxFill)" />
-                  <path d={linePath("tx")} fill="none" stroke="#78a9ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d={linePath("rx")} fill="none" stroke="#63ffa3" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-
-                  {hoverIndex != null && data[hoverIndex] ? (() => {
-                    const x = pad + hoverIndex * xStep;
-                    return (
-                      <g>
-                        <line x1={x} y1={pad} x2={x} y2={height - pad} stroke="rgba(255,255,255,0.20)" strokeDasharray="4 4" />
-                      </g>
-                    );
-                  })() : null}
-                </>
-              )}
-            </svg>
-
-            {hoverItem ? (
-              <div
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
+          {rawSeries.map((s) => {
+            const hidden = !!hiddenSeries?.[s.key];
+            return (
+              <button
+                key={s.key}
+                onClick={() => onToggleSeries && onToggleSeries(s.key)}
+                title={hidden ? "Show series" : "Hide series"}
                 style={{
-                  position: "absolute",
-                  left: Math.min(Math.max(12, hoverBox.x + 12), Math.max(12, (wrapRef.current?.clientWidth || 500) - 250)),
-                  top: Math.min(Math.max(12, hoverBox.y), 180),
-                  width: 238,
-                  pointerEvents: "none",
-                  padding: 12,
-                  borderRadius: 16,
-                  border: "1px solid rgba(255,255,255,0.10)",
-                  background: "linear-gradient(180deg, rgba(8,14,28,0.96), rgba(12,20,40,0.98))",
-                  boxShadow: "0 14px 40px rgba(0,0,0,0.35)",
-                  color: "#fff",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "6px 10px",
+                  borderRadius: 999,
+                  background: hidden ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: hidden ? "rgba(255,255,255,0.45)" : "#fff",
+                  cursor: "pointer",
+                  opacity: hidden ? 0.55 : 1
                 }}
               >
-                <div style={{ fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase", opacity: 0.66 }}>
-                  {hoverItem.kindLabel}
-                </div>
-                <div style={{ marginTop: 6, fontWeight: 900, fontSize: 14 }}>
-                  {hoverItem.label}
-                </div>
-                <div style={{ marginTop: 8, fontSize: 13, opacity: 0.82 }}>
-                  {fmtTime(hoverItem.time)}
-                </div>
-                <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
-                  <div style={{ color: stacked ? "#f6d04d" : "#63ffa3", fontWeight: 800 }}>RX: {fmtMbps(hoverItem.rx)}</div>
-                  <div style={{ color: stacked ? "#ff7a59" : "#78a9ff", fontWeight: 800 }}>TX: {fmtMbps(hoverItem.tx)}</div>
-                  {stacked ? (
-                    <div style={{ color: "#ffffff", opacity: 0.88, fontWeight: 700 }}>
-                      TOTAL: {fmtMbps(hoverItem.total)}
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            ) : null}
-          </>
-        )}
+                <span style={{ width: 10, height: 10, borderRadius: 999, background: s.color, display: "inline-block", opacity: hidden ? 0.45 : 1 }} />
+                <span style={{ textDecoration: hidden ? "line-through" : "none" }}>{s.label}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
+
+      <svg viewBox={`0 0 ${width} ${height}`} style={{ width: "100%", display: "block" }}>
+        {gridVals.map((gv, idx) => {
+          const yy = y(gv);
+          return (
+            <g key={idx}>
+              <line x1={padL} x2={width - padR} y1={yy} y2={yy} stroke="rgba(255,255,255,0.08)" strokeDasharray="4 6" />
+              <text x={8} y={yy + 4} fill="rgba(255,255,255,0.60)" fontSize="12" fontWeight="700">
+                {fmtMbps(gv)}
+              </text>
+            </g>
+          );
+        })}
+
+        {series.map((s) => (
+          <g key={s.key}>
+            <path d={linePath(s.points, "rx")} fill="none" stroke={s.color} strokeWidth="3" strokeLinecap="round" style={{ transition: "all 320ms ease" }} />
+            <path d={linePath(s.points, "tx")} fill="none" stroke={s.color} strokeOpacity="0.35" strokeWidth="2" strokeDasharray="8 6" strokeLinecap="round" style={{ transition: "all 320ms ease" }} />
+            {s.points.map((p, i) => (
+              <g key={i}>
+                <circle
+                  cx={x(p.ts)}
+                  cy={y(p.rx)}
+                  r="5" fill={s.color} style={{ transition: "all 220ms ease", cursor: "pointer" }}
+                  onMouseMove={(e) => {
+                    const rect = e.currentTarget.ownerSVGElement.getBoundingClientRect();
+                    setHover({
+                      left: e.clientX - rect.left + 16,
+                      top: e.clientY - rect.top + 16,
+                      target: s.label,
+                      source: s.source,
+                      time: fmtTime(p.ts),
+                      rx: p.rx,
+                      tx: p.tx
+                    });
+                  }}                  onMouseLeave={() => setHover(null)}
+                />
+              </g>
+            ))}
+          </g>
+        ))}
+
+        {(() => {
+          const xTicks = [...new Set(allPoints.map((p) => p.ts))].sort((a, b) => a - b);
+          const step = Math.max(1, Math.ceil(xTicks.length / 8));
+          return xTicks.filter((_, idx) => idx % step === 0).map((ts, idx) => (
+            <g key={idx}>
+              <line x1={x(ts)} x2={x(ts)} y1={padT} y2={height - padB} stroke="rgba(255,255,255,0.04)" />
+              <text x={x(ts)} y={height - 12} textAnchor="middle" fill="rgba(255,255,255,0.58)" fontSize="11" fontWeight="700">
+                {shortTime(ts, range)}
+              </text>
+            </g>
+          ));
+        })()}
+      </svg>
+
+      <div style={{ display: "flex", gap: 16, marginTop: 10, flexWrap: "wrap", opacity: 0.72, fontSize: 12 }}>
+        <div><strong>Solid</strong> = RX</div>
+        <div><strong>Dashed</strong> = TX</div>
+      </div>
+
+      {hover && (
+        <div
+          style={{
+            position: "absolute",
+            left: hover.left,
+            top: hover.top,
+            minWidth: 250,
+            pointerEvents: "none",
+            borderRadius: 14,
+            padding: 12,
+            background: "rgba(10,14,22,0.96)",
+            border: "1px solid rgba(255,255,255,0.12)",
+            boxShadow: "0 12px 28px rgba(0,0,0,0.35)",
+            backdropFilter: "blur(8px)"
+          }}
+        >
+          <div style={{ fontWeight: 900, fontSize: 15 }}>{hover.target}</div>
+          <div style={{ marginTop: 4, opacity: 0.7 }}>{hover.source}</div>
+          <div style={{ marginTop: 8, fontSize: 12 }}>{hover.time}</div>
+          <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "auto auto", gap: 8 }}>
+            <div>RX</div><div><strong style={{ color: "#63ffa3" }}>{fmtMbps(hover.rx)}</strong></div>
+            <div>TX</div><div><strong style={{ color: "#78a9ff" }}>{fmtMbps(hover.tx)}</strong></div>
+            <div>Total</div><div><strong style={{ color: "#ffd76a" }}>{fmtMbps(num(hover.rx) + num(hover.tx))}</strong></div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-function HistoryPage() {
+const pageStyle = {
+  minHeight: "100%",
+  padding: 16,
+  color: "#fff",
+  background: "radial-gradient(circle at top left, rgba(90,120,255,0.16), transparent 32%), radial-gradient(circle at top right, rgba(99,255,163,0.12), transparent 28%), #0b1020"
+};
+
+const panel = {
+  border: "1px solid rgba(255,255,255,0.08)",
+  background: "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03))",
+  borderRadius: 18,
+  boxShadow: "0 12px 28px rgba(0,0,0,0.22)"
+};
+
+const labelStyle = {
+  fontSize: 12,
+  fontWeight: 800,
+  textTransform: "uppercase",
+  letterSpacing: "0.06em",
+  opacity: 0.7,
+  marginBottom: 8
+};
+
+function normalizeRows(items) {
+  const arr = Array.isArray(items) ? items : [];
+  return arr.map((r) => ({
+    ...r,
+    ts: parseTs(r?.ts),
+    rx: num(r?.rx),
+    tx: num(r?.tx),
+    source: String(r?.source || ""),
+    type: String(r?.type || ""),
+    target: String(r?.target || ""),
+    targetId: String(r?.targetId || r?.target || "")
+  })).filter((r) => r.ts > 0);
+}
+
+export default function HistoryPage() {
   const [range, setRange] = useState("5m");
+  const [source, setSource] = useState("all");
+const [chartMode, setChartMode] = useState("unified");
+const [hiddenSeries, setHiddenSeries] = useState({});
+  const [target, setTarget] = useState("all");
   const [searchInput, setSearchInput] = useState("");
   const [appliedSearch, setAppliedSearch] = useState("");
-  const [selectedKey, setSelectedKey] = useState("all");
-  const [rawRows, setRawRows] = useState([]);
-  const [allRows, setAllRows] = useState([]);
-  const [selectedSource, setSelectedSource] = useState("all");
+  const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
   const [page, setPage] = useState(1);
-  const pageSize = 25;
+const [autoRefresh, setAutoRefresh] = useState(true);
+const [refreshMs, setRefreshMs] = useState(10000);
+const [lastRefreshAt, setLastRefreshAt] = useState(0);
 
-  async function loadData(currentRange, currentSearch) {
+  async function loadData(currentRange, currentSource, currentQ) {
+    setLoading(true);
+    setErr("");
     try {
-      setLoading(true);
-      setErr("");
+      const params = new URLSearchParams();
+      params.set("range", currentRange);
+      params.set("source", currentSource || "all");
+      params.set("q", currentQ || "");
+      params.set("limit", currentRange === "30d" ? "50000" : "12000");
 
-      const smartLimit = 1000;
+      const r = await fetch(`/api/history/unified?${params.toString()}`, { cache: "no-store" });
+      const j = await r.json();
+      if (!r.ok || !j?.ok) throw new Error(j?.error || "Unified history failed");
 
-      const [historyResp, streetResp] = await Promise.allSettled([
-        fetch(buildHistoryUrl(currentRange, currentSearch, smartLimit), { cache: "no-store" }),
-        fetch("/api/history/monitor-street?range=" + encodeURIComponent(currentRange) + "&q=" + encodeURIComponent(currentSearch || "") + "&limit=" + encodeURIComponent(smartLimit), { cache: "no-store" }),
-      ]);
-
-      let uplinkRows = [];
-      let interfaceRows = [];
-      let errors = [];
-
-      if (historyResp.status === "fulfilled") {
-        const r = historyResp.value;
-        const j = await r.json();
-        if (!r.ok || !j?.ok) {
-          errors.push(j?.error || "Uplink history failed");
-        } else {
-          const data = Array.isArray(j?.items)
-            ? j.items
-            : Array.isArray(j?.data)
-            ? j.data
-            : Array.isArray(j?.rows)
-            ? j.rows
-            : Array.isArray(j?.history)
-            ? j.history
-            : [];
-          uplinkRows = normalizeUplinkRows(data);
-        }
-      } else {
-        errors.push("Uplink history request failed");
-      }
-
-      if (streetResp.status === "fulfilled") {
-        const r = streetResp.value;
-        const j = await r.json();
-        if (!r.ok || !j?.ok) {
-          errors.push(j?.error || "Monitor Street history failed");
-        } else {
-          const data = Array.isArray(j?.items)
-            ? j.items
-            : Array.isArray(j?.data)
-            ? j.data
-            : Array.isArray(j?.rows)
-            ? j.rows
-            : Array.isArray(j?.history)
-            ? j.history
-            : [];
-          interfaceRows = normalizeInterfaceRows(data);
-        }
-      } else {
-        errors.push("Monitor Street history request failed");
-      }
-
-      const merged = [...uplinkRows, ...interfaceRows].sort((a, b) => (a.__ms || 0) - (b.__ms || 0));
-      setRawRows(merged);
-setAllRows((prev) => {
-  const map = new Map();
-  [...prev, ...merged].forEach(r => {
-    map.set(r.selectorKey, r);
-  });
-  return Array.from(map.values());
-});
-
-      if (errors.length && merged.length === 0) {
-        throw new Error(errors.join(" | "));
-      }
-
-      setErr(errors.length ? errors.join(" | ") : "");
+      const items = normalizeRows(j?.items);
+      setRows(items);
     } catch (e) {
-      setRawRows([]);
+      setRows([]);
       setErr(String(e?.message || e || "Unknown history error"));
     } finally {
       setLoading(false);
+      setLastRefreshAt(Date.now());
     }
   }
 
   useEffect(() => {
-    loadData(range, appliedSearch);
-  }, [range, appliedSearch]);
-
-  const selectorItems = useMemo(() => {
-    const map = new Map();
-    for (const r of allRows) {
-      if (!map.has(r.selectorKey)) {
-        map.set(r.selectorKey, {
-          value: r.selectorKey,
-          label: `${r.displayName} (${r.kindLabel})`,
-        });
-      }
-    }
-    return [{ value: "all", label: "All targets" }, ...Array.from(map.values())];
-  }, [allRows]);
+    loadData(range, source, appliedSearch);
+  }, [range, source, appliedSearch]);
 
   useEffect(() => {
-    const exists = selectorItems.some((x) => x.value === selectedKey);
-    if (!exists) {
-      setSelectedKey("all");
-    }
-  }, [selectorItems, selectedKey]);
+    if (!autoRefresh) return undefined;
+    const id = setInterval(() => {
+      loadData(range, source, appliedSearch);
+    }, Math.max(3000, Number(refreshMs || 10000)));
+    return () => clearInterval(id);
+  }, [autoRefresh, refreshMs, range, source, appliedSearch]);
 
   useEffect(() => {
     setPage(1);
-  }, [range, selectedKey, selectedSource, appliedSearch]);
+  }, [range, source, target, appliedSearch]);
+
+  useEffect(() => {
+    setHiddenSeries({});
+  }, [range, source, target, appliedSearch, chartMode]);
+
+  const targetItems = useMemo(() => {
+    const map = new Map();
+    for (const r of rows) {
+      if (!map.has(r.targetId)) {
+        const sourceRank = r.source === "monitor" ? 1 : r.source === "uplink" ? 2 : r.source === "aviat" ? 3 : 9;
+        map.set(r.targetId, {
+          value: r.targetId,
+          label: `${r.target} • ${r.source} • ${r.type}`,
+          target: r.target || "",
+          source: r.source || "",
+          type: r.type || "",
+          sourceRank
+        });
+      }
+    }
+
+    const sorted = [...map.values()].sort((a, b) => {
+      if (a.sourceRank !== b.sourceRank) return a.sourceRank - b.sourceRank;
+      if (a.source !== b.source) return a.source.localeCompare(b.source);
+      if (a.type !== b.type) return a.type.localeCompare(b.type);
+      return a.target.localeCompare(b.target);
+    });
+
+    return [{ value: "all", label: "All targets", target: "All targets", source: "all", type: "", sourceRank: 0 }, ...sorted];
+  }, [rows]);
+
+  useEffect(() => {
+    if (!targetItems.some((x) => x.value === target)) {
+      setTarget("all");
+    }
+  }, [targetItems, target]);
 
   const filteredRows = useMemo(() => {
-    let rows = Array.isArray(rawRows) ? rawRows : [];
+  let out = Array.isArray(rows) ? rows.slice() : [];
 
-    if (selectedSource !== "all") {
-      rows = rows.filter((r) => r.kind === selectedSource);
-    }
+  if (target !== "all") {
+    out = out.filter((r) => r.targetId === target);
+  }
 
-    if (selectedKey !== "all") {
-      rows = rows.filter((r) => r.selectorKey === selectedKey);
-    }
+  out.sort((a, b) => a.ts - b.ts);
+  return out;
+}, [rows, target]);
 
-    if (appliedSearch) {
-      const q = appliedSearch.toLowerCase();
-      rows = rows.filter((r) =>
-        String(r?.displayName || "").toLowerCase().includes(q) ||
-        String(r?.name || "").toLowerCase().includes(q) ||
-        String(r?.ip || "").toLowerCase().includes(q) ||
-        String(r?.source || "").toLowerCase().includes(q) ||
-        String(r?.uplink || "").toLowerCase().includes(q)
-      );
-    }
+const chartRows = useMemo(() => {
+  let out = Array.isArray(filteredRows) ? filteredRows.slice() : [];
 
-    return rows;
-  }, [rawRows, selectedSource, selectedKey, appliedSearch, range]);
+  if (chartMode === "uplink") {
+    out = out.filter((r) => r.source === "uplink");
+  } else if (chartMode === "monitor") {
+    out = out.filter((r) => r.source === "monitor");
+  } else if (chartMode === "aviat") {
+    out = out.filter((r) => r.source === "aviat");
+  }
 
+  out.sort((a, b) => a.ts - b.ts);
+  return out;
+}, [filteredRows, chartMode]);
+
+  const stats = useMemo(() => {
+    const latest = filteredRows.length ? filteredRows[filteredRows.length - 1] : null;
+    const latestTotal = latest ? num(latest.rx) + num(latest.tx) : 0;
+    return {
+      status: err && filteredRows.length === 0 ? "ERROR" : loading ? "LOADING" : "OK",
+      rows: filteredRows.length,
+      rx: latest ? num(latest.rx) : 0,
+      tx: latest ? num(latest.tx) : 0,
+      type: latest?.type || "-",
+      target: latest?.target || "-",
+      source: latest?.source || "-",
+      total: latestTotal,
+      ts: latest?.ts || 0
+    };
+  }, [filteredRows, err, loading]);
+
+  const pageSize = 20;
   const totalPages = Math.max(1, Math.ceil(filteredRows.length / pageSize));
   const safePage = Math.min(page, totalPages);
   const pagedRows = useMemo(() => {
@@ -682,340 +581,516 @@ setAllRows((prev) => {
     return filteredRows.slice(start, start + pageSize);
   }, [filteredRows, safePage]);
 
-  const chartRows = useMemo(() => {
-    const rows = Array.isArray(filteredRows) ? filteredRows : [];
-
-    if (selectedKey !== "all") {
-      return rows;
+  const topTalkers = useMemo(() => {
+    const map = new Map();
+    for (const r of filteredRows) {
+      const key = r.targetId || r.target || "unknown";
+      const value = num(r.rx) + num(r.tx);
+      const prev = map.get(key) || {
+        key,
+        target: r.target || key,
+        source: r.source || "-",
+        type: r.type || "-",
+        total: 0,
+        rx: 0,
+        tx: 0,
+        peak: 0,
+        samples: 0,
+        avg: 0
+      };
+      prev.rx += num(r.rx);
+      prev.tx += num(r.tx);
+      prev.total += value;
+      prev.peak = Math.max(prev.peak, value);
+      prev.samples += 1;
+      map.set(key, prev);
     }
 
-    const topN = range === "24h" || range === "30d" ? 8 : 5;
-    const scoreMap = new Map();
+    return [...map.values()]
+      .map((x) => ({
+        ...x,
+        avg: x.samples > 0 ? (x.total / x.samples) : 0
+      }))
+      .sort((a, b) => b.avg - a.avg)
+      .slice(0, 8);
+  }, [filteredRows]);
 
-    for (const r of rows) {
-      const key = String(r?.selectorKey || "").trim();
-      if (!key) continue;
-
-      const rx = Number(r?.rxValue ?? r?.rxMbps ?? r?.rx ?? 0);
-      const tx = Number(r?.txValue ?? r?.txMbps ?? r?.tx ?? 0);
-      const total = Math.max(0, rx) + Math.max(0, tx);
-
-      if (!scoreMap.has(key) || total > scoreMap.get(key)) {
-        scoreMap.set(key, total);
-      }
+  const sourceBreakdown = useMemo(() => {
+    const base = [
+      { source: "uplink", rows: 0, total: 0 },
+      { source: "monitor", rows: 0, total: 0 },
+      { source: "aviat", rows: 0, total: 0 }
+    ];
+    const map = new Map(base.map(x => [x.source, { ...x }]));
+    for (const r of filteredRows) {
+      const key = r.source || "unknown";
+      if (!map.has(key)) map.set(key, { source: key, rows: 0, total: 0 });
+      const item = map.get(key);
+      item.rows += 1;
+      item.total += num(r.rx) + num(r.tx);
     }
+    return [...map.values()].sort((a, b) => b.total - a.total);
+  }, [filteredRows]);
 
-    const allowed = new Set(
-      Array.from(scoreMap.entries())
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, topN)
-        .map((x) => x[0])
-    );
-
-    return rows.filter((r) => allowed.has(String(r?.selectorKey || "").trim()));
-  }, [filteredRows, selectedKey, range]);
-
-  console.log("DEBUG selectedKey =", selectedKey);
-  const latest = filteredRows.length ? filteredRows[filteredRows.length - 1] : null;
-
-  const stats = useMemo(() => {
-    const rx = num(latest?.rxValue ?? latest?.rxMbps ?? latest?.rx);
-    const tx = num(latest?.txValue ?? latest?.txMbps ?? latest?.tx);
-    return {
-      status: err && filteredRows.length === 0 ? "ERROR" : loading ? "LOADING" : "OK",
-      rows: filteredRows.length,
-      rx,
-      tx,
-      ts: latest?.__dt || latest?.ts || latest?.time || latest?.timestamp || null,
-      target: latest?.displayName || latest?.name || latest?.uplink || latest?.source || latest?.ip || "-",
-      kindLabel: latest?.kindLabel || "Mixed",
-    };
-  }, [filteredRows, latest, err, loading]);
+  const lastRefreshText = useMemo(() => {
+    if (!lastRefreshAt) return "-";
+    return new Date(lastRefreshAt).toLocaleTimeString();
+  }, [lastRefreshAt]);
 
   return (
-    <div style={shell}>
-      <div
-        style={{
-          padding: 22,
-          display: "grid",
-          gap: 16,
-          background:
-            "radial-gradient(circle at top right, rgba(80,90,255,0.18), transparent 26%), radial-gradient(circle at top left, rgba(0,255,200,0.08), transparent 20%)",
-        }}
-      >
-        <div style={{ ...panel, padding: 24 }}>
-          <div style={{ fontSize: 15, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.58 }}>
-            NoComment Work Tools
-          </div>
-          <div style={{ fontSize: 46, fontWeight: 900, letterSpacing: "-0.04em", marginTop: 10 }}>
-            Unified History
-          </div>
-          <div style={{ marginTop: 8, opacity: 0.7, maxWidth: 980, fontSize: 15 }}>
-            One shared history page that mixes uplink traffic with real Monitor Street interface history inside the same controls.
-          </div>
-        </div>
-
-        <div style={{ ...panel, padding: 18 }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(12, minmax(0, 1fr))",
-              gap: 12,
-              alignItems: "center",
-            }}
-          >
-            <div style={{ gridColumn: "span 3" }}>
-              <div style={labelStyle}>Range</div>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
-                {[
-                  { value: "5m", label: "5 Minutes" },
-                  { value: "30m", label: "30 Minutes" },
-                  { value: "60m", label: "60 Minutes" },
-                  { value: "24h", label: "24 Hours" },
-                  { value: "30d", label: "30 Days" },
-                ].map((x) => (
-                  <button
-                    key={x.value}
-                    onClick={() => setRange(x.value)}
-                    style={{
-                      padding: "10px 14px",
-                      borderRadius: 14,
-                      border: x.value === range ? "1px solid rgba(140,180,255,0.55)" : "1px solid rgba(255,255,255,0.10)",
-                      background: x.value === range ? "rgba(90,120,255,0.22)" : "rgba(255,255,255,0.04)",
-                      color: "#fff",
-                      fontWeight: 800,
-                      cursor: "pointer",
-                    }}
-                  >
-                    {x.label}
-                  </button>
-                ))}
-              </div>
+    <div style={pageStyle}>
+      <div style={{ ...panel, padding: 20 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "flex-start", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ fontSize: 30, fontWeight: 900, letterSpacing: "-0.02em" }}>Unified History</div>
+            <div style={{ opacity: 0.74, marginTop: 6 }}>
+              One clean NOC-level history page for Uplink, Monitor Street, and Aviat WTM4200 with live controls and interactive chart analysis.
             </div>
-
-            <div style={{ gridColumn: "span 3" }}>
-              <div style={labelStyle}>Target</div>
-              <select
-                value={selectedKey}
-                onChange={(e) => setSelectedKey(e.target.value)}
+          </div>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            {[
+              { value: "5m", label: "5 Minutes" },
+              { value: "30m", label: "30 Minutes" },
+              { value: "60m", label: "60 Minutes" },
+              { value: "24h", label: "24 Hours" },
+              { value: "30d", label: "30 Days" }
+            ].map((x) => (
+              <button
+                key={x.value}
+                onClick={() => setRange(x.value)}
                 style={{
-                  width: "100%",
-                  marginTop: 8,
-                  height: 46,
-                  borderRadius: 14,
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  background: "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03))",
+                  padding: "10px 14px",
+                  borderRadius: 12,
+                  border: x.value === range ? "1px solid rgba(140,180,255,0.55)" : "1px solid rgba(255,255,255,0.10)",
+                  background: x.value === range ? "rgba(90,120,255,0.22)" : "rgba(255,255,255,0.04)",
                   color: "#fff",
-                  padding: "0 14px",
-                  fontWeight: 700,
-                  appearance: "none",
-                  WebkitAppearance: "none",
-                  MozAppearance: "none",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
+                  fontWeight: 800,
+                  cursor: "pointer"
                 }}
               >
-                {selectorItems.map((x) => (
-                  <option key={x.value} value={x.value} style={{ color: "#111" }}>
-                    {x.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+                {x.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-            <div style={{ gridColumn: "span 2" }}>
-              <div style={labelStyle}>Search</div>
-              <input
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Search IP / uplink / interface / source"
+      <div style={{ ...panel, padding: 18, marginTop: 16 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+          <div>
+            <div style={{ fontSize: 22, fontWeight: 900 }}>Live Controls</div>
+            <div style={{ opacity: 0.72, marginTop: 4 }}>
+              Auto refresh, interval control, and live status for the NOC timeline.
+            </div>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "8px 12px",
+                borderRadius: 999,
+                background: autoRefresh ? "rgba(99,255,163,0.14)" : "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.10)",
+                fontWeight: 800
+              }}
+            >
+              <span
                 style={{
-                  width: "100%",
-                  marginTop: 8,
-                  height: 46,
-                  borderRadius: 14,
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  background: "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03))",
-                  color: "#fff",
-                  padding: "0 14px",
-                  fontWeight: 700,
-                  outline: "none",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
+                  width: 10,
+                  height: 10,
+                  borderRadius: 999,
+                  display: "inline-block",
+                  background: autoRefresh ? "#63ffa3" : "rgba(255,255,255,0.35)",
+                  boxShadow: autoRefresh ? "0 0 14px rgba(99,255,163,0.75)" : "none"
                 }}
               />
+              {autoRefresh ? "LIVE" : "PAUSED"}
             </div>
 
-            <div style={{ gridColumn: "span 2", display: "flex", gap: 10, alignSelf: "end" }}>
-              <button
-                onClick={() => setAppliedSearch(searchInput.trim())}
-                style={{
-                  flex: 1,
-                  height: 46,
-                  borderRadius: 14,
-                  border: "1px solid rgba(140,180,255,0.45)",
-                  background: "linear-gradient(180deg, rgba(102,129,255,0.35), rgba(59,83,214,0.30))",
-                  color: "#fff",
-                  fontWeight: 900,
-                  cursor: "pointer",
-                }}
-              >
-                Apply
-              </button>
-              <button
-                onClick={() => {
-                  setSearchInput("");
-                  setAppliedSearch("");
-                  setSelectedKey("all");
-                  setRange("5m");
-                }}
-                style={{
-                  flex: 1,
-                  height: 46,
-                  borderRadius: 14,
-                  border: "1px solid rgba(255,255,255,0.10)",
-                  background: "rgba(255,255,255,0.05)",
-                  color: "#fff",
-                  fontWeight: 900,
-                  cursor: "pointer",
-                }}
-              >
-                Clear
-              </button>
+            <button
+              onClick={() => setAutoRefresh((v) => !v)}
+              style={{
+                padding: "10px 14px",
+                borderRadius: 12,
+                border: "1px solid rgba(255,255,255,0.10)",
+                background: autoRefresh ? "rgba(99,255,163,0.14)" : "rgba(255,255,255,0.06)",
+                color: "#fff",
+                fontWeight: 900,
+                cursor: "pointer"
+              }}
+            >
+              {autoRefresh ? "Stop Auto Refresh" : "Start Auto Refresh"}
+            </button>
+
+            <select
+              value={String(refreshMs)}
+              onChange={(e) => setRefreshMs(Number(e.target.value || 10000))}
+              style={{
+                borderRadius: 12,
+                border: "1px solid rgba(255,255,255,0.10)",
+                background: "rgba(255,255,255,0.05)",
+                color: "#fff",
+                padding: "10px 12px"
+              }}
+            >
+              <option value="5000" style={{ color: "#000" }}>5s</option>
+              <option value="10000" style={{ color: "#000" }}>10s</option>
+              <option value="15000" style={{ color: "#000" }}>15s</option>
+              <option value="30000" style={{ color: "#000" }}>30s</option>
+            </select>
+
+            <button
+              onClick={() => loadData(range, source, appliedSearch)}
+              style={{
+                padding: "10px 14px",
+                borderRadius: 12,
+                border: "1px solid rgba(255,255,255,0.10)",
+                background: "rgba(120,169,255,0.14)",
+                color: "#fff",
+                fontWeight: 900,
+                cursor: "pointer"
+              }}
+            >
+              Refresh Now
+            </button>
+
+            <div style={{ opacity: 0.72, fontSize: 13 }}>
+              Last refresh: <strong>{lastRefreshText}</strong>
             </div>
           </div>
         </div>
+      </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: 16 }}>
-          <SummaryCard label="Status" value={stats.status} sub={err ? err : "Unified history page online"} color={stats.status === "OK" ? "#63ffa3" : stats.status === "LOADING" ? "#ffd76a" : "#ff7f96"} />
-          <SummaryCard label="Rows" value={String(stats.rows)} sub="Filtered rows from uplinks + interfaces" />
-          <SummaryCard label="Latest RX" value={fmtMbps(stats.rx)} sub="Most recent receive throughput" color="#63ffa3" />
-          <SummaryCard label="Latest TX" value={fmtMbps(stats.tx)} sub="Most recent transmit throughput" color="#78a9ff" />
-          <SummaryCard label="Latest Type" value={stats.kindLabel} sub={stats.target} />
-        </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(6, minmax(0, 1fr))", gap: 14, marginTop: 16 }}>
+        <SummaryCard label="Status" value={stats.status} sub={err ? err : "Unified history online"} color={stats.status === "OK" ? "#63ffa3" : stats.status === "LOADING" ? "#ffd76a" : "#ff7f96"} />
+        <SummaryCard label="Rows" value={String(stats.rows)} sub="Filtered rows only" color="#8fe9ff" />
+        <SummaryCard label="Latest RX" value={fmtMbps(stats.rx)} sub="Based on current filter" color="#63ffa3" />
+        <SummaryCard label="Latest TX" value={fmtMbps(stats.tx)} sub="Based on current filter" color="#78a9ff" />
+        <SummaryCard label="Latest Type" value={stats.type} sub={stats.source} color={sourceTone(stats.source)} />
+        <SummaryCard label="Latest Target" value={stats.target} sub={stats.ts ? fmtTime(stats.ts) : "-"} color="#ffd76a" />
+      </div>
 
-        <HistoryChart items={chartRows} stacked={!selectedKey || selectedKey === "all"} />
-
-        <div style={{ ...panel, padding: 18 }}>
-          <div style={labelStyle}>Latest sample</div>
-          <div style={{ marginTop: 10, fontSize: 18, fontWeight: 800 }}>
-            {fmtTime(stats.ts)} • {stats.kindLabel} • {stats.target} • RX {fmtMbps(stats.rx)} • TX {fmtMbps(stats.tx)}
-          </div>
-        </div>
-
-        <div style={{ ...panel, padding: 18 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-            <div>
-              <div style={{ fontSize: 22, fontWeight: 900 }}>Detailed rows</div>
-              <div style={{ opacity: 0.64, marginTop: 4 }}>Unified table for uplink history + monitor interfaces with smart row limiting</div>
-            </div>
-            <div style={{ opacity: 0.68, fontWeight: 800, display: "flex", gap: 14, alignItems: "center" }}>
-              <span>{loading ? "Loading..." : `${filteredRows.length} row(s)`}</span>
-              <span>Page {safePage} of {totalPages}</span>
-            </div>
-          </div>
-
-          <div style={{ overflowX: "auto", borderRadius: 16, border: "1px solid rgba(255,255,255,0.08)" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1120 }}>
-              <thead>
-                <tr style={{ background: "rgba(255,255,255,0.05)" }}>
-                  {["Type", "Time", "Target", "RX", "TX", "IP", "Source"].map((h) => (
-                    <th
-                      key={h}
-                      style={{
-                        textAlign: "left",
-                        padding: "14px 16px",
-                        fontSize: 12,
-                        letterSpacing: "0.08em",
-                        textTransform: "uppercase",
-                        color: "rgba(255,255,255,0.68)",
-                        borderBottom: "1px solid rgba(255,255,255,0.08)",
-                      }}
-                    >
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {filteredRows.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} style={{ padding: 22, opacity: 0.72 }}>
-                      {err ? err : "No rows found for the current filter."}
-                    </td>
-                  </tr>
-                ) : (
-                  pagedRows.slice().reverse().map((r, idx) => (
-                    <tr
-                      key={r.kind + ":" + r.displayName + ":" + idx}
-                      style={{
-                        borderBottom: "1px solid rgba(255,255,255,0.06)",
-                        background: idx % 2 === 0 ? "rgba(255,255,255,0.015)" : "transparent",
-                      }}
-                    >
-                      <td style={{ padding: "14px 16px", whiteSpace: "nowrap", fontWeight: 800 }}>{r.kindLabel}</td>
-                      <td style={{ padding: "14px 16px", whiteSpace: "nowrap" }}>{fmtTime(r?.__dt || r?.ts || r?.time || r?.timestamp)}</td>
-                      <td style={{ padding: "14px 16px", fontWeight: 800, whiteSpace: "nowrap" }}>{r?.displayName || r?.name || r?.uplink || r?.target || "-"}</td>
-                      <td style={{ padding: "14px 16px", color: "#63ffa3", fontWeight: 800 }}>{fmtMbps(r?.rxValue ?? r?.rxMbps ?? r?.rx)}</td>
-                      <td style={{ padding: "14px 16px", color: "#78a9ff", fontWeight: 800 }}>{fmtMbps(r?.txValue ?? r?.txMbps ?? r?.tx)}</td>
-                      <td style={{ padding: "14px 16px" }}>{r?.ip || "-"}</td>
-                      <td style={{ padding: "14px 16px" }}>{r?.source || r?.ifName || "-"}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+      <div style={{ ...panel, padding: 18, marginTop: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1.4fr 1.6fr auto auto", gap: 14, alignItems: "end" }}>
+          <div>
+            <div style={labelStyle}>Source</div>
+            <select
+              value={source}
+              onChange={(e) => setSource(e.target.value)}
+              style={{
+                width: "100%",
+                borderRadius: 12,
+                border: "1px solid rgba(255,255,255,0.10)",
+                background: "rgba(255,255,255,0.05)",
+                color: "#fff",
+                padding: "12px 14px"
+              }}
+            >
+              <option value="all" style={{ color: "#000" }}>All sources</option>
+              <option value="uplink" style={{ color: "#000" }}>Uplink</option>
+              <option value="monitor" style={{ color: "#000" }}>Monitor Street</option>
+              <option value="aviat" style={{ color: "#000" }}>Aviat</option>
+            </select>
           </div>
 
-          <div
+          <div>
+            <div style={labelStyle}>Target</div>
+            <select
+              value={target}
+              onChange={(e) => setTarget(e.target.value)}
+              style={{
+                width: "100%",
+                borderRadius: 12,
+                border: "1px solid rgba(255,255,255,0.10)",
+                background: "rgba(255,255,255,0.05)",
+                color: "#fff",
+                padding: "12px 14px"
+              }}
+            >
+              {targetItems.map((x) => (
+                <option key={x.value} value={x.value} style={{ color: "#000" }}>{x.label}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <div style={labelStyle}>Search</div>
+            <input
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Search target / IP / type / source / status"
+              style={{
+                width: "100%",
+                borderRadius: 12,
+                border: "1px solid rgba(255,255,255,0.10)",
+                background: "rgba(255,255,255,0.05)",
+                color: "#fff",
+                padding: "12px 14px"
+              }}
+            />
+          </div>
+
+          <button
+            onClick={() => setAppliedSearch(searchInput.trim())}
             style={{
-              marginTop: 14,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: 12,
-              flexWrap: "wrap",
+              padding: "12px 18px",
+              borderRadius: 12,
+              border: "1px solid rgba(255,255,255,0.10)",
+              background: "rgba(99,255,163,0.14)",
+              color: "#fff",
+              cursor: "pointer",
+              fontWeight: 900
             }}
           >
-            <div style={{ opacity: 0.68, fontSize: 14 }}>
-              Showing {filteredRows.length === 0 ? 0 : (((safePage - 1) * pageSize) + 1)} to {Math.min(safePage * pageSize, filteredRows.length)} of {filteredRows.length}
-            </div>
+            Apply
+          </button>
 
-            <div style={{ display: "flex", gap: 10 }}>
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={safePage <= 1}
+          <button
+            onClick={() => {
+              setSource("all");
+              setTarget("all");
+              setSearchInput("");
+              setAppliedSearch("");
+              setRange("5m");
+              setChartMode("unified");
+            }}
+            style={{
+              padding: "12px 18px",
+              borderRadius: 12,
+              border: "1px solid rgba(255,255,255,0.10)",
+              background: "rgba(255,255,255,0.06)",
+              color: "#fff",
+              cursor: "pointer",
+              fontWeight: 900
+            }}
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+
+      <div style={{ ...panel, padding: 18, marginTop: 16 }}>
+  <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
+    <div>
+      <div style={{ fontSize: 22, fontWeight: 900 }}>Chart Mode</div>
+      <div style={{ opacity: 0.68, marginTop: 4 }}>
+        Switch between unified view and per-source timelines for better scale balance. Click legend pills to hide or show any series.
+      </div>
+    </div>
+    <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+      {[
+        { value: "unified", label: "Unified" },
+        { value: "uplink", label: "Uplink" },
+        { value: "monitor", label: "Monitor" },
+        { value: "aviat", label: "Aviat" }
+      ].map((x) => (
+        <button
+          key={x.value}
+          onClick={() => setChartMode(x.value)}
+          style={{
+            padding: "10px 14px",
+            borderRadius: 12,
+            border: x.value === chartMode ? "1px solid rgba(140,180,255,0.55)" : "1px solid rgba(255,255,255,0.10)",
+            background: x.value === chartMode ? "rgba(90,120,255,0.22)" : "rgba(255,255,255,0.04)",
+            color: "#fff",
+            fontWeight: 800,
+            cursor: "pointer"
+          }}
+        >
+          {x.label}
+        </button>
+      ))}
+    </div>
+  </div>
+</div>
+
+<div style={{ marginTop: 16 }}>
+  <HistoryChart
+          rows={chartRows}
+          range={range}
+          selectedTarget={target}
+          hiddenSeries={hiddenSeries}
+          onToggleSeries={(key) => setHiddenSeries((prev) => ({ ...prev, [key]: !prev[key] }))}
+        />
+</div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1.3fr 0.9fr", gap: 16, marginTop: 16 }}>
+        <div style={{ ...panel, padding: 18 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
+            <div>
+              <div style={{ fontSize: 22, fontWeight: 900 }}>Top Talkers</div>
+              <div style={{ opacity: 0.68, marginTop: 4 }}>
+                Ranked by average throughput inside the current filter, with peak and total shown for context.
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: 14, display: "grid", gap: 10 }}>
+            {topTalkers.length === 0 ? (
+              <div style={{ opacity: 0.72 }}>No data.</div>
+            ) : topTalkers.map((r, idx) => (
+              <div
+                key={r.key}
                 style={{
-                  height: 40,
-                  padding: "0 16px",
-                  borderRadius: 12,
-                  border: "1px solid rgba(255,255,255,0.10)",
-                  background: safePage <= 1 ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.06)",
-                  color: "#fff",
-                  fontWeight: 800,
-                  cursor: safePage <= 1 ? "not-allowed" : "pointer",
-                  opacity: safePage <= 1 ? 0.45 : 1,
+                  display: "grid",
+                  gridTemplateColumns: "52px 1fr auto auto auto",
+                  gap: 12,
+                  alignItems: "center",
+                  padding: "12px 14px",
+                  borderRadius: 14,
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(255,255,255,0.06)"
                 }}
               >
-                Prev
-              </button>
+                <div style={{ fontSize: 22, fontWeight: 900, opacity: 0.72 }}>#{idx + 1}</div>
+                <div>
+                  <div style={{ fontWeight: 900 }}>{r.target}</div>
+                  <div style={{ opacity: 0.65, marginTop: 4, fontSize: 12 }}>{r.source} • {r.type}</div>
+                </div>
+                <div style={{ color: "#63ffa3", fontWeight: 900 }}>Avg {fmtMbps(r.avg)}</div>
+                <div style={{ color: "#78a9ff", fontWeight: 900 }}>Peak {fmtMbps(r.peak)}</div>
+                <div style={{ color: "#ffd76a", fontWeight: 900 }}>Total {fmtMbps(r.total)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-              <button
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={safePage >= totalPages}
+        <div style={{ ...panel, padding: 18 }}>
+          <div style={{ fontSize: 22, fontWeight: 900 }}>Source Breakdown</div>
+          <div style={{ opacity: 0.68, marginTop: 4 }}>
+            Current filter distribution by source.
+          </div>
+
+          <div style={{ marginTop: 14, display: "grid", gap: 10 }}>
+            {sourceBreakdown.map((r) => (
+              <div
+                key={r.source}
                 style={{
-                  height: 40,
-                  padding: "0 16px",
-                  borderRadius: 12,
-                  border: "1px solid rgba(140,180,255,0.35)",
-                  background: safePage >= totalPages ? "rgba(255,255,255,0.03)" : "linear-gradient(180deg, rgba(102,129,255,0.30), rgba(59,83,214,0.24))",
-                  color: "#fff",
-                  fontWeight: 800,
-                  cursor: safePage >= totalPages ? "not-allowed" : "pointer",
-                  opacity: safePage >= totalPages ? 0.45 : 1,
+                  padding: "12px 14px",
+                  borderRadius: 14,
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(255,255,255,0.06)"
                 }}
               >
-                Next
-              </button>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center" }}>
+                  <div style={{ fontWeight: 900, color: sourceTone(r.source) }}>{r.source}</div>
+                  <div style={{ opacity: 0.72 }}>{r.rows} rows</div>
+                </div>
+                <div style={{ marginTop: 8, fontWeight: 900 }}>{fmtMbps(r.total)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ ...panel, padding: 18, marginTop: 16 }}>
+        <div style={labelStyle}>Latest sample</div>
+        <div style={{ fontSize: 18, fontWeight: 800 }}>
+          {stats.ts ? `${fmtTime(stats.ts)} • ${stats.source} • ${stats.type} • ${stats.target} • RX ${fmtMbps(stats.rx)} • TX ${fmtMbps(stats.tx)}` : "No sample"}
+        </div>
+      </div>
+
+      <div style={{ ...panel, padding: 18, marginTop: 16 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ fontSize: 22, fontWeight: 900 }}>Unified Records Table</div>
+            <div style={{ opacity: 0.68, marginTop: 4 }}>
+              Smart columns for uplink + monitor + aviat.
             </div>
+          </div>
+          <div style={{ opacity: 0.75 }}>{loading ? "Loading..." : `${filteredRows.length} row(s)`}</div>
+        </div>
+
+        <div style={{ marginTop: 14, overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1450 }}>
+            <thead>
+              <tr>
+                {["Time", "Type", "Target", "RX", "TX", "Source", "IP", "Ping", "Loss", "Capacity", "Utilization", "Status"].map((h) => (
+                  <th
+                    key={h}
+                    style={{
+                      textAlign: "left",
+                      padding: "12px 14px",
+                      borderBottom: "1px solid rgba(255,255,255,0.08)",
+                      opacity: 0.72,
+                      fontSize: 12,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em"
+                    }}
+                  >
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {pagedRows.length === 0 ? (
+                <tr>
+                  <td colSpan={12} style={{ padding: 18, opacity: 0.72 }}>
+                    {err ? err : "No rows found for the current filter."}
+                  </td>
+                </tr>
+              ) : (
+                pagedRows.map((r, idx) => (
+                  <tr key={`${r.targetId}:${r.ts}:${idx}`} style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>{fmtTime(r.ts)}</td>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap", fontWeight: 800 }}>{r.type || "-"}</td>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap", fontWeight: 800 }}>{r.target || "-"}</td>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap", color: "#63ffa3", fontWeight: 800 }}>{fmtMbps(r.rx)}</td>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap", color: "#78a9ff", fontWeight: 800 }}>{fmtMbps(r.tx)}</td>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap", color: sourceTone(r.source), fontWeight: 800 }}>{r.source || "-"}</td>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>{r.ip || "-"}</td>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>{r.ping == null ? "-" : `${Math.round(num(r.ping))} ms`}</td>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>{r.loss == null ? "-" : `${num(r.loss).toFixed(0)}%`}</td>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>{r.capacity == null ? "-" : fmtMbps(r.capacity)}</td>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>{r.utilization == null ? "-" : fmtPct(r.utilization)}</td>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>{r.status || "-"}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "center", marginTop: 14, flexWrap: "wrap" }}>
+          <div style={{ opacity: 0.68 }}>
+            Showing {filteredRows.length === 0 ? 0 : (((safePage - 1) * pageSize) + 1)} to {Math.min(safePage * pageSize, filteredRows.length)} of {filteredRows.length}
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={safePage <= 1}
+              style={{
+                padding: "10px 14px",
+                borderRadius: 10,
+                border: "1px solid rgba(255,255,255,0.10)",
+                background: safePage <= 1 ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.07)",
+                color: "#fff",
+                cursor: safePage <= 1 ? "not-allowed" : "pointer"
+              }}
+            >
+              Prev
+            </button>
+            <div style={{ padding: "10px 14px", borderRadius: 10, background: "rgba(255,255,255,0.05)" }}>
+              Page {safePage} / {totalPages}
+            </div>
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={safePage >= totalPages}
+              style={{
+                padding: "10px 14px",
+                borderRadius: 10,
+                border: "1px solid rgba(255,255,255,0.10)",
+                background: safePage >= totalPages ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.07)",
+                color: "#fff",
+                cursor: safePage >= totalPages ? "not-allowed" : "pointer"
+              }}
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>
@@ -1023,7 +1098,6 @@ setAllRows((prev) => {
   );
 }
 
-export default HistoryPage;
 
 
 
