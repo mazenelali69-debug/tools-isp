@@ -7,16 +7,15 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  AreaChart,
-  Area
+  ReferenceLine
 } from "recharts";
 
 const RANGES = ["5m", "30m", "1h", "1d", "30d"];
 const VIEWS = [
-  { key: "all", label: "All", accent: "#a78bfa" },
-  { key: "uplink", label: "Uplink", accent: "#63e6ff" },
-  { key: "switchB", label: "Switch B", accent: "#8dff8a" },
-  { key: "switchA", label: "Switch A", accent: "#ffbf66" }
+  { key: "all", label: "UNIFIED", accent: "#a78bfa" },
+  { key: "uplink", label: "UPLINK", accent: "#53e3ff" },
+  { key: "switchB", label: "SWITCH B", accent: "#86ff84" },
+  { key: "switchA", label: "SWITCH A", accent: "#ffbf66" }
 ];
 
 function num(v) {
@@ -36,15 +35,10 @@ function fmtShort(v) {
   return n.toFixed(0) + "M";
 }
 
-function fmtCompact(v) {
+function fmtAxis(v) {
   const n = num(v);
-  if (n >= 1000) return (n / 1000).toFixed(1) + " G";
-  return n.toFixed(0) + " M";
-}
-
-function fmtTime(ts) {
-  const d = new Date(Number(ts));
-  return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  if (n >= 1000) return (n / 1000).toFixed(1) + "G";
+  return n.toFixed(0) + "M";
 }
 
 function fmtLabel(ts, range) {
@@ -56,8 +50,13 @@ function fmtLabel(ts, range) {
   return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
 
+function fmtClock(ts) {
+  const d = new Date(Number(ts));
+  return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+}
+
 function calcStats(list, key) {
-  const vals = list.map(x => num(x[key]));
+  const vals = list.map((x) => num(x[key]));
   const current = vals.length ? vals[vals.length - 1] : 0;
   const peak = vals.length ? Math.max(...vals) : 0;
   const avg = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
@@ -85,143 +84,120 @@ function pollingMsForRange(range) {
 function maxPointsForRange(range) {
   if (range === "5m") return 240;
   if (range === "30m") return 260;
-  if (range === "1h") return 280;
-  if (range === "1d") return 320;
-  return 360;
+  if (range === "1h") return 300;
+  if (range === "1d") return 340;
+  return 380;
 }
 
-function healthColor(v) {
-  if (v >= 800) return "#ff7b72";
-  if (v >= 500) return "#ffd166";
-  return "#58f7c2";
-}
-
-function cardStyle(extra) {
+function shell(extra) {
   return {
-    borderRadius: 24,
     border: "1px solid rgba(255,255,255,.08)",
-    background: "linear-gradient(180deg, rgba(9,14,24,.97), rgba(6,10,17,.96))",
-    boxShadow: "0 20px 45px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.04)",
+    background: "linear-gradient(180deg, rgba(3,7,13,.98), rgba(4,9,17,.97))",
+    boxShadow: "0 20px 40px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.03)",
     ...extra
   };
 }
 
-function RangeBtn({ active, children, onClick }) {
+function Button({ active, onClick, children, accent = "#4f7cff", minWidth = 74 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       style={{
-        position: "relative",
-        zIndex: 8,
-        pointerEvents: "auto",
-        padding: "8px 13px",
-        borderRadius: 12,
-        border: active ? "1px solid rgba(110,168,255,.52)" : "1px solid rgba(255,255,255,.10)",
-        background: active
-          ? "linear-gradient(180deg, rgba(55,105,255,.30), rgba(55,105,255,.17))"
-          : "rgba(255,255,255,.03)",
-        color: "#fff",
-        cursor: "pointer",
-        fontWeight: 900,
-        fontSize: 11,
-        letterSpacing: ".04em",
-        minWidth: 48,
-        boxShadow: active ? "0 0 0 1px rgba(120,170,255,.08), 0 8px 22px rgba(55,105,255,.18)" : "none"
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-
-function ViewBtn({ active, children, onClick, accent }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      style={{
-        position: "relative",
-        zIndex: 20,
-        pointerEvents: "auto",
-        padding: "11px 16px",
-        borderRadius: 14,
+        minWidth,
+        height: 36,
+        padding: "0 14px",
+        borderRadius: 11,
         border: active ? `1px solid ${accent}` : "1px solid rgba(255,255,255,.10)",
-        background: active ? "rgba(255,255,255,.08)" : "rgba(255,255,255,.03)",
+        background: active ? "rgba(255,255,255,.09)" : "rgba(255,255,255,.025)",
         color: "#fff",
-        cursor: "pointer",
+        fontSize: 11,
         fontWeight: 900,
-        fontSize: 12,
-        minWidth: 96,
-        boxShadow: active ? `0 0 0 1px ${accent}22, 0 10px 24px ${accent}18` : "none",
-        transition: "transform .15s ease, box-shadow .15s ease, border-color .15s ease"
+        letterSpacing: ".08em",
+        cursor: "pointer",
+        boxShadow: active ? `0 0 0 1px ${accent}22, 0 0 28px ${accent}14 inset` : "none"
       }}
-      onMouseDown={(e) => e.stopPropagation()}
     >
       {children}
     </button>
   );
 }
 
-function KPI({ label, value, sub, accent }) {
+function MetricBox({ label, value, accent, sub }) {
   return (
     <div
-      style={cardStyle({
-        padding: "14px 16px",
-        minHeight: 92,
-        position: "relative",
-        overflow: "hidden"
-      })}
+      style={{
+        ...shell({
+          borderRadius: 16,
+          padding: 14,
+          position: "relative",
+          overflow: "hidden"
+        })
+      }}
     >
       <div
         style={{
           position: "absolute",
-          inset: "auto -20px -20px auto",
-          width: 80,
-          height: 80,
+          right: -16,
+          top: -16,
+          width: 56,
+          height: 56,
           borderRadius: 999,
-          background: `${accent}22`,
-          filter: "blur(18px)"
+          background: `${accent}20`,
+          filter: "blur(16px)"
         }}
       />
-      <div style={{ fontSize: 10, opacity: 0.58, marginBottom: 8, letterSpacing: ".08em", textTransform: "uppercase" }}>
-        {label}
-      </div>
-      <div style={{ fontSize: 22, fontWeight: 950, color: "#fff", lineHeight: 1.02, marginBottom: 6 }}>
-        {value}
-      </div>
-      <div style={{ fontSize: 11, color: accent, fontWeight: 800 }}>
-        {sub}
+      <div style={{ fontSize: 10, opacity: 0.54, marginBottom: 8, letterSpacing: ".14em" }}>{label}</div>
+      <div style={{ fontSize: 28, fontWeight: 1000, lineHeight: .95, marginBottom: 7 }}>{value}</div>
+      <div style={{ fontSize: 11, color: accent, fontWeight: 900 }}>{sub}</div>
+    </div>
+  );
+}
+
+function RailStat({ label, value, accent }) {
+  return (
+    <div
+      style={{
+        ...shell({
+          borderRadius: 14,
+          padding: "12px 14px"
+        })
+      }}
+    >
+      <div style={{ fontSize: 10, opacity: .5, marginBottom: 6, letterSpacing: ".10em" }}>{label}</div>
+      <div style={{ fontSize: 18, fontWeight: 950, color: "#fff" }}>{value}</div>
+      <div style={{ marginTop: 8, height: 4, borderRadius: 999, background: "rgba(255,255,255,.05)", overflow: "hidden" }}>
+        <div style={{ width: "100%", height: "100%", background: accent, boxShadow: `0 0 18px ${accent}` }} />
       </div>
     </div>
   );
 }
 
-function StatusPill({ ok, text }) {
+function SmallTag({ text, ok }) {
   return (
     <div
       style={{
         display: "inline-flex",
         alignItems: "center",
         gap: 8,
+        height: 30,
+        padding: "0 12px",
         borderRadius: 999,
-        padding: "7px 12px",
-        background: ok ? "rgba(33,208,122,.10)" : "rgba(255,107,107,.10)",
-        border: ok ? "1px solid rgba(33,208,122,.22)" : "1px solid rgba(255,107,107,.22)",
-        color: ok ? "#58f7c2" : "#ff8a80",
+        border: ok ? "1px solid rgba(40,220,120,.20)" : "1px solid rgba(255,90,90,.20)",
+        background: ok ? "rgba(40,220,120,.08)" : "rgba(255,90,90,.08)",
         fontSize: 11,
         fontWeight: 900,
-        letterSpacing: ".06em",
-        textTransform: "uppercase"
+        color: ok ? "#67ffb1" : "#ff8a80",
+        letterSpacing: ".08em"
       }}
     >
       <span
         style={{
-          width: 8,
-          height: 8,
+          width: 7,
+          height: 7,
           borderRadius: 999,
-          background: ok ? "#58f7c2" : "#ff8a80",
-          boxShadow: ok ? "0 0 12px #58f7c2" : "0 0 12px #ff8a80"
+          background: ok ? "#67ffb1" : "#ff8a80",
+          boxShadow: ok ? "0 0 10px #67ffb1" : "0 0 10px #ff8a80"
         }}
       />
       {text}
@@ -229,16 +205,17 @@ function StatusPill({ ok, text }) {
   );
 }
 
-function LegendPill({ label, color }) {
+function LegendChip({ color, label, dashed }) {
   return (
     <div
       style={{
         display: "inline-flex",
         alignItems: "center",
         gap: 8,
-        padding: "8px 12px",
+        height: 34,
+        padding: "0 12px",
         borderRadius: 999,
-        background: "rgba(255,255,255,.04)",
+        background: "rgba(255,255,255,.03)",
         border: "1px solid rgba(255,255,255,.08)",
         fontSize: 11,
         fontWeight: 900,
@@ -247,11 +224,10 @@ function LegendPill({ label, color }) {
     >
       <span
         style={{
-          width: 9,
-          height: 9,
-          borderRadius: 999,
-          background: color,
-          boxShadow: `0 0 12px ${color}`
+          width: 18,
+          height: 0,
+          borderTop: `3px ${dashed ? "dashed" : "solid"} ${color}`,
+          boxShadow: `0 0 10px ${color}`
         }}
       />
       {label}
@@ -259,123 +235,55 @@ function LegendPill({ label, color }) {
   );
 }
 
-function CustomTooltip({ active, payload, label, mode }) {
+function BrutalTooltip({ active, payload, label, mode }) {
   if (!active || !payload || !payload.length) return null;
   const row = payload[0]?.payload || {};
+
   return (
     <div
       style={{
-        background: "rgba(6,10,16,.97)",
-        border: "1px solid rgba(255,255,255,.14)",
+        minWidth: 180,
         borderRadius: 14,
+        background: "rgba(2,5,10,.98)",
+        border: "1px solid rgba(255,255,255,.14)",
+        boxShadow: "0 20px 36px rgba(0,0,0,.45)",
         padding: 12,
-        color: "#fff",
-        minWidth: 170,
-        boxShadow: "0 12px 30px rgba(0,0,0,.28)"
+        color: "#fff"
       }}
     >
-      <div style={{ fontSize: 10, marginBottom: 9, opacity: 0.75 }}>{label}</div>
+      <div style={{ fontSize: 10, opacity: .66, marginBottom: 8 }}>{label}</div>
+
       {mode === "all" ? (
         <>
-          <div style={{ color: "#63e6ff", fontWeight: 900, fontSize: 11, marginBottom: 5 }}>Uplink: {fmtMbps(row.uplinkTotal)}</div>
-          <div style={{ color: "#8dff8a", fontWeight: 900, fontSize: 11, marginBottom: 5 }}>Switch B: {fmtMbps(row.switchBTotal)}</div>
-          <div style={{ color: "#ffbf66", fontWeight: 900, fontSize: 11 }}>Switch A: {fmtMbps(row.switchATotal)}</div>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 5 }}>
+            <span style={{ color: "#53e3ff", fontWeight: 900 }}>UPLINK</span>
+            <span style={{ fontWeight: 900 }}>{fmtMbps(row.uplinkTotal)}</span>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 5 }}>
+            <span style={{ color: "#86ff84", fontWeight: 900 }}>SWITCH B</span>
+            <span style={{ fontWeight: 900 }}>{fmtMbps(row.switchBTotal)}</span>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+            <span style={{ color: "#ffbf66", fontWeight: 900 }}>SWITCH A</span>
+            <span style={{ fontWeight: 900 }}>{fmtMbps(row.switchATotal)}</span>
+          </div>
         </>
       ) : (
         <>
-          <div style={{ color: "#63e6ff", fontWeight: 900, fontSize: 11, marginBottom: 5 }}>RX: {fmtMbps(row.rxMbps)}</div>
-          <div style={{ color: "#58f7c2", fontWeight: 900, fontSize: 11, marginBottom: 5 }}>TX: {fmtMbps(row.txMbps)}</div>
-          <div style={{ color: "#a78bfa", fontWeight: 900, fontSize: 11 }}>TOTAL: {fmtMbps(row.totalMbps)}</div>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 5 }}>
+            <span style={{ color: "#53e3ff", fontWeight: 900 }}>RX</span>
+            <span style={{ fontWeight: 900 }}>{fmtMbps(row.rxMbps)}</span>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 5 }}>
+            <span style={{ color: "#57ffc9", fontWeight: 900 }}>TX</span>
+            <span style={{ fontWeight: 900 }}>{fmtMbps(row.txMbps)}</span>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+            <span style={{ color: "#a78bfa", fontWeight: 900 }}>TOTAL</span>
+            <span style={{ fontWeight: 900 }}>{fmtMbps(row.totalMbps)}</span>
+          </div>
         </>
       )}
-    </div>
-  );
-}
-
-function MiniPanel({ title, subtitle, rows, accent }) {
-  const stats = calcStats(rows, "totalMbps");
-  const utilization = Math.min(100, (num(stats.current) / 1000) * 100);
-  const gradId = `g_${title.replace(/\s+/g, "_")}`;
-
-  return (
-    <div style={cardStyle({ padding: 16 })}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10, marginBottom: 10 }}>
-        <div>
-          <div style={{ fontSize: 16, fontWeight: 950, color: "#fff", lineHeight: 1.05 }}>{title}</div>
-          <div style={{ fontSize: 10, opacity: 0.56, marginTop: 4 }}>{subtitle}</div>
-        </div>
-        <div
-          style={{
-            padding: "6px 10px",
-            borderRadius: 999,
-            fontSize: 10,
-            fontWeight: 900,
-            color: accent,
-            border: `1px solid ${accent}33`,
-            background: `${accent}11`
-          }}
-        >
-          {fmtShort(stats.current)}
-        </div>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0,1fr))", gap: 8, marginBottom: 12 }}>
-        <div style={{ padding: 10, borderRadius: 14, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
-          <div style={{ fontSize: 9, opacity: 0.56, marginBottom: 4 }}>Current</div>
-          <div style={{ fontSize: 14, fontWeight: 900, color: "#fff" }}>{fmtShort(stats.current)}</div>
-        </div>
-        <div style={{ padding: 10, borderRadius: 14, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
-          <div style={{ fontSize: 9, opacity: 0.56, marginBottom: 4 }}>Peak</div>
-          <div style={{ fontSize: 14, fontWeight: 900, color: "#fff" }}>{fmtShort(stats.peak)}</div>
-        </div>
-        <div style={{ padding: 10, borderRadius: 14, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
-          <div style={{ fontSize: 9, opacity: 0.56, marginBottom: 4 }}>Average</div>
-          <div style={{ fontSize: 14, fontWeight: 900, color: "#fff" }}>{fmtShort(stats.avg)}</div>
-        </div>
-      </div>
-
-      <div style={{ marginBottom: 12 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-          <div style={{ fontSize: 10, opacity: 0.56 }}>Utilization</div>
-          <div style={{ fontSize: 10, fontWeight: 900, color: healthColor(stats.current) }}>
-            {utilization.toFixed(0)}%
-          </div>
-        </div>
-        <div style={{ height: 10, borderRadius: 999, background: "rgba(255,255,255,.05)", overflow: "hidden", border: "1px solid rgba(255,255,255,.06)" }}>
-          <div
-            style={{
-              width: utilization + "%",
-              height: "100%",
-              borderRadius: 999,
-              background: `linear-gradient(90deg, ${accent}, rgba(255,255,255,.85))`,
-              boxShadow: `0 0 18px ${accent}55`
-            }}
-          />
-        </div>
-      </div>
-
-      <div style={{ width: "100%", height: 90 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={rows} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
-            <defs>
-              <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={accent} stopOpacity={0.40} />
-                <stop offset="100%" stopColor={accent} stopOpacity={0.01} />
-              </linearGradient>
-            </defs>
-            <Tooltip content={<CustomTooltip mode="single" />} />
-            <Area
-              type="monotone"
-              dataKey="totalMbps"
-              stroke={accent}
-              strokeWidth={2.3}
-              fill={`url(#${gradId})`}
-              isAnimationActive={false}
-              dot={false}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
     </div>
   );
 }
@@ -476,293 +384,254 @@ export default function AviatHistoryPage() {
     return combinedRows;
   }, [view, uplinkRows, switchBRows, switchARows, combinedRows]);
 
+  const currentStats = useMemo(() => {
+    if (view === "uplink") return calcStats(uplinkRows, "totalMbps");
+    if (view === "switchB") return calcStats(switchBRows, "totalMbps");
+    if (view === "switchA") return calcStats(switchARows, "totalMbps");
+    const vals = combinedRows.map(r => num(r.uplinkTotal) + num(r.switchBTotal) + num(r.switchATotal));
+    return {
+      current: vals.length ? vals[vals.length - 1] : 0,
+      peak: vals.length ? Math.max(...vals) : 0,
+      avg: vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0
+    };
+  }, [view, uplinkRows, switchBRows, switchARows, combinedRows]);
+
   const latest = items.length ? items[items.length - 1] : null;
-  const currentTotal =
-    view === "uplink" ? num(latest?.uplink?.totalMbps) :
-    view === "switchB" ? num(latest?.switchB?.totalMbps) :
-    view === "switchA" ? num(latest?.switchA?.totalMbps) :
-    num(latest?.uplink?.totalMbps) + num(latest?.switchB?.totalMbps) + num(latest?.switchA?.totalMbps);
-
-  const allTotals = useMemo(() => {
-    return combinedRows.map(r => num(r.uplinkTotal) + num(r.switchBTotal) + num(r.switchATotal));
-  }, [combinedRows]);
-
-  const peakTotal = allTotals.length ? Math.max(...allTotals) : 0;
-  const avgTotal = allTotals.length ? allTotals.reduce((a, b) => a + b, 0) / allTotals.length : 0;
-
   const livePolling = pollingMsForRange(range) > 0;
-  const statusOk = !err;
-  const currentViewLabel = VIEWS.find(v => v.key === view)?.label || view;
+  const currentViewLabel = VIEWS.find((v) => v.key === view)?.label || view;
+
+  const railTop = [
+    { label: "UPLINK NOW", value: fmtShort(latest?.uplink?.totalMbps || 0), accent: "#53e3ff" },
+    { label: "SWITCH B NOW", value: fmtShort(latest?.switchB?.totalMbps || 0), accent: "#86ff84" },
+    { label: "SWITCH A NOW", value: fmtShort(latest?.switchA?.totalMbps || 0), accent: "#ffbf66" }
+  ];
 
   return (
     <div
       style={{
         minHeight: "100vh",
-        padding: 16,
+        padding: 14,
         color: "#fff",
         background:
-          "radial-gradient(circle at top right, rgba(74,114,255,.18), transparent 22%)," +
-          "radial-gradient(circle at top left, rgba(0,200,255,.10), transparent 18%)," +
-          "linear-gradient(180deg, #05070b 0%, #08101a 44%, #05080d 100%)"
+          "radial-gradient(circle at 80% 0%, rgba(60,88,255,.15), transparent 18%)," +
+          "linear-gradient(180deg, #010306 0%, #03070d 40%, #03060b 100%)"
       }}
     >
-      <div style={cardStyle({ padding: 20, marginBottom: 14, position: "relative", overflow: "hidden" })}>
-        <div
-          style={{
-            position: "absolute",
-            right: -40,
-            top: -40,
-            width: 180,
-            height: 180,
-            borderRadius: 999,
-            background: "rgba(95,125,255,.16)",
-            filter: "blur(28px)"
-          }}
-        />
-
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap", position: "relative", zIndex: 2 }}>
-          <div style={{ minWidth: 280 }}>
-            <div style={{ fontSize: 11, color: "#7ddfff", fontWeight: 900, letterSpacing: ".18em", marginBottom: 10 }}>
-              NOC LUXURY EDITION
-            </div>
-            <div style={{ fontSize: 34, fontWeight: 1000, lineHeight: .95, letterSpacing: "-.03em", marginBottom: 8 }}>
-              AVIAT HISTORY V2
-            </div>
-            <div style={{ fontSize: 13, opacity: .68, maxWidth: 680 }}>
-              Radio backbone traffic intelligence panel with premium long-range visibility, lighter rendering, and cleaner operational focus.
-            </div>
-
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 14 }}>
-              <StatusPill ok={statusOk} text={statusOk ? (livePolling ? "Live Monitoring" : "Manual Long Range") : "Data Error"} />
-              <div style={{ padding: "7px 12px", borderRadius: 999, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", fontSize: 11, fontWeight: 800 }}>
-                Last Update: {lastUpdated ? fmtTime(lastUpdated) : "--:--:--"}
-              </div>
-              <div style={{ padding: "7px 12px", borderRadius: 999, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", fontSize: 11, fontWeight: 800 }}>
-                Refresh: {livePolling ? `${pollingMsForRange(range) / 1000}s` : "Off"}
-              </div>
-            </div>
-          </div>
-
-          <div style={{ display: "grid", gap: 10, alignContent: "start", justifyItems: "end", position: "relative", zIndex: 30 }}>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
-              {RANGES.map((rg) => (
-                <RangeBtn key={rg} active={rg === range} onClick={() => setRange(rg)}>
-                  {rg}
-                </RangeBtn>
-              ))}
-            </div>
-
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end", position: "relative", zIndex: 30 }}>
-              {VIEWS.map((v) => (
-                <ViewBtn
-                  key={v.key}
-                  active={view === v.key}
-                  onClick={() => setView(v.key)}
-                  accent={v.accent}
-                >
-                  {v.label}
-                </ViewBtn>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(6, minmax(0, 1fr))",
-          gap: 12,
-          marginBottom: 14
+          ...shell({
+            borderRadius: 18,
+            padding: 14,
+            marginBottom: 12
+          })
         }}
       >
-        <KPI label="Samples Loaded" value={String(baseRows.length)} sub={`Raw: ${items.length}`} accent="#63e6ff" />
-        <KPI label="Current View Total" value={fmtMbps(currentTotal)} sub={currentViewLabel} accent={healthColor(currentTotal)} />
-        <KPI label="Range Peak" value={fmtMbps(peakTotal)} sub="Combined Max" accent="#ffbf66" />
-        <KPI label="Range Average" value={fmtMbps(avgTotal)} sub="Combined Avg" accent="#58f7c2" />
-        <KPI label="Latest Uplink" value={fmtCompact(latest?.uplink?.totalMbps || 0)} sub="Radio1 Backbone" accent="#63e6ff" />
-        <KPI label="Latest Switches" value={`${fmtCompact(latest?.switchB?.totalMbps || 0)} / ${fmtCompact(latest?.switchA?.totalMbps || 0)}`} sub="B / A" accent="#a78bfa" />
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 10, alignItems: "center" }}>
+          <div>
+            <div style={{ fontSize: 10, letterSpacing: ".18em", color: "#6ddcff", fontWeight: 900, marginBottom: 6 }}>
+              BRUTAL DATA EDITION
+            </div>
+            <div style={{ fontSize: 30, fontWeight: 1000, letterSpacing: "-.04em", lineHeight: .95 }}>
+              AVIAT HISTORY
+            </div>
+          </div>
+
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
+            {RANGES.map((rg) => (
+              <Button key={rg} active={range === rg} onClick={() => setRange(rg)} accent="#4d7bff" minWidth={58}>
+                {rg}
+              </Button>
+            ))}
+          </div>
+
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
+            {VIEWS.map((v) => (
+              <Button key={v.key} active={view === v.key} onClick={() => setView(v.key)} accent={v.accent} minWidth={92}>
+                {v.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 12 }}>
+          <SmallTag ok={!err} text={!err ? (livePolling ? "LIVE ACTIVE" : "LONG RANGE STATIC") : "DATA ERROR"} />
+          <div style={{ height: 30, padding: "0 12px", borderRadius: 999, border: "1px solid rgba(255,255,255,.08)", background: "rgba(255,255,255,.03)", display: "inline-flex", alignItems: "center", fontSize: 11, fontWeight: 900 }}>
+            LAST UPDATE: {lastUpdated ? fmtClock(lastUpdated) : "--:--:--"}
+          </div>
+          <div style={{ height: 30, padding: "0 12px", borderRadius: 999, border: "1px solid rgba(255,255,255,.08)", background: "rgba(255,255,255,.03)", display: "inline-flex", alignItems: "center", fontSize: 11, fontWeight: 900 }}>
+            POINT CAP: {maxPointsForRange(range)}
+          </div>
+          <div style={{ height: 30, padding: "0 12px", borderRadius: 999, border: "1px solid rgba(255,255,255,.08)", background: "rgba(255,255,255,.03)", display: "inline-flex", alignItems: "center", fontSize: 11, fontWeight: 900 }}>
+            STATE: {loading ? "LOADING" : "READY"}
+          </div>
+        </div>
       </div>
 
       {err ? (
         <div
           style={{
-            marginBottom: 14,
-            padding: 12,
-            borderRadius: 14,
-            color: "#ff8a80",
-            background: "rgba(255,90,90,.08)",
-            border: "1px solid rgba(255,90,90,.18)",
-            fontWeight: 700
+            ...shell({
+              borderRadius: 16,
+              padding: 12,
+              marginBottom: 12,
+              color: "#ff8a80",
+              border: "1px solid rgba(255,90,90,.24)",
+              background: "rgba(60,5,8,.70)"
+            })
           }}
         >
           {err}
         </div>
       ) : null}
 
-      <div style={cardStyle({ padding: 18, marginBottom: 14 })}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
-          <div>
-            <div style={{ fontSize: 21, fontWeight: 950, lineHeight: 1 }}>Traffic Intelligence Core</div>
-            <div style={{ fontSize: 11, opacity: 0.58, marginTop: 5 }}>
-              {view === "all" ? "Unified traffic timeline with stronger line styling and live legend balance." : `Focused view for ${currentViewLabel}.`}
-            </div>
-          </div>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {view === "all" ? (
-              <>
-                <LegendPill label="Uplink" color="#63e6ff" />
-                <LegendPill label="Switch B" color="#8dff8a" />
-                <LegendPill label="Switch A" color="#ffbf66" />
-              </>
-            ) : (
-              <>
-                <LegendPill label="RX Solid" color="#63e6ff" />
-                <LegendPill label="TX Dashed" color="#58f7c2" />
-                <LegendPill label="Total Core" color="#a78bfa" />
-              </>
-            )}
-            <div style={{ padding: "7px 12px", borderRadius: 999, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", fontSize: 11, fontWeight: 800 }}>
-              Point Cap: {maxPointsForRange(range)}
-            </div>
-            <div style={{ padding: "7px 12px", borderRadius: 999, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", fontSize: 11, fontWeight: 800 }}>
-              State: {loading ? "Loading" : "Ready"}
-            </div>
-          </div>
-        </div>
-
-        <div style={{ width: "100%", height: 390 }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={activeRows} margin={{ top: 8, right: 18, left: -8, bottom: 8 }}>
-              <CartesianGrid stroke="rgba(255,255,255,.05)" vertical={false} />
-              <XAxis
-                dataKey="label"
-                minTickGap={28}
-                tick={{ fill: "rgba(255,255,255,.55)", fontSize: 10 }}
-                axisLine={{ stroke: "rgba(255,255,255,.08)" }}
-                tickLine={{ stroke: "rgba(255,255,255,.08)" }}
-              />
-              <YAxis
-                tick={{ fill: "rgba(255,255,255,.50)", fontSize: 10 }}
-                width={50}
-                axisLine={{ stroke: "rgba(255,255,255,.08)" }}
-                tickLine={{ stroke: "rgba(255,255,255,.08)" }}
-                tickFormatter={(v) => fmtShort(v)}
-              />
-              <Tooltip content={<CustomTooltip mode={view} />} />
-
-              {view === "all" ? (
-                <>
-                  <Line
-                    type="monotone"
-                    dataKey="uplinkTotal"
-                    stroke="#63e6ff"
-                    strokeWidth={3}
-                    dot={{ r: 0 }}
-                    activeDot={{ r: 5, stroke: "#63e6ff", strokeWidth: 2, fill: "#0a1020" }}
-                    isAnimationActive={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="switchBTotal"
-                    stroke="#8dff8a"
-                    strokeWidth={3}
-                    dot={{ r: 0 }}
-                    activeDot={{ r: 5, stroke: "#8dff8a", strokeWidth: 2, fill: "#0a1020" }}
-                    isAnimationActive={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="switchATotal"
-                    stroke="#ffbf66"
-                    strokeWidth={3}
-                    dot={{ r: 0 }}
-                    activeDot={{ r: 5, stroke: "#ffbf66", strokeWidth: 2, fill: "#0a1020" }}
-                    isAnimationActive={false}
-                  />
-                </>
-              ) : (
-                <>
-                  <Line
-                    type="monotone"
-                    dataKey="rxMbps"
-                    stroke="#63e6ff"
-                    strokeWidth={3}
-                    dot={{ r: 0 }}
-                    activeDot={{ r: 5, stroke: "#63e6ff", strokeWidth: 2, fill: "#0a1020" }}
-                    isAnimationActive={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="txMbps"
-                    stroke="#58f7c2"
-                    strokeWidth={2.4}
-                    strokeDasharray="8 6"
-                    dot={{ r: 0 }}
-                    activeDot={{ r: 4, stroke: "#58f7c2", strokeWidth: 2, fill: "#0a1020" }}
-                    isAnimationActive={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="totalMbps"
-                    stroke="#a78bfa"
-                    strokeWidth={3.3}
-                    dot={{ r: 0 }}
-                    activeDot={{ r: 5, stroke: "#a78bfa", strokeWidth: 2, fill: "#0a1020" }}
-                    isAnimationActive={false}
-                  />
-                </>
-              )}
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
+          gridTemplateColumns: "1fr 300px",
           gap: 12,
-          marginBottom: 14
+          alignItems: "stretch"
         }}
       >
-        <MiniPanel
-          title="UPLINK"
-          subtitle="Radio1 • Main Internet Source • 3 Gbps"
-          rows={uplinkRows}
-          accent="#63e6ff"
-        />
-        <MiniPanel
-          title="SWITCH B"
-          subtitle="88.88.88.254 • VLAN1559 • TenGigE1/1"
-          rows={switchBRows}
-          accent="#8dff8a"
-        />
-        <MiniPanel
-          title="SWITCH A"
-          subtitle="10.88.88.254 • VLAN2430 • TenGigE1/2"
-          rows={switchARows}
-          accent="#ffbf66"
-        />
-      </div>
+        <div
+          style={{
+            ...shell({
+              borderRadius: 20,
+              padding: 14,
+              minHeight: 690
+            })
+          }}
+        >
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 10, marginBottom: 12 }}>
+            <MetricBox label="CURRENT" value={fmtMbps(currentStats.current)} sub={currentViewLabel} accent="#53e3ff" />
+            <MetricBox label="PEAK" value={fmtMbps(currentStats.peak)} sub="RANGE HIGH" accent="#ffbf66" />
+            <MetricBox label="AVERAGE" value={fmtMbps(currentStats.avg)} sub="RANGE MEAN" accent="#57ffc9" />
+          </div>
 
-      <div style={cardStyle({ padding: 14 })}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0,1fr))", gap: 10 }}>
-          <div style={{ padding: 12, borderRadius: 14, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
-            <div style={{ fontSize: 10, opacity: 0.56, marginBottom: 5 }}>Source</div>
-            <div style={{ fontSize: 12, fontWeight: 900 }}>/api/aviat/history</div>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 12, alignItems: "center" }}>
+            <div>
+              <div style={{ fontSize: 24, fontWeight: 1000, letterSpacing: "-.03em", lineHeight: .95 }}>
+                TRAFFIC CORE
+              </div>
+              <div style={{ fontSize: 11, opacity: .58, marginTop: 5 }}>
+                {view === "all" ? "Unified source timeline" : `Focused source inspection — ${currentViewLabel}`}
+              </div>
+            </div>
+
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {view === "all" ? (
+                <>
+                  <LegendChip color="#53e3ff" label="UPLINK" />
+                  <LegendChip color="#86ff84" label="SWITCH B" />
+                  <LegendChip color="#ffbf66" label="SWITCH A" />
+                </>
+              ) : (
+                <>
+                  <LegendChip color="#53e3ff" label="RX" />
+                  <LegendChip color="#57ffc9" label="TX" dashed={true} />
+                  <LegendChip color="#a78bfa" label="TOTAL" />
+                </>
+              )}
+            </div>
           </div>
-          <div style={{ padding: 12, borderRadius: 14, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
-            <div style={{ fontSize: 10, opacity: 0.56, marginBottom: 5 }}>Range Mode</div>
-            <div style={{ fontSize: 12, fontWeight: 900 }}>{range}</div>
+
+          <div style={{ width: "100%", height: 560 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={activeRows} margin={{ top: 10, right: 14, left: -10, bottom: 8 }}>
+                <CartesianGrid stroke="rgba(255,255,255,.07)" vertical={true} horizontal={true} />
+                <XAxis
+                  dataKey="label"
+                  minTickGap={24}
+                  tick={{ fill: "rgba(255,255,255,.50)", fontSize: 10 }}
+                  axisLine={{ stroke: "rgba(255,255,255,.10)" }}
+                  tickLine={{ stroke: "rgba(255,255,255,.08)" }}
+                />
+                <YAxis
+                  width={58}
+                  tick={{ fill: "rgba(255,255,255,.54)", fontSize: 10 }}
+                  axisLine={{ stroke: "rgba(255,255,255,.10)" }}
+                  tickLine={{ stroke: "rgba(255,255,255,.08)" }}
+                  tickFormatter={fmtAxis}
+                />
+                <ReferenceLine y={0} stroke="rgba(255,255,255,.14)" />
+                <Tooltip content={<BrutalTooltip mode={view} />} />
+
+                {view === "all" ? (
+                  <>
+                    <Line type="monotone" dataKey="uplinkTotal" stroke="#53e3ff" strokeWidth={3.3} dot={false} activeDot={{ r: 5, stroke: "#53e3ff", strokeWidth: 2, fill: "#06101a" }} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="switchBTotal" stroke="#86ff84" strokeWidth={3.1} dot={false} activeDot={{ r: 5, stroke: "#86ff84", strokeWidth: 2, fill: "#06101a" }} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="switchATotal" stroke="#ffbf66" strokeWidth={3.1} dot={false} activeDot={{ r: 5, stroke: "#ffbf66", strokeWidth: 2, fill: "#06101a" }} isAnimationActive={false} />
+                  </>
+                ) : (
+                  <>
+                    <Line type="monotone" dataKey="rxMbps" stroke="#53e3ff" strokeWidth={3.2} dot={false} activeDot={{ r: 5, stroke: "#53e3ff", strokeWidth: 2, fill: "#06101a" }} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="txMbps" stroke="#57ffc9" strokeWidth={2.4} strokeDasharray="8 6" dot={false} activeDot={{ r: 4, stroke: "#57ffc9", strokeWidth: 2, fill: "#06101a" }} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="totalMbps" stroke="#a78bfa" strokeWidth={3.5} dot={false} activeDot={{ r: 5, stroke: "#a78bfa", strokeWidth: 2, fill: "#06101a" }} isAnimationActive={false} />
+                  </>
+                )}
+              </LineChart>
+            </ResponsiveContainer>
           </div>
-          <div style={{ padding: 12, borderRadius: 14, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
-            <div style={{ fontSize: 10, opacity: 0.56, marginBottom: 5 }}>Polling</div>
-            <div style={{ fontSize: 12, fontWeight: 900 }}>{livePolling ? "Adaptive" : "Disabled"}</div>
+        </div>
+
+        <div style={{ display: "grid", gap: 12 }}>
+          <div
+            style={{
+              ...shell({
+                borderRadius: 20,
+                padding: 14
+              })
+            }}
+          >
+            <div style={{ fontSize: 12, letterSpacing: ".18em", color: "#7ee5ff", fontWeight: 900, marginBottom: 12 }}>
+              LIVE RAIL
+            </div>
+
+            <div style={{ display: "grid", gap: 10 }}>
+              {railTop.map((r) => (
+                <RailStat key={r.label} label={r.label} value={r.value} accent={r.accent} />
+              ))}
+            </div>
           </div>
-          <div style={{ padding: 12, borderRadius: 14, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)" }}>
-            <div style={{ fontSize: 10, opacity: 0.56, marginBottom: 5 }}>Render Mode</div>
-            <div style={{ fontSize: 12, fontWeight: 900 }}>Luxury Timeline</div>
+
+          <div
+            style={{
+              ...shell({
+                borderRadius: 20,
+                padding: 14
+              })
+            }}
+          >
+            <div style={{ fontSize: 12, letterSpacing: ".18em", color: "#7ee5ff", fontWeight: 900, marginBottom: 12 }}>
+              SESSION
+            </div>
+
+            <div style={{ display: "grid", gap: 10 }}>
+              <RailStat label="RAW LOADED" value={String(items.length)} accent="#53e3ff" />
+              <RailStat label="RENDERED" value={String(baseRows.length)} accent="#a78bfa" />
+              <RailStat label="POLLING" value={livePolling ? `${pollingMsForRange(range) / 1000}s` : "OFF"} accent="#57ffc9" />
+              <RailStat label="CLOCK" value={lastUpdated ? fmtClock(lastUpdated) : "--:--:--"} accent="#ffbf66" />
+            </div>
+          </div>
+
+          <div
+            style={{
+              ...shell({
+                borderRadius: 20,
+                padding: 14
+              })
+            }}
+          >
+            <div style={{ fontSize: 12, letterSpacing: ".18em", color: "#7ee5ff", fontWeight: 900, marginBottom: 12 }}>
+              SOURCE
+            </div>
+            <div style={{ fontSize: 11, opacity: .62, marginBottom: 10 }}>API</div>
+            <div style={{ fontSize: 18, fontWeight: 900, marginBottom: 14 }}>/api/aviat/history</div>
+
+            <div style={{ fontSize: 11, opacity: .62, marginBottom: 10 }}>MODE</div>
+            <div style={{ fontSize: 18, fontWeight: 900, marginBottom: 14 }}>{currentViewLabel}</div>
+
+            <div style={{ fontSize: 11, opacity: .62, marginBottom: 10 }}>RANGE</div>
+            <div style={{ fontSize: 18, fontWeight: 900 }}>{range}</div>
           </div>
         </div>
       </div>
