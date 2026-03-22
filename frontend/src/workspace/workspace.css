@@ -74,10 +74,10 @@
 /* ===== Ping Tool (Workspace) ===== */
 .wsPingRoot{ display:flex; flex-direction:column; gap:10px; }
 .wsPingRow{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
-.wsPingLeft{ display:flex; align-items:center; gap:10px; min-width:260px; }
+.wsPingLeft{ display:flex; align-items:center; gap:10px; min-width:0; }
 .wsPingLabel{ font-size:12px; font-weight:900; opacity:.75; }
 .wsPingInput{
-  height:32px; width:220px;
+  height:32px; width:min(220px,100%);
   border-radius:12px;
   border:1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.05);
@@ -126,7 +126,7 @@
 /* ===== Monitor Tool (Workspace) ===== */
 .wsMonRoot{ display:flex; flex-direction:column; gap:12px; }
 .wsMonTop{ display:flex; flex-wrap:wrap; gap:10px; align-items:end; justify-content:space-between; }
-.wsMonField{ display:flex; flex-direction:column; gap:6px; min-width:210px; }
+.wsMonField{ display:flex; flex-direction:column; gap:6px; min-width:0; }
 .wsMonLbl{ font-size:12px; font-weight:900; opacity:.75; }
 .wsMonIn, .wsMonSel{
   height:34px;
@@ -310,4 +310,18 @@
 /* click */
 .wsWin .wsWinBtn:active{
   transform: scale(.9);
+}
+
+@media (max-width: 900px){
+  .wsPingLeft,
+  .wsMonField,
+  .wsMonCards > *,
+  .wsRoot *{
+    min-width:0 !important;
+  }
+
+  .wsPingLeft{
+    width:100% !important;
+    flex-wrap:wrap !important;
+  }
 }

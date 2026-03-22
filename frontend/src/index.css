@@ -648,7 +648,7 @@ hr, .tools-divider{
 }
 
 /* TOOLSISP_NO_SCROLL_v1 - prevent page scroll so fixed windows drag/resize stays sane */
-html, body { overflow-x: hidden !important; overflow-y: auto !important; height: 100% !important; }
+html, body { overflow-x:auto !important; overflow-y: auto !important; height: 100% !important; }
 
 
 /* =========================
@@ -6527,4 +6527,5 @@ html, body, #root {
 .wsWin *{
   backdrop-filter: none !important;
 }
+
 

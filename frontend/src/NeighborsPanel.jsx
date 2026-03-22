@@ -96,7 +96,7 @@ export default function NeighborsPanel(){
               placeholder="88.88.88.0/24"
               style={{
                 flex: "1 1 320px",
-                minWidth: 260,
+                minWidth: 0,
                 padding: "10px 12px",
                 borderRadius: 12,
                 border: "1px solid rgba(255,255,255,.12)",
@@ -206,3 +206,4 @@ export default function NeighborsPanel(){
     </div>
   );
 }
+

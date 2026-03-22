@@ -1005,7 +1005,7 @@ const chartRows = useMemo(() => {
         </div>
 
         <div style={{ marginTop: 14, overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1450 }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth:0 }}>
             <thead>
               <tr>
                 {["Time", "Type", "Target", "RX", "TX", "Source", "IP", "Ping", "Loss", "Capacity", "Utilization", "Status"].map((h) => (
@@ -1097,6 +1097,7 @@ const chartRows = useMemo(() => {
     </div>
   );
 }
+
 
 
 
