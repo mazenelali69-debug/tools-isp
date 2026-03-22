@@ -26,133 +26,57 @@ function toneFor(value, capacity) {
   if (p >= 90) {
     return {
       name: "CRITICAL",
-      text: "#ff9caf",
-      border: "rgba(255,107,129,0.45)",
-      soft: "rgba(255,107,129,0.12)",
-      bar: "linear-gradient(90deg, #ff8fa3 0%, #ff5e7c 100%)"
+      text: "#ffb8c5",
+      border: "rgba(255,94,122,0.42)",
+      soft: "rgba(255,94,122,0.08)",
+      bar: "linear-gradient(90deg, #ffb0be 0%, #ff5c7a 100%)"
     };
   }
 
   if (p >= 70) {
     return {
       name: "HIGH",
-      text: "#ffe08a",
-      border: "rgba(247,201,72,0.40)",
-      soft: "rgba(247,201,72,0.10)",
-      bar: "linear-gradient(90deg, #ffe082 0%, #ffc44d 100%)"
+      text: "#ffe08f",
+      border: "rgba(255,198,91,0.34)",
+      soft: "rgba(255,198,91,0.07)",
+      bar: "linear-gradient(90deg, #ffe08f 0%, #ffc24c 100%)"
     };
   }
 
   return {
     name: "NORMAL",
     text: "#8fe9ff",
-    border: "rgba(72,205,255,0.35)",
-    soft: "rgba(72,205,255,0.08)",
-    bar: "linear-gradient(90deg, #6be7ff 0%, #35bfff 100%)"
+    border: "rgba(63,204,255,0.26)",
+    soft: "rgba(63,204,255,0.06)",
+    bar: "linear-gradient(90deg, #78efff 0%, #37bfff 100%)"
   };
 }
 
-function TopStat({ label, value, sub, accentText="#fff", accentBorder="rgba(255,255,255,0.08)", accentBg="rgba(255,255,255,0.03)" }) {
-  return (
-    <div style={{
-      padding: 16,
-      borderRadius: 22,
-      background: accentBg,
-      border: `1px solid ${accentBorder}`,
-      boxShadow: "0 12px 32px rgba(0,0,0,0.22)"
-    }}>
-      <div style={{
-        fontSize: 12,
-        color: "#8ea8cf",
-        letterSpacing: 1.4,
-        textTransform: "uppercase",
-        marginBottom: 8
-      }}>
-        {label}
-      </div>
-      <div style={{
-        fontSize: 30,
-        lineHeight: 1,
-        fontWeight: 900,
-        color: accentText
-      }}>
-        {value}
-      </div>
-      <div style={{ marginTop: 8, color: "#9db5da", fontSize: 13 }}>
-        {sub}
-      </div>
-    </div>
-  );
-}
+function statusTone(err, loading) {
+  if (err) {
+    return {
+      label: "DEGRADED",
+      text: "#ffb8c5",
+      border: "rgba(255,94,122,0.36)",
+      bg: "rgba(255,94,122,0.07)"
+    };
+  }
 
-function MiniMetric({ label, value, color }) {
-  return (
-    <div style={{
-      padding: 14,
-      borderRadius: 18,
-      background: "rgba(255,255,255,0.035)",
-      border: "1px solid rgba(255,255,255,0.07)"
-    }}>
-      <div style={{ fontSize: 12, color: "#84a1cb", marginBottom: 8 }}>{label}</div>
-      <div style={{ fontSize: 30, fontWeight: 900, color }}>
-        {fmt(value)}
-      </div>
-      <div style={{ marginTop: 6, color: "#a8bddf", fontSize: 12 }}>Mbps</div>
-    </div>
-  );
-}
+  if (loading) {
+    return {
+      label: "LOADING",
+      text: "#ffe08f",
+      border: "rgba(255,198,91,0.30)",
+      bg: "rgba(255,198,91,0.07)"
+    };
+  }
 
-function InfoPill({ children }) {
-  return (
-    <div style={{
-      padding: "10px 14px",
-      borderRadius: 999,
-      background: "rgba(255,255,255,.04)",
-      border: "1px solid rgba(255,255,255,.08)",
-      color: "#dbe7ff",
-      fontSize: 13,
-      fontWeight: 700
-    }}>
-      {children}
-    </div>
-  );
-}
-
-function UtilBar({ value, capacity }) {
-  const percent = utilPct(value, capacity);
-  const tone = toneFor(value, capacity);
-
-  return (
-    <div>
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 8
-      }}>
-        <div style={{ color: "#8ea8cf", fontSize: 12, letterSpacing: 1.2, textTransform: "uppercase" }}>
-          Utilization
-        </div>
-        <div style={{ color: tone.text, fontSize: 13, fontWeight: 900 }}>
-          {percent}%
-        </div>
-      </div>
-
-      <div style={{
-        height: 12,
-        borderRadius: 999,
-        background: "rgba(255,255,255,0.06)",
-        border: "1px solid rgba(255,255,255,0.06)",
-        overflow: "hidden"
-      }}>
-        <div style={{
-          width: `${Math.min(100, percent)}%`,
-          height: "100%",
-          background: tone.bar
-        }} />
-      </div>
-    </div>
-  );
+  return {
+    label: "LIVE",
+    text: "#a9ffd5",
+    border: "rgba(72,255,176,0.24)",
+    bg: "rgba(72,255,176,0.06)"
+  };
 }
 
 function normalizePart(obj, fallbackKey, fallbackName) {
@@ -181,11 +105,11 @@ function getApiParts(data) {
   if (data?.switchB) out.push(normalizePart(data.switchB, "swb", "Switch B"));
 
   if (Array.isArray(data?.parts)) {
-    data.parts.forEach((p, i) => out.push(normalizePart(p, `part${i+1}`, `Part ${i+1}`)));
+    data.parts.forEach((p, i) => out.push(normalizePart(p, `part${i + 1}`, `Part ${i + 1}`)));
   }
 
   const seen = new Set();
-  return out.filter(Boolean).filter(p => {
+  return out.filter(Boolean).filter((p) => {
     const k = `${p.key}|${p.name}`.toLowerCase();
     if (seen.has(k)) return false;
     seen.add(k);
@@ -194,9 +118,8 @@ function getApiParts(data) {
 }
 
 function buildCards(data, parts) {
-  let uplink = parts.find(p =>
-    p.key.includes("radio") ||
-    String(p.name).toLowerCase().includes("radio")
+  let uplink = parts.find(
+    (p) => p.key.includes("radio") || String(p.name).toLowerCase().includes("radio")
   );
 
   if (!uplink) {
@@ -210,37 +133,46 @@ function buildCards(data, parts) {
     };
   }
 
-  const switchB = parts.find(p =>
-    p.key === "swb" ||
-    String(p.name).toLowerCase().includes("switch b") ||
-    String(p.name).toLowerCase().includes("tengige1/1")
+  const switchB = parts.find(
+    (p) =>
+      p.key === "swb" ||
+      String(p.name).toLowerCase().includes("switch b") ||
+      String(p.name).toLowerCase().includes("tengige1/1")
   );
 
-  const switchA = parts.find(p =>
-    p.key === "swa" ||
-    String(p.name).toLowerCase().includes("switch a") ||
-    String(p.name).toLowerCase().includes("tengige1/2")
+  const switchA = parts.find(
+    (p) =>
+      p.key === "swa" ||
+      String(p.name).toLowerCase().includes("switch a") ||
+      String(p.name).toLowerCase().includes("tengige1/2")
   );
 
   return {
     uplink: {
       ...uplink,
-      title: "UPLINK",
-      subtitle: "Radio1 • Main Internet Source",
+      title: "UPLINK CORE",
+      subtitle: "Radio1 Main Internet Source",
+      meta: "155.15.59.4 • 3 Gbps core path • Aviat WTM4200",
       capacityMbps: CAPACITY.uplink
     },
-    switchB: switchB ? {
-      ...switchB,
-      title: "Switch B",
-      subtitle: "88.88.88.254 • VLAN1559 • TenGigE1/1",
-      capacityMbps: CAPACITY.switchB
-    } : null,
-    switchA: switchA ? {
-      ...switchA,
-      title: "Switch A",
-      subtitle: "10.88.88.254 • VLAN2430 • TenGigE1/2",
-      capacityMbps: CAPACITY.switchA
-    } : null
+    switchB: switchB
+      ? {
+          ...switchB,
+          title: "Switch B",
+          subtitle: "88.88.88.254 • VLAN1559 • TenGigE1/1",
+          meta: "Distribution segment • 1 Gbps",
+          capacityMbps: CAPACITY.switchB
+        }
+      : null,
+    switchA: switchA
+      ? {
+          ...switchA,
+          title: "Switch A",
+          subtitle: "10.88.88.254 • VLAN2430 • TenGigE1/2",
+          meta: "Distribution segment • 1 Gbps",
+          capacityMbps: CAPACITY.switchA
+        }
+      : null
   };
 }
 
@@ -253,23 +185,171 @@ function getCombined(data, cards) {
     return { rxMbps: rx, txMbps: tx, totalMbps: total };
   }
 
-  return [cards.uplink, cards.switchB, cards.switchA].filter(Boolean).reduce((acc, c) => {
-    acc.rxMbps += num(c.rxMbps);
-    acc.txMbps += num(c.txMbps);
-    acc.totalMbps += num(c.totalMbps);
-    return acc;
-  }, { rxMbps: 0, txMbps: 0, totalMbps: 0 });
+  return [cards.uplink, cards.switchB, cards.switchA]
+    .filter(Boolean)
+    .reduce(
+      (acc, c) => {
+        acc.rxMbps += num(c.rxMbps);
+        acc.txMbps += num(c.txMbps);
+        acc.totalMbps += num(c.totalMbps);
+        return acc;
+      },
+      { rxMbps: 0, txMbps: 0, totalMbps: 0 }
+    );
 }
 
-function TrafficCard({ card }) {
+function Chip({ label, value, accent = "#8fe9ff" }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        padding: "10px 14px",
+        borderRadius: 999,
+        background: "rgba(255,255,255,0.035)",
+        border: "1px solid rgba(255,255,255,0.07)",
+        boxShadow: "0 10px 20px rgba(0,0,0,0.16)"
+      }}
+    >
+      <span
+        style={{
+          fontSize: 11,
+          color: "#6f8cb8",
+          letterSpacing: 1.05,
+          textTransform: "uppercase"
+        }}
+      >
+        {label}
+      </span>
+      <span style={{ fontSize: 13, fontWeight: 900, color: accent }}>{value}</span>
+    </div>
+  );
+}
+
+function HeroMetric({ label, value, sub, color }) {
+  return (
+    <div
+      style={{
+        borderRadius: 24,
+        padding: 18,
+        background: "linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)",
+        border: "1px solid rgba(255,255,255,0.07)"
+      }}
+    >
+      <div
+        style={{
+          fontSize: 11,
+          color: "#7392bf",
+          letterSpacing: 1.35,
+          textTransform: "uppercase",
+          marginBottom: 10
+        }}
+      >
+        {label}
+      </div>
+      <div
+        style={{
+          fontSize: 36,
+          lineHeight: 1,
+          fontWeight: 950,
+          color
+        }}
+      >
+        {fmt(value)}
+        <span style={{ fontSize: 17, marginLeft: 8, color: "#98b0d6" }}>Mbps</span>
+      </div>
+      <div style={{ marginTop: 10, color: "#96aed4", fontSize: 13 }}>{sub}</div>
+    </div>
+  );
+}
+
+function UtilBar({ value, capacity }) {
+  const percent = utilPct(value, capacity);
+  const tone = toneFor(value, capacity);
+
+  return (
+    <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 8
+        }}
+      >
+        <div
+          style={{
+            fontSize: 11,
+            color: "#7392bf",
+            letterSpacing: 1.25,
+            textTransform: "uppercase"
+          }}
+        >
+          Capacity Pressure
+        </div>
+        <div style={{ color: tone.text, fontWeight: 900, fontSize: 13 }}>{percent}%</div>
+      </div>
+
+      <div
+        style={{
+          height: 12,
+          borderRadius: 999,
+          overflow: "hidden",
+          background: "rgba(255,255,255,0.05)",
+          border: "1px solid rgba(255,255,255,0.06)"
+        }}
+      >
+        <div
+          style={{
+            width: `${Math.min(100, percent)}%`,
+            height: "100%",
+            background: tone.bar
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function RailCard({ title, value, sub, color = "#fff", border = "rgba(255,255,255,0.08)" }) {
+  return (
+    <div
+      style={{
+        borderRadius: 22,
+        padding: 16,
+        background: "linear-gradient(180deg, rgba(10,16,29,0.98) 0%, rgba(7,12,23,0.98) 100%)",
+        border: `1px solid ${border}`
+      }}
+    >
+      <div
+        style={{
+          fontSize: 11,
+          color: "#6f8cb8",
+          letterSpacing: 1.2,
+          textTransform: "uppercase",
+          marginBottom: 8
+        }}
+      >
+        {title}
+      </div>
+      <div style={{ color, fontSize: 28, lineHeight: 1.05, fontWeight: 950 }}>{value}</div>
+      <div style={{ marginTop: 10, color: "#9bb3d8", fontSize: 14, lineHeight: 1.5 }}>{sub}</div>
+    </div>
+  );
+}
+
+function TrafficPanel({ card, large = false }) {
   if (!card) {
     return (
-      <div style={{
-        borderRadius: 28,
-        padding: 20,
-        background: "linear-gradient(180deg, rgba(10,18,30,.96) 0%, rgba(8,14,24,.96) 100%)",
-        border: "1px solid rgba(255,255,255,0.08)"
-      }}>
+      <div
+        style={{
+          borderRadius: 30,
+          padding: 22,
+          background: "linear-gradient(180deg, rgba(8,15,27,0.98) 0%, rgba(5,10,19,0.98) 100%)",
+          border: "1px solid rgba(255,255,255,0.08)"
+        }}
+      >
         <div style={{ fontSize: 22, fontWeight: 900, color: "#fff" }}>No Data</div>
       </div>
     );
@@ -278,52 +358,92 @@ function TrafficCard({ card }) {
   const tone = toneFor(card.totalMbps, card.capacityMbps);
 
   return (
-    <div style={{
-      borderRadius: 28,
-      padding: 20,
-      background: "linear-gradient(180deg, rgba(10,18,30,.96) 0%, rgba(8,14,24,.96) 100%)",
-      border: `1px solid ${tone.border}`,
-      boxShadow: "0 20px 60px rgba(0,0,0,.34)"
-    }}>
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        gap: 12,
-        alignItems: "flex-start",
-        marginBottom: 16
-      }}>
-        <div>
-          <div style={{ fontSize: 22, fontWeight: 900, color: "#fff" }}>
+    <div
+      style={{
+        borderRadius: 30,
+        padding: large ? 24 : 22,
+        background:
+          "radial-gradient(circle at top right, rgba(0,162,255,0.09), transparent 24%), linear-gradient(180deg, rgba(8,15,27,0.985) 0%, rgba(4,9,18,0.995) 100%)",
+        border: `1px solid ${tone.border}`,
+        boxShadow: "0 24px 56px rgba(0,0,0,0.24)"
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: 12,
+          alignItems: "flex-start",
+          marginBottom: 16
+        }}
+      >
+        <div style={{ minWidth: 0 }}>
+          <div
+            style={{
+              fontSize: 11,
+              color: "#7392bf",
+              letterSpacing: 1.45,
+              textTransform: "uppercase",
+              marginBottom: 8
+            }}
+          >
             {card.title}
           </div>
-          <div style={{ marginTop: 6, color: "#9db5da", fontSize: 14, lineHeight: 1.45 }}>
+          <div
+            style={{
+              fontSize: large ? 34 : 26,
+              lineHeight: 1.02,
+              fontWeight: 950,
+              color: "#fff"
+            }}
+          >
             {card.subtitle}
           </div>
+          <div style={{ marginTop: 10, color: "#97afd5", fontSize: 14, lineHeight: 1.5 }}>{card.meta}</div>
         </div>
 
-        <div style={{
-          padding: "8px 12px",
-          borderRadius: 999,
-          background: tone.soft,
-          border: `1px solid ${tone.border}`,
-          color: tone.text,
-          fontSize: 12,
-          fontWeight: 900,
-          letterSpacing: 1.2
-        }}>
+        <div
+          style={{
+            padding: "8px 12px",
+            borderRadius: 999,
+            background: tone.soft,
+            border: `1px solid ${tone.border}`,
+            color: tone.text,
+            fontSize: 12,
+            fontWeight: 900,
+            letterSpacing: 1.2,
+            whiteSpace: "nowrap"
+          }}
+        >
           {tone.name}
         </div>
       </div>
 
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(3, minmax(140px, 1fr))",
-        gap: 12,
-        marginBottom: 16
-      }}>
-        <MiniMetric label="RX" value={card.rxMbps} color="#8fe9ff" />
-        <MiniMetric label="TX" value={card.txMbps} color="#9cffd6" />
-        <MiniMetric label="TOTAL" value={card.totalMbps} color={tone.text} />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: large ? "1fr 1fr 1.15fr" : "repeat(3, minmax(120px, 1fr))",
+          gap: 12,
+          marginBottom: 16
+        }}
+      >
+        <div style={{ borderRadius: 20, padding: 18, background: "rgba(255,255,255,0.035)", border: "1px solid rgba(255,255,255,0.07)" }}>
+          <div style={{ fontSize: 11, color: "#7392bf", marginBottom: 8, letterSpacing: 1.2, textTransform: "uppercase" }}>RX</div>
+          <div style={{ fontSize: large ? 42 : 26, lineHeight: 1, fontWeight: 950, color: "#8fe9ff" }}>{fmt(card.rxMbps)}</div>
+          <div style={{ marginTop: 8, fontSize: 12, color: "#98b0d6" }}>Mbps</div>
+        </div>
+
+        <div style={{ borderRadius: 20, padding: 18, background: "rgba(255,255,255,0.035)", border: "1px solid rgba(255,255,255,0.07)" }}>
+          <div style={{ fontSize: 11, color: "#7392bf", marginBottom: 8, letterSpacing: 1.2, textTransform: "uppercase" }}>TX</div>
+          <div style={{ fontSize: large ? 42 : 26, lineHeight: 1, fontWeight: 950, color: "#9cffd7" }}>{fmt(card.txMbps)}</div>
+          <div style={{ marginTop: 8, fontSize: 12, color: "#98b0d6" }}>Mbps</div>
+        </div>
+
+        <div style={{ borderRadius: 20, padding: 18, background: "rgba(255,255,255,0.04)", border: `1px solid ${tone.border}` }}>
+          <div style={{ fontSize: 11, color: "#7392bf", marginBottom: 8, letterSpacing: 1.2, textTransform: "uppercase" }}>Total</div>
+          <div style={{ fontSize: large ? 54 : 30, lineHeight: 1, fontWeight: 950, color: tone.text }}>{fmt(card.totalMbps)}</div>
+          <div style={{ marginTop: 8, fontSize: 12, color: "#98b0d6" }}>Mbps</div>
+        </div>
       </div>
 
       <UtilBar value={card.totalMbps} capacity={card.capacityMbps} />
@@ -345,7 +465,9 @@ export default function AviatWTM4200Page() {
       try {
         const res = await fetch("/api/aviatwtm4200/live", { cache: "no-store" });
         const json = await res.json();
+
         if (dead) return;
+
         setData(json);
         setErr("");
         setLastOkAt(new Date().toLocaleTimeString());
@@ -358,8 +480,9 @@ export default function AviatWTM4200Page() {
     }
 
     load();
+
     const id = setInterval(() => {
-      setTick(v => v + 1);
+      setTick((v) => v + 1);
       load();
     }, 3000);
 
@@ -372,67 +495,158 @@ export default function AviatWTM4200Page() {
   const parts = useMemo(() => getApiParts(data), [data]);
   const cards = useMemo(() => buildCards(data, parts), [data, parts]);
   const combined = useMemo(() => getCombined(data, cards), [data, cards]);
+  const live = statusTone(err, loading);
+  const aggregatePressure = utilPct(
+    combined.totalMbps,
+    CAPACITY.uplink + CAPACITY.switchA + CAPACITY.switchB
+  );
 
   return (
-    <div style={{
-      minHeight: "100%",
-      padding: 22,
-      background:
-        "radial-gradient(circle at top left, rgba(0,170,255,0.12), transparent 28%), radial-gradient(circle at top right, rgba(98,70,255,0.10), transparent 24%), linear-gradient(180deg, #07111f 0%, #040b16 100%)",
-      color: "#fff"
-    }}>
-      <div style={{ marginBottom: 18 }}>
-        <div style={{
-          fontSize: 12,
-          letterSpacing: 2,
-          textTransform: "uppercase",
-          color: "#7ea2d8",
-          marginBottom: 8
-        }}>
-          Aviat WTM4200
+    <div
+      style={{
+        minHeight: "100%",
+        padding: 20,
+        background:
+          "radial-gradient(circle at 0% 0%, rgba(0,168,255,0.12), transparent 18%), radial-gradient(circle at 100% 0%, rgba(69,54,255,0.09), transparent 18%), linear-gradient(180deg, #060f1b 0%, #030814 100%)",
+        color: "#fff"
+      }}
+    >
+      <div style={{ maxWidth: 1600, margin: "0 auto" }}>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
+          <Chip label="Mode" value="Aviat WTM4200 Live" />
+          <Chip label="Device" value="155.15.59.4" />
+          <Chip label="Polling" value="3s" accent="#9cffd7" />
+          <Chip label="Uplink" value="3 Gbps" />
+          <Chip label="Switch B" value="1 Gbps" />
+          <Chip label="Switch A" value="1 Gbps" />
+          <Chip label="Tick" value={tick} accent="#ffe08f" />
         </div>
-        <div style={{ fontSize: 36, fontWeight: 900, lineHeight: 1.04 }}>
-          Uplink Traffic Matrix
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "minmax(0, 1.6fr) 320px",
+            gap: 14,
+            marginBottom: 14
+          }}
+        >
+          <div
+            style={{
+              borderRadius: 34,
+              padding: 24,
+              background:
+                "radial-gradient(circle at top left, rgba(0,150,255,0.14), transparent 24%), linear-gradient(180deg, rgba(8,16,31,0.98) 0%, rgba(4,9,18,0.99) 100%)",
+              border: "1px solid rgba(72,152,255,0.18)",
+              boxShadow: "0 28px 70px rgba(0,0,0,0.28)"
+            }}
+          >
+            <div
+              style={{
+                fontSize: 12,
+                color: "#789dd4",
+                letterSpacing: 2,
+                textTransform: "uppercase",
+                marginBottom: 12
+              }}
+            >
+              Aviat WTM4200 • Live Operations Surface
+            </div>
+
+            <div
+              style={{
+                fontSize: 52,
+                lineHeight: 0.98,
+                fontWeight: 950,
+                letterSpacing: -1.2,
+                marginBottom: 12
+              }}
+            >
+              Uplink Traffic Command Matrix
+            </div>
+
+            <div
+              style={{
+                maxWidth: 920,
+                color: "#a4bcdf",
+                fontSize: 16,
+                lineHeight: 1.6,
+                marginBottom: 20
+              }}
+            >
+              Real-time monitoring board for uplink throughput, aggregate pressure, and
+              distribution path state across the Aviat transport chain.
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+              <HeroMetric label="Combined Total" value={combined.totalMbps} sub="Primary operational throughput" color="#ffffff" />
+              <HeroMetric label="Combined RX" value={combined.rxMbps} sub="Inbound aggregate" color="#8fe9ff" />
+              <HeroMetric label="Combined TX" value={combined.txMbps} sub="Outbound aggregate" color="#9cffd7" />
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gap: 14 }}>
+            <RailCard
+              title="Session"
+              value={live.label}
+              sub={err ? err : `Last update ${lastOkAt || "-"}`}
+              color={live.text}
+              border={live.border}
+            />
+            <RailCard
+              title="Aggregate Pressure"
+              value={`${aggregatePressure}%`}
+              sub="Combined throughput against the full modeled available capacity."
+              color="#8fe9ff"
+              border="rgba(63,204,255,0.24)"
+            />
+            <RailCard
+              title="Engine"
+              value={err ? "Alert" : "Stable"}
+              sub={err ? "Polling error detected in transport layer." : "Live telemetry running in normal polling cycle."}
+              color={err ? "#ffb8c5" : "#a9ffd5"}
+              border={err ? "rgba(255,94,122,0.30)" : "rgba(72,255,176,0.20)"}
+            />
+          </div>
         </div>
-        <div style={{ marginTop: 10, color: "#a8bddf", fontSize: 14 }}>
-          Live operational traffic view with real per-link capacity.
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "minmax(0, 1.6fr) 320px",
+            gap: 14,
+            marginBottom: 14
+          }}
+        >
+          <TrafficPanel card={cards.uplink} large />
+          <div style={{ display: "grid", gap: 14 }}>
+            <RailCard
+              title="Operations Signal"
+              value={toneFor(cards.uplink?.totalMbps, cards.uplink?.capacityMbps ?? CAPACITY.uplink).name}
+              sub="Live assessment of the primary uplink capacity state."
+              color={toneFor(cards.uplink?.totalMbps, cards.uplink?.capacityMbps ?? CAPACITY.uplink).text}
+              border={toneFor(cards.uplink?.totalMbps, cards.uplink?.capacityMbps ?? CAPACITY.uplink).border}
+            />
+            <RailCard
+              title="Telemetry"
+              value={lastOkAt ? `Updated ${lastOkAt}` : "Awaiting poll"}
+              sub="Polling interval fixed at 3 seconds with continuous refresh cadence."
+              color="#b9f4ff"
+              border="rgba(63,204,255,0.20)"
+            />
+            <RailCard
+              title="Aggregate State"
+              value={err ? "Issue" : "Live"}
+              sub={err ? err : "Transport telemetry currently active with no reported fetch errors."}
+              color={err ? "#ffb8c5" : "#ffffff"}
+              border="rgba(255,255,255,0.10)"
+            />
+          </div>
         </div>
-      </div>
 
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(4, minmax(180px, 1fr))",
-        gap: 12,
-        marginBottom: 12
-      }}>
-        <TopStat label="Combined RX" value={fmt(combined.rxMbps) + " Mbps"} sub="Inbound aggregate" accentText="#8fe9ff" accentBorder="rgba(37,200,255,.24)" accentBg="rgba(37,200,255,.10)" />
-        <TopStat label="Combined TX" value={fmt(combined.txMbps) + " Mbps"} sub="Outbound aggregate" accentText="#9cffd6" accentBorder="rgba(53,242,161,.24)" accentBg="rgba(53,242,161,.10)" />
-        <TopStat label="Combined Total" value={fmt(combined.totalMbps) + " Mbps"} sub="Operational throughput" accentText="#8fe9ff" accentBorder="rgba(72,205,255,.24)" accentBg="rgba(72,205,255,.08)" />
-        <TopStat label="Status" value={err ? "DEGRADED" : (loading ? "LOADING" : "LIVE")} sub={err ? err : ("Last update: " + (lastOkAt || "-"))} />
-      </div>
-
-      <div style={{
-        display: "flex",
-        gap: 10,
-        flexWrap: "wrap",
-        marginBottom: 16
-      }}>
-        <InfoPill>Device: 155.15.59.4</InfoPill>
-        <InfoPill>Poll: 3s</InfoPill>
-        <InfoPill>UPLINK: 3 Gbps</InfoPill>
-        <InfoPill>Switch B: 1 Gbps</InfoPill>
-        <InfoPill>Switch A: 1 Gbps</InfoPill>
-        <InfoPill>Tick: {tick}</InfoPill>
-      </div>
-
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(3, minmax(260px, 1fr))",
-        gap: 14
-      }}>
-        <TrafficCard card={cards.uplink} />
-        <TrafficCard card={cards.switchB} />
-        <TrafficCard card={cards.switchA} />
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <TrafficPanel card={cards.switchB} />
+          <TrafficPanel card={cards.switchA} />
+        </div>
       </div>
     </div>
   );
