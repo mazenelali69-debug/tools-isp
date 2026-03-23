@@ -351,7 +351,7 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
         .wt-wrap {
           width: 100%;
           max-width: 100%;
-          margin: 0 auto;
+          margin: 0;
           display: grid;
           gap: 22px;
         }
@@ -867,6 +867,7 @@ const glowC = {
   filter: "blur(70px)",
   pointerEvents: "none"
 };
+
 
 
 

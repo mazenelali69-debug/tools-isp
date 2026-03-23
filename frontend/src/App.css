@@ -1,6 +1,6 @@
-#root {
+﻿#root {
   max-width:none;
-  margin: 0 auto;
+  margin: 0;
   padding: 2rem;
   text-align: center;
 }
@@ -65,10 +65,10 @@ body { margin: 0; }
 html, body { height: 100%; }
 body { margin: 0; }
 
-#root{
+#root {
   min-height: 100vh !important;
   display: block !important;
-  padding-top: 14px !important;
+  padding-top: 0 !important;
 }
 
 
@@ -79,6 +79,7 @@ body { margin: 0; }
   padding: 0 !important;
   text-align: left !important;
 }
+
 
 
 

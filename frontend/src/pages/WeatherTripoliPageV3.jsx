@@ -12,7 +12,7 @@ export default function WeatherTripoliPageV3() {
         .weather-v5-command{
           width:100%;
           max-width: 100%;
-          margin:0 auto 14px auto;
+          margin: 0;
           display:grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
           gap:12px;
@@ -47,7 +47,7 @@ export default function WeatherTripoliPageV3() {
         .weather-v5-alert{
           width:100%;
           max-width: 100%;
-          margin:0 auto 14px auto;
+          margin: 0;
           border-radius:18px;
           padding: 0 16px;
           border:1px solid rgba(255,255,255,.08);
@@ -332,6 +332,7 @@ export default function WeatherTripoliPageV3() {
     </div>
   );
 }
+
 
 
 

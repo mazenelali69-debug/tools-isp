@@ -26,7 +26,7 @@ body {
   margin: 0;
   display: block;
   min-width: 100%;
-  min-height: 100vh;
+  min-min-height: 100dvh;
 }
 
 h1 {
@@ -95,8 +95,8 @@ body{
 
 /* helpers (optional) */
 .tools-container{
-  width: min(1200px, calc(100% - 32px));
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
 }
 .tools-grid{
   display:grid;
@@ -106,7 +106,7 @@ body{
 .col-6{ grid-column: span 6; }
 .col-4{ grid-column: span 4; }
 .col-3{ grid-column: span 3; }
-@media (max-width: 100%){
+@media (max-width: 900px){
   .col-6,.col-4,.col-3{ grid-column: span 12; }
 }
 
@@ -167,13 +167,13 @@ button:hover{
 body{
   /* make sure no centering ever comes back */
   display: block !important;
-  min-height: 100vh;
+  min-min-height: 100dvh;
 }
 
 /* container + typography */
 .tools-container{
-  width: min(1400px, calc(100% - 36px));
-  margin: 0 auto 40px auto;
+  width: 100%;
+  margin: 0;
 }
 
 .tools-title{
@@ -203,10 +203,10 @@ body{
   align-items: center;
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .tools-controls{ grid-template-columns: 1fr 1fr; }
 }
-@media (max-width: 100%){
+@media (max-width: 900px){
   .tools-controls{ grid-template-columns: 1fr; }
 }
 
@@ -1277,7 +1277,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   border-radius: 999px;
   background: rgba(97,218,251,.10);
   border: 1px solid rgba(255,255,255,.08);
-  overflow: hidden;
+  overflow: auto;
 }
 
 .uiPro .wsPingFill{
@@ -1576,7 +1576,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   border-radius: 999px;
   background: rgba(97,218,251,.10);
   border: 1px solid rgba(255,255,255,.08);
-  overflow: hidden;
+  overflow: auto;
 }
 
 .uiPro .wsPingFill{
@@ -2175,7 +2175,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 .lpLossBar{
   height:8px;
   border-radius:999px;
-  overflow:hidden;
+  overflow: auto;
   background:rgba(255,255,255,.05);
   border:1px solid rgba(255,255,255,.06);
 }
@@ -2247,7 +2247,7 @@ body{
    ========================================================= */
 
 .ti-app{
-  min-height:100vh;
+  min-min-height: 100dvh;
   display:flex;
   color:var(--ti-text);
 }
@@ -2337,7 +2337,7 @@ body{
 .ti-side{
   width: 100%;
   flex:0 0 280px;
-  min-height:100vh;
+  min-min-height: 100dvh;
   padding: 0 14px;
   border-right:1px solid rgba(255,255,255,0.06);
   background:
@@ -2667,7 +2667,7 @@ body{
   width:100%;
   border-radius:999px;
   background:rgba(255,255,255,0.06);
-  overflow:hidden;
+  overflow: auto;
 }
 
 .ti-pressureRow__fill{
@@ -2752,7 +2752,7 @@ body{
    RESPONSIVE
    ========================================================= */
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .ti-grid--metrics{
     grid-template-columns:repeat(2, minmax(0,1fr));
   }
@@ -2763,7 +2763,7 @@ body{
   }
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .ti-side{
     width: 100%;
     flex-basis:88px;
@@ -3017,7 +3017,7 @@ body{
   height:9px;
   border-radius:999px;
   background:rgba(255,255,255,0.06);
-  overflow:hidden;
+  overflow: auto;
 }
 
 .ti-rankRow__fill{
@@ -3096,7 +3096,7 @@ body{
   color:var(--ti-muted);
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .ti-dash2__metrics{
     grid-template-columns:repeat(2, minmax(0,1fr));
   }
@@ -3107,7 +3107,7 @@ body{
   }
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .ti-hero2{
     flex-direction:column;
   }
@@ -3177,7 +3177,7 @@ body{
   height:10px;
   border-radius:999px;
   background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
-  overflow:hidden;
+  overflow: auto;
   position:relative;
 }
 
@@ -3212,7 +3212,7 @@ body{
 
 .ti-panel2{
   position:relative;
-  overflow:hidden;
+  overflow: auto;
 }
 
 .ti-panel2::before{
@@ -3240,7 +3240,7 @@ body{
 
 .ti-metric2{
   position:relative;
-  overflow:hidden;
+  overflow: auto;
 }
 
 .ti-metric2::before{
@@ -3259,7 +3259,7 @@ body{
 }
 
 .ti-hero2{
-  overflow:hidden;
+  overflow: auto;
 }
 
 .ti-hero2::after{
@@ -3426,20 +3426,20 @@ body{
   gap:16px;
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .ms3-grid{ grid-template-columns:repeat(3, minmax(0,1fr)); }
 }
-@media (max-width: 100%){
+@media (max-width: 900px){
   .ms3-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
 }
-@media (max-width: 100%){
+@media (max-width: 900px){
   .ms3-grid{ grid-template-columns:1fr; }
 }
 
 .ms3-card{
   position:relative;
-  overflow:hidden;
-  min-height:332px;
+  overflow: auto;
+  min-height: auto;
   padding: 0 12px 14px;
   border-radius:24px;
   border:1px solid rgba(255,255,255,.07);
@@ -4137,7 +4137,7 @@ body{
   background:rgba(127,29,29,.22) !important;
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dashx-metrics{
     grid-template-columns:repeat(2, minmax(0,1fr)) !important;
   }
@@ -4147,7 +4147,7 @@ body{
   }
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dashx-hero{
     flex-direction:column !important;
   }
@@ -4245,10 +4245,10 @@ body{
 
 .nmap-board{
   position:relative;
-  min-height:640px;
+  min-height: auto;
   border-radius:26px;
   border:1px solid rgba(255,255,255,.08);
-  overflow:hidden;
+  overflow: auto;
   background:
     radial-gradient(circle at top left, rgba(34,197,94,.06), transparent 22%),
     radial-gradient(circle at top right, rgba(59,130,246,.08), transparent 24%),
@@ -4377,7 +4377,7 @@ body{
   }
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .nmap-hero{
     flex-direction:column;
   }
@@ -4387,7 +4387,7 @@ body{
   }
 
   .nmap-board{
-    min-height:860px;
+    min-height: auto;
   }
 }
 
@@ -4591,7 +4591,7 @@ body{
   font-weight:900;
   color:#eef4fb;
   white-space:nowrap;
-  overflow:hidden;
+  overflow: auto;
   text-overflow:ellipsis;
 }
 
@@ -4713,7 +4713,7 @@ body{
   font-weight:900;
   color:#f3f6fb;
   white-space:nowrap;
-  overflow:hidden;
+  overflow: auto;
   text-overflow:ellipsis;
   max-width: 100%;
 }
@@ -4769,7 +4769,7 @@ body{
   box-shadow:0 0 5px rgba(255,255,255,.03);
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dashx-rankRow__name{
     max-width: 100%;
   }
@@ -4881,7 +4881,7 @@ body{
 }
 
 /* responsive fallback */
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dashx-row{
     grid-template-columns: 1fr !important;
   }
@@ -4971,7 +4971,7 @@ body{
 }
 
 /* ??? ????? ???? ???? */
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dashx-rankRow__head{
     grid-template-columns: 20px minmax(90px, 130px) minmax(68px, 86px) !important;
   }
@@ -5085,7 +5085,7 @@ body{
   box-shadow: 0 0 8px rgba(240,106,87,.12) !important;
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dashx-rankRow__top,
   .dashx-rankRow__head{
     grid-template-columns: 20px minmax(95px, 145px) 1fr minmax(66px, 86px) !important;
@@ -5114,14 +5114,14 @@ body{
 
 /* health ???? */
 .dashx-midFull__health{
-  min-height: 300px !important;
+  min-height: auto !important;
   padding: 0 !important;
   border-radius: 18px !important;
 }
 
 /* top busy ???? */
 .dashx-midFull__topbusy{
-  min-height: 300px !important;
+  min-height: auto !important;
   padding: 0 12px !important;
   border-radius: 18px !important;
   display: flex !important;
@@ -5270,7 +5270,7 @@ body{
 }
 
 /* responsive */
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dashx-midFull{
     grid-template-columns: 1fr !important;
   }
@@ -5295,20 +5295,20 @@ body{
   gap:14px;
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dpg-grid{ grid-template-columns:repeat(3, minmax(0,1fr)); }
 }
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dpg-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
 }
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dpg-grid{ grid-template-columns:1fr; }
 }
 
 .dpg-card{
   position:relative;
-  overflow:hidden;
-  min-height:332px;
+  overflow: auto;
+  min-height: auto;
   padding: 0 12px 14px;
   border-radius:24px;
   border:1px solid rgba(255,255,255,.07);
@@ -5532,20 +5532,20 @@ body{
   gap:16px !important;
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dpg-grid{ grid-template-columns:repeat(3, minmax(0,1fr)) !important; }
 }
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dpg-grid{ grid-template-columns:repeat(2, minmax(0,1fr)) !important; }
 }
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dpg-grid{ grid-template-columns:1fr !important; }
 }
 
 .dpg-card{
   position:relative !important;
   overflow:hidden !important;
-  min-height:332px !important;
+  min-height: auto !important;
   padding: 0 12px 14px !important;
   border-radius:24px !important;
   border:1px solid rgba(255,255,255,.07) !important;
@@ -5795,14 +5795,14 @@ body{
 }
 
 /* ?? ?????? ???? ???? ????? ???? */
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dashx-metrics{
     grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
   }
 }
 
 /* ????????? ???? ???? */
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dashx-metrics{
     grid-template-columns:1fr !important;
   }
@@ -5867,13 +5867,13 @@ body{
   text-overflow:ellipsis !important;
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dashx-metrics{
     grid-template-columns:repeat(2, minmax(0,1fr)) !important;
   }
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dashx-metrics{
     grid-template-columns:1fr !important;
   }
@@ -5931,7 +5931,7 @@ body{
 }
 
 /* ????????? ????? ???? ?????? */
-@media (max-width: 100%){
+@media (max-width: 900px){
   .dashx-metric{
     min-height:44px !important;
     height:auto !important;
@@ -5975,7 +5975,7 @@ body{
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
 
-  overflow:hidden;
+  overflow: auto;
 
   animation:dashxWelcomeNoc 3s ease-in-out both;
 
@@ -6078,7 +6078,7 @@ body{
 .dashx-page{
   width:100%;
   max-width: none;
-  margin:0 auto;
+  margin: 0;
   padding: 0;
 }
 
@@ -6202,15 +6202,15 @@ html, body, #root {
 }
 
 .ti-app {
-  height: 100vh;
-  min-height: 100vh;
-  overflow: hidden;
+  min-height: 100dvh;
+  min-min-height: 100dvh;
+  overflow: auto;
 }
 
 .ti-main {
-  height: 100vh;
+  min-height: 100dvh;
   min-height: 0;
-  overflow: hidden;
+  overflow: auto;
   display: grid;
   grid-template-rows: auto 1fr;
 }
@@ -6530,5 +6530,21 @@ html, body, #root {
 
 
 
+
+
+
+/* ROOT + CONTAINER FINAL FIX */
+#root{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.tools-container{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
 
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+﻿import React, { useEffect, useMemo, useState } from "react";
 
 function num(v) {
   const n = Number(v);
@@ -61,7 +61,7 @@ function TopBusyPanel({ rows }) {
                 style={{
                   display: "grid",
                   gridTemplateColumns: "auto 1fr auto",
-                  alignItems: "center",
+                  alignItems: "flex-start",
                   gap: 10,
                   marginBottom: 8
                 }}
@@ -337,9 +337,9 @@ function PingSegmentedGauge({ valueMs, name, totalText }) {
               fontWeight: 700,
               color: mainColor,
               lineHeight: 1.12,
-              maxWidth: '100%',
-              marginLeft: "auto",
-              marginRight: "auto",
+              
+              
+              
               textAlign: "center",
               textWrap: "balance",
               letterSpacing: ".15px",
@@ -545,8 +545,7 @@ function ServicePingSection() {
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
           gap: 12,
-          maxWidth: '100%'
-        }}
+          }}
       >
         {rows.map(row => (
           <ServicePingGaugeCard
@@ -632,6 +631,10 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+
+
+
 
 
 

@@ -122,3 +122,4 @@ export default function MonitorCanvas({ monitors, live, history, stopMonitor }) 
 
 
 
+

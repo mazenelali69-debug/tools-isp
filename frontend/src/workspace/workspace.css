@@ -162,7 +162,7 @@
 }
 
 .wsMonCards{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
-@media (max-width: 100%){ .wsMonCards{ grid-template-columns: 1fr; } }
+@media (max-width: 900px){ .wsMonCards{ grid-template-columns: 1fr; } }
 
 .wsMonCard{
   border-radius:16px;
@@ -312,7 +312,7 @@
   transform: scale(.9);
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .wsPingLeft,
   .wsMonField,
   .wsMonCards > *,
@@ -325,6 +325,9 @@
     flex-wrap:wrap !important;
   }
 }
+
+
+
 
 
 

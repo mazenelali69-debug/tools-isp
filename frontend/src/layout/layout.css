@@ -1,4 +1,4 @@
-/* ===== AppShell Layout ===== */
+﻿/* ===== AppShell Layout ===== */
 .appShell{ display:flex; min-height:100vh; width:100%; }
 
 .side{
@@ -112,10 +112,10 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
-@media (max-width: 100%){
+@media (max-width: 900px){
   .lpGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (max-width: 100%){
+@media (max-width: 900px){
   .lpGrid{ grid-template-columns: 1fr; }
 }
 
@@ -473,8 +473,8 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
 }
 
 .ethGrid{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:14px; }
-@media (max-width: 100%){ .ethGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
-@media (max-width: 100%){ .ethGrid{ grid-template-columns: 1fr; } }
+@media (max-width: 900px){ .ethGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 900px){ .ethGrid{ grid-template-columns: 1fr; } }
 
 .ethCard{
   position:relative;
@@ -587,7 +587,7 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
   overflow-x:auto;
 }
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .ti-app, .appShell{
     display:block !important;
   }
@@ -705,7 +705,7 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
 /* ===== END HIDE TOPBAR TITLE ===== */
 
 
-@media (max-width: 100%){
+@media (max-width: 900px){
   .appShell{ flex-direction:column; }
   .appSidebar,
   .side,
@@ -722,4 +722,64 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
 }
 
 
+
+
+
+
+
+/* REAL SHELL FIX */
+.ti-app{
+  display:flex !important;
+  width:100% !important;
+  min-height:100dvh !important;
+}
+
+.ti-main{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  width:auto !important;
+}
+
+.ti-content{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  width:100% !important;
+}
+
+@media (max-width: 900px){
+  .ti-app{
+    flex-direction:column !important;
+  }
+
+  .ti-side,
+  .ti-side.is-collapsed{
+    width:100% !important;
+    max-width:none !important;
+    flex-basis:auto !important;
+    min-height:auto !important;
+  }
+}
+
+/* KILL TIGHT CENTER */
+.ti-content--tight{
+  width:100% !important;
+  max-width:none !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+
+.ti-content {
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow: auto !important;
+}
+
+
+
+.ti-content {
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow: auto !important;
+}
 

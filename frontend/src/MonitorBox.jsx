@@ -65,3 +65,4 @@ export default function MonitorBox({ monitor, live, points, onClose }) {
 
 
 
+
