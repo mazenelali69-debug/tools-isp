@@ -29,6 +29,8 @@ const historyRouter = require("./routes/history");
 const authRouter = require("./routes/auth");
 const { appendUplinkHistory } = require("./lib/historyStore");
 const app = express();
+const { startNocLinkEngine } = require("./nocLinkEngine");
+const { startNocPingEngine } = require('./nocPingEngine');
 const { visitorAlertMiddleware } = require("./visitorAlertMiddleware");
 
 app.set("trust proxy", 1);
@@ -2463,6 +2465,24 @@ app.get("/api/test/whatsapp-alert", async (req, res) => {
 
 // =====================================
 // TOOLS_ISP_NOC_ALERTS_START
+
+async function sendTelegramNOC(message) {
+  try {
+    await fetch("https://api.telegram.org/bot8732391910:AAHU7-0ZI4YBioJMV7-INC53X7R35rRX_0U/sendMessage", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        chat_id: "8292425726",
+        text: message
+      })
+    });
+  } catch (e) {
+    console.error("Telegram NOC error:", e.message);
+  }
+}
+
 // =====================================
 const NOC_ALERT_PHONES = [
   "96176126213",
@@ -2555,6 +2575,7 @@ async function nocSend(message, key, cooldownMs = NOC_ALERT_CFG.cooldownMs) {
   }
 
   const out = await sendWhatsAppAlertMulti(message);
+await sendTelegramNOC(message);
   console.log("[NOC-ALERT]", key, out);
   return out;
 }
@@ -2842,6 +2863,8 @@ function startNocAlerts() {
 }
 
 startNocAlerts();
+startNocPingEngine();
+startNocLinkEngine();
 
 app.get("/api/test/noc-alerts-run", async (req, res) => {
   const out = await nocRunCycle();
@@ -2849,6 +2872,26 @@ app.get("/api/test/noc-alerts-run", async (req, res) => {
 });
 
 // =====================================
+
+app.get("/api/test/noc-telegram", async (req, res) => {
+  try {
+    await sendTelegramNOC("?? TEST NOC TELEGRAM OK");
+    res.json({ ok: true, sent: "telegram" });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e?.message || e) });
+  }
+});
+
+
+app.get("/api/test/noc-send", async (req, res) => {
+  try {
+    const out = await nocSend("?? TEST FULL NOC SEND", "test-full-noc-send-" + Date.now(), 0);
+    res.json({ ok: true, out });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e?.message || e) });
+  }
+});
+
 // TOOLS_ISP_NOC_ALERTS_END
 // =====================================
 
@@ -4129,6 +4172,15 @@ if (!global.__uplinkRealHistoryPollerStarted) {
   }, 10000);
 }
 // ===== UPLINK_REAL_HISTORY_POLLER_END =====
+
+
+
+
+
+
+
+
+
 
 
 
