@@ -1,4 +1,4 @@
-ï»¿import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -482,7 +482,7 @@ export default function AviatHistoryPage() {
             <div style={{ fontSize: 34, fontWeight: 1000, lineHeight: .95, letterSpacing: "-.03em", marginBottom: 8 }}>
               AVIAT HISTORY V2
             </div>
-            <div style={{ fontSize: 13, opacity: .68, maxWidth: 680 }}>
+            <div style={{ fontSize: 13, opacity: .68, maxWidth: '100%' }}>
               Radio backbone traffic intelligence panel with premium long-range visibility, lighter rendering, and cleaner operational focus.
             </div>
 
@@ -614,21 +614,21 @@ export default function AviatHistoryPage() {
       >
         <MiniPanel
           title="UPLINK"
-          subtitle="Radio1 â€¢ Main Internet Source â€¢ 3 Gbps"
+          subtitle="Radio1 • Main Internet Source • 3 Gbps"
           rows={uplinkRows}
           accent="#63e6ff"
           areaColor="#1e90ff"
         />
         <MiniPanel
           title="SWITCH B"
-          subtitle="88.88.88.254 â€¢ VLAN1559 â€¢ TenGigE1/1"
+          subtitle="88.88.88.254 • VLAN1559 • TenGigE1/1"
           rows={switchBRows}
           accent="#8dff8a"
           areaColor="#58f7c2"
         />
         <MiniPanel
           title="SWITCH A"
-          subtitle="10.88.88.254 â€¢ VLAN2430 â€¢ TenGigE1/2"
+          subtitle="10.88.88.254 • VLAN2430 • TenGigE1/2"
           rows={switchARows}
           accent="#ffbf66"
           areaColor="#ff8a66"
@@ -658,3 +658,6 @@ export default function AviatHistoryPage() {
     </div>
   );
 }
+
+
+

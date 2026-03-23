@@ -1,5 +1,5 @@
-﻿/* =========================
-   PING BOX â€” ENTERPRISE STYLE
+/* =========================
+   PING BOX — ENTERPRISE STYLE
    ========================= */
 
 .pingBox{
@@ -30,7 +30,7 @@
 
 .pingBox > div:first-child{
   width:100% !important;
-  padding: 10px 12px !important;
+  padding: 0 12px !important;
   border-bottom: 1px solid rgba(255,255,255,.08) !important;
   background: rgba(255,255,255,.03) !important;
   border-radius: 22px 22px 0 0 !important;
@@ -44,7 +44,7 @@
 }
 
 .pingBox > div:first-child button{
-  width: 34px !important;
+  width: 100% !important;
   height: 34px !important;
   border-radius: 14px !important;
   border: 1px solid rgba(255,255,255,.10) !important;
@@ -75,8 +75,8 @@
 }
 
 .pingMetaWrap{
-  margin: 10px 0 12px 0 !important;
-  padding: 10px 12px !important;
+  margin: 0 0 12px 0 !important;
+  padding: 0 12px !important;
   border-radius: 16px !important;
   background: rgba(120,200,255,.06) !important;
   border: 1px solid rgba(255,255,255,.08) !important;
@@ -98,7 +98,7 @@
   background: rgba(0,0,0,.22);
   border: 1px solid rgba(255,255,255,.08);
   border-radius: 18px;
-  padding: 14px;
+  padding: 0;
   color: rgba(235,255,255,.92);
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 12px;
@@ -161,7 +161,7 @@
 }
 
 /* Scrollbar */
-.pingOut::-webkit-scrollbar{ width: 10px; }
+.pingOut::-webkit-scrollbar{ width: 100%; }
 .pingOut::-webkit-scrollbar-thumb{
   background: rgba(120,200,255,.22);
   border: 1px solid rgba(255,255,255,.10);
@@ -186,13 +186,13 @@
 .pingBox input{
   height: 34px !important;
   font-size: 12px !important;
-  padding: 6px 10px !important;
+  padding: 0 10px !important;
   border-radius: 12px !important;
 }
 
 .pingBox button{
   height: 34px !important;
-  padding: 6px 12px !important;
+  padding: 0 12px !important;
   font-size: 12px !important;
   border-radius: 12px !important;
 }
@@ -210,7 +210,7 @@
 .pingOut{
   font-size: 11px !important;
   line-height: 1.25 !important;
-  padding: 10px !important;
+  padding: 0 !important;
   border-radius: 14px !important;
 }
 
@@ -370,7 +370,7 @@
 
 /* SAFE_TIGHTEN_PING */
 .pingOut{ font-size: 11px; line-height: 1.35; }
-.pingMetaWrap{ padding: 8px; }
+.pingMetaWrap{ padding: 0; }
 .pingMetaLabel{ opacity: .85; letter-spacing: .2px; }
 .pingBox{ box-shadow: 0 20px 80px rgba(0,0,0,.55); }
 
@@ -379,7 +379,7 @@
 /* ===== Ping Box Pro/Cyber tweaks (SAFE CSS only) ===== */
 /* TOOLSISP_UNLOCK_RESIZE_v1 removed hard width/height lock */
 
-/* خلّي الجزء الفوقاني (العنوان + input + buttons) يضل ثابت */
+/* ???? ????? ???????? (??????? + input + buttons) ??? ???? */
 .pingBox > .pingHeader,
 .pingBox .pingTop,
 .pingBox .pingHead,
@@ -392,25 +392,25 @@
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
 }
 
-/* صغّر الخطوط شوي */
+/* ???? ?????? ??? */
 .pingBox, .pingBox *{
   font-size: 12px !important;
 }
 
-/* خلي منطقة الـ output بس هي اللي تسكّرول */
+/* ??? ????? ??? output ?? ?? ???? ??????? */
 .pingOut{
   max-height: 320px !important;
   overflow: auto !important;
 }
 
-/* شيل أي margin/فراغات كبيرة */
+/* ??? ?? margin/?????? ????? */
 .pingMetaWrap{ margin-top: 6px !important; }
 .pingMetaRow{ gap: 8px !important; }
 
-/* زرار Run/Stop شكل أقوى */
+/* ???? Run/Stop ??? ???? */
 .pingBox button{
   border-radius: 12px !important;
-  padding: 8px 12px !important;
+  padding: 0 12px !important;
   font-weight: 800 !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(255,255,255,.06) !important;
@@ -419,7 +419,7 @@
   background: rgba(255,255,255,.10) !important;
 }
 
-/* Packet loss bar: خليها أنحف */
+/* Packet loss bar: ????? ???? */
 .plBar{
   height: 6px !important;
   border-radius: 999px !important;
@@ -447,7 +447,7 @@
 }
 
 .pingBox button{
-  padding: 6px 10px !important;
+  padding: 0 10px !important;
   font-size: 12px !important;
 }
 
@@ -469,8 +469,8 @@
 }
 
 /* TOOLSISP_POINTER_EVENTS_FIX_v1
-   Fix: drag/resize not working بسبب CSS pointer-events:none على .pingBox أو أولاده
-   نرجّع pointer events للـ box والأطفال، ونترك الـ pseudo elements none لأنها overlay تجميلي
+   Fix: drag/resize not working ???? CSS pointer-events:none ??? .pingBox ?? ??????
+   ????? pointer events ??? box ????????? ????? ??? pseudo elements none ????? overlay ??????
 */
 .pingBox { pointer-events: auto !important; }
 .pingBox * { pointer-events: auto !important; }
@@ -481,11 +481,14 @@
 .pingBox [title="Resize"] { pointer-events: auto !important; }
 
 /* TOOLSISP_RESIZE_CSS_OVERRIDE_v1
-   Fix: ping-modern.css كان يفرض width/height ثابتين على .pingBox (مع !important)
-   وهذا يمنع resize من الظهور. نخلي القياس يتحكم فيه inline styles من React.
+   Fix: ping-modern.css ??? ???? width/height ?????? ??? .pingBox (?? !important)
+   ???? ???? resize ?? ??????. ???? ?????? ????? ??? inline styles ?? React.
 */
 .pingBox{
   width: auto !important;
   height: auto !important;
 }
+
+
+
 

@@ -1,5 +1,5 @@
-﻿/* ===== Packet Loss UI ===== */
-.pingMetaWrap{ margin:8px 0 10px 0; }
+/* ===== Packet Loss UI ===== */
+.pingMetaWrap{ margin: 0 0 10px 0; }
 .pingMetaRow{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
 .pingMetaLeft{ display:flex; align-items:baseline; gap:10px; }
 .pingMetaLabel{ font-size:12px; opacity:.75; letter-spacing:.2px; }
@@ -16,12 +16,12 @@
   width:0%;
 }
 .pingDotBox{
-  width:34px; height:18px; border-radius:999px;
+  width: 100%; height:18px; border-radius:999px;
   border:1px solid rgba(255,255,255,.12);
   background: rgba(0,0,0,.18);
-  display:flex; align-items:center; justify-content:center;
+  display:flex; align-items:center; justify-content: flex-start;
 }
-.pingDot{ width:8px; height:8px; border-radius:999px; background: rgba(120,200,255,.25); transition: all .25s ease; }
+.pingDot{ width: 100%; height:8px; border-radius:999px; background: rgba(120,200,255,.25); transition: all .25s ease; }
 .pingDotBox.on .pingDot{
   background: rgba(120,200,255,.95);
   box-shadow: 0 0 10px rgba(120,200,255,.45), 0 0 18px rgba(120,200,255,.22);
@@ -56,3 +56,6 @@
 .plSpark { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
 .plSpark polyline { stroke-width: 2; fill: none; }
 .plSpark path, .plSpark line { fill: none; }
+
+
+

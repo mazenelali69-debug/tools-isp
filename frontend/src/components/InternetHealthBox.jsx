@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const PUBLIC_TARGETS = [
   { name: "Facebook", host: "www.fb.com" },
@@ -77,7 +77,7 @@ function Gauge({ name, ip, value }){
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: 'flex-start'
       }}
     >
       <div style={{ width: 102, height: 102, position: "relative" }}>
@@ -111,7 +111,7 @@ function Gauge({ name, ip, value }){
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: "center",
+            justifyContent: 'flex-start',
             pointerEvents: "none",
             textAlign: "center"
           }}
@@ -132,7 +132,7 @@ function Gauge({ name, ip, value }){
           fontSize: 9,
           opacity: .62,
           textAlign: "center",
-          maxWidth: 96,
+          maxWidth: '100%',
           whiteSpace: "nowrap",
           overflow: "hidden",
           textOverflow: "ellipsis"
@@ -267,4 +267,7 @@ export default function InternetHealthBox(){
     </div>
   );
 }
+
+
+
 

@@ -1,4 +1,4 @@
-﻿#root {
+#root {
   max-width:none;
   margin: 0 auto;
   padding: 2rem;
@@ -76,8 +76,11 @@ body { margin: 0; }
 #root{
   max-width: none !important;
   margin: 0 !important;
-  padding: 18px !important;
+  padding: 0 !important;
   text-align: left !important;
 }
+
+
+
 
 

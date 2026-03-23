@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 // same backend port convention used in legacy
 const API = window.location.origin.replace(/:\d+$/, ":9090");
@@ -139,7 +139,7 @@ export default function PingTool({ ip, onIpChange }) {
       <div className="wsPingMeta">
         <div className="wsPingMetaLabel">Packet loss</div>
         <div className="wsPingMetaValue">
-          {loss == null ? "—" : (loss + "%")}
+          {loss == null ? "�" : (loss + "%")}
         </div>
       </div>
 
@@ -154,4 +154,7 @@ export default function PingTool({ ip, onIpChange }) {
     </div>
   );
 }
+
+
+
 

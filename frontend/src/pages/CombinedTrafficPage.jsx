@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -92,7 +92,7 @@ function HeroCard({ rx, tx, total, error }){
         border: "1px solid rgba(255,255,255,.10)",
         boxShadow: "0 18px 40px rgba(0,0,0,.22)",
         marginBottom: 18,
-        maxWidth: 1030
+        maxWidth: '100%'
       }}
     >
       <div
@@ -241,7 +241,7 @@ export default function CombinedTrafficPage(){
       <div
         style={{
           width: "100%",
-          maxWidth: 1100,
+          maxWidth: '100%',
           height: 420,
           borderRadius: 18,
           border: "1px solid rgba(255,255,255,.10)",
@@ -263,7 +263,7 @@ export default function CombinedTrafficPage(){
 
         <div style={{ position: "relative", zIndex: 1 }}>
           <div style={{ marginBottom: 8, fontWeight: 800, fontSize: 18 }}>
-            History — {range}
+            History � {range}
           </div>
 
           {histErr ? (
@@ -329,5 +329,8 @@ export default function CombinedTrafficPage(){
     </div>
   );
 }
+
+
+
 
 

@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const LINKS = [
 
@@ -269,7 +269,7 @@ export default function NetworkMapPage() {
                 <div className="nmap-node__traffic">{fmtMbps(row.totalMbps)}</div>
                 <div className={`nmap-node__ping ${loss > 0 ? "is-loss" : ""}`}>
                   {fmtPing(row.pingMs)}
-                  {loss > 0 ? ` • PL ${Math.round(loss)}%` : ""}
+                  {loss > 0 ? ` � PL ${Math.round(loss)}%` : ""}
                 </div>
               </div>
             </div>
@@ -279,6 +279,9 @@ export default function NetworkMapPage() {
     </div>
   );
 }
+
+
+
 
 
 

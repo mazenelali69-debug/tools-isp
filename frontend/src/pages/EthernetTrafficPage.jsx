@@ -377,7 +377,7 @@ export default function EthernetTrafficPage(){
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
           gap: 14,
-          maxWidth: 1400
+          maxWidth: '100%'
         }}
       >{data.filter(x => !String(x?.id || "").startsWith("uplink_")).map((it, idx) => {
           const id = String(it?.id || it?.name || it?.ip || idx);
@@ -393,6 +393,9 @@ export default function EthernetTrafficPage(){
     </div>
   );
 }
+
+
+
 
 
 

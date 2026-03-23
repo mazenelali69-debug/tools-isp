@@ -1,32 +1,32 @@
-﻿/* ===== AppShell Layout ===== */
+/* ===== AppShell Layout ===== */
 .appShell{ display:flex; min-height:100vh; width:100%; }
 
 .side{
-  width:240px; min-width:0;
+  width: 100%; min-width:0;
   border-right:1px solid rgba(255,255,255,.08);
   background: rgba(10,12,16,.55);
   backdrop-filter: blur(10px);
   display:flex; flex-direction:column;
 }
-.side--collapsed{ width:64px; min-width:0; }
+.side--collapsed{ width: 100%; min-width:0; }
 
-.sideHead{ display:flex; align-items:center; justify-content:space-between; padding:12px 10px; gap:10px; }
+.sideHead{ display:flex; align-items:center; justify-content:space-between; padding: 0 10px; gap:10px; }
 .sideBrand{ display:flex; align-items:center; gap:10px; min-width:0; }
 .sideLogo{ font-size:18px; }
 .sideTitle{ font-weight:900; letter-spacing:.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
 .sideBtn{
-  height:30px; width:30px; border-radius:10px;
+  height:30px; width: 100%; border-radius:10px;
   border:1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.06);
   cursor:pointer;
 }
 
-.sideNav{ padding:8px; display:flex; flex-direction:column; gap:6px; }
+.sideNav{ padding: 0; display:flex; flex-direction:column; gap:6px; }
 
 .sideItem{
   display:flex; align-items:center; gap:10px;
-  padding:10px 10px; border-radius:12px;
+  padding: 0 10px; border-radius:12px;
   border:1px solid rgba(255,255,255,.08);
   background: rgba(255,255,255,.04);
   cursor:pointer; text-align:left;
@@ -34,10 +34,10 @@
 .sideItem:hover{ background: rgba(255,255,255,.07); }
 .sideItem.isActive{ background: rgba(120,200,255,.14); border-color: rgba(120,200,255,.25); }
 
-.sideIcon{ width:22px; display:flex; justify-content:center; }
+.sideIcon{ width: 100%; display:flex; justify-content: flex-start; }
 .sideLabel{ font-weight:800; font-size:13px; }
 
-.sideFoot{ margin-top:auto; padding:10px; opacity:.7; font-size:12px; }
+.sideFoot{ margin-top:auto; padding: 0; opacity:.7; font-size:12px; }
 
 .appMain{ flex:1; min-width:0; display:flex; flex-direction:column; }
 
@@ -49,7 +49,7 @@
 }
 .topbarTitle{ font-weight:900; letter-spacing:.2px; }
 
-.appContent{ flex:1; min-width:0; padding:14px; }
+.appContent{ flex:1; min-width:0; padding: 0; }
 
 .topBtn{
   height:30px;
@@ -67,7 +67,7 @@
 
 /* Ultra glass + neon border tokens */
 .lpWrap{
-  padding: 18px 18px 26px 18px;
+  padding: 0 18px 26px 18px;
   min-height: calc(100vh - 100px);
 }
 .lpTop{
@@ -83,14 +83,14 @@
 }
 .lpTitle:before{
   content:"";
-  width: 10px; height:10px; border-radius:999px;
+  width: 100%; height:10px; border-radius:999px;
   background: rgba(140,210,255,.95);
   box-shadow: 0 0 18px rgba(140,210,255,.55), 0 0 48px rgba(140,210,255,.22);
 }
 .lpControls{ display:flex; gap:8px; align-items:center; }
 
 .lpBtn{
-  padding: 10px 14px;
+  padding: 0 14px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.06);
@@ -112,10 +112,10 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
-@media (max-width: 1400px){
+@media (max-width: 100%){
   .lpGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (max-width: 980px){
+@media (max-width: 100%){
   .lpGrid{ grid-template-columns: 1fr; }
 }
 
@@ -123,7 +123,7 @@
 .lpCard{
   position:relative;
   border-radius: 18px;
-  padding: 12px;
+  padding: 0;
   overflow:hidden;
   min-height: 228px;
 
@@ -205,7 +205,7 @@
 /* Status pill */
 .lpPill{
   display:inline-flex; align-items:center; gap:8px;
-  padding: 8px 11px;
+  padding: 0 11px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(0,0,0,.16);
@@ -215,7 +215,7 @@
   box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
 }
 .lpDot{
-  width: 8px; height: 8px;
+  width: 100%; height: 8px;
   border-radius: 999px;
   position:relative;
 }
@@ -260,7 +260,7 @@
   margin-bottom: 10px;
 }
 .lpStat{
-  padding: 10px 10px;
+  padding: 0 10px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.035);
@@ -280,7 +280,7 @@
 /* Chart container */
 .lpChartRow{
   position:relative;
-  padding: 10px 10px 8px 10px;
+  padding: 0 10px 8px 10px;
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.03);
@@ -330,7 +330,7 @@
   margin-top: 9px;
   font-size: 12px;
   opacity: .95;
-  padding: 8px 10px;
+  padding: 0 10px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.18);
@@ -458,7 +458,7 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
 
 /* ETH-UI-START */
 .ethWrap{
-  padding: 18px 18px 26px 18px;
+  padding: 0 18px 26px 18px;
   background:
     radial-gradient(900px 420px at 12% 8%, rgba(64,220,255,.10), rgba(0,0,0,0) 60%),
     radial-gradient(800px 380px at 82% 18%, rgba(120,255,160,.08), rgba(0,0,0,0) 55%),
@@ -473,13 +473,13 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
 }
 
 .ethGrid{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:14px; }
-@media (max-width: 1400px){ .ethGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
-@media (max-width: 980px){ .ethGrid{ grid-template-columns: 1fr; } }
+@media (max-width: 100%){ .ethGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 100%){ .ethGrid{ grid-template-columns: 1fr; } }
 
 .ethCard{
   position:relative;
   border-radius:18px;
-  padding:12px;
+  padding: 0;
   overflow:hidden;
   min-height: 260px;
 
@@ -520,18 +520,18 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
 
 .ethPill{
   display:inline-flex; align-items:center; gap:8px;
-  padding:8px 11px; border-radius:999px;
+  padding: 0 11px; border-radius:999px;
   border:1px solid rgba(255,255,255,.12);
   background: rgba(0,0,0,.18);
   font-weight:1000; font-size:12px;
 }
-.ethDot{ width:8px; height:8px; border-radius:999px; }
+.ethDot{ width: 100%; height:8px; border-radius:999px; }
 .ethCard.ok .ethDot{ background: rgba(120,255,190,.95); box-shadow: 0 0 18px rgba(120,255,190,.42); }
 .ethCard.down .ethDot{ background: rgba(255,110,130,.95); box-shadow: 0 0 18px rgba(255,110,130,.42); }
 
 .ethMeta{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:10px; margin-bottom:10px; }
 .ethStat{
-  padding:10px; border-radius:14px;
+  padding: 0; border-radius:14px;
   border:1px solid rgba(255,255,255,.085);
   background: rgba(255,255,255,.028);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.07);
@@ -541,7 +541,7 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
 
 .ethCharts{ display:grid; grid-template-columns: 1fr; gap:10px; }
 .ethChartBox{
-  padding:10px 10px 8px 10px;
+  padding: 0 10px 8px 10px;
   border-radius:16px;
   border:1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.03);
@@ -557,7 +557,7 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
 
 .ethErr{
   margin-top:9px; font-size:12px; opacity:.95;
-  padding:8px 10px; border-radius:14px;
+  padding: 0 10px; border-radius:14px;
   border:1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.18);
 }
@@ -587,7 +587,7 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
   overflow-x:auto;
 }
 
-@media (max-width: 980px){
+@media (max-width: 100%){
   .ti-app, .appShell{
     display:block !important;
   }
@@ -607,7 +607,7 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
   .ti-topbar, .topbar{
     height:auto !important;
     min-height:52px !important;
-    padding:10px 12px !important;
+    padding: 0 12px !important;
     gap:10px !important;
     flex-wrap:wrap !important;
   }
@@ -620,19 +620,19 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
   }
 
   .ti-content, .appContent{
-    padding:10px !important;
+    padding: 0 !important;
   }
 }
 
-@media (min-width: 1600px){
+@media (min-width: 100%){
   .ti-content, .appContent{
-    padding:18px 20px !important;
+    padding: 0 20px !important;
   }
 }
 
 /* ===== NOCOMMENT GLOW ===== */
 .nocGlow{
-  font-size: inherit; /* نفس الحجم */
+  font-size: inherit; /* ??? ????? */
   font-weight: inherit;
   letter-spacing: .08em;
 
@@ -705,7 +705,7 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
 /* ===== END HIDE TOPBAR TITLE ===== */
 
 
-@media (max-width: 900px){
+@media (max-width: 100%){
   .appShell{ flex-direction:column; }
   .appSidebar,
   .side,
@@ -720,3 +720,6 @@ background:linear-gradient(90deg,#7ef9ff,#00ffa6);
     min-width:0 !important;
   }
 }
+
+
+

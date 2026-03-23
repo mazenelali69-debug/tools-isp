@@ -1,4 +1,4 @@
-ï»¿import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 function num(v) {
   const n = Number(v);
@@ -506,7 +506,7 @@ const [lastRefreshAt, setLastRefreshAt] = useState(0);
         const sourceRank = r.source === "monitor" ? 1 : r.source === "uplink" ? 2 : r.source === "aviat" ? 3 : 9;
         map.set(r.targetId, {
           value: r.targetId,
-          label: `${r.target} â€¢ ${r.source} â€¢ ${r.type}`,
+          label: `${r.target} • ${r.source} • ${r.type}`,
           target: r.target || "",
           source: r.source || "",
           type: r.type || "",
@@ -948,7 +948,7 @@ const chartRows = useMemo(() => {
                 <div style={{ fontSize: 22, fontWeight: 900, opacity: 0.72 }}>#{idx + 1}</div>
                 <div>
                   <div style={{ fontWeight: 900 }}>{r.target}</div>
-                  <div style={{ opacity: 0.65, marginTop: 4, fontSize: 12 }}>{r.source} â€¢ {r.type}</div>
+                  <div style={{ opacity: 0.65, marginTop: 4, fontSize: 12 }}>{r.source} • {r.type}</div>
                 </div>
                 <div style={{ color: "#63ffa3", fontWeight: 900 }}>Avg {fmtMbps(r.avg)}</div>
                 <div style={{ color: "#78a9ff", fontWeight: 900 }}>Peak {fmtMbps(r.peak)}</div>
@@ -989,7 +989,7 @@ const chartRows = useMemo(() => {
       <div style={{ ...panel, padding: 18, marginTop: 16 }}>
         <div style={labelStyle}>Latest sample</div>
         <div style={{ fontSize: 18, fontWeight: 800 }}>
-          {stats.ts ? `${fmtTime(stats.ts)} â€¢ ${stats.source} â€¢ ${stats.type} â€¢ ${stats.target} â€¢ RX ${fmtMbps(stats.rx)} â€¢ TX ${fmtMbps(stats.tx)}` : "No sample"}
+          {stats.ts ? `${fmtTime(stats.ts)} • ${stats.source} • ${stats.type} • ${stats.target} • RX ${fmtMbps(stats.rx)} • TX ${fmtMbps(stats.tx)}` : "No sample"}
         </div>
       </div>
 
@@ -1097,6 +1097,9 @@ const chartRows = useMemo(() => {
     </div>
   );
 }
+
+
+
 
 
 

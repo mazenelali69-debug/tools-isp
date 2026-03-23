@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -520,7 +520,7 @@ export default function AviatHistoryPage() {
                 TRAFFIC CORE
               </div>
               <div style={{ fontSize: 11, opacity: .58, marginTop: 5 }}>
-                {view === "all" ? "Unified traffic timeline" : `Focused source inspection — ${currentViewLabel}`}
+                {view === "all" ? "Unified traffic timeline" : `Focused source inspection � ${currentViewLabel}`}
               </div>
             </div>
 
@@ -704,3 +704,6 @@ export default function AviatHistoryPage() {
     </div>
   );
 }
+
+
+

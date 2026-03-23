@@ -1,4 +1,4 @@
-﻿
+
 const { exec, execFileSync } = require("child_process");
 
 function checkVlan1559(cb){
@@ -1081,7 +1081,7 @@ app.post("/api/debug/walk-ifdescr", async (req, res) => {
 });
 
 //
-// API: Universal interfaces via SNMP CLI (snmpwalk) — works across vendors
+// API: Universal interfaces via SNMP CLI (snmpwalk) � works across vendors
 // POST /api/interfaces-cli  { ip, community }
 // returns: { ok:true, count, interfaces:[{ifIndex, ifName}] }
 //

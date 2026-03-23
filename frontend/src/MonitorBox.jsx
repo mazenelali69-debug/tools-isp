@@ -1,4 +1,4 @@
-﻿import DragResizeWindow from "./DragResizeWindow.jsx";
+import DragResizeWindow from "./DragResizeWindow.jsx";
 import TrafficGraph from "./TrafficGraph.jsx";
 
 export default function MonitorBox({ monitor, live, points, onClose }) {
@@ -61,4 +61,7 @@ export default function MonitorBox({ monitor, live, points, onClose }) {
 }
 
 /* TOOLS_TIGHT_BW_MB_v1 */
+
+
+
 

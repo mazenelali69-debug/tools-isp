@@ -1,4 +1,4 @@
-﻿const msal = require("@azure/msal-node");
+const msal = require("@azure/msal-node");
 
 function required(name) {
   const v = process.env[name];

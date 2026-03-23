@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 
 function monoStyle(){
   return {
@@ -206,4 +206,7 @@ export default function NeighborsPanel(){
     </div>
   );
 }
+
+
+
 

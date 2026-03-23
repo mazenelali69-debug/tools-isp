@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 
 const nodes = [
 { id:"up1", label:"155.15.59.4", type:"upstream", x:500, y:40 },
@@ -100,3 +100,6 @@ fontSize="12"
 </div>
 );
 }
+
+
+

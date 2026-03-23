@@ -1,4 +1,4 @@
-ï»¿import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const LAT = 34.4367;
 const LON = 35.8497;
@@ -350,7 +350,7 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
       <style>{`
         .wt-wrap {
           width: 100%;
-          max-width: 1540px;
+          max-width: 100%;
           margin: 0 auto;
           display: grid;
           gap: 22px;
@@ -382,13 +382,13 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
           border-radius: 999px;
         }
 
-        @media (max-width: 1220px) {
+        @media (max-width: 100%) {
           .wt-hero, .wt-mid {
             grid-template-columns: 1fr;
           }
         }
 
-        @media (max-width: 760px) {
+        @media (max-width: 100%) {
           .wt-title { font-size: 32px !important; }
           .wt-big-temp { font-size: 56px !important; }
           .wt-stats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
@@ -400,7 +400,7 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
           position: relative;
           overflow: hidden;
           border-radius: 28px;
-          padding: 24px;
+          padding: 0;
           border: 1px solid rgba(120,190,255,.18);
           background:
             radial-gradient(700px 320px at 15% 10%, rgba(87,180,255,.18), transparent 55%),
@@ -439,7 +439,7 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
           line-height: .94;
           font-weight: 1000;
           letter-spacing: -2px;
-          margin: 10px 0 8px;
+          margin: 0 0 8px;
           color: #fff;
         }
 
@@ -459,7 +459,7 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          padding: 8px 12px;
+          padding: 0 12px;
           border-radius: 999px;
           background: rgba(255,70,70,.14);
           border: 1px solid rgba(255,70,70,.24);
@@ -473,7 +473,7 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
 
         .wt-livebox-badge::before {
           content: "";
-          width: 8px;
+          width: 100%;
           height: 8px;
           border-radius: 999px;
           background: #ff5f70;
@@ -489,7 +489,7 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
 
         .wt-livebox-kpi {
           border-radius: 18px;
-          padding: 14px;
+          padding: 0;
           border: 1px solid rgba(255,255,255,.10);
           background: rgba(6,14,28,.32);
         }
@@ -516,7 +516,7 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
 
         .wt-live-side-card {
           border-radius: 22px;
-          padding: 18px;
+          padding: 0;
           border: 1px solid rgba(255,255,255,.10);
           background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
           box-shadow: 0 18px 50px rgba(0,0,0,.22);
@@ -543,15 +543,15 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
           margin-top: 6px;
         }
 
-        @media (max-width: 1220px) {
+        @media (max-width: 100%) {
           .wt-livebox-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
         }
 
-        @media (max-width: 760px) {
+        @media (max-width: 100%) {
           .wt-livebox {
-            padding: 18px;
+            padding: 0;
             border-radius: 22px;
           }
 
@@ -590,7 +590,7 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
             </div>
 
             <div style={{ color: "#9bbce5", marginTop: 10, fontSize: 16 }}>
-              {weatherLabel(current.weather_code)} â€¢ Updated {updatedAt}
+              {weatherLabel(current.weather_code)} • Updated {updatedAt}
             </div>
 
             <div className="wt-stats" style={{
@@ -599,7 +599,7 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
               gap: 12,
               marginTop: 22
             }}>
-              <MetricCard label="Feels Like" value={`${round(current.apparent_temperature)}Â°C`} />
+              <MetricCard label="Feels Like" value={`${round(current.apparent_temperature)}°C`} />
               <MetricCard label="Humidity" value={`${round(current.relative_humidity_2m)}%`} />
               <MetricCard label="Wind" value={`${round(current.wind_speed_10m)} km/h`} />
               <MetricCard label="Pressure" value={`${round(current.pressure_msl)} hPa`} />
@@ -610,7 +610,7 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", gap: 18 }}>
               <div>
                 <div className="wt-big-temp" style={{ fontSize: 80, fontWeight: 900, lineHeight: .92 }}>
-                  {fusedTemp}Â°C
+                  {fusedTemp}°C
                 </div>
                 <div style={{ color: "#9bbce5", marginTop: 10, fontSize: 16 }}>
                   {weatherLabel(current.weather_code)}
@@ -626,7 +626,7 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
               gap: 10,
               marginTop: 18
             }}>
-              <MiniChip label="Direction" value={`${round(current.wind_direction_10m)}Â°`} />
+              <MiniChip label="Direction" value={`${round(current.wind_direction_10m)}°`} />
               <MiniChip label="Gust" value={`${round(current.wind_gusts_10m)} km/h`} />
               <MiniChip label="Cloud" value={`${round(current.cloud_cover)}%`} />
             </div>
@@ -657,7 +657,7 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
                   }}>
                     <div style={{ color: "#9bbce5", fontSize: 12 }}>{fmtHour(h.time)}</div>
                     <div style={{ fontSize: 28, marginTop: 8 }}>{weatherIcon(h.weatherCode)}</div>
-                    <div style={{ fontSize: 28, fontWeight: 900, marginTop: 8 }}>{round(h.tempC)}Â°</div>
+                    <div style={{ fontSize: 28, fontWeight: 900, marginTop: 8 }}>{round(h.tempC)}°</div>
                     <div style={{ color: "#9bbce5", fontSize: 12, marginTop: 8 }}>{weatherLabel(h.weatherCode)}</div>
 
                     <div style={{ marginTop: 10, height: 6, borderRadius: 999, background: "rgba(255,255,255,.06)", overflow: "hidden" }}>
@@ -727,8 +727,8 @@ const fusedTemp = fuseTemperature(current.temperature_2m, metData?.temperature)
                   </div>
 
                   <div style={{ display: "flex", alignItems: "end", gap: 10, marginTop: 14 }}>
-                    <div style={{ fontSize: 34, fontWeight: 900 }}>{round(d.tempMaxC)}Â°</div>
-                    <div style={{ fontSize: 18, color: "#9bbce5" }}>{round(d.tempMinC)}Â°</div>
+                    <div style={{ fontSize: 34, fontWeight: 900 }}>{round(d.tempMaxC)}°</div>
+                    <div style={{ fontSize: 18, color: "#9bbce5" }}>{round(d.tempMinC)}°</div>
                   </div>
 
                   <div style={{ marginTop: 12, height: 7, borderRadius: 999, background: "rgba(255,255,255,.06)", overflow: "hidden" }}>
@@ -867,6 +867,9 @@ const glowC = {
   filter: "blur(70px)",
   pointerEvents: "none"
 };
+
+
+
 
 
 

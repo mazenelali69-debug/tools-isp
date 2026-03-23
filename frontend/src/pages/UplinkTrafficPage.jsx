@@ -157,7 +157,7 @@ function SegmentedGauge({ valueMbps, name, totalText }){
   const mainColor = gaugeColorByRatio(ratio);
 
   return (
-    <div style={{ display:"flex", justifyContent:"center" }}>
+    <div style={{ display:"flex", justifyContent: 'flex-start' }}>
       <div style={{ width: 314, position:"relative" }}>
         <svg viewBox={`0 0 ${width} ${height}`} style={{ width:"100%", height:232, display:"block" }}>
           {Array.from({ length: segments }, (_, i) => {
@@ -222,7 +222,7 @@ function SegmentedGauge({ valueMbps, name, totalText }){
               fontWeight:700,
               color:mainColor,
               lineHeight:1.12,
-              maxWidth:136,
+              maxWidth: '100%',
               marginLeft:"auto",
               marginRight:"auto",
               textAlign:"center",
@@ -399,7 +399,7 @@ export default function UplinkTrafficPage(){
           display:"grid",
           gridTemplateColumns:"repeat(auto-fit, minmax(320px, 1fr))",
           gap:16,
-          maxWidth: 1500
+          maxWidth: '100%'
         }}
       >
         {data.map((it) => {
@@ -416,3 +416,6 @@ export default function UplinkTrafficPage(){
     </div>
   );
 }
+
+
+

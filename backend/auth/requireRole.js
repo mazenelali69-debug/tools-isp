@@ -1,4 +1,4 @@
-﻿function requireRole(...allowedRoles) {
+function requireRole(...allowedRoles) {
   return (req, res, next) => {
     const roles = Array.isArray(req.session?.user?.roles) ? req.session.user.roles : [];
     const ok = allowedRoles.some((r) => roles.includes(r));

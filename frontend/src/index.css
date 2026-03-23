@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -25,7 +25,7 @@ a:hover {
 body {
   margin: 0;
   display: block;
-  min-width: 320px;
+  min-width: 100%;
   min-height: 100vh;
 }
 
@@ -96,7 +96,7 @@ body{
 /* helpers (optional) */
 .tools-container{
   width: min(1200px, calc(100% - 32px));
-  margin: 18px auto;
+  margin: 0 auto;
 }
 .tools-grid{
   display:grid;
@@ -106,7 +106,7 @@ body{
 .col-6{ grid-column: span 6; }
 .col-4{ grid-column: span 4; }
 .col-3{ grid-column: span 3; }
-@media (max-width: 900px){
+@media (max-width: 100%){
   .col-6,.col-4,.col-3{ grid-column: span 12; }
 }
 
@@ -134,7 +134,7 @@ input, select, textarea{
   background: rgba(255,255,255,.05);
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 12px;
-  padding: 10px 12px;
+  padding: 0 12px;
   outline: none;
 }
 input:focus, select:focus, textarea:focus{
@@ -148,7 +148,7 @@ button{
   background: rgba(255,255,255,.08);
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 14px;
-  padding: 10px 14px;
+  padding: 0 14px;
   cursor: pointer;
 }
 button:hover{
@@ -173,7 +173,7 @@ body{
 /* container + typography */
 .tools-container{
   width: min(1400px, calc(100% - 36px));
-  margin: 18px auto 40px auto;
+  margin: 0 auto 40px auto;
 }
 
 .tools-title{
@@ -187,7 +187,7 @@ body{
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 0 12px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.06);
@@ -203,10 +203,10 @@ body{
   align-items: center;
 }
 
-@media (max-width: 980px){
+@media (max-width: 100%){
   .tools-controls{ grid-template-columns: 1fr 1fr; }
 }
-@media (max-width: 560px){
+@media (max-width: 100%){
   .tools-controls{ grid-template-columns: 1fr; }
 }
 
@@ -223,14 +223,14 @@ body{
 .tools-divider{
   height: 1px;
   background: rgba(255,255,255,.10);
-  margin: 14px 0;
+  margin: 0 0;
   border: 0;
 }
 
 /* monitor card */
 .mon-card{
-  padding: 14px;
-  margin: 12px 0;
+  padding: 0;
+  margin: 0 0;
   border-radius: 18px;
   background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
   border: 1px solid rgba(255,255,255,.12);
@@ -259,10 +259,10 @@ body{
   display: flex;
   gap: 18px;
   flex-wrap: wrap;
-  margin: 8px 0 10px 0;
+  margin: 0 0 10px 0;
 }
 .metric{
-  padding: 8px 10px;
+  padding: 0 10px;
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(0,0,0,.18);
@@ -273,7 +273,7 @@ body{
 /* button look */
 button{
   border-radius: 14px !important;
-  padding: 10px 14px !important;
+  padding: 0 14px !important;
   font-weight: 900 !important;
 }
 
@@ -316,7 +316,7 @@ h1,h2,h3{
 /* inputs smaller + modern */
 input, select, textarea{
   font-size: var(--fs);
-  padding: 9px 11px;
+  padding: 0 11px;
   border-radius: 14px;
   border: 1px solid var(--line);
   background: rgba(255,255,255,.05);
@@ -326,7 +326,7 @@ input::placeholder{ color: rgba(255,255,255,.45); }
 /* buttons smaller + consistent */
 button{
   font-size: var(--fs);
-  padding: 9px 12px;
+  padding: 0 12px;
   border-radius: 14px;
   border: 1px solid var(--line);
   background: rgba(255,255,255,.06);
@@ -401,15 +401,15 @@ hr, .tools-divider{
 
 /* Close (icon button like mac-ish) */
 .twClose{
-  width: 28px;
-  min-width: 28px;
+  width: 100%;
+  min-width: 100%;
   padding: 0;
   border-radius: 999px;
   font-size: 14px;
   font-weight: 900;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .twClose:hover{
   background: rgba(255,70,70,.16);
@@ -443,8 +443,8 @@ hr, .tools-divider{
 
 /* close icon button even smaller */
 .twClose{
-  width: 22px !important;
-  min-width: 22px !important;
+  width: 100% !important;
+  min-width: 100% !important;
   height: 22px !important;
   padding: 0 !important;
   font-size: 14px !important;
@@ -463,7 +463,7 @@ hr, .tools-divider{
 
 /* optional: make header bar feel slimmer if you have a header container class */
 .twHeader, .twTopbar{
-  padding: 8px 10px !important;
+  padding: 0 10px !important;
 }
 
 /* improve typography inside the mini window */
@@ -489,7 +489,7 @@ hr, .tools-divider{
   display:inline-flex;
   align-items:baseline;
   gap:6px;
-  padding:6px 10px;
+  padding: 0 10px;
   border-radius:999px;
   border:1px solid rgba(255,255,255,.12);
   background: rgba(0,0,0,.18);
@@ -526,14 +526,14 @@ hr, .tools-divider{
 
 /* ===== TOOLS_BW_TIGHT_v1 ===== */
 .bwRow{
-  display:inline-flex;           /* بدل flex full width */
+  display:inline-flex;           /* ??? flex full width */
   align-items:center;
-  gap:10px;                      /* أصغر */
+  gap:10px;                      /* ???? */
 }
 
 .bwPill{
-  padding:4px 8px;               /* أصغر */
-  font-size:11px;                /* أصغر شوي */
+  padding: 0 8px;               /* ???? */
+  font-size:11px;                /* ???? ??? */
   border-radius:14px;
 }
 
@@ -625,21 +625,21 @@ hr, .tools-divider{
 }
 
 .plSpark polyline{
-  /* احتياط إذا الستايل inline ما طلع */
+  /* ?????? ??? ??????? inline ?? ??? */
   stroke-width: 2;
 }
 
-/* تصغير/ترتيب عام داخل الـ ping box */
+/* ?????/????? ??? ???? ??? ping box */
 .pingOut{
   max-height: 210px;
   overflow: auto;
-  padding: 10px !important;
+  padding: 0 !important;
   border-radius: 14px;
   background: rgba(0,0,0,0.22);
   border: 1px solid rgba(255,255,255,0.08);
 }
 
-/* لمعة cyber خفيفة */
+/* ???? cyber ????? */
 .pingNeonLine{
   height: 2px;
   background: linear-gradient(90deg, rgba(0,0,0,0), rgba(120,220,255,0.55), rgba(0,0,0,0));
@@ -708,7 +708,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 }
 
 /* Scrollbar subtle */
-.uiPro ::-webkit-scrollbar{ width:10px; height:10px; }
+.uiPro ::-webkit-scrollbar{ width: 100%; height:10px; }
 .uiPro ::-webkit-scrollbar-thumb{
   background: rgba(255,255,255,.14);
   border-radius: 999px;
@@ -854,7 +854,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 /* Enterprise buttons */
 .uiPro button{
   font-size:13px;
-  padding:6px 12px;
+  padding: 0 12px;
   border-radius:8px;
   font-weight:600;
   box-shadow:none !important;
@@ -870,7 +870,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 .uiPro .top-actions button,
 .uiPro button[style*="float"]{
   font-size:12px;
-  padding:5px 10px;
+  padding: 0 10px;
 }
 
 /* Packet loss bar clean enterprise look */
@@ -890,12 +890,12 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 
 /* Reduce vertical padding inside Ping */
 .uiPro [class*="Ping"]{
-  padding:16px !important;
+  padding: 0 !important;
 }
 
 /* Monitor box tighter */
 .uiPro [class*="Monitor"]{
-  padding:14px !important;
+  padding: 0 !important;
 }
 
 /* Sidebar enterprise tone */
@@ -947,7 +947,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 }
 
 /* Scrollbar subtle */
-.uiPro ::-webkit-scrollbar{ width:10px; height:10px; }
+.uiPro ::-webkit-scrollbar{ width: 100%; height:10px; }
 .uiPro ::-webkit-scrollbar-thumb{
   background: rgba(255,255,255,.14);
   border-radius: 999px;
@@ -959,7 +959,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 
 /* ===== Panels / Cards (conservative) =====
    NOTE: avoids [class*="box"] because it can hit too much.
-   If you want stronger targeting later, we’ll map your real classes.
+   If you want stronger targeting later, we�ll map your real classes.
 */
 .uiPro [class*="Ping"],
 .uiPro [class*="Monitor"],
@@ -1080,7 +1080,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 }
 
 .uiPro .appContent{
-  padding: 14px;
+  padding: 0;
 }
 
 /* ===== Sidebar ===== */
@@ -1091,7 +1091,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 }
 
 .uiPro .sideHead{
-  padding: 12px 12px 10px;
+  padding: 0 12px 10px;
   border-bottom: 1px solid rgba(255,255,255,.06);
 }
 
@@ -1290,7 +1290,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   background: rgba(0,0,0,.34);
   border: 1px solid rgba(255,255,255,.08);
   border-radius: 14px;
-  padding: 10px 12px;
+  padding: 0 12px;
   color: rgba(255,255,255,.88);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
@@ -1406,7 +1406,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 
 .uiPro .sideHead{
   border-bottom: 1px solid rgba(255,255,255,.06);
-  padding: 12px 12px 10px;
+  padding: 0 12px 10px;
 }
 
 .uiPro .sideTitle{ color: var(--ink); letter-spacing:.2px; }
@@ -1417,7 +1417,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   border: 1px solid rgba(255,255,255,.12);
   border-radius: 12px;
   color: rgba(255,255,255,.84);
-  padding: 9px 10px;
+  padding: 0 10px;
   position: relative;
 }
 
@@ -1442,7 +1442,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   left: -1px;
   top: 10px;
   bottom: 10px;
-  width: 3px;
+  width: 100%;
   border-radius: 999px;
   background: linear-gradient(180deg, rgba(97,218,251,.9), rgba(167,139,250,.7));
 }
@@ -1466,7 +1466,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   border-radius: 12px;
   color: var(--ink);
   font-weight: 900;
-  padding: 7px 12px;
+  padding: 0 12px;
   transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
 }
 
@@ -1495,7 +1495,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 }
 
 /* ===== workspace / windows ===== */
-.uiPro .appContent{ padding: 12px; }
+.uiPro .appContent{ padding: 0; }
 
 .uiPro .wsPanel{
   background: linear-gradient(180deg, rgba(14,22,48,.85), rgba(10,15,31,.85));
@@ -1537,7 +1537,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 }
 
 .uiPro .wsWinBody{
-  padding: 12px 14px !important;
+  padding: 0 14px !important;
 }
 
 .uiPro .wsWinBtn{
@@ -1559,7 +1559,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   border: 1px solid rgba(255,255,255,.12);
   border-radius: 12px;
   color: var(--ink);
-  padding: 8px 10px;
+  padding: 0 10px;
 }
 
 .uiPro input::placeholder, .uiPro textarea::placeholder{ color: var(--mut2); }
@@ -1588,7 +1588,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   background: rgba(0,0,0,.36);
   border: 1px solid rgba(255,255,255,.10);
   border-radius: 14px;
-  padding: 10px 12px;
+  padding: 0 12px;
   color: rgba(255,255,255,.90);
 }
 
@@ -1642,7 +1642,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 .uiPro .wsPingMeta{
   background: transparent !important;
   border: none !important;
-  padding: 6px 0 !important;
+  padding: 0 0 !important;
 }
 
 /* flatten input row */
@@ -1684,7 +1684,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 
 /* tighten spacing */
 .uiPro .wsWinBody{
-  padding: 10px 12px !important;
+  padding: 0 12px !important;
 }
 
 /* remove layered look from monitor cards */
@@ -1708,7 +1708,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
    This block is meant to OVERRIDE everything above (uses !important)
    ===================================== */
 
-/* --- kill the nested “boxes inside boxes” feel --- */
+/* --- kill the nested �boxes inside boxes� feel --- */
 .uiPro .wsWinBody,
 .uiPro .wsPingRoot,
 .uiPro .wsMonRoot{
@@ -1733,7 +1733,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   border-bottom: 1px solid rgba(255,255,255,.08) !important;
   border-top-left-radius: 14px !important;
   border-top-right-radius: 14px !important;
-  padding: 8px 10px !important;
+  padding: 0 10px !important;
 }
 
 .uiPro .wsWinTitle{
@@ -1742,14 +1742,14 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 }
 
 .uiPro .wsWinBody{
-  padding: 10px 12px !important;
+  padding: 0 12px !important;
 }
 
-/* --- tighten everything (the “dakhabet l box”) --- */
+/* --- tighten everything (the �dakhabet l box�) --- */
 .uiPro .wsPingRow,
 .uiPro .wsMonTop,
 .uiPro .wsMonFoot{
-  padding: 6px 0 !important;
+  padding: 0 0 !important;
   margin: 0 !important;
   background: transparent !important;
   border: none !important;
@@ -1762,7 +1762,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   background: rgba(255,255,255,.05) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 10px !important;
-  padding: 7px 10px !important;
+  padding: 0 10px !important;
   color: rgba(255,255,255,.92) !important;
 }
 
@@ -1774,13 +1774,13 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   box-shadow: 0 0 0 3px rgba(97,218,251,.10) !important;
 }
 
-/* --- buttons: smaller, less “toy” --- */
+/* --- buttons: smaller, less �toy� --- */
 .uiPro .wsPingBtn,
 .uiPro .wsMonBtn,
 .uiPro .topBtn,
 .uiPro .sideBtn{
   border-radius: 10px !important;
-  padding: 6px 10px !important;
+  padding: 0 10px !important;
   font-weight: 800 !important;
   transform: none !important;
 }
@@ -1814,7 +1814,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 .uiPro .wsPingMeta{
   background: transparent !important;
   border: none !important;
-  padding: 6px 0 2px !important;
+  padding: 0 0 2px !important;
 }
 
 .uiPro .wsPingMetaLabel{
@@ -1863,14 +1863,14 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   background: rgba(0,0,0,.34) !important;
   border: 1px solid rgba(255,255,255,.12) !important;
   border-radius: 12px !important;
-  padding: 10px 12px !important;
+  padding: 0 12px !important;
   max-height: 240px !important;
   overflow: auto !important;
   font-size: 12px !important;
   line-height: 1.35 !important;
 }
 
-/* --- Monitor cards: remove “layer cake” --- */
+/* --- Monitor cards: remove �layer cake� --- */
 .uiPro .wsMonCards{
   gap: 10px !important;
 }
@@ -1879,14 +1879,14 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   background: rgba(0,0,0,.20) !important;
   border: 1px solid rgba(255,255,255,.12) !important;
   border-radius: 12px !important;
-  padding: 10px 12px !important;
+  padding: 0 12px !important;
 }
 
 .uiPro .wsMonCardTop{
   background: transparent !important;
   border-bottom: 1px solid rgba(255,255,255,.08) !important;
   margin: -10px -12px 10px !important;
-  padding: 8px 12px !important;
+  padding: 0 12px !important;
   border-top-left-radius: 12px !important;
   border-top-right-radius: 12px !important;
 }
@@ -1912,7 +1912,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 
 /* 1) window body padding too big */
 .uiPro .wsWinBody{
-  padding: 8px 10px !important;
+  padding: 0 10px !important;
 }
 
 /* 2) Make Ping layout compact */
@@ -1952,11 +1952,11 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 /* input smaller + not huge */
 .uiPro .wsPingInput{
   height: 32px !important;
-  padding: 6px 10px !important;
+  padding: 0 10px !important;
   border-radius: 10px !important;
   background: rgba(255,255,255,.05) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
-  max-width: 280px !important;
+  max-width: 100% !important;
 }
 
 /* buttons smaller + tight */
@@ -2027,7 +2027,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 /* 4) Output: less padding + fixed usable height */
 .uiPro .wsPingOut{
   margin: 0 !important;
-  padding: 8px 10px !important;
+  padding: 0 10px !important;
   border-radius: 12px !important;
   max-height: 170px !important;
   overflow: auto !important;
@@ -2037,7 +2037,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   border: 1px solid rgba(255,255,255,.12) !important;
 }
 
-/* 5) Kill any accidental inner “cards” inside Ping window */
+/* 5) Kill any accidental inner �cards� inside Ping window */
 .uiPro .wsPingRoot > div{
   box-shadow: none !important;
   backdrop-filter: none !important;
@@ -2069,7 +2069,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   display: none !important;
 }
 
-/* prevent “round cap bubble” at the start of the fill */
+/* prevent �round cap bubble� at the start of the fill */
 .uiPro .wsPingFill,
 .uiPro .plFill{
   min-width: 0 !important;
@@ -2140,13 +2140,13 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   max-height: 65vh;
   overflow: auto !important;
 }
-.neiTableWrap::-webkit-scrollbar{ width: 10px; height: 10px; }
+.neiTableWrap::-webkit-scrollbar{ width: 100%; height: 10px; }
 /* NEI-SCROLL-FORCE-END */
 
 /* NEI-BADGES-START */
 .badge {
   font-size: 10px;
-  padding: 2px 6px;
+  padding: 0 6px;
   border-radius: 999px;
   margin-left: 8px;
   font-weight: 700;
@@ -2208,7 +2208,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 
 
 /* =========================================================
-   TOOLS-ISP V2 — NOC PREMIUM FOUNDATION
+   TOOLS-ISP V2 � NOC PREMIUM FOUNDATION
    ========================================================= */
 
 :root{
@@ -2267,7 +2267,7 @@ body{
   justify-content:space-between;
   align-items:center;
   gap:16px;
-  padding:20px 24px;
+  padding: 0 24px;
   border-bottom:1px solid rgba(255,255,255,0.06);
   background:rgba(7,14,22,0.82);
   backdrop-filter:blur(14px);
@@ -2296,7 +2296,7 @@ body{
 }
 
 .ti-content{
-  padding:24px;
+  padding: 0;
 }
 
 /* =========================================================
@@ -2335,10 +2335,10 @@ body{
    ========================================================= */
 
 .ti-side{
-  width:280px;
+  width: 100%;
   flex:0 0 280px;
   min-height:100vh;
-  padding:18px 14px;
+  padding: 0 14px;
   border-right:1px solid rgba(255,255,255,0.06);
   background:
     linear-gradient(180deg, rgba(15,27,42,0.98), rgba(9,17,28,0.98));
@@ -2348,7 +2348,7 @@ body{
 }
 
 .ti-side.is-collapsed{
-  width:84px;
+  width: 100%;
   flex-basis:84px;
 }
 
@@ -2368,7 +2368,7 @@ body{
 }
 
 .ti-brand__mark{
-  width:40px;
+  width: 100%;
   height:40px;
   border-radius:12px;
   display:grid;
@@ -2394,7 +2394,7 @@ body{
 }
 
 .ti-side__toggle{
-  width:34px;
+  width: 100%;
   height:34px;
   border-radius:10px;
   border:1px solid rgba(255,255,255,0.10);
@@ -2408,7 +2408,7 @@ body{
   text-transform:uppercase;
   letter-spacing:0.16em;
   color:var(--ti-muted);
-  margin:10px 8px 10px;
+  margin: 0 8px 10px;
 }
 
 .ti-side__nav{
@@ -2444,7 +2444,7 @@ body{
 }
 
 .ti-side__icon{
-  width:22px;
+  width: 100%;
   text-align:center;
   font-size:16px;
   flex:0 0 22px;
@@ -2457,7 +2457,7 @@ body{
 
 .ti-side__foot{
   margin-top:auto;
-  padding:14px 10px 6px;
+  padding: 0 10px 6px;
   color:var(--ti-muted);
 }
 
@@ -2486,7 +2486,7 @@ body{
   justify-content:space-between;
   align-items:flex-start;
   gap:18px;
-  padding:22px 24px;
+  padding: 0 24px;
   border-radius:24px;
   border:1px solid rgba(255,255,255,0.08);
   background:
@@ -2511,15 +2511,15 @@ body{
 }
 
 .ti-hero__sub{
-  max-width:720px;
+  max-width: 100%;
   color:var(--ti-muted);
   line-height:1.65;
 }
 
 .ti-hero__status{
-  min-width:220px;
+  min-width: 100%;
   border-radius:18px;
-  padding:16px 18px;
+  padding: 0 18px;
   border:1px solid rgba(255,255,255,0.08);
   background:rgba(255,255,255,0.03);
 }
@@ -2568,11 +2568,11 @@ body{
 }
 
 .ti-panel{
-  padding:18px;
+  padding: 0;
 }
 
 .ti-metric{
-  padding:18px;
+  padding: 0;
   min-height:132px;
   display:flex;
   flex-direction:column;
@@ -2622,7 +2622,7 @@ body{
 
 .ti-healthBox{
   border-radius:18px;
-  padding:16px;
+  padding: 0;
   border:1px solid rgba(255,255,255,0.08);
   background:rgba(255,255,255,0.03);
 }
@@ -2723,7 +2723,7 @@ body{
   display:flex;
   justify-content:space-between;
   gap:12px;
-  padding:12px 0;
+  padding: 0 0;
   border-bottom:1px solid rgba(255,255,255,0.06);
 }
 
@@ -2737,12 +2737,12 @@ body{
 
 .ti-emptyState{
   color:var(--ti-muted);
-  padding:18px 0;
+  padding: 0 0;
 }
 
 .ti-errorBox{
   border-radius:16px;
-  padding:14px 16px;
+  padding: 0 16px;
   color:#fecaca;
   border:1px solid rgba(239,68,68,0.25);
   background:rgba(127,29,29,0.22);
@@ -2752,7 +2752,7 @@ body{
    RESPONSIVE
    ========================================================= */
 
-@media (max-width: 1280px){
+@media (max-width: 100%){
   .ti-grid--metrics{
     grid-template-columns:repeat(2, minmax(0,1fr));
   }
@@ -2763,9 +2763,9 @@ body{
   }
 }
 
-@media (max-width: 900px){
+@media (max-width: 100%){
   .ti-side{
-    width:88px;
+    width: 100%;
     flex-basis:88px;
   }
 
@@ -2796,11 +2796,11 @@ body{
 /* ========================================================= */
 
 /* =========================================================
-   TOOLS-ISP V2 — CLEAN RIGHT-SIDE DASHBOARD REBUILD
+   TOOLS-ISP V2 � CLEAN RIGHT-SIDE DASHBOARD REBUILD
    ========================================================= */
 
 .ti-topbar--tight{
-  padding:14px 20px;
+  padding: 0 20px;
 }
 
 .ti-topbar__left{
@@ -2808,7 +2808,7 @@ body{
 }
 
 .ti-content--tight{
-  padding:18px 20px 20px;
+  padding: 0 20px 20px;
 }
 
 .ti-topbar__title{
@@ -2837,7 +2837,7 @@ body{
     radial-gradient(circle at top right, rgba(59,130,246,0.15), transparent 28%),
     linear-gradient(180deg, rgba(16,28,44,0.96), rgba(10,18,29,0.96));
   box-shadow:0 18px 44px rgba(0,0,0,0.24);
-  padding:16px 18px;
+  padding: 0 18px;
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
@@ -2863,13 +2863,13 @@ body{
   font-size:12px;
   color:var(--ti-muted);
   line-height:1.55;
-  max-width:760px;
+  max-width: 100%;
 }
 
 .ti-hero2__status{
-  min-width:170px;
+  min-width: 100%;
   border-radius:14px;
-  padding:12px 14px;
+  padding: 0 14px;
   background:rgba(255,255,255,0.03);
   border:1px solid rgba(255,255,255,0.08);
 }
@@ -2900,7 +2900,7 @@ body{
 
 .ti-metric2{
   min-height:92px;
-  padding:14px 16px;
+  padding: 0 16px;
   border-radius:16px;
   border:1px solid rgba(255,255,255,0.08);
   background:linear-gradient(180deg, rgba(14,24,38,0.96), rgba(10,18,29,0.96));
@@ -2942,7 +2942,7 @@ body{
 }
 
 .ti-panel2{
-  padding:14px;
+  padding: 0;
   border-radius:18px;
   border:1px solid rgba(255,255,255,0.08);
   background:linear-gradient(180deg, rgba(14,24,38,0.96), rgba(10,18,29,0.96));
@@ -2970,7 +2970,7 @@ body{
 .ti-health2__item{
   min-height:72px;
   border-radius:14px;
-  padding:12px;
+  padding: 0;
   border:1px solid rgba(255,255,255,0.08);
   background:rgba(255,255,255,0.02);
   display:flex;
@@ -3083,7 +3083,7 @@ body{
   display:flex;
   justify-content:space-between;
   gap:10px;
-  padding:10px 0;
+  padding: 0 0;
   border-bottom:1px solid rgba(255,255,255,0.06);
   font-size:12px;
 }
@@ -3096,7 +3096,7 @@ body{
   color:var(--ti-muted);
 }
 
-@media (max-width: 1280px){
+@media (max-width: 100%){
   .ti-dash2__metrics{
     grid-template-columns:repeat(2, minmax(0,1fr));
   }
@@ -3107,7 +3107,7 @@ body{
   }
 }
 
-@media (max-width: 860px){
+@media (max-width: 100%){
   .ti-hero2{
     flex-direction:column;
   }
@@ -3123,11 +3123,11 @@ body{
 /* ========================================================= */
 
 /* =========================================================
-   TOOLS-ISP V2 — VISUAL POLISH BEFORE ALERTS
+   TOOLS-ISP V2 � VISUAL POLISH BEFORE ALERTS
    ========================================================= */
 
 .ti-rankRow{
-  padding:4px 0;
+  padding: 0 0;
 }
 
 .ti-rankRow__left{
@@ -3146,14 +3146,14 @@ body{
 }
 
 .ti-rankIndex{
-  min-width:22px;
+  min-width: 100%;
   font-size:11px;
   color:var(--ti-muted);
   font-weight:800;
 }
 
 .ti-rankDot{
-  width:8px;
+  width: 100%;
   height:8px;
   border-radius:999px;
   flex:0 0 8px;
@@ -3281,7 +3281,7 @@ body{
    ========================================= */
 
 .ti-content--tight{
-  padding:8px 12px 10px;
+  padding: 0 12px 10px;
 }
 
 .ti-dash2{
@@ -3291,7 +3291,7 @@ body{
 /* HERO */
 
 .ti-hero2{
-  padding:8px 10px;
+  padding: 0 10px;
 }
 
 .ti-hero2__title{
@@ -3314,7 +3314,7 @@ body{
 
 .ti-metric2{
   min-height:55px;
-  padding:6px 8px;
+  padding: 0 8px;
 }
 
 .ti-metric2__title{
@@ -3332,7 +3332,7 @@ body{
 /* PANELS */
 
 .ti-panel2{
-  padding:8px;
+  padding: 0;
 }
 
 /* HEALTH */
@@ -3343,7 +3343,7 @@ body{
 
 .ti-health2__item{
   min-height:40px;
-  padding:6px;
+  padding: 0;
 }
 
 .ti-health2__item strong{
@@ -3357,7 +3357,7 @@ body{
 /* RANK LIST */
 
 .ti-rankRow{
-  padding:1px 0;
+  padding: 0 0;
 }
 
 .ti-rankRow__name{
@@ -3385,7 +3385,7 @@ body{
 }
 
 .ti-kv2__row{
-  padding:4px 0;
+  padding: 0 0;
   font-size:10px;
 }
 
@@ -3426,13 +3426,13 @@ body{
   gap:16px;
 }
 
-@media (max-width: 1400px){
+@media (max-width: 100%){
   .ms3-grid{ grid-template-columns:repeat(3, minmax(0,1fr)); }
 }
-@media (max-width: 1080px){
+@media (max-width: 100%){
   .ms3-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
 }
-@media (max-width: 720px){
+@media (max-width: 100%){
   .ms3-grid{ grid-template-columns:1fr; }
 }
 
@@ -3440,7 +3440,7 @@ body{
   position:relative;
   overflow:hidden;
   min-height:332px;
-  padding:12px 12px 14px;
+  padding: 0 12px 14px;
   border-radius:24px;
   border:1px solid rgba(255,255,255,.07);
   background:
@@ -3553,7 +3553,7 @@ body{
   position:absolute;
   right:0;
   top:6px;
-  width:6px;
+  width: 100%;
   height:6px;
   border-radius:999px;
   background:#ff6f96;
@@ -3642,7 +3642,7 @@ body{
   50%{ filter:drop-shadow(0 0 10px rgba(255,90,110,.24)); }
 }
 
-/* تعطيل ستايل monitor street القديم */
+/* ????? ????? monitor street ?????? */
 .ms-page, .ms-grid, .ms-card, .ms-hero,
 .ms2-page, .ms2-grid, .ms2-card, .ms2-gaugeWrap, .ms2-meta{
   all: unset;
@@ -3669,7 +3669,7 @@ body{
   justify-content:space-between;
   align-items:flex-start;
   gap:20px;
-  padding:16px;
+  padding: 0;
   border-radius:18px;
   border:1px solid rgba(255,255,255,.08);
   background:rgba(255,255,255,.04);
@@ -3687,7 +3687,7 @@ body{
 }
 
 .ti-hero2__status{
-  padding:10px 14px;
+  padding: 0 14px;
   border-radius:14px;
   background:rgba(0,0,0,.35);
   border:1px solid rgba(255,255,255,.08);
@@ -3700,7 +3700,7 @@ body{
 }
 
 .ti-metric2{
-  padding:14px;
+  padding: 0;
   border-radius:16px;
   background:rgba(255,255,255,.05);
   border:1px solid rgba(255,255,255,.08);
@@ -3723,7 +3723,7 @@ body{
 }
 
 .ti-panel2{
-  padding:16px;
+  padding: 0;
   border-radius:18px;
   border:1px solid rgba(255,255,255,.08);
   background:rgba(255,255,255,.04);
@@ -3747,7 +3747,7 @@ body{
 }
 
 .ti-health2__item{
-  padding:10px;
+  padding: 0;
   border-radius:12px;
   text-align:center;
   background:rgba(255,255,255,.05);
@@ -3769,7 +3769,7 @@ body{
 }
 
 .ti-rankRow{
-  padding:10px;
+  padding: 0;
   border-radius:12px;
   background:rgba(255,255,255,.05);
 }
@@ -3801,7 +3801,7 @@ body{
   justify-content:space-between !important;
   align-items:flex-start !important;
   gap:18px !important;
-  padding:18px 20px !important;
+  padding: 0 20px !important;
   border-radius:20px !important;
   border:1px solid rgba(255,255,255,.08) !important;
   background:
@@ -3830,13 +3830,13 @@ body{
   font-size:13px !important;
   line-height:1.55 !important;
   color:rgba(255,255,255,.64) !important;
-  max-width:760px !important;
+  max-width: 100% !important;
 }
 
 .dashx-hero__status{
-  min-width:180px !important;
+  min-width: 100% !important;
   border-radius:16px !important;
-  padding:14px 16px !important;
+  padding: 0 16px !important;
   background:rgba(255,255,255,.03) !important;
   border:1px solid rgba(255,255,255,.08) !important;
 }
@@ -3867,7 +3867,7 @@ body{
 
 .dashx-metric{
   min-height:102px !important;
-  padding:16px !important;
+  padding: 0 !important;
   border-radius:18px !important;
   border:1px solid rgba(255,255,255,.08) !important;
   background:linear-gradient(180deg, rgba(14,24,38,.96), rgba(10,18,29,.96)) !important;
@@ -3909,7 +3909,7 @@ body{
 }
 
 .dashx-panel{
-  padding:16px !important;
+  padding: 0 !important;
   border-radius:20px !important;
   border:1px solid rgba(255,255,255,.08) !important;
   background:linear-gradient(180deg, rgba(14,24,38,.96), rgba(10,18,29,.96)) !important;
@@ -3937,7 +3937,7 @@ body{
 .dashx-health__item{
   min-height:78px !important;
   border-radius:14px !important;
-  padding:12px !important;
+  padding: 0 !important;
   border:1px solid rgba(255,255,255,.07) !important;
   background:rgba(255,255,255,.03) !important;
   display:flex !important;
@@ -3968,7 +3968,7 @@ body{
 }
 
 .dashx-rankRow{
-  padding:4px 0 !important;
+  padding: 0 0 !important;
 }
 
 .dashx-rankRow__top{
@@ -3995,14 +3995,14 @@ body{
 }
 
 .dashx-rankIndex{
-  min-width:22px !important;
+  min-width: 100% !important;
   font-size:11px !important;
   color:rgba(255,255,255,.50) !important;
   font-weight:800 !important;
 }
 
 .dashx-rankDot{
-  width:8px !important;
+  width: 100% !important;
   height:8px !important;
   border-radius:999px !important;
   flex:0 0 8px !important;
@@ -4111,7 +4111,7 @@ body{
   display:flex !important;
   justify-content:space-between !important;
   gap:10px !important;
-  padding:10px 0 !important;
+  padding: 0 0 !important;
   border-bottom:1px solid rgba(255,255,255,.06) !important;
   font-size:12px !important;
 }
@@ -4126,18 +4126,18 @@ body{
 
 .dashx-emptyState{
   color:rgba(255,255,255,.56) !important;
-  padding:18px 0 !important;
+  padding: 0 0 !important;
 }
 
 .dashx-errorBox{
   border-radius:16px !important;
-  padding:14px 16px !important;
+  padding: 0 16px !important;
   color:#fecaca !important;
   border:1px solid rgba(239,68,68,.25) !important;
   background:rgba(127,29,29,.22) !important;
 }
 
-@media (max-width: 1280px){
+@media (max-width: 100%){
   .dashx-metrics{
     grid-template-columns:repeat(2, minmax(0,1fr)) !important;
   }
@@ -4147,7 +4147,7 @@ body{
   }
 }
 
-@media (max-width: 860px){
+@media (max-width: 100%){
   .dashx-hero{
     flex-direction:column !important;
   }
@@ -4178,7 +4178,7 @@ body{
   align-items:flex-start;
   justify-content:space-between;
   gap:16px;
-  padding:16px 18px;
+  padding: 0 18px;
   border:1px solid rgba(255,255,255,.08);
   border-radius:22px;
   background:
@@ -4206,7 +4206,7 @@ body{
   font-size:13px;
   color:var(--ti-muted);
   line-height:1.55;
-  max-width:760px;
+  max-width: 100%;
 }
 
 .nmap-hero__stats{
@@ -4217,8 +4217,8 @@ body{
 }
 
 .nmap-stat{
-  min-width:150px;
-  padding:12px 14px;
+  min-width: 100%;
+  padding: 0 14px;
   border-radius:16px;
   border:1px solid rgba(255,255,255,.08);
   background:rgba(255,255,255,.03);
@@ -4302,7 +4302,7 @@ body{
 }
 
 .nmap-node__dot{
-  width:18px;
+  width: 100%;
   height:18px;
   border-radius:999px;
   border:2px solid rgba(255,255,255,.16);
@@ -4326,8 +4326,8 @@ body{
 }
 
 .nmap-node__card{
-  min-width:160px;
-  padding:12px 14px;
+  min-width: 100%;
+  padding: 0 14px;
   border-radius:18px;
   border:1px solid rgba(255,255,255,.08);
   background:linear-gradient(180deg, rgba(14,25,40,.96), rgba(9,17,29,.96));
@@ -4377,7 +4377,7 @@ body{
   }
 }
 
-@media (max-width: 980px){
+@media (max-width: 100%){
   .nmap-hero{
     flex-direction:column;
   }
@@ -4401,7 +4401,7 @@ body{
    ===================================== */
 
 .dashx-rankRow{
-  padding: 6px 0;
+  padding: 0 0;
 }
 
 .dashx-rankRow__top{
@@ -4436,11 +4436,11 @@ body{
   font-size:11px;
   color:rgba(255,255,255,.58);
   font-weight:900;
-  min-width:24px;
+  min-width: 100%;
 }
 
 .dashx-rankDot{
-  width:8px;
+  width: 100%;
   height:8px;
   border-radius:999px;
   flex:0 0 8px;
@@ -4568,7 +4568,7 @@ body{
 }
 
 .dashx-rankDot{
-  width:7px;
+  width: 100%;
   height:7px;
   border-radius:999px;
   box-shadow:none;
@@ -4580,7 +4580,7 @@ body{
 .dashx-rankDot.is-critical{ background:#ff6a4d; color:#ff6a4d; }
 
 .dashx-rankIndex{
-  min-width:18px;
+  min-width: 100%;
   font-size:10px;
   font-weight:900;
   color:rgba(255,255,255,.46);
@@ -4636,7 +4636,7 @@ body{
   background:linear-gradient(180deg, #d9d34b, #b8b338);
 }
 
-/* شيل شكل البادج القديم إذا بقي بأي ستايل */
+/* ??? ??? ?????? ?????? ??? ??? ??? ????? */
 .dashx-rankList--heat .dashx-miniBadge{
   display:none !important;
 }
@@ -4651,7 +4651,7 @@ body{
    ===================================== */
 
 .dashx-panel--busy{
-  padding:12px 14px !important;
+  padding: 0 14px !important;
 }
 
 .dashx-panel--busy .dashx-blockTitle{
@@ -4689,7 +4689,7 @@ body{
 }
 
 .dashx-rankDot{
-  width:7px;
+  width: 100%;
   height:7px;
   border-radius:999px;
   flex:0 0 7px;
@@ -4702,7 +4702,7 @@ body{
 .dashx-rankDot.is-critical{ color:#ff6262; background:#ff6262; }
 
 .dashx-rankIndex{
-  min-width:24px;
+  min-width: 100%;
   font-size:10px;
   font-weight:900;
   color:rgba(255,255,255,.45);
@@ -4715,7 +4715,7 @@ body{
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-  max-width:220px;
+  max-width: 100%;
 }
 
 .dashx-rankRow__value{
@@ -4769,9 +4769,9 @@ body{
   box-shadow:0 0 5px rgba(255,255,255,.03);
 }
 
-@media (max-width: 1400px){
+@media (max-width: 100%){
   .dashx-rankRow__name{
-    max-width:160px;
+    max-width: 100%;
   }
 }
 
@@ -4784,21 +4784,21 @@ body{
    TOP-BUSY-SIZE-TUNE-START
    ===================================== */
 
-/* خلي صف الهيلث / التوب بزي أعرض باتجاه التوب بزي */
+/* ??? ?? ?????? / ????? ??? ???? ?????? ????? ??? */
 .dashx-row{
   grid-template-columns: 0.88fr 1.12fr !important;
   gap: 12px !important;
   align-items: start !important;
 }
 
-/* صندوق top busy نفسه أصغر وأعرض */
+/* ????? top busy ???? ???? ????? */
 .dashx-panel--busy{
-  padding: 10px 12px !important;
+  padding: 0 12px !important;
   min-height: auto !important;
   border-radius: 18px !important;
 }
 
-/* عنوانه ومسافاته أضيق */
+/* ?????? ???????? ???? */
 .dashx-panel--busy .dashx-blockTitle{
   font-size: 15px !important;
   margin-bottom: 1px !important;
@@ -4812,18 +4812,18 @@ body{
   opacity: .78 !important;
 }
 
-/* اللستة كلها tighter */
+/* ?????? ???? tighter */
 .dashx-rankList--true{
   gap: 6px !important;
 }
 
-/* كل row يصير أقصر */
+/* ?? row ???? ???? */
 .dashx-rankRow--true{
   padding: 0 !important;
   margin: 0 !important;
 }
 
-/* هيدر السطر أضيق */
+/* ???? ????? ???? */
 .dashx-rankRow__head{
   margin-bottom: 4px !important;
   gap: 8px !important;
@@ -4834,15 +4834,15 @@ body{
   gap: 6px !important;
 }
 
-/* النصوص أصغر شوي */
+/* ?????? ???? ??? */
 .dashx-rankIndex{
-  min-width: 18px !important;
+  min-width: 100% !important;
   font-size: 9px !important;
 }
 
 .dashx-rankRow__name{
   font-size: 10px !important;
-  max-width: 170px !important;
+  max-width: 100% !important;
   line-height: 1 !important;
 }
 
@@ -4851,20 +4851,20 @@ body{
   line-height: 1 !important;
 }
 
-/* النقطة أصغر */
+/* ?????? ???? */
 .dashx-rankDot{
-  width: 6px !important;
+  width: 100% !important;
   height: 6px !important;
   flex: 0 0 6px !important;
 }
 
-/* البار نفسه أخف وأقصر */
+/* ????? ???? ??? ????? */
 .dashx-rankRow__barWrap--true{
   margin-top: 0 !important;
 }
 
-/* عدد البلوكات موجود بالـ jsx
-   هون منصغّر شكلهم ليصير الbox أخف */
+/* ??? ???????? ????? ???? jsx
+   ??? ?????? ????? ????? ??box ??? */
 .dashx-heat--true{
   gap: 2px !important;
 }
@@ -4875,19 +4875,19 @@ body{
   min-width: 0 !important;
 }
 
-/* البانل اليسار كمان خليها أخف شوي حتى يبين الفرق */
+/* ?????? ?????? ???? ????? ??? ??? ??? ???? ????? */
 .dashx-row > .dashx-panel:first-child{
-  padding: 12px 14px !important;
+  padding: 0 14px !important;
 }
 
 /* responsive fallback */
-@media (max-width: 1400px){
+@media (max-width: 100%){
   .dashx-row{
     grid-template-columns: 1fr !important;
   }
 
   .dashx-rankRow__name{
-    max-width: 150px !important;
+    max-width: 100% !important;
   }
 }
 
@@ -4900,7 +4900,7 @@ body{
    TOP-BUSY-LINE-WIDTH-START
    ===================================== */
 
-/* خلي الهيدر فوق السطر مضغوط */
+/* ??? ?????? ??? ????? ????? */
 .dashx-rankRow__head{
   display:grid !important;
   grid-template-columns: 22px minmax(110px, 150px) minmax(72px, 92px) !important;
@@ -4909,12 +4909,12 @@ body{
   margin-bottom:4px !important;
 }
 
-/* left side ما عاد ياخد مساحة كبيرة */
+/* left side ?? ??? ???? ????? ????? */
 .dashx-rankRow__left{
   display:contents !important;
 }
 
-/* right side كمان ثابت وصغير */
+/* right side ???? ???? ????? */
 .dashx-rankRow__right{
   display:contents !important;
 }
@@ -4942,7 +4942,7 @@ body{
   white-space:nowrap !important;
 }
 
-/* خلي البار ياخد العرض الكامل تحت */
+/* ??? ????? ???? ????? ?????? ??? */
 .dashx-rankRow__barWrap,
 .dashx-rankRow__barWrap--true{
   width:100% !important;
@@ -4962,7 +4962,7 @@ body{
   border-radius:2px !important;
 }
 
-/* خفف حجم البادجات إذا موجودة */
+/* ??? ??? ???????? ??? ?????? */
 .dashx-miniBadge{
   height:18px !important;
   padding:0 6px !important;
@@ -4970,8 +4970,8 @@ body{
   justify-self:end !important;
 }
 
-/* إذا الاسم طويل كتير */
-@media (max-width: 1500px){
+/* ??? ????? ???? ???? */
+@media (max-width: 100%){
   .dashx-rankRow__head{
     grid-template-columns: 20px minmax(90px, 130px) minmax(68px, 86px) !important;
   }
@@ -4991,7 +4991,7 @@ body{
 }
 
 .dashx-rankRow{
-  padding: 4px 0 !important;
+  padding: 0 0 !important;
 }
 
 .dashx-rankRow__top,
@@ -5085,7 +5085,7 @@ body{
   box-shadow: 0 0 8px rgba(240,106,87,.12) !important;
 }
 
-@media (max-width: 1450px){
+@media (max-width: 100%){
   .dashx-rankRow__top,
   .dashx-rankRow__head{
     grid-template-columns: 20px minmax(95px, 145px) 1fr minmax(66px, 86px) !important;
@@ -5099,7 +5099,7 @@ body{
 
 /* FULL-WIDTH-TOPBUSY-START */
 
-/* الوسط كله */
+/* ????? ??? */
 .dashx-midFull{
   display: grid !important;
   grid-template-columns: 0.28fr 0.72fr !important;
@@ -5112,17 +5112,17 @@ body{
   height: 100% !important;
 }
 
-/* health يسار */
+/* health ???? */
 .dashx-midFull__health{
   min-height: 300px !important;
-  padding: 12px !important;
+  padding: 0 !important;
   border-radius: 18px !important;
 }
 
-/* top busy يمين */
+/* top busy ???? */
 .dashx-midFull__topbusy{
   min-height: 300px !important;
-  padding: 10px 12px !important;
+  padding: 0 12px !important;
   border-radius: 18px !important;
   display: flex !important;
   flex-direction: column !important;
@@ -5141,7 +5141,7 @@ body{
   opacity: .82 !important;
 }
 
-/* القائمة */
+/* ??????? */
 .fwb-list{
   display: flex !important;
   flex-direction: column !important;
@@ -5150,7 +5150,7 @@ body{
   flex: 1 1 auto !important;
 }
 
-/* السطر */
+/* ????? */
 .fwb-row{
   display: flex !important;
   flex-direction: column !important;
@@ -5161,7 +5161,7 @@ body{
   margin: 0 !important;
 }
 
-/* الرأس */
+/* ????? */
 .fwb-row__head{
   display: flex !important;
   align-items: center !important;
@@ -5182,13 +5182,13 @@ body{
   display: flex !important;
   align-items: center !important;
   justify-content: flex-end !important;
-  min-width: 98px !important;
+  min-width: 100% !important;
   flex: 0 0 auto !important;
 }
 
 /* dot */
 .fwb-dot{
-  width: 6px !important;
+  width: 100% !important;
   height: 6px !important;
   border-radius: 999px !important;
   flex: 0 0 6px !important;
@@ -5202,7 +5202,7 @@ body{
 
 /* rank */
 .fwb-rank{
-  min-width: 20px !important;
+  min-width: 100% !important;
   font-size: 9px !important;
   line-height: 1 !important;
   font-weight: 900 !important;
@@ -5270,7 +5270,7 @@ body{
 }
 
 /* responsive */
-@media (max-width: 1280px){
+@media (max-width: 100%){
   .dashx-midFull{
     grid-template-columns: 1fr !important;
   }
@@ -5295,13 +5295,13 @@ body{
   gap:14px;
 }
 
-@media (max-width: 1400px){
+@media (max-width: 100%){
   .dpg-grid{ grid-template-columns:repeat(3, minmax(0,1fr)); }
 }
-@media (max-width: 1080px){
+@media (max-width: 100%){
   .dpg-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
 }
-@media (max-width: 720px){
+@media (max-width: 100%){
   .dpg-grid{ grid-template-columns:1fr; }
 }
 
@@ -5309,7 +5309,7 @@ body{
   position:relative;
   overflow:hidden;
   min-height:332px;
-  padding:12px 12px 14px;
+  padding: 0 12px 14px;
   border-radius:24px;
   border:1px solid rgba(255,255,255,.07);
   background:
@@ -5422,7 +5422,7 @@ body{
   position:absolute;
   right:0;
   top:6px;
-  width:6px;
+  width: 100%;
   height:6px;
   border-radius:999px;
   background:#ff6f96;
@@ -5517,7 +5517,7 @@ body{
 
 /* DPG-TRUE-STYLE-START */
 
-/* نفس روح ستايل gauge القديم اللي اشتغلناه */
+/* ??? ??? ????? gauge ?????? ???? ???????? */
 .dpg-section{
   margin-top: 10px !important;
 }
@@ -5532,13 +5532,13 @@ body{
   gap:16px !important;
 }
 
-@media (max-width: 1400px){
+@media (max-width: 100%){
   .dpg-grid{ grid-template-columns:repeat(3, minmax(0,1fr)) !important; }
 }
-@media (max-width: 1080px){
+@media (max-width: 100%){
   .dpg-grid{ grid-template-columns:repeat(2, minmax(0,1fr)) !important; }
 }
-@media (max-width: 720px){
+@media (max-width: 100%){
   .dpg-grid{ grid-template-columns:1fr !important; }
 }
 
@@ -5546,7 +5546,7 @@ body{
   position:relative !important;
   overflow:hidden !important;
   min-height:332px !important;
-  padding:12px 12px 14px !important;
+  padding: 0 12px 14px !important;
   border-radius:24px !important;
   border:1px solid rgba(255,255,255,.07) !important;
   background:
@@ -5659,7 +5659,7 @@ body{
   position:absolute !important;
   right:0 !important;
   top:6px !important;
-  width:6px !important;
+  width: 100% !important;
   height:6px !important;
   border-radius:999px !important;
   background:#ff6f96 !important;
@@ -5756,7 +5756,7 @@ body{
    DASH-METRICS-BAR-RESIZE-START
    ===================================== */
 
-/* خلي الميتريكس سطر واحد */
+/* ??? ????????? ??? ???? */
 .dashx-metrics{
   display:grid !important;
   grid-template-columns:repeat(4, minmax(0, 1fr)) !important;
@@ -5764,18 +5764,18 @@ body{
   align-items:stretch !important;
 }
 
-/* صغّر البوكسات لنص الحجم تقريباً */
+/* ???? ???????? ??? ????? ??????? */
 .dashx-metric{
   min-height:56px !important;
   height:56px !important;
-  padding:8px 12px !important;
+  padding: 0 12px !important;
   border-radius:14px !important;
   display:flex !important;
   flex-direction:column !important;
-  justify-content:center !important;
+  justify-content: flex-start !important;
 }
 
-/* صغّر النصوص والمسافات */
+/* ???? ?????? ????????? */
 .dashx-metric__title{
   font-size:10px !important;
   margin-bottom:4px !important;
@@ -5794,15 +5794,15 @@ body{
   opacity:.78 !important;
 }
 
-/* لو الشاشة أضيق شوي، خليها صفين */
-@media (max-width: 1200px){
+/* ?? ?????? ???? ???? ????? ???? */
+@media (max-width: 100%){
   .dashx-metrics{
     grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
   }
 }
 
-/* بالموبايل عمود واحد */
-@media (max-width: 700px){
+/* ????????? ???? ???? */
+@media (max-width: 100%){
   .dashx-metrics{
     grid-template-columns:1fr !important;
   }
@@ -5832,11 +5832,11 @@ body{
 .dashx-metric{
   min-height:44px !important;
   height:44px !important;
-  padding:5px 10px !important;
+  padding: 0 10px !important;
   border-radius:12px !important;
   display:flex !important;
   flex-direction:column !important;
-  justify-content:center !important;
+  justify-content: flex-start !important;
   overflow:hidden !important;
 }
 
@@ -5867,13 +5867,13 @@ body{
   text-overflow:ellipsis !important;
 }
 
-@media (max-width: 1200px){
+@media (max-width: 100%){
   .dashx-metrics{
     grid-template-columns:repeat(2, minmax(0,1fr)) !important;
   }
 }
 
-@media (max-width: 700px){
+@media (max-width: 100%){
   .dashx-metrics{
     grid-template-columns:1fr !important;
   }
@@ -5896,7 +5896,7 @@ body{
 .dashx-metric{
   min-height:40px !important;
   height:40px !important;
-  padding:6px 10px !important;
+  padding: 0 10px !important;
   display:grid !important;
   grid-template-columns:auto 1fr !important;
   grid-template-areas:
@@ -5930,8 +5930,8 @@ body{
   display:none !important;
 }
 
-/* بالموبايل خليها ترجع طبيعية */
-@media (max-width: 700px){
+/* ????????? ????? ???? ?????? */
+@media (max-width: 100%){
   .dashx-metric{
     min-height:44px !important;
     height:auto !important;
@@ -5952,10 +5952,10 @@ body{
   transform:translate(-50%,-50%);
   z-index:99999;
 
-  min-width:420px;
-  max-width:600px;
+  min-width: 100%;
+  max-width: 100%;
 
-  padding:22px 28px 18px;
+  padding: 0 28px 18px;
   border-radius:18px;
 
   background:
@@ -6077,9 +6077,9 @@ body{
 
 .dashx-page{
   width:100%;
-  max-width:1600px;
+  max-width: none;
   margin:0 auto;
-  padding:20px;
+  padding: 0;
 }
 
 .dashx-midFull{
@@ -6226,7 +6226,7 @@ html, body, #root {
 /* smoother page scrolling */
 .ti-content::-webkit-scrollbar,
 .ti-content--tight::-webkit-scrollbar {
-  width: 10px;
+  width: 100%;
 }
 
 .ti-content::-webkit-scrollbar-track,
@@ -6277,7 +6277,7 @@ html, body, #root {
 /* ===== BUTTONS ===== */
 .ti-btn{
   border-radius: 14px;
-  padding: 10px 18px;
+  padding: 0 18px;
   font-weight: 800;
   border: 1px solid rgba(255,255,255,.1);
   background: rgba(255,255,255,.04);
@@ -6297,7 +6297,7 @@ html, body, #root {
 
 /* ===== CONTENT ===== */
 .ti-content{
-  padding: 20px;
+  padding: 0;
 }
 
 /* ===== WORKSPACE WINDOWS ===== */
@@ -6316,7 +6316,7 @@ html, body, #root {
 .wsNote{
   background: rgba(10,12,22,.9);
   border-radius: 14px;
-  padding: 14px;
+  padding: 0;
   color: #fff;
 }
 
@@ -6462,7 +6462,7 @@ html, body, #root {
 
 /* body */
 .wsWinBody{
-  padding: 14px !important;
+  padding: 0 !important;
   background: transparent !important;
 }
 
@@ -6527,5 +6527,8 @@ html, body, #root {
 .wsWin *{
   backdrop-filter: none !important;
 }
+
+
+
 
 

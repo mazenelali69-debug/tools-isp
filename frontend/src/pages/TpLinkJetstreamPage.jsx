@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const POLL_MS = 4000;
 
@@ -92,7 +92,7 @@ const GaugeCard = React.memo(function GaugeCard({ title, value, display, max = 1
     <div style={{ ...panelStyle(), padding: 10, minHeight: 138 }}>
       <div style={titleStyle()}>{title}</div>
 
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", paddingTop: 2 }}>
+      <div style={{ display: "flex", justifyContent: 'flex-start', alignItems: "center", paddingTop: 2 }}>
         <div style={{ position: "relative", width: 152, height: 88 }}>
           <svg width="152" height="88" viewBox="0 0 152 88">
             <path
@@ -119,7 +119,7 @@ const GaugeCard = React.memo(function GaugeCard({ title, value, display, max = 1
               inset: 0,
               display: "flex",
               alignItems: "flex-end",
-              justifyContent: "center",
+              justifyContent: 'flex-start',
               paddingBottom: 8
             }}
           >
@@ -186,7 +186,7 @@ const UptimeCard = React.memo(function UptimeCard({ uptime, liveTrafficMbps }) {
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
+            justifyContent: 'flex-start',
             minHeight: 92,
             fontSize: 34,
             fontWeight: 800,
@@ -264,14 +264,14 @@ const DeviceCard = React.memo(function DeviceCard({ item, index }) {
               VLAN1559 Status
             </div>
             <div style={{ fontSize: 14, color: "#d4d9e0" }}>
-              {item.vlan1559Status === "ONLINE" ? "● ONLINE" : "● DOWN"}
+              {item.vlan1559Status === "ONLINE" ? "? ONLINE" : "? DOWN"}
             </div>
           </div>
         </div>
       </div>
 
       <div style={{ marginTop: 6, color: "rgba(255,255,255,.64)", fontSize: 12 }}>
-        {(item?.sysName || item?.ip)} Â· {item?.ip} Â· {(item?.ok ? "ONLINE" : "ERROR")} Â· Ports UP {portsUp} / {portsTotal} Â· Ports DOWN {portsDown}
+        {(item?.sysName || item?.ip)} · {item?.ip} · {(item?.ok ? "ONLINE" : "ERROR")} · Ports UP {portsUp} / {portsTotal} · Ports DOWN {portsDown}
       </div>
     </div>
   );
@@ -358,5 +358,8 @@ export default function TpLinkJetstreamPage() {
     </div>
   );
 }
+
+
+
 
 

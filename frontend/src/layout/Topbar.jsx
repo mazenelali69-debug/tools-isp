@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 
 const TITLES = {
   dashboard: "Dashboard",
@@ -24,4 +24,7 @@ export default function Topbar({ active, actions }) {
     </header>
   );
 }
+
+
+
 

@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Rnd } from "react-rnd";
 import TrafficGraph from "./TrafficGraph.jsx";
 
@@ -94,7 +94,7 @@ export default function MonitorCanvas({ monitors, live, history, stopMonitor }) 
             <div className="tisp-cardWin">
               <div className="tisp-drag">
                 <div className="tisp-dragTitle">
-                  <strong>{m.label}</strong> ({m.ip}) — ifIndex {m.ifIndex}
+                  <strong>{m.label}</strong> ({m.ip}) � ifIndex {m.ifIndex}
                 </div>
                 <div className="tisp-dragHint">drag</div>
               </div>
@@ -118,4 +118,7 @@ export default function MonitorCanvas({ monitors, live, history, stopMonitor }) 
     </div>
   );
 }
+
+
+
 

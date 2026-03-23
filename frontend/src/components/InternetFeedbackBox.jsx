@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const TARGETS = [
   { name: "Facebook", host: "www.fb.com" },
@@ -249,3 +249,6 @@ export default function InternetFeedbackBox(){
     </>
   );
 }
+
+
+

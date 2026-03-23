@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const TARGETS = [
   { name: "Facebook", host: "www.fb.com" },
@@ -89,7 +89,7 @@ export default function PingStatusBoxes(){
         boxShadow: "0 10px 28px rgba(0,0,0,.20)",
         marginTop: 10,
         marginBottom: 14,
-        maxWidth: 760
+        maxWidth: '100%'
       }}
     >
       <div
@@ -183,6 +183,9 @@ export default function PingStatusBoxes(){
     </div>
   );
 }
+
+
+
 
 
 

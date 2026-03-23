@@ -1,11 +1,11 @@
-﻿import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { io as ioClient } from "socket.io-client";
 
 const API = window.location.origin.replace(/:\d+$/, ":9090");
 
 function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
 function fmtMbps(x){
-  if(x == null || Number.isNaN(Number(x))) return "—";
+  if(x == null || Number.isNaN(Number(x))) return "�";
   const n = Number(x);
   if(n >= 1000) return (n/1000).toFixed(2) + " Gbps";
   return n.toFixed(n >= 100 ? 1 : 2) + " Mbps";
@@ -184,7 +184,7 @@ export default function MonitorTool({ win, onChange }) {
     if(!j?.ok || !j?.id){ setErr(j?.error || "Failed to start monitor"); return; }
 
     monIdRef.current = j.id;
-    onChange?.({ monitorId: j.id, title: "Monitor — " + tip + (ifName?(" ("+ifName+")"):"") });
+    onChange?.({ monitorId: j.id, title: "Monitor � " + tip + (ifName?(" ("+ifName+")"):"") });
 
     const s = ensureSocket();
     setRunning(true);
@@ -282,7 +282,7 @@ export default function MonitorTool({ win, onChange }) {
         </div>
       </div>
 
-      {err ? <div className="wsMonErr">⚠ {err}</div> : null}
+      {err ? <div className="wsMonErr">? {err}</div> : null}
 
       <div className="wsMonCards">
         <div className="wsMonCard">
@@ -310,5 +310,8 @@ export default function MonitorTool({ win, onChange }) {
     </div>
   );
 }
+
+
+
 
 

@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 function num(v) {
   const n = Number(v);
@@ -136,7 +136,7 @@ function fmtPingMs(ms, alive, loss = 0) {
   if (!alive && loss >= 100) return "timeout";
   if (!alive) return "down";
   const n = num(ms);
-  if (loss > 0) return `${Math.round(n)} ms � PL ${Math.round(loss)}%`;
+  if (loss > 0) return `${Math.round(n)} ms ? PL ${Math.round(loss)}%`;
   return `${Math.round(n)} ms`;
 }
 
@@ -272,7 +272,7 @@ function PingSegmentedGauge({ valueMs, name, totalText }) {
   const mainColor = pingGaugeColorByRatio(ratio);
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
+    <div style={{ display: "flex", justifyContent: 'flex-start' }}>
       <div style={{ width: 270, position: "relative" }}>
         <svg viewBox={`0 0 ${width} ${height}`} style={{ width: "100%", height: 198, display: "block" }}>
           {Array.from({ length: segments }, (_, i) => {
@@ -337,7 +337,7 @@ function PingSegmentedGauge({ valueMs, name, totalText }) {
               fontWeight: 700,
               color: mainColor,
               lineHeight: 1.12,
-              maxWidth: 118,
+              maxWidth: '100%',
               marginLeft: "auto",
               marginRight: "auto",
               textAlign: "center",
@@ -499,7 +499,7 @@ function ServicePingGaugeCard({ row, hist }) {
         <div style={{ marginTop: 4 }}>
           <PingSparkline
             values={hist || []}
-            label={`${row.name} � ${fmtPingMs(row.pingMs, row.alive, loss)}`}
+            label={`${row.name} ? ${fmtPingMs(row.pingMs, row.alive, loss)}`}
           />
         </div>
 
@@ -545,7 +545,7 @@ function ServicePingSection() {
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
           gap: 12,
-          maxWidth: 1500
+          maxWidth: '100%'
         }}
       >
         {rows.map(row => (
@@ -632,6 +632,9 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+
+
 
 
 
