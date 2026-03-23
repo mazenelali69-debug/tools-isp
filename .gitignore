@@ -64,3 +64,15 @@ backend/data/uplink-history.json
 backend/data/aviat-history.json
 backend/data/uplink-history.json
 backend/data/monitor-street-history.json
+
+# cloudflare secrets
+*.json
+*.pem
+.cloudflared/
+
+# pm2
+pm2/
+dump.pm2
+
+# startup scripts (optional)
+startup-tools.ps1
