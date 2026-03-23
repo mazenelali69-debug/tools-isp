@@ -29,8 +29,10 @@ const historyRouter = require("./routes/history");
 const authRouter = require("./routes/auth");
 const { appendUplinkHistory } = require("./lib/historyStore");
 const app = express();
+const { visitorAlertMiddleware } = require("./visitorAlertMiddleware");
 
 app.set("trust proxy", 1);
+app.use(visitorAlertMiddleware);
 
 // =====================================
 // CALLMEBOT_WHATSAPP_HELPER_START
@@ -4127,6 +4129,8 @@ if (!global.__uplinkRealHistoryPollerStarted) {
   }, 10000);
 }
 // ===== UPLINK_REAL_HISTORY_POLLER_END =====
+
+
 
 
 
