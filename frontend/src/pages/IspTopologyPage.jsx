@@ -1,1007 +1,412 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+﻿import React, { useEffect, useMemo, useState } from "react";
 
-const DEFAULT_NODES = {
-  "254": { id:"254", label:"TP LINK IN Aviat", ip:"88.88.88.254", type:"core", x:760, y:90 },
-  "253": { id:"253", label:"TP Link1 IN Cabinet", ip:"88.88.88.253", type:"tp", x:410, y:230 },
-  "252": { id:"252", label:"TP Link2 IN Cabinet", ip:"88.88.88.252", type:"tp", x:1110, y:230 },
-
-  "10": { id:"10", label:"IN C5C", ip:"88.88.88.10", type:"mk", x:760, y:230 },
-  "11": { id:"11", label:"IN Army Jabal", ip:"88.88.88.11", type:"mk", x:760, y:380 },
-  "12": { id:"12", label:"IN Home Fast Web", ip:"88.88.88.12", type:"mk", x:760, y:530 },
-  "13": { id:"13", label:"Finished Jabal", ip:"88.88.88.13", type:"mk", x:760, y:680 },
-
-  "9": { id:"9", label:"88.88.88.9", ip:"88.88.88.9", type:"mk", x:210, y:380 },
-  "4": { id:"4", label:"HexGR3 ON Redwan", ip:"88.88.88.4", type:"mk", x:410, y:380 },
-  "5": { id:"5", label:"HexGR3 ON Center Fadel", ip:"88.88.88.5", type:"mk", x:410, y:560 },
-
-  "251": { id:"251", label:"TP link On fast web", ip:"88.88.88.251", type:"tp", x:1110, y:380 },
-  "15": { id:"15", label:"HexGR3 ON Davo", ip:"88.88.88.15", type:"mk", x:1110, y:560 },
-
-  "10254": { id:"10254", label:"TP LINK IN Aviat VLAN 2", ip:"10.88.88.254", type:"core", x:1420, y:100 },
-  "10111sfp": { id:"10111sfp", label:"HEX S", ip:"10.88.88.111", type:"mk", x:1420, y:230 },
-  "10111e1": { id:"10111e1", label:"Office 1", ip:"10.88.88.111", type:"edge", x:1270, y:380 },
-  "10111e2": { id:"10111e2", label:"Office 3", ip:"10.88.88.111", type:"edge", x:1420, y:380 },
-  "10111e3": { id:"10111e3", label:"Rawda Street", ip:"10.88.88.111", type:"edge", x:1570, y:380 }
+const FALLBACK_NODES = {
+  "core-254": {
+    id: "core-254",
+    name: "Core SW 254",
+    ip: "88.88.88.254",
+    type: "core",
+    x: 180,
+    y: 180,
+  },
+  "core-10-254": {
+    id: "core-10-254",
+    name: "Core SW 10.254",
+    ip: "10.88.88.254",
+    type: "core",
+    x: 520,
+    y: 180,
+  },
+  "radio1": {
+    id: "radio1",
+    name: "Aviat WTM4200",
+    ip: "88.88.88.1",
+    type: "radio",
+    x: 350,
+    y: 70,
+  },
+  "router1": {
+    id: "router1",
+    name: "Main Router",
+    ip: "10.88.88.1",
+    type: "router",
+    x: 350,
+    y: 320,
+  },
 };
 
-const DEFAULT_LINKS = [
-  { id:"link-254-253", source:"254", target:"253" },
-  { id:"link-254-252", source:"254", target:"252" },
-  { id:"link-254-10", source:"254", target:"10" },
-  { id:"link-253-9", source:"253", target:"9" },
-  { id:"link-253-4", source:"253", target:"4" },
-  { id:"link-4-5", source:"4", target:"5" },
-  { id:"link-252-251", source:"252", target:"251" },
-  { id:"link-251-15", source:"251", target:"15" },
-  { id:"link-10-11", source:"10", target:"11" },
-  { id:"link-11-12", source:"11", target:"12" },
-  { id:"link-12-13", source:"12", target:"13" },
-  { id:"link-vlan2-hexs", source:"10254", target:"10111sfp" },
-  { id:"link-hexs-office1", source:"10111sfp", target:"10111e1" },
-  { id:"link-hexs-office3", source:"10111sfp", target:"10111e2" },
-  { id:"link-hexs-rawda", source:"10111sfp", target:"10111e3" }
+const FALLBACK_LINKS = [
+  { id: "l1", source: "radio1", target: "core-254" },
+  { id: "l2", source: "core-254", target: "core-10-254" },
+  { id: "l3", source: "core-10-254", target: "router1" },
 ];
 
-const primaryNodeMetrics = {
-  "254": {
-    port: "27",
-    ifIndex: 49179,
-    rxOid: "1.3.6.1.2.1.31.1.1.1.6.49179",
-    txOid: "1.3.6.1.2.1.31.1.1.1.10.49179"
-  },
-  "10254": {
-    port: "gigabitEthernet 1/0/10",
-    ifIndex: 49162,
-    rxOid: "1.3.6.1.2.1.31.1.1.1.6.49162",
-    txOid: "1.3.6.1.2.1.31.1.1.1.10.49162"
-  }
-};
+function normalizeNodes(rawNodes, rawPositions) {
+  const nodesObj = rawNodes && typeof rawNodes === "object" && !Array.isArray(rawNodes)
+    ? rawNodes
+    : {};
 
-const WORKSPACE_W = 2600;
-const WORKSPACE_H = 1200;
+  const positionsObj = rawPositions && typeof rawPositions === "object" && !Array.isArray(rawPositions)
+    ? rawPositions
+    : {};
 
-function clamp(v, min, max) {
-  return Math.max(min, Math.min(max, v));
-}
-
-function curvedPath(a, b) {
-  const mx = (a.x + b.x) / 2;
-  const my = (a.y + b.y) / 2;
-  const dx = b.x - a.x;
-  const dy = b.y - a.y;
-  const len = Math.sqrt(dx * dx + dy * dy) || 1;
-  const nx = -dy / len;
-  const ny = dx / len;
-  const bend = Math.min(90, Math.max(28, len * 0.12));
-  const cx = mx + nx * bend;
-  const cy = my + ny * bend;
-  return `M ${a.x} ${a.y} Q ${cx} ${cy} ${b.x} ${b.y}`;
-}
-
-function midpoint(a, b) {
-  return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
-}
-
-function toneForTraffic(total) {
-  if (total >= 700) return {
-    color:"#ff5468",
-    glow:"rgba(255,84,104,.22)",
-    soft:"rgba(255,84,104,.09)",
-    badge:"rgba(66,12,20,.92)",
-    text:"#ffe1e5"
-  };
-  if (total >= 250) return {
-    color:"#ffc85c",
-    glow:"rgba(255,200,92,.18)",
-    soft:"rgba(255,200,92,.08)",
-    badge:"rgba(70,52,12,.92)",
-    text:"#fff4d4"
-  };
-  return {
-    color:"#47d7ff",
-    glow:"rgba(71,215,255,.18)",
-    soft:"rgba(71,215,255,.08)",
-    badge:"rgba(11,34,47,.92)",
-    text:"#daf8ff"
-  };
-}
-
-function nodeTheme(type, selected, picked) {
-  if (picked) {
+  const entries = Object.entries(nodesObj).map(([key, value]) => {
+    const pos = positionsObj[key] || {};
     return {
-      halo:"rgba(255,206,92,.26)",
-      fill:"#ffce5c",
-      stroke:"#fff1bf",
-      label:"#fff8e1",
-      ip:"#ffe2a3"
+      id: value?.id || key,
+      name: value?.name || key,
+      ip: value?.ip || "-",
+      type: value?.type || "node",
+      x: Number.isFinite(Number(pos.x)) ? Number(pos.x) : Number(value?.x ?? 120),
+      y: Number.isFinite(Number(pos.y)) ? Number(pos.y) : Number(value?.y ?? 120),
+      raw: value || {},
     };
-  }
-
-  if (type === "core") {
-    return {
-      halo:selected ? "rgba(126,220,255,.28)" : "rgba(126,220,255,.16)",
-      fill:"#7edcff",
-      stroke:selected ? "#ffffff" : "#dff8ff",
-      label:"#f5fbff",
-      ip:"#9fd4f6"
-    };
-  }
-
-  if (type === "tp") {
-    return {
-      halo:selected ? "rgba(88,200,255,.28)" : "rgba(88,200,255,.16)",
-      fill:"#58c8ff",
-      stroke:selected ? "#ffffff" : "#e9f7ff",
-      label:"#f5fbff",
-      ip:"#9fd4f6"
-    };
-  }
-
-  if (type === "edge") {
-    return {
-      halo:selected ? "rgba(201,151,255,.26)" : "rgba(201,151,255,.14)",
-      fill:"#c997ff",
-      stroke:selected ? "#ffffff" : "#f7ebff",
-      label:"#fff7ff",
-      ip:"#d9baf8"
-    };
-  }
-
-  return {
-    halo:selected ? "rgba(74,240,185,.26)" : "rgba(74,240,185,.14)",
-    fill:"#4af0b9",
-    stroke:selected ? "#ffffff" : "#eefff9",
-    label:"#f6fffc",
-    ip:"#9fe8d1"
-  };
-}
-
-function loadNodeMeta(saved) {
-  const merged = { ...DEFAULT_NODES };
-  if (!saved || typeof saved !== "object") return merged;
-
-  Object.keys(saved).forEach((id) => {
-    if (!merged[id]) return;
-    const x = Number(saved[id]?.x);
-    const y = Number(saved[id]?.y);
-    if (Number.isFinite(x) && Number.isFinite(y)) {
-      merged[id] = { ...merged[id], x, y };
-    }
   });
 
-  return merged;
+  if (entries.length > 0) return entries;
+
+  return Object.values(FALLBACK_NODES);
+}
+
+function normalizeLinks(rawLinks) {
+  if (Array.isArray(rawLinks) && rawLinks.length > 0) {
+    return rawLinks
+      .filter((x) => x && x.source && x.target)
+      .map((x, i) => ({
+        id: x.id || `link-${i}`,
+        source: x.source,
+        target: x.target,
+      }));
+  }
+
+  return FALLBACK_LINKS;
+}
+
+function getNodeColor(type) {
+  switch (String(type || "").toLowerCase()) {
+    case "core":
+      return "#60a5fa";
+    case "router":
+      return "#34d399";
+    case "radio":
+      return "#f59e0b";
+    case "switch":
+      return "#a78bfa";
+    case "tp":
+      return "#f472b6";
+    case "mk":
+      return "#22c55e";
+    default:
+      return "#94a3b8";
+  }
 }
 
 export default function IspTopologyPage() {
-  const [nodes, setNodes] = useState(DEFAULT_NODES);
-  const [links, setLinks] = useState(DEFAULT_LINKS);
-  const [traffic, setTraffic] = useState({});
-  const [selectedId, setSelectedId] = useState("254");
-  const [selectedLink, setSelectedLink] = useState(null);
-  const [locked, setLocked] = useState(false);
-  const [mode, setMode] = useState("move");
-  const [linkStart, setLinkStart] = useState(null);
-  const [zoom, setZoom] = useState(0.52);
-  const [offset, setOffset] = useState({ x: 170, y: 40 });
-
-  const dragRef = useRef({
-    active:false,
-    nodeId:null,
-    startX:0,
-    startY:0,
-    nodeX:0,
-    nodeY:0
-  });
-
-  const workspaceRef = useRef(null);
-  const [draft, setDraft] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [errorText, setErrorText] = useState("");
+  const [nodes, setNodes] = useState([]);
+  const [links, setLinks] = useState([]);
+  const [selectedId, setSelectedId] = useState("");
 
   useEffect(() => {
-    let stop = false;
+    let cancelled = false;
 
-    const loadAll = async () => {
+    async function load() {
+      setLoading(true);
+      setErrorText("");
+
       try {
-        const [nodesRes, posRes, linkRes] = await Promise.all([
-          fetch("/api/topology/nodes"),
-          fetch("/api/topology/positions"),
-          fetch("/api/topology/links")
+        const [nodesRes, positionsRes, linksRes] = await Promise.allSettled([
+          fetch("/api/topology/nodes", { cache: "no-store" }),
+          fetch("/api/topology/positions", { cache: "no-store" }),
+          fetch("/api/topology/links", { cache: "no-store" }),
         ]);
 
-        const nodesJson = await nodesRes.json();
-        const posJson = await posRes.json();
-        const linkJson = await linkRes.json();
+        const nodesRaw = await nodesRes.value.json();
+const nodesJson = nodesRaw?.data || nodesRaw || {};
+            : {};
 
-        const baseNodes =
-          nodesJson?.ok && nodesJson?.data && typeof nodesJson.data === "object" && Object.keys(nodesJson.data).length > 0
-            ? nodesJson.data
-            : DEFAULT_NODES;
+        const positionsRaw = await positionsRes.value.json();
+const positionsJson = positionsRaw?.data || positionsRaw || {};
+            : {};
 
-        if (!stop) {
-          if (posJson?.ok) {
-            const merged = { ...baseNodes };
-            Object.keys(posJson.data || {}).forEach((id) => {
-              if (!merged[id]) return;
-              const x = Number(posJson.data[id]?.x);
-              const y = Number(posJson.data[id]?.y);
-              if (Number.isFinite(x) && Number.isFinite(y)) {
-                merged[id] = { ...merged[id], x, y };
-              }
-            });
-            setNodes(merged);
-          } else {
-            setNodes(baseNodes);
-          }
-        }
+        const linksRaw = await linksRes.value.json();
+const linksJson = linksRaw?.data || linksRaw || [];
+            : [];
 
-        if (!stop && linkJson?.ok && Array.isArray(linkJson.data) && linkJson.data.length > 0) {
-          setLinks(linkJson.data);
-        }
-      } catch {
-        if (!stop) {
-          setNodes(DEFAULT_NODES);
-        }
+        if (cancelled) return;
+
+        const nextNodes = normalizeNodes(nodesJson, positionsJson);
+        const nextLinks = normalizeLinks(linksJson);
+
+        setNodes(nextNodes);
+        setLinks(nextLinks);
+        setSelectedId((prev) => prev || nextNodes[0]?.id || "");
+      } catch (err) {
+        if (cancelled) return;
+
+        setErrorText(err?.message || "Failed to load Network Map.");
+        setNodes(Object.values(FALLBACK_NODES));
+        setLinks(FALLBACK_LINKS);
+        setSelectedId("core-254");
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-    };
+    }
 
-    loadAll();
-    return () => { stop = true; };
-  }, []);
-
-  useEffect(() => {
-    let stop = false;
-
-    const tick = async () => {
-      try {
-        const res = await fetch("/api/topology/snapshot");
-        const json = await res.json();
-        if (!stop && json?.ok && Array.isArray(json.data)) {
-          setTraffic(Object.fromEntries(json.data.map(x => [x.id, x])));
-        }
-      } catch {}
-    };
-
-    tick();
-    const timer = setInterval(tick, 3000);
-
+    load();
     return () => {
-      stop = true;
-      clearInterval(timer);
+      cancelled = true;
     };
   }, []);
 
-  useEffect(() => {
-    const onMove = (e) => {
-      if (!dragRef.current.active || locked || mode !== "move") return;
+  const nodeMap = useMemo(() => {
+    return Object.fromEntries(nodes.map((n) => [n.id, n]));
+  }, [nodes]);
 
-      const dx = (e.clientX - dragRef.current.startX) / zoom;
-      const dy = (e.clientY - dragRef.current.startY) / zoom;
-
-      setNodes(prev => ({
-        ...prev,
-        [dragRef.current.nodeId]: {
-          ...prev[dragRef.current.nodeId],
-          x: clamp(dragRef.current.nodeX + dx, 40, WORKSPACE_W - 40),
-          y: clamp(dragRef.current.nodeY + dy, 40, WORKSPACE_H - 40)
-        }
-      }));
-    };
-
-    const onUp = () => {
-      dragRef.current.active = false;
-      dragRef.current.nodeId = null;
-    };
-
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
-
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onUp);
-    };
-  }, [locked, mode, zoom]);
-
-  useEffect(() => {
-    const node = nodes[selectedId];
-    if (!node) return;
-
-    setDraft({
-      id: String(node.id || ""),
-      label: String(node.label || ""),
-      ip: String(node.ip || ""),
-      type: String(node.type || "mk"),
-      x: Number(node.x || 0),
-      y: Number(node.y || 0),
-      port: String(node.port || ""),
-      ifIndex: String(node.ifIndex ?? ""),
-      rxOid: String(node.rxOid || ""),
-      txOid: String(node.txOid || "")
-    });
-  }, [selectedId, nodes]);
-
-  const updateDraft = (key, value) => {
-    setDraft(prev => prev ? { ...prev, [key]: value } : prev);
-  };
-
-  const saveNodes = async (nextNodes) => {
-    const payload = nextNodes || nodes;
-
-    try {
-      await fetch("/api/topology/nodes", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify(payload)
-      });
-      alert("Nodes saved.");
-    } catch {
-      alert("Save nodes failed.");
-    }
-  };
-
-  const saveDraftNode = async () => {
-    if (!draft || !draft.id) return;
-
-    const next = {
-      ...nodes,
-      [draft.id]: {
-        ...nodes[draft.id],
-        id: draft.id,
-        label: draft.label || draft.id,
-        ip: draft.ip || "",
-        type: draft.type || "mk",
-        x: Number(draft.x || 0),
-        y: Number(draft.y || 0),
-        port: draft.port || "",
-        ifIndex: draft.ifIndex === "" ? "" : Number.isFinite(Number(draft.ifIndex)) ? Number(draft.ifIndex) : draft.ifIndex,
-        rxOid: draft.rxOid || "",
-        txOid: draft.txOid || ""
-      }
-    };
-
-    setNodes(next);
-    await saveNodes(next);
-  };
-
-  const addNode = async () => {
-    const id = `node${Date.now()}`;
-    const base = nodes[selectedId] || { x:760, y:360 };
-
-const newNode = {
-  id,
-  label:"New Node",
-  ip:"",
-  type:"mk",
-  x:base.x + 140,
-  y:base.y + 40,
-  port:"",
-  ifIndex:"",
-  rxOid:"",
-  txOid:""
-};
-
-    const next = { ...nodes, [id]: newNode };
-    setNodes(next);
-setSelectedId(id);
-
-if (selectedId && nodes[selectedId]) {
-  setLinks(prev => [
-    ...prev,
-    {
-      id:`link-${selectedId}-${id}-${Date.now()}`,
-      source:selectedId,
-      target:id
-    }
-  ]);
-}
-    await saveNodes(next);
-  };
-
-  const deleteSelectedNode = async () => {
-    if (!selectedId || !nodes[selectedId]) return;
-
-    const next = { ...nodes };
-    delete next[selectedId];
-
-    const nextLinks = links.filter(x => x.source !== selectedId && x.target !== selectedId);
-
-    setNodes(next);
-    setLinks(nextLinks);
-    setSelectedId(Object.keys(next)[0] || "");
-    setLinkStart(null);
-
-    try {
-      await fetch("/api/topology/nodes", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify(next)
-      });
-
-      await fetch("/api/topology/links", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify(nextLinks)
-      });
-    } catch {
-      alert("Delete node failed.");
-    }
-  };
-
-  const selectedNode = nodes[selectedId] || DEFAULT_NODES["254"];
-
-  const selectedTraffic =
-    Object.values(traffic).find(x => x.targetId === selectedId) ||
-    Object.values(traffic).find(x => x.sourceId === selectedId) ||
-    null;
-
-  const selectedPrimary = primaryNodeMetrics[selectedId] || null;
-  const selectedPortValue = selectedPrimary ? selectedPrimary.port : (selectedTraffic ? selectedTraffic.port : "-");
-  const selectedIfIndexValue = String(selectedPrimary ? selectedPrimary.ifIndex : (selectedTraffic ? selectedTraffic.ifIndex : "-"));
-  const selectedRxOidValue = selectedPrimary ? selectedPrimary.rxOid : (selectedTraffic ? selectedTraffic.rxOid : "-");
-  const selectedTxOidValue = selectedPrimary ? selectedPrimary.txOid : (selectedTraffic ? selectedTraffic.txOid : "-");
-
-  const saveLayout = async () => {
-    const payload = Object.fromEntries(
-      Object.entries(nodes).map(([id, node]) => [id, { x: node.x, y: node.y }])
-    );
-
-    try {
-      await fetch("/api/topology/positions", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify(payload)
-      });
-      alert("Layout saved.");
-    } catch {
-      alert("Save layout failed.");
-    }
-  };
-
-  const saveLinks = async () => {
-    try {
-      await fetch("/api/topology/links", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify(links)
-      });
-      alert("Links saved.");
-    } catch {
-      alert("Save links failed.");
-    }
-  };
-
-  const resetLayout = async () => {
-    setNodes(DEFAULT_NODES);
-    setZoom(0.52);
-    setOffset({ x: 170, y: 40 });
-    setLinkStart(null);
-
-    try {
-      const payload = Object.fromEntries(
-        Object.entries(DEFAULT_NODES).map(([id, node]) => [id, { x: node.x, y: node.y }])
-      );
-
-      await fetch("/api/topology/positions", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify(payload)
-      });
-    } catch {}
-  };
-
-  const resetLinks = async () => {
-    setLinks(DEFAULT_LINKS);
-    setLinkStart(null);
-
-    try {
-      await fetch("/api/topology/links", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify(DEFAULT_LINKS)
-      });
-    } catch {}
-  };
-
-  const handleNodeMouseDown = (e, id) => {
-    if (locked || mode !== "move") return;
-    e.stopPropagation();
-
-    const node = nodes[id];
-    dragRef.current = {
-      active:true,
-      nodeId:id,
-      startX:e.clientX,
-      startY:e.clientY,
-      nodeX:node.x,
-      nodeY:node.y
-    };
-  };
-
-  const handleNodeClick = (id) => {
-    setSelectedId(id);
-
-    if (locked) return;
-
-    if (mode === "link") {
-      if (!linkStart) {
-        setLinkStart(id);
-        return;
-      }
-
-      if (linkStart === id) {
-        setLinkStart(null);
-        return;
-      }
-
-      const exists = links.some(x =>
-        (x.source === linkStart && x.target === id) ||
-        (x.source === id && x.target === linkStart)
-      );
-
-      if (!exists) {
-        setLinks(prev => [
-          ...prev,
-          {
-            id:`link-${linkStart}-${id}-${Date.now()}`,
-            source:linkStart,
-            target:id
-          }
-        ]);
-      }
-
-      setLinkStart(null);
-    }
-  };
-
-  const handleLineClick = (id) => {
-
-  const link = links.find(x => x.id === id);
-  if (link) setSelectedLink(link);
-    if (locked || mode !== "delete") return;
-    setLinks(prev => prev.filter(x => x.id !== id));
-  };
-
-  const handleWheel = (e) => {
-    const next = e.deltaY > 0 ? zoom * 0.92 : zoom * 1.08;
-    setZoom(clamp(next, 0.45, 1.8));
-  };
+  const selectedNode = selectedId ? nodeMap[selectedId] || null : null;
 
   const stats = useMemo(() => {
-    const ids = Object.keys(nodes);
+    const byType = {};
+    for (const n of nodes) {
+      const key = String(n.type || "node").toLowerCase();
+      byType[key] = (byType[key] || 0) + 1;
+    }
+
     return {
-      total: ids.length,
-      links: links.length,
-      core: ids.filter(id => nodes[id].type === "core").length,
-      tp: ids.filter(id => nodes[id].type === "tp").length,
-      mk: ids.filter(id => nodes[id].type === "mk").length,
-      edge: ids.filter(id => nodes[id].type === "edge").length
+      totalNodes: nodes.length,
+      totalLinks: links.length,
+      core: byType.core || 0,
+      router: byType.router || 0,
+      radio: byType.radio || 0,
+      switch: byType.switch || 0,
     };
   }, [nodes, links]);
 
   return (
-    <div style={{
-      minHeight:"100%",
-      padding:20,
-      background:"linear-gradient(180deg,#030914 0%,#07101a 100%)",
-      color:"#fff"
-    }}>
-      <style>{`
-        @keyframes flowDash {
-          from { stroke-dashoffset: 0; }
-          to { stroke-dashoffset: -42; }
-        }
-
-        @keyframes pulseGlow {
-          0% { opacity: .45; transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.18); }
-          100% { opacity: .45; transform: scale(1); }
-        }
-
-        @keyframes badgeFloat {
-          0% { transform: translateY(0px); }
-          50% { transform: translateY(-2px); }
-          100% { transform: translateY(0px); }
-        }
-      `}</style>
-
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 220px", gap:16, alignItems:"start" }}>
-        <div style={{
-          border:"1px solid rgba(120,160,255,0.14)",
-          borderRadius:24,
-          overflow:"hidden",
-          background:"#06101a",
-          boxShadow:"0 24px 80px rgba(0,0,0,0.35)"
-        }}>
-          <div style={{
-            display:"flex",
-            justifyContent:"space-between",
-            alignItems:"center",
-            padding:"14px 16px",
-            borderBottom:"1px solid rgba(255,255,255,0.05)",
-            gap:10,
-            flexWrap:"wrap"
-          }}>
-            <div style={{ fontSize:14, fontWeight:800 }}>? NoComment Ultimate Topology Builder</div>
-
-            <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
-              <button onClick={() => setLocked(v => !v)} style={locked ? activeBtnStyle : btnStyle}>
-                {locked ? "LOCKED" : "UNLOCKED"}
-              </button>
-              <button onClick={() => { setMode("move"); setLinkStart(null); }} style={mode === "move" ? activeBtnStyle : btnStyle}>Move</button>
-              <button onClick={() => { setMode("link"); setLinkStart(null); }} style={mode === "link" ? activeBtnStyle : btnStyle}>Link</button>
-              <button onClick={() => { setMode("delete"); setLinkStart(null); }} style={mode === "delete" ? activeBtnStyle : btnStyle}>Delete</button>
-              <button onClick={() => setZoom(z => clamp(z + 0.1, 0.45, 1.8))} style={btnStyle}>Zoom +</button>
-              <button onClick={() => setZoom(z => clamp(z - 0.1, 0.45, 1.8))} style={btnStyle}>Zoom -</button>
-              <button onClick={saveLayout} style={btnStyle}>Save Layout</button>
-              <button onClick={saveLinks} style={btnStyle}>Save Links</button>
-              <button onClick={resetLayout} style={btnStyle}>Reset Layout</button>
-              <button onClick={resetLinks} style={btnStyle}>Reset Links</button>
-              <button onClick={addNode} style={btnStyle}>Add Node</button>
-              <button onClick={saveDraftNode} style={btnStyle}>Save Node</button>
-              <button onClick={saveNodes} style={btnStyle}>Save All Nodes</button>
-              <button onClick={deleteSelectedNode} style={btnStyle}>Delete Node</button>
-            </div>
+    <div
+      style={{
+        padding: 16,
+        color: "#e5e7eb",
+        background: "#0b1020",
+        minHeight: "100%",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 12,
+          flexWrap: "wrap",
+          marginBottom: 16,
+        }}
+      >
+        <div>
+          <div style={{ fontSize: 24, fontWeight: 800 }}>Network Map</div>
+          <div style={{ fontSize: 13, color: "#94a3b8", marginTop: 4 }}>
+            Clean rebuilt topology page
           </div>
+        </div>
 
-          <div
-            ref={workspaceRef}
-            onWheel={handleWheel}
-            style={{
-              height:700,
-              overflow:"hidden",
-              position:"relative",
-              background:
-                "radial-gradient(circle at 50% 10%, rgba(40,90,180,0.10) 0%, rgba(0,0,0,0) 35%), linear-gradient(180deg,#020911 0%,#07101a 100%)"
-            }}
-          >
-            <div style={{
-              position:"absolute",
-              inset:0,
-              backgroundImage: `
-                linear-gradient(rgba(90,120,170,0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(90,120,170,0.08) 1px, transparent 1px),
-                linear-gradient(rgba(90,120,170,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(90,120,170,0.03) 1px, transparent 1px)
-              `,
-              backgroundSize: `
-                ${48 * zoom}px ${48 * zoom}px,
-                ${48 * zoom}px ${48 * zoom}px,
-                ${12 * zoom}px ${12 * zoom}px,
-                ${12 * zoom}px ${12 * zoom}px
-              `,
-              backgroundPosition: `${offset.x}px ${offset.y}px`,
-              pointerEvents:"none"
-            }} />
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+            flexWrap: "wrap",
+          }}
+        >
+          <StatBox label="Nodes" value={stats.totalNodes} />
+          <StatBox label="Links" value={stats.totalLinks} />
+          <StatBox label="Core" value={stats.core} />
+          <StatBox label="Routers" value={stats.router} />
+          <StatBox label="Radio" value={stats.radio} />
+        </div>
+      </div>
+
+      {loading ? (
+        <Panel>
+          <div style={{ fontSize: 15, fontWeight: 700 }}>Loading Network Map...</div>
+        </Panel>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "minmax(0, 1fr) 320px",
+            gap: 16,
+          }}
+        >
+          <Panel>
+            {errorText ? (
+              <div
+                style={{
+                  marginBottom: 12,
+                  padding: 10,
+                  borderRadius: 10,
+                  background: "rgba(239,68,68,0.12)",
+                  border: "1px solid rgba(239,68,68,0.35)",
+                  color: "#fecaca",
+                  fontSize: 13,
+                }}
+              >
+                {errorText}
+              </div>
+            ) : null}
 
             <div
               style={{
-                position:"absolute",
-                left:offset.x,
-                top:offset.y,
-                width:WORKSPACE_W,
-                height:WORKSPACE_H,
-                transform:`scale(${zoom})`,
-                transformOrigin:"top left"
+                width: "100%",
+                overflow: "auto",
+                borderRadius: 14,
+                border: "1px solid rgba(148,163,184,0.18)",
+                background:
+                  "radial-gradient(circle at top, rgba(30,41,59,0.9), rgba(2,6,23,0.98))",
               }}
             >
-              <svg
-                width={WORKSPACE_W}
-                height={WORKSPACE_H}
-                style={{ position:"absolute", inset:0, overflow:"visible" }}
-              >
+              <svg viewBox="0 0 900 520" style={{ width: "100%", height: "auto", display: "block" }}>
                 <defs>
-                  <filter id="softGlow">
-                    <feGaussianBlur stdDeviation="3.5" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
+                  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(148,163,184,0.12)" strokeWidth="1" />
+                  </pattern>
                 </defs>
 
-                {links.map((link) => {
-                  const a = nodes[link.source];
-                  const b = nodes[link.target];
-                  if (!a || !b) return null;
+                <rect x="0" y="0" width="900" height="520" fill="url(#grid)" />
 
-                  const t =
-                    traffic[link.id] ||
-                    traffic[link.source] ||
-                    traffic[link.target] ||
-                    null;
-                  const tone = toneForTraffic(t?.totalMbps || 0);
-                  const isSelected = selectedId === link.source || selectedId === link.target;
-                  const path = curvedPath(a, b);
-                  const mid = midpoint(a, b);
+                {links.map((link) => {
+                  const source = nodeMap[link.source];
+                  const target = nodeMap[link.target];
+                  if (!source || !target) return null;
 
                   return (
-                    <g key={link.id} onClick={() => handleLineClick(link.id)} style={{ cursor: mode === "delete" && !locked ? "pointer" : "default" }}>
-                      <path
-                        id={`${link.id}-path`}
-                        d={path}
-                        fill="none"
-                        stroke={isSelected ? tone.glow : "rgba(70,120,190,.10)"}
-                        strokeWidth={isSelected ? 10 : 7}
-                        strokeLinecap="round"
-                        filter="url(#softGlow)"
-                        opacity="0.95"
-                      />
-                      <path
-                        d={path}
-                        fill="none"
-                        stroke={tone.color}
-                        strokeWidth={isSelected ? 4 : 2.6}
-                        strokeLinecap="round"
-                      />
-                      <path
-                        d={path}
-                        fill="none"
-                        stroke="#ffffff"
-                        strokeOpacity={isSelected ? 0.95 : 0.58}
-                        strokeWidth={isSelected ? 1.4 : 1.0}
-                        strokeLinecap="round"
-                        strokeDasharray="11 12"
-                        style={{ animation:"flowDash 1.05s linear infinite" }}
-                      />
+                    <line
+                      key={link.id}
+                      x1={source.x}
+                      y1={source.y}
+                      x2={target.x}
+                      y2={target.y}
+                      stroke="rgba(96,165,250,0.7)"
+                      strokeWidth="3"
+                    />
+                  );
+                })}
 
-                      <circle r={isSelected ? "5.2" : "4.2"} fill="#ffffff" opacity="0.95" filter="url(#softGlow)">
-                        <animateMotion dur={isSelected ? "1.15s" : "1.55s"} repeatCount="indefinite" rotate="auto">
-                          <mpath href={`#${link.id}-path`} />
-                        </animateMotion>
-                      </circle>
+                {nodes.map((node) => {
+                  const active = selectedId === node.id;
+                  const fill = getNodeColor(node.type);
 
-                      <circle r={isSelected ? "3.4" : "2.8"} fill={tone.color} opacity="0.95">
-                        <animateMotion dur={isSelected ? "1.15s" : "1.55s"} repeatCount="indefinite" rotate="auto">
-                          <mpath href={`#${link.id}-path`} />
-                        </animateMotion>
-                      </circle>
-
-                      {t ? (
-                        <g key={`badge-${link.id}`} style={{ animation:"badgeFloat 2.2s ease-in-out infinite" }}>
-                          <rect
-                            x={mid.x - 31}
-                            y={mid.y - 12}
-                            rx="10"
-                            width="62"
-                            height="24"
-                            fill={tone.badge}
-                            stroke="rgba(255,255,255,.10)"
-                          />
-                          <text
-                            x={mid.x}
-                            y={mid.y + 4}
-                            textAnchor="middle"
-                            fill={tone.text}
-                            fontSize="10"
-                            fontWeight="800"
-                          >
-                            {t.totalMbps.toFixed(1)} Mb
-                          </text>
-                        </g>
-                      ) : null}
+                  return (
+                    <g
+                      key={node.id}
+                      onClick={() => setSelectedId(node.id)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <circle
+                        cx={node.x}
+                        cy={node.y}
+                        r={active ? 28 : 24}
+                        fill={fill}
+                        stroke={active ? "#ffffff" : "rgba(255,255,255,0.35)"}
+                        strokeWidth={active ? 3 : 1.5}
+                      />
+                      <text
+                        x={node.x}
+                        y={node.y + 48}
+                        textAnchor="middle"
+                        fill="#e5e7eb"
+                        fontSize="14"
+                        fontWeight="700"
+                      >
+                        {node.name}
+                      </text>
+                      <text
+                        x={node.x}
+                        y={node.y + 66}
+                        textAnchor="middle"
+                        fill="#94a3b8"
+                        fontSize="12"
+                      >
+                        {node.ip}
+                      </text>
                     </g>
                   );
                 })}
               </svg>
-
-              {Object.entries(nodes).map(([nodeKey, node]) => {
-                const selected = selectedId === node.id;
-                const picked = linkStart === node.id;
-                const theme = nodeTheme(node.type, selected, picked);
-
-                return (
-                  <div
-                    key={nodeKey}
-                    style={{
-                      position:"absolute",
-                      left:node.x,
-                      top:node.y,
-                      transform:"translate(-50%, -50%)",
-                      userSelect:"none"
-                    }}
-                  >
-                    <div
-                      onMouseDown={(e) => handleNodeMouseDown(e, node.id)}
-                      onClick={() => handleNodeClick(node.id)}
-                      style={{
-                        position:"absolute",
-                        left:"50%",
-                        top:"50%",
-                        transform:"translate(-50%, -50%)",
-                        width: picked ? 28 : 22,
-                        height: picked ? 28 : 22,
-                        borderRadius:"999px",
-                        background: theme.halo,
-                        boxShadow:`0 0 0 1px ${theme.halo}`,
-                        cursor: locked ? "default" : (mode === "move" ? "grab" : "pointer")
-                      }}
-                    />
-
-                    <div
-                      onMouseDown={(e) => handleNodeMouseDown(e, node.id)}
-                      onClick={() => handleNodeClick(node.id)}
-                      style={{
-                        position:"absolute",
-                        left:"50%",
-                        top:"50%",
-                        transform:"translate(-50%, -50%)",
-                        width: picked ? 18 : 14,
-                        height: picked ? 18 : 14,
-                        borderRadius:"999px",
-                        background: theme.fill,
-                        border:`2px solid ${theme.stroke}`,
-                        boxShadow:selected ? "0 0 18px rgba(255,255,255,.18)" : "0 0 12px rgba(0,0,0,.35)",
-                        cursor: locked ? "default" : (mode === "move" ? "grab" : "pointer")
-                      }}
-                    />
-
-                    <div style={{
-                      position:"absolute",
-                      left:"50%",
-                      top:24,
-                      transform:"translateX(-50%)",
-                      padding:"3px 6px",
-                      borderRadius:8,
-                      background:"rgba(255,255,255,.90)",
-                      color:"#23364f",
-                      fontWeight:700,
-                      fontSize:9,
-                      whiteSpace:"nowrap",
-                      boxShadow:"0 8px 24px rgba(0,0,0,.26)"
-                    }}>
-                      {node.label}
-                    </div>
-
-                    <div style={{
-                      position:"absolute",
-                      left:"50%",
-                      top:46,
-                      transform:"translateX(-50%)",
-                      fontSize:8,
-                      color:theme.ip,
-                      whiteSpace:"nowrap",
-                      textShadow:"0 2px 8px rgba(0,0,0,.95)",
-                      fontWeight:700
-                    }}>
-                      {node.ip}
-                    </div>
-                  </div>
-                );
-              })}
             </div>
-          </div>
+          </Panel>
+
+          <Panel>
+            <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 12 }}>Node Details</div>
+
+            {selectedNode ? (
+              <div style={{ display: "grid", gap: 10 }}>
+                <InfoRow label="Name" value={selectedNode.name} />
+                <InfoRow label="ID" value={selectedNode.id} />
+                <InfoRow label="IP" value={selectedNode.ip} />
+                <InfoRow label="Type" value={selectedNode.type} />
+                <InfoRow label="X" value={String(selectedNode.x)} />
+                <InfoRow label="Y" value={String(selectedNode.y)} />
+              </div>
+            ) : (
+              <div style={{ color: "#94a3b8", fontSize: 13 }}>No node selected.</div>
+            )}
+          </Panel>
         </div>
-
-        <div style={{
-          border:"1px solid rgba(120,160,255,0.14)",
-          borderRadius:24,
-          padding:12,
-          background:"#07101a",
-          boxShadow:"0 24px 80px rgba(0,0,0,0.35)"
-        }}>
-          <div style={{ color:"#7fa7d8", fontSize:8, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>
-            Node Editor
-          </div>
-
-          <div style={{ fontSize:14, fontWeight:800, marginBottom:10 }}>{selectedNode.label}</div>
-
-          <InfoCard title="Live Speed" value={selectedTraffic ? `${selectedTraffic.totalMbps.toFixed(2)} Mbps` : "-"} />
-
-          {draft ? (
-            <div style={{ display:"grid", gap:8 }}>
-              <InputRow label="ID" value={draft.id} onChange={(v) => updateDraft("id", v)} />
-              <InputRow label="Name" value={draft.label} onChange={(v) => updateDraft("label", v)} />
-              <InputRow label="IP" value={draft.ip} onChange={(v) => updateDraft("ip", v)} />
-              <label style={{ display:"grid", gap:4 }}>
-  <div style={{ color:"#7fa7d8", fontSize:8 }}>Type</div>
-  <select
-    value={draft.type}
-    onChange={(e)=>updateDraft("type",e.target.value)}
-    style={{
-      width:"100%",
-      borderRadius:10,
-      border:"1px solid rgba(255,255,255,0.10)",
-      background:"rgba(255,255,255,0.04)",
-      color:"#eef6ff",
-      padding:"8px 10px",
-      outline:"none"
-    }}
-  >
-    <option value="core">core</option>
-    <option value="tp">tp</option>
-    <option value="mk">mk</option>
-    <option value="edge">edge</option>
-  </select>
-</label>
-              <InputRow label="X" value={draft.x} onChange={(v) => updateDraft("x", v)} />
-              <InputRow label="Y" value={draft.y} onChange={(v) => updateDraft("y", v)} />
-              <InputRow label="Port" value={draft.port} onChange={(v) => updateDraft("port", v)} />
-              <InputRow label="IfIndex" value={draft.ifIndex} onChange={(v) => updateDraft("ifIndex", v)} />
-              <InputRow label="RX OID" value={draft.rxOid} onChange={(v) => updateDraft("rxOid", v)} />
-              <InputRow label="TX OID" value={draft.txOid} onChange={(v) => updateDraft("txOid", v)} />
-            </div>
-          ) : null}
-        </div>
-      </div>
+      )}
     </div>
   );
 }
 
-function InfoCard({ title, value, mono }) {
+function Panel({ children }) {
   return (
-    <div style={{
-      border:"1px solid rgba(255,255,255,0.06)",
-      borderRadius:16,
-      padding:10,
-      background:"rgba(255,255,255,0.02)",
-      marginBottom:10
-    }}>
-      <div style={{ color:"#7fa7d8", fontSize:8, marginBottom:6 }}>{title}</div>
-      <div style={{
-        color:"#eef6ff",
-        fontSize: mono ? 9.5 : 11.5,
-        fontWeight: mono ? 500 : 700,
-        fontFamily: mono ? "Consolas, monospace" : "inherit",
-        lineHeight:1.5,
-        wordBreak:"break-all"
-      }}>
+    <div
+      style={{
+        background: "rgba(15,23,42,0.92)",
+        border: "1px solid rgba(148,163,184,0.18)",
+        borderRadius: 16,
+        padding: 14,
+        boxShadow: "0 12px 30px rgba(0,0,0,0.22)",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function StatBox({ label, value }) {
+  return (
+    <div
+      style={{
+        minWidth: 86,
+        padding: "10px 12px",
+        borderRadius: 12,
+        background: "rgba(15,23,42,0.92)",
+        border: "1px solid rgba(148,163,184,0.18)",
+      }}
+    >
+      <div style={{ fontSize: 11, color: "#94a3b8" }}>{label}</div>
+      <div style={{ fontSize: 18, fontWeight: 800, marginTop: 4 }}>{value}</div>
+    </div>
+  );
+}
+
+function InfoRow({ label, value }) {
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "96px minmax(0, 1fr)",
+        gap: 10,
+        padding: "10px 12px",
+        borderRadius: 12,
+        background: "rgba(2,6,23,0.5)",
+        border: "1px solid rgba(148,163,184,0.12)",
+      }}
+    >
+      <div style={{ color: "#94a3b8", fontSize: 12 }}>{label}</div>
+      <div style={{ color: "#e5e7eb", fontSize: 13, fontWeight: 700, wordBreak: "break-word" }}>
         {value}
       </div>
     </div>
   );
 }
-
-function InputRow({ label, value, onChange }) {
-  return (
-    <label style={{ display:"grid", gap:4 }}>
-      <div style={{ color:"#7fa7d8", fontSize:8 }}>{label}</div>
-      <input
-        value={value ?? ""}
-        onChange={(e) => onChange(e.target.value)}
-        style={{
-          width:"100%",
-          borderRadius:10,
-          border:"1px solid rgba(255,255,255,0.10)",
-          background:"rgba(255,255,255,0.04)",
-          color:"#eef6ff",
-          padding:"8px 10px",
-          outline:"none"
-        }}
-      />
-    </label>
-  );
-}
-
-const btnStyle = {
-  padding:"6px 10px",
-  borderRadius:10,
-  border:"1px solid rgba(255,255,255,0.08)",
-  background:"rgba(255,255,255,0.04)",
-  color:"#fff",
-  cursor:"pointer",
-  fontWeight:700
-};
-
-const activeBtnStyle = {
-  ...btnStyle,
-  background:"rgba(71,215,255,0.20)",
-  border:"1px solid rgba(71,215,255,0.48)"
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
