@@ -7,7 +7,7 @@ export default function LoginPage({ onLogin }) {
   function submit(e) {
     e.preventDefault();
     if (u === "admin" && p === "morad3alamdar") {
-      localStorage.setItem("noc_token", "ok");
+      ;
       onLogin?.();
     }
   }
@@ -144,3 +144,5 @@ const styles = {
     cursor:"pointer"
   }
 };
+
+

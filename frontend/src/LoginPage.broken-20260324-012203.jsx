@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const VALID_USERNAME = "admin";
 const VALID_PASSWORD = "morad3alamdar";
@@ -51,8 +51,8 @@ export default function LoginPage({ onLogin }) {
     const p = String(password || "");
 
     if (u === VALID_USERNAME && p === VALID_PASSWORD) {
-      localStorage.setItem("noc_token", "ok");
-      localStorage.setItem("noc_user", u);
+      ;
+      ;
       setErr("");
       onLogin?.();
       return;
@@ -181,7 +181,7 @@ export default function LoginPage({ onLogin }) {
 
             <form onSubmit={submit} style={styles.form}>
               <div style={styles.inputWrap}>
-                <span style={styles.inputIcon}>◉</span>
+                <span style={styles.inputIcon}>?</span>
                 <input
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -193,7 +193,7 @@ export default function LoginPage({ onLogin }) {
               </div>
 
               <div style={styles.inputWrap}>
-                <span style={styles.inputIcon}>◈</span>
+                <span style={styles.inputIcon}>?</span>
                 <input
                   type="password"
                   value={password}
@@ -515,6 +515,8 @@ const styles = {
     clipPath: "polygon(8% 0, 0 100%, 100% 100%, 92% 0)",
   },
 };
+
+
 
 
 

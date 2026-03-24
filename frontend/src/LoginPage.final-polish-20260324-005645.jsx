@@ -61,8 +61,8 @@ export default function LoginPage({ onLogin }) {
     const p = String(password || "");
 
     if (u === VALID_USERNAME && p === VALID_PASSWORD) {
-      localStorage.setItem("noc_token", "ok");
-      localStorage.setItem("noc_user", u);
+      ;
+      ;
       setErr("");
       onLogin?.();
       return;
@@ -680,5 +680,7 @@ const styles = {
     textTransform: "uppercase",
   },
 };
+
+
 
 

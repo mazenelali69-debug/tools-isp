@@ -59,3 +59,5 @@ export default function MonitorCanvasPure({ monitors, live, history, stopMonitor
 
 
 
+
+

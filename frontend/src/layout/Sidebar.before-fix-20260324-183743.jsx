@@ -1,20 +1,20 @@
-﻿import React, { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 const NAV = [
-  { id: "dashboard", label: "Dashboard", icon: "â—«" },
-  { id: "tplinkjetstream", label: "TP-Link-JETStream", icon: "â—‰" },
-  { id: "neighbors", label: "Neighbors", icon: "â—Ž" },
-  { id: "liveping", label: "Latency LIVE", icon: "â—Œ" },
-  { id: "ethernet", label: "Bandwidth LIVE", icon: "â‡„" },
-  { id: "uplink", label: "UPLINK Traffic", icon: "â–²" },
-  { id: "combined", label: "Combined Traffic", icon: "â—ˆ" },
-  { id: "history", label: "History", icon: "â—·" },
-  { id: "aviatwtm4200", label: "AviatWTM4200", icon: "â–£" },
-  { id: "aviathistory", label: "Aviat History", icon: "â—«" },
-  { id: "monitorstreet", label: "Monitor Street", icon: "â—”" },
-  { id: "networkmap", label: "Network Map", icon: "âŒ˜" },
-  { id: "isptopology", label: "ISP Topology", icon: "â—‰" },
-  { id: "weathertripoli", label: "Weather Tripoli", icon: "â˜" }
+  { id: "dashboard", label: "Dashboard", icon: "◫" },
+  { id: "tplinkjetstream", label: "TP-Link-JETStream", icon: "◉" },
+  { id: "neighbors", label: "Neighbors", icon: "◎" },
+  { id: "liveping", label: "Latency LIVE", icon: "◌" },
+  { id: "ethernet", label: "Bandwidth LIVE", icon: "⇄" },
+  { id: "uplink", label: "UPLINK Traffic", icon: "▲" },
+  { id: "combined", label: "Combined Traffic", icon: "◈" },
+  { id: "history", label: "History", icon: "◷" },
+  { id: "aviatwtm4200", label: "AviatWTM4200", icon: "▣" },
+  { id: "aviathistory", label: "Aviat History", icon: "◫" },
+  { id: "monitorstreet", label: "Monitor Street", icon: "◔" },
+  { id: "networkmap", label: "Network Map", icon: "⌘" },
+  { id: "isptopology", label: "ISP Topology", icon: "◉" },
+  { id: "weathertripoli", label: "Weather Tripoli", icon: "☁" }
 ];
 
 export default function Sidebar({ active, setActive }) {
@@ -46,12 +46,12 @@ export default function Sidebar({ active, setActive }) {
           onClick={() => setCollapsed(v => !v)}
           title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
-          {collapsed ? "Â»" : "Â«"}
+          {collapsed ? "»" : "«"}
         </button>
       </div>
 
       <div className="ti-side__sectionLabel">
-        {!collapsed ? "Navigation" : "â€¢"}
+        {!collapsed ? "Navigation" : "•"}
       </div>
 
       <nav className="ti-side__nav">
@@ -75,7 +75,7 @@ export default function Sidebar({ active, setActive }) {
   onClick={handleLogout}
   title="Logout"
 >
-  <span className="ti-side__icon">⏻</span>
+  <span className="ti-side__icon">?</span>
   {!collapsed ? <span className="ti-side__label">Logout</span> : null}
 </button>
 
@@ -90,6 +90,8 @@ export default function Sidebar({ active, setActive }) {
     </aside>
   );
 }
+
+
 
 
 
