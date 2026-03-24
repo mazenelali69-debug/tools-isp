@@ -39,53 +39,29 @@ function one(v) {
 }
 
 function weatherIcon(code) {
-  const n = Number(code);
-
-  if (n === 0) return "☀️";
-  if (n === 1 || n === 2) return "🌤️";
-  if (n === 3) return "☁️";
-  if (n === 45 || n === 48) return "🌫️";
-  if (n >= 51 && n <= 57) return "🌦️";
-  if (n >= 61 && n <= 67) return "🌧️";
-  if (n >= 71 && n <= 77) return "❄️";
-  if (n >= 80 && n <= 82) return "🌧️";
-  if (n >= 85 && n <= 86) return "🌨️";
-  if (n >= 95) return "⛈️";
-  return "☁️";
+  if (code === 0) return "☀️";
+  if (code === 1 || code === 2) return "🌤️";
+  if (code === 3) return "☁️";
+  if (code === 45 || code === 48) return "🌫️";
+  if (code >= 51 && code <= 57) return "🌦️";
+  if (code >= 61 && code <= 67) return "🌧️";
+  if (code >= 71 && code <= 77) return "❄️";
+  if (code >= 80 && code <= 82) return "🌧️";
+  if (code >= 95) return "⛈️";
+  return "❓";
 }
 
 function weatherLabel(code) {
-  const map = {
-    0: "Clear sky",
-    1: "Mainly clear",
-    2: "Partly cloudy",
-    3: "Overcast",
-    45: "Fog",
-    48: "Rime fog",
-    51: "Light drizzle",
-    53: "Drizzle",
-    55: "Dense drizzle",
-    56: "Freezing drizzle",
-    57: "Heavy freezing drizzle",
-    61: "Light rain",
-    63: "Rain",
-    65: "Heavy rain",
-    66: "Freezing rain",
-    67: "Heavy freezing rain",
-    71: "Light snow",
-    73: "Snow",
-    75: "Heavy snow",
-    77: "Snow grains",
-    80: "Rain showers",
-    81: "Rain showers",
-    82: "Heavy showers",
-    85: "Snow showers",
-    86: "Heavy snow showers",
-    95: "Thunderstorm",
-    96: "Thunderstorm hail",
-    99: "Heavy thunderstorm hail",
-  };
-  return map[code] || "Weather";
+  if (code === 0) return "Clear sky";
+  if (code <= 2) return "Partly cloudy";
+  if (code === 3) return "Cloudy";
+  if (code <= 48) return "Fog";
+  if (code <= 57) return "Drizzle";
+  if (code <= 67) return "Rain";
+  if (code <= 77) return "Snow";
+  if (code <= 82) return "Showers";
+  if (code >= 95) return "Thunderstorm";
+  return "Unknown";
 }
 
 function weatherTone(code, rainProb) {
@@ -750,6 +726,7 @@ const glowC = {
   filter: "blur(70px)",
   pointerEvents: "none",
 };
+
 
 
 
