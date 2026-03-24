@@ -1,5 +1,9 @@
 ﻿import React, { useEffect, useMemo, useRef, useState } from "react";
 
+const VIEWBOX_WIDTH = 1800;
+const VIEWBOX_HEIGHT = 900;
+const REFRESH_MS = 10000;
+
 const FALLBACK_NODES = {
   "254": { id: "254", label: "TP LINK IN Aviat", ip: "88.88.88.254", type: "core" },
   "253": { id: "253", label: "TP Link1 IN Cabinet", ip: "88.88.88.253", type: "tp" },
@@ -10,7 +14,7 @@ const FALLBACK_NODES = {
 const FALLBACK_LINKS = [
   { id: "link-254-253", source: "254", target: "253" },
   { id: "link-254-252", source: "254", target: "252" },
-  { id: "link-254-10254", source: "254", target: "10254" },
+  { id: "link-vlan2-hexs", source: "254", target: "10254" },
 ];
 
 const FALLBACK_POSITIONS = {
@@ -23,6 +27,10 @@ const FALLBACK_POSITIONS = {
 function unwrapPayload(raw, fallback) {
   if (raw && typeof raw === "object" && "data" in raw) return raw.data;
   return raw ?? fallback;
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
 }
 
 function toNodeArray(nodesRaw, positionsRaw) {
@@ -62,20 +70,20 @@ function toNodeArray(nodesRaw, positionsRaw) {
       };
     });
 
-  return out.length
-    ? out
-    : Object.entries(FALLBACK_NODES).map(([key, value]) => ({
-        id: value.id,
-        label: value.label,
-        ip: value.ip,
-        type: value.type,
-        x: FALLBACK_POSITIONS[key]?.x ?? 120,
-        y: FALLBACK_POSITIONS[key]?.y ?? 120,
-        port: "",
-        ifIndex: "",
-        rxOid: "",
-        txOid: "",
-      }));
+  if (out.length) return out;
+
+  return Object.entries(FALLBACK_NODES).map(([key, value]) => ({
+    id: value.id,
+    label: value.label,
+    ip: value.ip,
+    type: value.type,
+    x: FALLBACK_POSITIONS[key]?.x ?? 120,
+    y: FALLBACK_POSITIONS[key]?.y ?? 120,
+    port: "",
+    ifIndex: "",
+    rxOid: "",
+    txOid: "",
+  }));
 }
 
 function toLinkArray(linksRaw) {
@@ -102,6 +110,8 @@ function nodeColor(type) {
       return "#34d399";
     case "edge":
       return "#f59e0b";
+    case "radio":
+      return "#f59e0b";
     default:
       return "#94a3b8";
   }
@@ -110,28 +120,92 @@ function nodeColor(type) {
 function formatMbps(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "-";
+  if (n >= 1000) return `${(n / 1000).toFixed(2)} G`;
+  return `${n.toFixed(1)} M`;
+}
+
+function formatFullMbps(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "-";
   if (n >= 1000) return `${(n / 1000).toFixed(2)} Gbps`;
   return `${n.toFixed(2)} Mbps`;
+}
+
+function getTrafficMapFromSnapshot(snapshotRaw) {
+  const data = unwrapPayload(snapshotRaw, []);
+  if (Array.isArray(data)) {
+    return Object.fromEntries(
+      data
+        .filter((item) => item && item.id)
+        .map((item) => [String(item.id), item])
+    );
+  }
+
+  const nested =
+    data?.traffic ||
+    data?.linksTraffic ||
+    data?.liveTraffic ||
+    {};
+
+  if (nested && typeof nested === "object") return nested;
+  return {};
 }
 
 function pickTrafficForLink(link, trafficMap) {
   if (!link || !trafficMap) return null;
 
-  const direct =
+  return (
     trafficMap[link.id] ||
     trafficMap[`${link.source}-${link.target}`] ||
-    trafficMap[`${link.target}-${link.source}`];
-
-  if (direct) return direct;
-
-  const values = Object.values(trafficMap);
-  return (
-    values.find((t) => t?.sourceId === link.source && t?.targetId === link.target) ||
-    values.find((t) => t?.sourceId === link.target && t?.targetId === link.source) ||
-    values.find((t) => t?.targetId === link.target) ||
-    values.find((t) => t?.targetId === link.source) ||
+    trafficMap[`${link.target}-${link.source}`] ||
+    Object.values(trafficMap).find((t) => t?.id === link.id) ||
+    Object.values(trafficMap).find((t) => t?.sourceId === link.source && t?.targetId === link.target) ||
+    Object.values(trafficMap).find((t) => t?.sourceId === link.target && t?.targetId === link.source) ||
     null
   );
+}
+
+function utilizationPercent(traffic) {
+  const total = Number(traffic?.totalMbps);
+  if (!Number.isFinite(total)) return null;
+
+  const capacityGuess =
+    total > 1200 ? 3000 :
+    total > 250 ? 1000 :
+    1000;
+
+  return (total / capacityGuess) * 100;
+}
+
+function lineColor(traffic) {
+  if (!traffic) return "rgba(148,163,184,0.45)";
+  if (traffic.live === false || String(traffic.status || "").toLowerCase() === "down") return "#ef4444";
+
+  const status = String(traffic.status || "").toLowerCase();
+  if (status === "warm") return "#f59e0b";
+  if (status === "hot") return "#ef4444";
+
+  const util = utilizationPercent(traffic);
+  if (util == null) return "#60a5fa";
+  if (util >= 80) return "#ef4444";
+  if (util >= 50) return "#f59e0b";
+  return "#22c55e";
+}
+
+function lineWidth(traffic) {
+  const total = Number(traffic?.totalMbps);
+  if (!Number.isFinite(total)) return 2.5;
+  if (total >= 500) return 8;
+  if (total >= 250) return 6;
+  if (total >= 100) return 4.5;
+  if (total >= 25) return 3.5;
+  return 2.5;
+}
+
+function isLinkDown(traffic) {
+  if (!traffic) return true;
+  if (traffic.live === false) return true;
+  return String(traffic.status || "").toLowerCase() === "down";
 }
 
 function Panel({ children }) {
@@ -189,9 +263,11 @@ function InfoRow({ label, value }) {
 }
 
 export default function IspTopologyPage() {
-  const [loading, setLoading] = useState(true);`r`n  const [firstLoadDone, setFirstLoadDone] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [firstLoadDone, setFirstLoadDone] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [saveText, setSaveText] = useState("");
+  const [lastUpdated, setLastUpdated] = useState("");
   const [nodes, setNodes] = useState([]);
   const [links, setLinks] = useState([]);
   const [trafficMap, setTrafficMap] = useState({});
@@ -205,7 +281,7 @@ export default function IspTopologyPage() {
 
     async function load() {
       if (!firstLoadDone) setLoading(true);
-setErrorText("");
+      setErrorText("");
 
       try {
         const [nodesRes, positionsRes, linksRes, snapRes] = await Promise.allSettled([
@@ -230,16 +306,10 @@ setErrorText("");
             ? unwrapPayload(await linksRes.value.json(), [])
             : [];
 
-        let nextTraffic = {};
-        if (snapRes.status === "fulfilled" && snapRes.value.ok) {
-          const snapJson = await snapRes.value.json();
-          const snapData = unwrapPayload(snapJson, {});
-          nextTraffic =
-            snapData?.traffic ||
-            snapData?.linksTraffic ||
-            snapData?.liveTraffic ||
-            {};
-        }
+        const nextTraffic =
+          snapRes.status === "fulfilled" && snapRes.value.ok
+            ? getTrafficMapFromSnapshot(await snapRes.value.json())
+            : {};
 
         if (cancelled) return;
 
@@ -252,7 +322,8 @@ setErrorText("");
         setNodes(nextNodes);
         setLinks(nextLinks);
         setTrafficMap(nextTraffic || {});
-        setSelectedId(nextNodes[0]?.id || "");
+        setSelectedId((prev) => prev || nextNodes[0]?.id || "");
+        setLastUpdated(new Date().toLocaleTimeString());
       } catch (err) {
         if (cancelled) return;
 
@@ -263,34 +334,31 @@ setErrorText("");
         setNodes(nextNodes);
         setLinks(nextLinks);
         setTrafficMap({});
-        setSelectedId(nextNodes[0]?.id || "");
+        setSelectedId((prev) => prev || nextNodes[0]?.id || "");
       } finally {
         if (!cancelled) {
-  setLoading(false);
-  setFirstLoadDone(true);
-}
+          setLoading(false);
+          setFirstLoadDone(true);
+        }
       }
     }
 
     load();
-    const timer = setInterval(load, 10000);
+    const timer = setInterval(load, REFRESH_MS);
+
     return () => {
       cancelled = true;
       clearInterval(timer);
     };
-  }, []);
+  }, [firstLoadDone]);
 
   useEffect(() => {
     function onMove(e) {
       if (!dragRef.current || !svgRef.current) return;
 
       const rect = svgRef.current.getBoundingClientRect();
-      const viewBoxWidth = 1800;
-      const viewBoxHeight = 900;
-
-      const x = ((e.clientX - rect.left) / rect.width) * viewBoxWidth;
-      const y = ((e.clientY - rect.top) / rect.height) * viewBoxHeight;
-
+      const x = ((e.clientX - rect.left) / rect.width) * VIEWBOX_WIDTH;
+      const y = ((e.clientY - rect.top) / rect.height) * VIEWBOX_HEIGHT;
       const { nodeId } = dragRef.current;
 
       setNodes((prev) =>
@@ -298,8 +366,8 @@ setErrorText("");
           n.id === nodeId
             ? {
                 ...n,
-                x: Math.max(30, Math.min(viewBoxWidth - 30, x)),
-                y: Math.max(30, Math.min(viewBoxHeight - 30, y)),
+                x: clamp(x, 30, VIEWBOX_WIDTH - 30),
+                y: clamp(y, 30, VIEWBOX_HEIGHT - 30),
               }
             : n
         )
@@ -330,10 +398,18 @@ setErrorText("");
 
   const stats = useMemo(() => {
     const counts = { core: 0, router: 0, radio: 0, mk: 0, tp: 0, edge: 0 };
+    let down = 0;
+
     for (const n of nodes) {
       const t = String(n.type || "").toLowerCase();
       if (t in counts) counts[t] += 1;
     }
+
+    for (const link of links) {
+      const tr = pickTrafficForLink(link, trafficMap);
+      if (isLinkDown(tr)) down += 1;
+    }
+
     return {
       totalNodes: nodes.length,
       totalLinks: links.length,
@@ -341,8 +417,9 @@ setErrorText("");
       mk: counts.mk,
       tp: counts.tp,
       edge: counts.edge,
+      down,
     };
-  }, [nodes, links]);
+  }, [nodes, links, trafficMap]);
 
   async function saveLayout() {
     try {
@@ -399,7 +476,10 @@ setErrorText("");
         <div>
           <div style={{ fontSize: 24, fontWeight: 800 }}>Network Map</div>
           <div style={{ fontSize: 13, color: "#94a3b8", marginTop: 4 }}>
-            Drag nodes • Save layout • Link traffic labels
+            Live topology • Drag nodes • Utilization colors • Traffic thickness
+          </div>
+          <div style={{ fontSize: 12, color: "#64748b", marginTop: 6 }}>
+            Last update: {lastUpdated || "-"}
           </div>
         </div>
 
@@ -411,7 +491,7 @@ setErrorText("");
           <StatBox label="Core" value={stats.core} />
           <StatBox label="MK" value={stats.mk} />
           <StatBox label="TP" value={stats.tp} />
-          <StatBox label="Edge" value={stats.edge} />
+          <StatBox label="Down" value={stats.down} />
         </div>
       </div>
 
@@ -429,7 +509,7 @@ setErrorText("");
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "minmax(0, 1fr) 340px",
+            gridTemplateColumns: "minmax(0, 1fr) 360px",
             gap: 16,
           }}
         >
@@ -462,7 +542,7 @@ setErrorText("");
             >
               <svg
                 ref={svgRef}
-                viewBox="0 0 1800 900"
+                viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
                 style={{ width: "100%", height: "auto", display: "block" }}
               >
                 <defs>
@@ -471,19 +551,20 @@ setErrorText("");
                   </pattern>
                 </defs>
 
-                <rect x="0" y="0" width="1800" height="900" fill="url(#grid)" />
+                <rect x="0" y="0" width={VIEWBOX_WIDTH} height={VIEWBOX_HEIGHT} fill="url(#grid)" />
 
                 {links.map((link) => {
                   const source = nodeMap[link.source];
                   const target = nodeMap[link.target];
                   if (!source || !target) return null;
 
+                  const traffic = pickTrafficForLink(link, trafficMap);
+                  const active = selectedLinkId === link.id;
                   const mx = (source.x + target.x) / 2;
                   const my = (source.y + target.y) / 2;
-                  const traffic = pickTrafficForLink(link, trafficMap);
-                  const rx = traffic?.rxMbps ?? traffic?.rx ?? null;
-                  const tx = traffic?.txMbps ?? traffic?.tx ?? null;
-                  const active = selectedLinkId === link.id;
+                  const color = lineColor(traffic);
+                  const width = active ? lineWidth(traffic) + 2 : lineWidth(traffic);
+                  const down = isLinkDown(traffic);
 
                   return (
                     <g key={link.id} onClick={() => setSelectedLinkId(link.id)} style={{ cursor: "pointer" }}>
@@ -492,28 +573,33 @@ setErrorText("");
                         y1={source.y}
                         x2={target.x}
                         y2={target.y}
-                        stroke={active ? "#f8fafc" : "rgba(96,165,250,0.7)"}
-                        strokeWidth={active ? 4 : 3}
+                        stroke={color}
+                        strokeWidth={width}
+                        strokeDasharray={down ? "10 8" : "0"}
+                        opacity={active ? 1 : 0.92}
                       />
+
                       <rect
-                        x={mx - 58}
-                        y={my - 16}
-                        width="116"
-                        height="24"
+                        x={mx - 72}
+                        y={my - 18}
+                        width="144"
+                        height="28"
                         rx="8"
-                        fill="rgba(2,6,23,0.88)"
-                        stroke="rgba(148,163,184,0.22)"
+                        fill="rgba(2,6,23,0.9)"
+                        stroke={down ? "rgba(239,68,68,0.55)" : "rgba(148,163,184,0.22)"}
                       />
                       <text
                         x={mx}
-                        y={my}
+                        y={my - 1}
                         textAnchor="middle"
                         dominantBaseline="middle"
-                        fill="#e5e7eb"
+                        fill={down ? "#fecaca" : "#e5e7eb"}
                         fontSize="12"
                         fontWeight="700"
                       >
-                        RX {formatMbps(rx)} | TX {formatMbps(tx)}
+                        {down
+                          ? "LINK DOWN"
+                          : `RX ${formatMbps(traffic?.rxMbps ?? traffic?.rx)} | TX ${formatMbps(traffic?.txMbps ?? traffic?.tx)}`}
                       </text>
                     </g>
                   );
@@ -587,14 +673,13 @@ setErrorText("");
                 <InfoRow label="Link ID" value={selectedLink.id} />
                 <InfoRow label="Source" value={selectedLink.source} />
                 <InfoRow label="Target" value={selectedLink.target} />
-                <InfoRow
-                  label="RX"
-                  value={formatMbps(selectedLinkTraffic?.rxMbps ?? selectedLinkTraffic?.rx ?? null)}
-                />
-                <InfoRow
-                  label="TX"
-                  value={formatMbps(selectedLinkTraffic?.txMbps ?? selectedLinkTraffic?.tx ?? null)}
-                />
+                <InfoRow label="Status" value={selectedLinkTraffic?.status || (isLinkDown(selectedLinkTraffic) ? "down" : "-")} />
+                <InfoRow label="RX" value={formatFullMbps(selectedLinkTraffic?.rxMbps ?? selectedLinkTraffic?.rx)} />
+                <InfoRow label="TX" value={formatFullMbps(selectedLinkTraffic?.txMbps ?? selectedLinkTraffic?.tx)} />
+                <InfoRow label="Total" value={formatFullMbps(selectedLinkTraffic?.totalMbps)} />
+                <InfoRow label="Port" value={selectedLinkTraffic?.port || "-"} />
+                <InfoRow label="IfIndex" value={selectedLinkTraffic?.ifIndex || "-"} />
+                <InfoRow label="Live" value={String(selectedLinkTraffic?.live ?? "-")} />
               </div>
             ) : null}
           </Panel>
@@ -614,4 +699,3 @@ const buttonStyle = {
   fontWeight: 700,
   cursor: "pointer",
 };
-
