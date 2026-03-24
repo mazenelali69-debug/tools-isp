@@ -1,4 +1,4 @@
-﻿import React, { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 function SideIcon({ kind }) {
   const common = {
@@ -179,8 +179,8 @@ export default function Sidebar({ active, setActive }) {
   const items = useMemo(() => NAV, []);
 
   function handleLogout() {
-    localStorage.removeItem("noc_token");
-    localStorage.removeItem("noc_user");
+    sessionStorage.removeItem("noc_token");
+    sessionStorage.removeItem("noc_user");
     window.location.reload();
   }
 
