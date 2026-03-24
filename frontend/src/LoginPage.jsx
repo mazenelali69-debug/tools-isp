@@ -1,62 +1,46 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 
 const VALID_USERNAME = "admin";
 const VALID_PASSWORD = "morad3alamdar";
 
-function rand(min, max) {
-  return min + Math.random() * (max - min);
-}
-
-function makeNodes(count = 52) {
+function makeDots(count = 22) {
   return Array.from({ length: count }, (_, i) => ({
     id: i,
-    x: rand(2, 98),
-    y: rand(4, 96),
-    r: rand(0.12, 0.22),
+    x: 8 + Math.random() * 84,
+    y: 10 + Math.random() * 80,
+    size: 2 + Math.random() * 2,
+    opacity: 0.08 + Math.random() * 0.18,
   }));
-}
-
-function makeEdges(nodes) {
-  const edges = [];
-  for (let i = 0; i < nodes.length; i += 1) {
-    for (let j = i + 1; j < nodes.length; j += 1) {
-      const dx = nodes[i].x - nodes[j].x;
-      const dy = nodes[i].y - nodes[j].y;
-      const d = Math.sqrt(dx * dx + dy * dy);
-      if (d < 16) {
-        edges.push({
-          id: `${i}-${j}`,
-          a: nodes[i],
-          b: nodes[j],
-          opacity: Math.max(0.04, 0.16 - d / 140),
-        });
-      }
-    }
-  }
-  return edges.slice(0, 140);
 }
 
 export default function LoginPage({ onLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
-  const [mouse, setMouse] = useState({ x: 50, y: 50, active: false });
-  const [pulses, setPulses] = useState([]);
-  const wrapRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < 920 : false
+  );
 
-  const nodes = useMemo(() => makeNodes(), []);
-  const edges = useMemo(() => makeEdges(nodes), [nodes]);
+  const dots = useMemo(() => makeDots(24), []);
 
   useEffect(() => {
     const oldOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    function onResize() {
+      setIsMobile(window.innerWidth < 920);
+    }
+
+    window.addEventListener("resize", onResize);
     return () => {
       document.body.style.overflow = oldOverflow;
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 
   function submit(e) {
     e.preventDefault();
+
     const u = String(username || "").trim();
     const p = String(password || "");
 
@@ -71,397 +55,397 @@ export default function LoginPage({ onLogin }) {
     setErr("Invalid credentials");
   }
 
-  function handleMove(e) {
-    const el = wrapRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setMouse({ x, y, active: true });
-  }
-
-  function handleLeave() {
-    setMouse((prev) => ({ ...prev, active: false }));
-  }
-
-  function handleClick(e) {
-    const el = wrapRef.current;
-    if (!el) return;
-
-    const rect = el.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-
-    const tx = x + (Math.random() * 10 - 5);
-    const ty = y + (Math.random() * 10 - 5);
-    const id = Date.now() + Math.random();
-
-    setPulses((prev) => [...prev, { id, x, y, tx, ty }]);
-
-    window.setTimeout(() => {
-      setPulses((prev) => prev.filter((p) => p.id !== id));
-    }, 800);
-  }
+  const styles = getStyles(isMobile);
 
   return (
-    <div
-      ref={wrapRef}
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-      onClick={handleClick}
-      style={styles.page}
-    >
+    <div style={styles.page}>
       <div style={styles.bg} />
-      <div style={styles.vignette} />
-      <div style={styles.leftGlow} />
-      <div style={styles.rightGlow} />
+      <div style={styles.grid} />
+      <div style={styles.glowLeft} />
+      <div style={styles.glowRight} />
 
-      <svg style={styles.net} viewBox="0 0 100 100" preserveAspectRatio="none">
-        {edges.map((edge) => (
-          <line
-            key={edge.id}
-            x1={edge.a.x}
-            y1={edge.a.y}
-            x2={edge.b.x}
-            y2={edge.b.y}
-            stroke="rgba(56,189,248,0.22)"
-            strokeWidth="0.08"
-            opacity={edge.opacity}
-          />
-        ))}
-
-        {nodes.map((n) => {
-          const dx = n.x - mouse.x;
-          const dy = n.y - mouse.y;
-          const d = Math.sqrt(dx * dx + dy * dy);
-          const near = mouse.active && d < 13;
-
-          return (
-            <g key={n.id}>
-              {near ? (
-                <line
-                  x1={n.x}
-                  y1={n.y}
-                  x2={mouse.x}
-                  y2={mouse.y}
-                  stroke="rgba(125,211,252,0.32)"
-                  strokeWidth="0.10"
-                  opacity={Math.max(0.12, 1 - d / 13)}
-                />
-              ) : null}
-              <circle
-                cx={n.x}
-                cy={n.y}
-                r={near ? n.r * 1.8 : n.r}
-                fill={near ? "rgba(125,211,252,0.95)" : "rgba(125,211,252,0.48)"}
-              />
-            </g>
-          );
-        })}
-
-        {pulses.map((p) => (
-          <line
-            key={p.id}
-            x1={p.x}
-            y1={p.y}
-            x2={p.tx}
-            y2={p.ty}
-            stroke="rgba(56,189,248,0.95)"
-            strokeWidth="0.18"
-            strokeDasharray="1.2 1.2"
-            className="pulse-line"
-          />
-        ))}
-      </svg>
-
-      <div
-        style={{
-          ...styles.mouseGlow,
-          left: `${mouse.x}%`,
-          top: `${mouse.y}%`,
-          opacity: mouse.active ? 1 : 0,
-        }}
-      />
-
-      <div style={styles.center}>
-        <div
+      {dots.map((d) => (
+        <span
+          key={d.id}
           style={{
-            ...styles.cardGlow,
-            opacity: mouse.active ? 1 : 0.7,
-            transform: mouse.active
-              ? `translate(${(mouse.x - 50) * 0.18}px, ${(mouse.y - 50) * 0.14}px)`
-              : "translate(0,0)",
+            position: "absolute",
+            left: `${d.x}%`,
+            top: `${d.y}%`,
+            width: `${d.size}px`,
+            height: `${d.size}px`,
+            borderRadius: "999px",
+            background: "rgba(103,232,249,.9)",
+            boxShadow: "0 0 10px rgba(56,189,248,.25)",
+            opacity: d.opacity,
+            pointerEvents: "none",
           }}
         />
-        <div
-          style={{
-            ...styles.card,
-            boxShadow: mouse.active
-              ? "0 30px 90px rgba(0,0,0,.62), 0 0 0 1px rgba(96,165,250,.18), 0 0 36px rgba(56,189,248,.12)"
-              : "0 24px 70px rgba(0,0,0,.56), 0 0 0 1px rgba(148,163,184,.08)",
-          }}
-        >
-          <div
-            style={{
-              ...styles.cardAura,
-              background: mouse.active
-                ? `radial-gradient(circle at ${mouse.x}% ${mouse.y}%, rgba(56,189,248,.12), rgba(59,130,246,.06) 20%, rgba(0,0,0,0) 56%)`
-                : "radial-gradient(circle at 50% 50%, rgba(56,189,248,.05), rgba(0,0,0,0) 56%)",
-            }}
-          />
+      ))}
 
-          <div style={styles.kicker}>NoComment Network</div>
-          <h1 style={styles.title}>Secure Access</h1>
-          <div style={styles.sub}>Enter the operations control layer</div>
+      <div style={styles.shell}>
+        <section style={styles.hero}>
+          <div style={styles.heroAccent} />
+          <div style={styles.heroKicker}>Operations Layer</div>
+          <h1 style={styles.heroTitle}>Network Control</h1>
+          <p style={styles.heroText}>
+            Secure access to monitoring, visibility, and control for the active
+            infrastructure environment.
+          </p>
 
-          <form onSubmit={submit}>
-            <div style={styles.field}>
-              <label style={styles.label}>Username</label>
-              <input
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                autoComplete="username"
-                spellCheck={false}
-                style={styles.input}
-              />
+          <div style={styles.heroStatRow}>
+            <div style={styles.heroStatCard}>
+              <div style={styles.heroStatLabel}>Status</div>
+              <div style={styles.heroStatValue}>Protected</div>
             </div>
-
-            <div style={styles.field}>
-              <label style={styles.label}>Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete="current-password"
-                style={styles.input}
-              />
+            <div style={styles.heroStatCard}>
+              <div style={styles.heroStatLabel}>Access</div>
+              <div style={styles.heroStatValue}>Restricted</div>
             </div>
+          </div>
+        </section>
 
-            {err ? <div style={styles.err}>{err}</div> : null}
+        <section style={styles.cardWrap}>
+          <div style={styles.cardGlow} />
+          <div style={styles.card}>
+            <div style={styles.cardTopBar} />
+            <div style={styles.brand}>NoComment Network</div>
+            <h2 style={styles.cardTitle}>Sign in</h2>
+            <div style={styles.cardSub}>Authorized access only</div>
 
-            <button type="submit" style={styles.button}>
-              Enter Dashboard
-            </button>
+            <form onSubmit={submit} style={styles.form}>
+              <div style={styles.field}>
+                <label style={styles.label}>Username</label>
+                <input
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  autoComplete="username"
+                  spellCheck={false}
+                  placeholder="Enter username"
+                  style={styles.input}
+                />
+              </div>
+
+              <div style={styles.field}>
+                <label style={styles.label}>Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  placeholder="Enter password"
+                  style={styles.input}
+                />
+              </div>
+
+              {err ? <div style={styles.err}>{err}</div> : null}
+
+              <button
+                type="submit"
+                style={styles.button}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 14px 28px rgba(56,189,248,.20)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow =
+                    "0 8px 18px rgba(56,189,248,.12)";
+                }}
+              >
+                Enter Dashboard
+              </button>
+            </form>
 
             <div style={styles.footer}>Protected Network Control Access</div>
-          </form>
-        </div>
+          </div>
+        </section>
       </div>
-
-      <style>{`
-        .pulse-line {
-          animation: pulseLine 0.8s ease-out forwards;
-        }
-
-        @keyframes pulseLine {
-          0% {
-            opacity: 1;
-            stroke-dashoffset: 12;
-          }
-          100% {
-            opacity: 0;
-            stroke-dashoffset: 0;
-          }
-        }
-
-        input:focus {
-          outline: none;
-          border-color: rgba(96,165,250,.55) !important;
-          box-shadow: 0 0 0 3px rgba(59,130,246,.08), 0 0 22px rgba(56,189,248,.08);
-        }
-
-        button:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 14px 32px rgba(34,211,238,.12);
-        }
-
-        button:active {
-          transform: translateY(0);
-        }
-      `}</style>
     </div>
   );
 }
 
-const styles = {
-  page: {
-    position: "relative",
-    minHeight: "100vh",
-    overflow: "hidden",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "#020613",
-    padding: "24px",
-  },
-  bg: {
-    position: "absolute",
-    inset: 0,
-    background:
-      "linear-gradient(90deg, rgba(3,8,20,1) 0%, rgba(2,6,18,1) 100%)",
-  },
-  vignette: {
-    position: "absolute",
-    inset: 0,
-    background: "radial-gradient(circle at center, rgba(0,0,0,0) 42%, rgba(0,0,0,.34) 100%)",
-  },
-  leftGlow: {
-    position: "absolute",
-    width: "560px",
-    height: "560px",
-    borderRadius: "999px",
-    left: "-180px",
-    top: "-140px",
-    background: "radial-gradient(circle, rgba(37,99,235,.14), rgba(37,99,235,0) 68%)",
-    filter: "blur(28px)",
-  },
-  rightGlow: {
-    position: "absolute",
-    width: "520px",
-    height: "520px",
-    borderRadius: "999px",
-    right: "-160px",
-    bottom: "-160px",
-    background: "radial-gradient(circle, rgba(34,211,238,.08), rgba(34,211,238,0) 68%)",
-    filter: "blur(30px)",
-  },
-  net: {
-    position: "absolute",
-    inset: 0,
-    width: "100%",
-    height: "100%",
-    opacity: 0.9,
-  },
-  mouseGlow: {
-    position: "absolute",
-    width: "240px",
-    height: "240px",
-    borderRadius: "999px",
-    transform: "translate(-50%, -50%)",
-    background: "radial-gradient(circle, rgba(56,189,248,.10), rgba(56,189,248,0) 70%)",
-    filter: "blur(18px)",
-    pointerEvents: "none",
-    transition: "opacity .16s ease",
-  },
-  center: {
-    position: "relative",
-    zIndex: 3,
-  },
-  cardGlow: {
-    position: "absolute",
-    inset: "-30px",
-    borderRadius: "36px",
-    background: "radial-gradient(circle at center, rgba(56,189,248,.08), rgba(0,0,0,0) 64%)",
-    filter: "blur(22px)",
-    transition: "transform .12s ease-out, opacity .16s ease",
-    pointerEvents: "none",
-  },
-  card: {
-    position: "relative",
-    width: "100%",
-    minWidth: "470px",
-    maxWidth: "470px",
-    padding: "36px",
-    borderRadius: "28px",
-    background: "linear-gradient(180deg, rgba(7,12,24,.92), rgba(3,8,18,.96))",
-    border: "1px solid rgba(148,163,184,.10)",
-    overflow: "hidden",
-    backdropFilter: "blur(16px)",
-    transition: "box-shadow .16s ease",
-  },
-  cardAura: {
-    position: "absolute",
-    inset: "-25%",
-    pointerEvents: "none",
-  },
-  kicker: {
-    position: "relative",
-    zIndex: 1,
-    color: "#7dd3fc",
-    fontSize: "12px",
-    fontWeight: 800,
-    letterSpacing: ".24em",
-    textTransform: "uppercase",
-    marginBottom: "14px",
-  },
-  title: {
-    position: "relative",
-    zIndex: 1,
-    margin: 0,
-    color: "#f8fafc",
-    fontSize: "48px",
-    fontWeight: 900,
-    lineHeight: 1,
-    letterSpacing: "-.05em",
-  },
-  sub: {
-    position: "relative",
-    zIndex: 1,
-    marginTop: "12px",
-    marginBottom: "28px",
-    color: "#93a4bc",
-    fontSize: "15px",
-  },
-  field: {
-    position: "relative",
-    zIndex: 1,
-    marginBottom: "18px",
-  },
-  label: {
-    display: "block",
-    marginBottom: "8px",
-    color: "#d3deea",
-    fontSize: "13px",
-    fontWeight: 700,
-  },
-  input: {
-    width: "100%",
-    height: "56px",
-    borderRadius: "15px",
-    border: "1px solid rgba(148,163,184,.14)",
-    background: "rgba(2,6,23,.72)",
-    color: "#f8fafc",
-    padding: "0 16px",
-    boxSizing: "border-box",
-    fontSize: "15px",
-    transition: "all .16s ease",
-  },
-  err: {
-    position: "relative",
-    zIndex: 1,
-    marginBottom: "14px",
-    padding: "12px 14px",
-    borderRadius: "14px",
-    background: "rgba(127,29,29,.22)",
-    border: "1px solid rgba(248,113,113,.18)",
-    color: "#fecaca",
-    fontSize: "13px",
-    fontWeight: 700,
-  },
-  button: {
-    position: "relative",
-    zIndex: 1,
-    width: "100%",
-    height: "58px",
-    border: "none",
-    borderRadius: "15px",
-    cursor: "pointer",
-    fontWeight: 900,
-    fontSize: "15px",
-    letterSpacing: ".02em",
-    color: "#04111f",
-    background: "linear-gradient(135deg, #93c5fd 0%, #38bdf8 52%, #22d3ee 100%)",
-    transition: "all .16s ease",
-  },
-  footer: {
-    position: "relative",
-    zIndex: 1,
-    marginTop: "15px",
-    textAlign: "center",
-    color: "#64748b",
-    fontSize: "11px",
-    letterSpacing: ".16em",
-    textTransform: "uppercase",
-  },
-};
+function getStyles(isMobile) {
+  return {
+    page: {
+      position: "relative",
+      minHeight: "100dvh",
+      overflow: "hidden",
+      background: "#07111f",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: isMobile ? "18px" : "28px",
+      fontFamily:
+        'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    },
 
+    bg: {
+      position: "absolute",
+      inset: 0,
+      background:
+        "linear-gradient(135deg, rgba(5,12,24,1) 0%, rgba(7,17,31,1) 45%, rgba(10,22,42,1) 100%)",
+    },
+
+    grid: {
+      position: "absolute",
+      inset: 0,
+      backgroundImage:
+        "linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px)",
+      backgroundSize: isMobile ? "26px 26px" : "34px 34px",
+      opacity: 0.16,
+    },
+
+    glowLeft: {
+      position: "absolute",
+      width: isMobile ? "300px" : "520px",
+      height: isMobile ? "300px" : "520px",
+      borderRadius: "999px",
+      left: isMobile ? "-120px" : "-180px",
+      top: isMobile ? "-100px" : "-170px",
+      background:
+        "radial-gradient(circle, rgba(37,99,235,.18), rgba(37,99,235,0) 68%)",
+      filter: "blur(40px)",
+      opacity: 0.78,
+    },
+
+    glowRight: {
+      position: "absolute",
+      width: isMobile ? "320px" : "540px",
+      height: isMobile ? "320px" : "540px",
+      borderRadius: "999px",
+      right: isMobile ? "-140px" : "-200px",
+      bottom: isMobile ? "-120px" : "-190px",
+      background:
+        "radial-gradient(circle, rgba(56,189,248,.12), rgba(56,189,248,0) 68%)",
+      filter: "blur(44px)",
+      opacity: 0.86,
+    },
+
+    shell: {
+      position: "relative",
+      zIndex: 2,
+      width: "100%",
+      maxWidth: isMobile ? "520px" : "1080px",
+      display: "grid",
+      gridTemplateColumns: isMobile ? "1fr" : "1.08fr 0.92fr",
+      gap: isMobile ? "20px" : "30px",
+      alignItems: "stretch",
+    },
+
+    hero: {
+      minHeight: isMobile ? "200px" : "520px",
+      borderRadius: "28px",
+      padding: isMobile ? "24px" : "34px",
+      background:
+        "linear-gradient(180deg, rgba(9,18,34,.72), rgba(5,12,24,.56))",
+      border: "1px solid rgba(148,163,184,.08)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,.03)",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+    },
+
+    heroAccent: {
+      width: "84px",
+      height: "3px",
+      borderRadius: "999px",
+      background: "linear-gradient(90deg, #67e8f9, #60a5fa)",
+      marginBottom: "18px",
+      boxShadow: "0 0 18px rgba(56,189,248,.20)",
+    },
+
+    heroKicker: {
+      color: "#7dd3fc",
+      fontSize: "11px",
+      fontWeight: 800,
+      letterSpacing: ".22em",
+      textTransform: "uppercase",
+      marginBottom: "14px",
+    },
+
+    heroTitle: {
+      margin: 0,
+      color: "#f8fafc",
+      fontSize: isMobile ? "42px" : "64px",
+      fontWeight: 900,
+      lineHeight: 0.96,
+      letterSpacing: "-.055em",
+    },
+
+    heroText: {
+      marginTop: "18px",
+      marginBottom: 0,
+      maxWidth: "520px",
+      color: "#93a4bc",
+      fontSize: isMobile ? "14px" : "15px",
+      lineHeight: 1.75,
+    },
+
+    heroStatRow: {
+      display: "flex",
+      gap: "12px",
+      flexWrap: "wrap",
+      marginTop: "30px",
+    },
+
+    heroStatCard: {
+      minWidth: "140px",
+      padding: "14px 16px",
+      borderRadius: "16px",
+      background: "rgba(255,255,255,.03)",
+      border: "1px solid rgba(148,163,184,.08)",
+    },
+
+    heroStatLabel: {
+      color: "#7f93ad",
+      fontSize: "11px",
+      fontWeight: 700,
+      letterSpacing: ".12em",
+      textTransform: "uppercase",
+    },
+
+    heroStatValue: {
+      marginTop: "8px",
+      color: "#e8f2ff",
+      fontSize: "18px",
+      fontWeight: 800,
+    },
+
+    cardWrap: {
+      position: "relative",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+
+    cardGlow: {
+      position: "absolute",
+      inset: "-18px",
+      borderRadius: "34px",
+      background:
+        "radial-gradient(circle at center, rgba(56,189,248,.085), rgba(0,0,0,0) 64%)",
+      filter: "blur(24px)",
+      pointerEvents: "none",
+    },
+
+    card: {
+      width: "100%",
+      maxWidth: isMobile ? "100%" : "460px",
+      minHeight: isMobile ? "auto" : "520px",
+      borderRadius: "28px",
+      padding: isMobile ? "26px" : "34px",
+      background:
+        "linear-gradient(180deg, rgba(8,16,30,.92), rgba(5,10,22,.98))",
+      border: "1px solid rgba(96,165,250,.14)",
+      boxShadow:
+        "0 18px 50px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.03)",
+      backdropFilter: "blur(18px)",
+      boxSizing: "border-box",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+    },
+
+    cardTopBar: {
+      width: "64px",
+      height: "3px",
+      borderRadius: "999px",
+      background: "linear-gradient(90deg, #67e8f9, #60a5fa)",
+      marginBottom: "18px",
+      boxShadow: "0 0 16px rgba(56,189,248,.18)",
+    },
+
+    brand: {
+      color: "#7dd3fc",
+      fontSize: "11px",
+      fontWeight: 800,
+      letterSpacing: ".22em",
+      textTransform: "uppercase",
+      marginBottom: "14px",
+    },
+
+    cardTitle: {
+      margin: 0,
+      color: "#f8fafc",
+      fontSize: isMobile ? "40px" : "52px",
+      fontWeight: 900,
+      lineHeight: 0.98,
+      letterSpacing: "-.05em",
+    },
+
+    cardSub: {
+      marginTop: "12px",
+      marginBottom: "28px",
+      color: "#93a4bc",
+      fontSize: "14px",
+    },
+
+    form: {
+      display: "flex",
+      flexDirection: "column",
+    },
+
+    field: {
+      marginBottom: "18px",
+    },
+
+    label: {
+      display: "block",
+      marginBottom: "8px",
+      color: "#d3deea",
+      fontSize: "12px",
+      fontWeight: 800,
+      letterSpacing: ".08em",
+      textTransform: "uppercase",
+    },
+
+    input: {
+      width: "100%",
+      height: "58px",
+      borderRadius: "16px",
+      border: "1px solid rgba(148,163,184,.14)",
+      background: "rgba(2,6,23,.82)",
+      color: "#f8fafc",
+      padding: "0 18px",
+      boxSizing: "border-box",
+      fontSize: "15px",
+      transition: "all .16s ease",
+    },
+
+    err: {
+      marginBottom: "14px",
+      padding: "12px 14px",
+      borderRadius: "14px",
+      background: "rgba(127,29,29,.22)",
+      border: "1px solid rgba(248,113,113,.18)",
+      color: "#fecaca",
+      fontSize: "13px",
+      fontWeight: 700,
+    },
+
+    button: {
+      marginTop: "6px",
+      height: "58px",
+      border: "none",
+      borderRadius: "16px",
+      cursor: "pointer",
+      fontWeight: 900,
+      fontSize: "15px",
+      letterSpacing: ".03em",
+      color: "#04111f",
+      background:
+        "linear-gradient(135deg, #67e8f9 0%, #38bdf8 48%, #818cf8 100%)",
+      boxShadow: "0 8px 18px rgba(56,189,248,.12)",
+      transition: "all .16s ease",
+    },
+
+    footer: {
+      marginTop: "18px",
+      color: "#64748b",
+      fontSize: "11px",
+      letterSpacing: ".16em",
+      textTransform: "uppercase",
+    },
+  };
+}
