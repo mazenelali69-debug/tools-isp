@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+﻿import React, { useEffect, useMemo, useState } from "react";
 
 const LAT = 34.4367;
 const LON = 35.8497;
@@ -39,17 +39,19 @@ function one(v) {
 }
 
 function weatherIcon(code) {
-  if (code === 0) return "?";
-  if (code === 1 || code === 2) return "?";
-  if (code === 3) return "?";
-  if (code === 45 || code === 48) return "??";
-  if (code >= 51 && code <= 57) return "??";
-  if (code >= 61 && code <= 67) return "??";
-  if (code >= 71 && code <= 77) return "?";
-  if (code >= 80 && code <= 82) return "??";
-  if (code >= 85 && code <= 86) return "??";
-  if (code >= 95) return "?";
-  return "??";
+  const n = Number(code);
+
+  if (n === 0) return "☀️";
+  if (n === 1 || n === 2) return "🌤️";
+  if (n === 3) return "☁️";
+  if (n === 45 || n === 48) return "🌫️";
+  if (n >= 51 && n <= 57) return "🌦️";
+  if (n >= 61 && n <= 67) return "🌧️";
+  if (n >= 71 && n <= 77) return "❄️";
+  if (n >= 80 && n <= 82) return "🌧️";
+  if (n >= 85 && n <= 86) return "🌨️";
+  if (n >= 95) return "⛈️";
+  return "☁️";
 }
 
 function weatherLabel(code) {
@@ -748,5 +750,6 @@ const glowC = {
   filter: "blur(70px)",
   pointerEvents: "none",
 };
+
 
 
