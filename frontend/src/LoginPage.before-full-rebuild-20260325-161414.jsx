@@ -26,39 +26,14 @@ export default function LoginPage({ onLogin }) {
 
   useEffect(() => {
     const oldOverflow = document.body.style.overflow;
-    document.body.style.overflow = "auto";
+    document.body.style.overflow = "hidden";
 
     function onResize() {
       setIsMobile(window.innerWidth < 920);
     }
 
     window.addEventListener("resize", onResize);
-    return () => {
-      document.body.style.overflow = oldOverflow;
-      window.removeEventListener("resize", onResize);
-    };
-  }, []);
-
-  function submit(e) {
-    e.preventDefault();
-
-    const u = String(username || "").trim();
-    const p = String(password || "");
-
-    if (u === VALID_USERNAME && p === VALID_PASSWORD) {
-      sessionStorage.setItem("noc_token", "ok");
-      sessionStorage.setItem("noc_user", u);
-      setErr("");
-      onLogin?.();
-      return;
-    }
-
-    setErr("Invalid credentials");
-  }
-
-  const styles = getStyles(isMobile);
-
-  return (
+    return (
     <div style={styles.page}>
       <div style={styles.bg} />
       <div style={styles.grid} />
@@ -139,150 +114,72 @@ export default function LoginPage({ onLogin }) {
         </div>
       </section>
 
-      <section id="plans" style={styles.section}>
-        <div style={styles.sectionInner}>
-          <div style={styles.sectionKicker}>Internet Plans</div>
-          <h2 style={styles.sectionTitle}>Simple plans. Clear pricing.</h2>
-
-          <div style={styles.planGrid}>
-            {[
-              { name: "Plan 1", speed: "5 Mbps", cached: "Up to 20 Mbps Cached", daily: "8GB Daily", monthly: "500GB Monthly", price: "$25" },
-              { name: "Plan 2", speed: "6 Mbps", cached: "Up to 30 Mbps Cached", daily: "12GB Daily", monthly: "600GB Monthly", price: "$35" },
-              { name: "Plan 3", speed: "7 Mbps", cached: "Up to 40 Mbps Cached", daily: "15GB Daily", monthly: "700GB Monthly", price: "$45" },
-              { name: "Plan 4", speed: "8 Mbps", cached: "Up to 50 Mbps Cached", daily: "20GB Daily", monthly: "800GB Monthly", price: "$65" },
-              { name: "Plan 5", speed: "9 Mbps", cached: "Up to 60 Mbps Cached", daily: "30GB Daily", monthly: "900GB Monthly", price: "$75" },
-              { name: "Plan 6", speed: "10 Mbps", cached: "Up to 100 Mbps Cached", daily: "40GB Daily", monthly: "1000GB Monthly", price: "$100", featured: true },
-            ].map((plan) => (
-              <div key={plan.name} style={plan.featured ? styles.planCardFeatured : styles.planCard}>
-                <div style={styles.planNameRow}>
-                  <div style={styles.planName}>{plan.name}</div>
-                  {plan.featured ? <div style={styles.planBadge}>Most Popular</div> : null}
-                </div>
-                <div style={styles.planSpeed}>{plan.speed}</div>
-                <div style={styles.planCached}>{plan.cached}</div>
-                <div style={styles.planMeta}>{plan.daily}</div>
-                <div style={styles.planMeta}>{plan.monthly}</div>
-                <div style={styles.planPrice}>{plan.price}</div>
-              </div>
-            ))}
-          </div>
-
-          <div style={styles.addonCard}>
-            <div style={styles.addonTitle}>Free Night + Open Speed</div>
-            <div style={styles.addonMeta}>1AM → 1PM</div>
-            <div style={styles.addonPrice}>+ $5</div>
-          </div>
-        </div>
-      </section>
-
-      <section id="devices" style={styles.sectionAlt}>
-        <div style={styles.sectionInner}>
-          <div style={styles.sectionKicker}>Devices & Cables</div>
-          <h2 style={styles.sectionTitle}>Ready hardware for every setup.</h2>
-
-          <div style={styles.deviceGrid}>
-            <div style={styles.infoCard}>
-              <div style={styles.infoTitle}>Tenda</div>
-              <div style={styles.infoLine}>N300 4G — $20</div>
-              <div style={styles.infoLine}>AC1200 4G &amp; 5G — $25</div>
-            </div>
-
-            <div style={styles.infoCard}>
-              <div style={styles.infoTitle}>Netis</div>
-              <div style={styles.infoLine}>N3 4G &amp; 5G — $25</div>
-            </div>
-
-            <div style={styles.infoCard}>
-              <div style={styles.infoTitle}>V-Sol</div>
-              <div style={styles.infoLine}>AC3000 4G / 5G / 6G — $40</div>
-              <div style={styles.infoLine}>AC3200 4G / 5G / 6G / 7G — $100</div>
-            </div>
-
-            <div style={styles.infoCard}>
-              <div style={styles.infoTitle}>Cables</div>
-              <div style={styles.infoLine}>Cat 5E — $0.30 / m</div>
-              <div style={styles.infoLine}>Cat 6E++ — $0.40 / m</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="contact" style={styles.section}>
-        <div style={styles.sectionInner}>
-          <div style={styles.contactCard}>
-            <div>
-              <div style={styles.sectionKicker}>Contact</div>
-              <h2 style={styles.sectionTitle}>Talk to NoComment directly.</h2>
-              <div style={styles.contactLine}>Phone: 70411518</div>
-              <div style={styles.contactLine}>Location: Jabal Mohssen</div>
-              <div style={styles.contactLine}>Network: NoComment</div>
-            </div>
-
-            <div style={styles.contactActions}>
-              <a href="tel:70411518" style={styles.heroMainBtn}>Call Now</a>
-              <button
-                type="button"
-                onClick={() => setShowLogin((v) => !v)}
-                style={styles.heroGhostButton}
-              >
-                Support Login
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {showLogin && (
-        <section style={styles.loginSection}>
-          <div style={styles.loginInner}>
-            <div style={styles.cardGlow} />
-            <div style={styles.card}>
-              <div style={styles.cardTopBar} />
-              <div style={styles.brand}>NoComment Network</div>
-              <h2 style={styles.cardTitle}>Sign in</h2>
-              <div style={styles.cardSub}>Authorized access only</div>
+        <section style={styles.cardWrap}>
+          <div style={styles.cardGlow} />
+          <div style={styles.card}>
+            <div style={styles.cardTopBar} />
+            <div style={styles.brand}>NoComment Network</div>
+            <h2 style={styles.cardTitle}>Sign in</h2>
+            <div style={styles.cardSub}>Authorized access only</div>
 
-              <form onSubmit={submit} style={styles.form}>
-                <div style={styles.field}>
-                  <label style={styles.label}>Username</label>
-                  <input
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    autoComplete="username"
-                    spellCheck={false}
-                    placeholder="Enter username"
-                    style={styles.input}
-                  />
-                </div>
+            <form onSubmit={submit} style={styles.form}>
+              <div style={styles.field}>
+                <label style={styles.label}>Username</label>
+                <input
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  autoComplete="username"
+                  spellCheck={false}
+                  placeholder="Enter username"
+                  style={styles.input}
+                />
+              </div>
 
-                <div style={styles.field}>
-                  <label style={styles.label}>Password</label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    autoComplete="current-password"
-                    placeholder="Enter password"
-                    style={styles.input}
-                  />
-                </div>
+              <div style={styles.field}>
+                <label style={styles.label}>Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  placeholder="Enter password"
+                  style={styles.input}
+                />
+              </div>
 
-                {err ? <div style={styles.err}>{err}</div> : null}
+              {err ? <div style={styles.err}>{err}</div> : null}
 
-                <button type="submit" style={styles.button}>
-                  Enter Dashboard
-                </button>
-              </form>
+              <button
+                type="submit"
+                style={styles.button}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 14px 28px rgba(56,189,248,.20)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow =
+                    "0 8px 18px rgba(56,189,248,.12)";
+                }}
+              >
+                Enter Dashboard
+              </button>
+            </form>
 
-              <div style={styles.footer}>Protected Network Control Access</div>
-            </div>
+            <div style={styles.footer}>Protected Network Control Access</div>
           </div>
         </section>
       )}
     </div>
   );
 }
+    </div>
+  );
+}
 
+function getStyles(isMobile) {
 function getStyles(isMobile) {
   return {
     page: {
@@ -290,7 +187,10 @@ function getStyles(isMobile) {
       minHeight: "100dvh",
       overflow: "hidden",
       background: "#07111f",
-      color: "#fff",
+      display: "flex",
+      alignItems: "stretch",
+      justifyContent: "flex-start",
+      padding: isMobile ? "18px" : "28px",
       fontFamily:
         'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     },
@@ -338,9 +238,11 @@ function getStyles(isMobile) {
     },
 
     topStrip: {
-      position: "sticky",
+      position: "absolute",
       top: 0,
-      zIndex: 20,
+      left: 0,
+      right: 0,
+      zIndex: 8,
       background: "rgba(255,255,255,.06)",
       borderBottom: "1px solid rgba(255,255,255,.08)",
       backdropFilter: "blur(10px)",
@@ -359,16 +261,20 @@ function getStyles(isMobile) {
       fontWeight: 700,
     },
 
-    topStripLeft: { opacity: 0.95 },
-    topStripRight: { opacity: 0.95 },
+    topStripLeft: {
+      opacity: 0.95,
+    },
+
+    topStripRight: {
+      opacity: 0.95,
+    },
 
     navbar: {
-      position: "sticky",
+      position: "absolute",
       top: "38px",
-      zIndex: 19,
-      background: "rgba(7,17,31,.58)",
-      backdropFilter: "blur(10px)",
-      borderBottom: "1px solid rgba(255,255,255,.06)",
+      left: 0,
+      right: 0,
+      zIndex: 8,
     },
 
     navbarInner: {
@@ -444,7 +350,7 @@ function getStyles(isMobile) {
       minHeight: isMobile ? "520px" : "760px",
       display: "flex",
       alignItems: "center",
-      paddingTop: isMobile ? "90px" : "120px",
+      paddingTop: isMobile ? "140px" : "150px",
       paddingBottom: isMobile ? "60px" : "90px",
       overflow: "hidden",
     },
@@ -462,16 +368,7 @@ function getStyles(isMobile) {
       maxWidth: "1280px",
       width: "100%",
       margin: "0 auto",
-      padding: "0 24px",
-    },
-
-    heroKicker: {
-      color: "#7dd3fc",
-      fontSize: "12px",
-      fontWeight: 800,
-      letterSpacing: ".22em",
-      textTransform: "uppercase",
-      marginBottom: "14px",
+      padding: isMobile ? "0 24px" : "0 24px",
     },
 
     heroTitleLarge: {
@@ -513,8 +410,6 @@ function getStyles(isMobile) {
       fontSize: "15px",
       fontWeight: 900,
       boxShadow: "0 12px 28px rgba(109,40,217,.28)",
-      border: "none",
-      cursor: "pointer",
     },
 
     heroGhostBtn: {
@@ -533,238 +428,193 @@ function getStyles(isMobile) {
       fontWeight: 800,
       backdropFilter: "blur(8px)",
     },
-
-    heroGhostButton: {
-      minWidth: "160px",
-      height: "54px",
-      padding: "0 22px",
-      borderRadius: "999px",
-      border: "1px solid rgba(255,255,255,.22)",
-      background: "rgba(255,255,255,.06)",
-      color: "#ffffff",
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      textDecoration: "none",
-      fontSize: "15px",
-      fontWeight: 800,
-      backdropFilter: "blur(8px)",
-      cursor: "pointer",
-    },
-
-    section: {
-      position: "relative",
-      zIndex: 2,
-      padding: isMobile ? "44px 0" : "70px 0",
-    },
-
-    sectionAlt: {
-      position: "relative",
-      zIndex: 2,
-      padding: isMobile ? "44px 0" : "70px 0",
-      background: "rgba(255,255,255,.02)",
-      borderTop: "1px solid rgba(255,255,255,.05)",
-      borderBottom: "1px solid rgba(255,255,255,.05)",
-    },
-
-    sectionInner: {
-      maxWidth: "1280px",
-      margin: "0 auto",
-      padding: "0 24px",
-    },
-
-    sectionKicker: {
-      color: "#7dd3fc",
-      fontSize: "12px",
-      fontWeight: 800,
-      letterSpacing: ".2em",
-      textTransform: "uppercase",
-      marginBottom: "10px",
-    },
-
-    sectionTitle: {
-      margin: "0 0 26px 0",
-      color: "#fff",
-      fontSize: isMobile ? "28px" : "44px",
-      fontWeight: 900,
-      lineHeight: 1.05,
-      letterSpacing: "-.04em",
-    },
-
-    planGrid: {
-      display: "grid",
-      gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0, 1fr))",
-      gap: "18px",
-    },
-
-    planCard: {
-      borderRadius: "24px",
-      padding: "24px",
-      background: "linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04))",
-      border: "1px solid rgba(255,255,255,.10)",
-      boxShadow: "0 14px 40px rgba(0,0,0,.22)",
-    },
-
-    planCardFeatured: {
-      borderRadius: "24px",
-      padding: "24px",
-      background: "linear-gradient(180deg, rgba(109,40,217,.28), rgba(255,255,255,.06))",
-      border: "1px solid rgba(167,139,250,.34)",
-      boxShadow: "0 18px 50px rgba(109,40,217,.18)",
-    },
-
-    planNameRow: {
+    topBar: {
+      position: "absolute",
+      top: isMobile ? "16px" : "22px",
+      left: isMobile ? "16px" : "24px",
+      right: isMobile ? "16px" : "24px",
+      zIndex: 5,
       display: "flex",
+      alignItems: "stretch",
       justifyContent: "space-between",
-      alignItems: "center",
       gap: "12px",
-      marginBottom: "14px",
     },
 
-    planName: {
-      fontSize: "18px",
+    topBrand: {
+      color: "#e8f2ff",
+      fontSize: isMobile ? "14px" : "15px",
       fontWeight: 900,
-      color: "#fff",
+      letterSpacing: ".04em",
+      textTransform: "uppercase",
     },
 
-    planBadge: {
-      padding: "6px 10px",
+    topLoginBtn: {
+      height: "42px",
+      padding: "0 16px",
+      borderRadius: "12px",
+      border: "1px solid rgba(148,163,184,.18)",
+      background: "rgba(255,255,255,.05)",
+      color: "#f8fafc",
+      fontSize: "13px",
+      fontWeight: 800,
+      letterSpacing: ".03em",
+      cursor: "pointer",
+      backdropFilter: "blur(8px)",
+    },
+
+    shell: {
+      position: "relative",
+      zIndex: 2,
+      width: "100%",
+      maxWidth: "1280px",
+      display: "flex",
+      flexDirection: "column",
+      gap: isMobile ? "20px" : "30px",
+      alignItems: "stretch",
+    },
+
+    hero: {
+      minHeight: isMobile ? "320px" : "560px",
+      borderRadius: "0px",
+      padding: isMobile ? "24px" : "34px",
+      background:
+        "linear-gradient(180deg, rgba(9,18,34,.72), rgba(5,12,24,.56))",
+      border: "none",
+      boxShadow: "none",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "flex-start",
+    },
+
+    heroAccent: {
+      width: "84px",
+      height: "3px",
       borderRadius: "999px",
-      background: "rgba(255,255,255,.12)",
+      background: "linear-gradient(90deg, #67e8f9, #60a5fa)",
+      marginBottom: "18px",
+      boxShadow: "0 0 18px rgba(56,189,248,.20)",
+    },
+
+    heroKicker: {
+      color: "#7dd3fc",
       fontSize: "11px",
       fontWeight: 800,
-      color: "#fff",
-      letterSpacing: ".05em",
+      letterSpacing: ".22em",
+      textTransform: "uppercase",
+      marginBottom: "14px",
+    },
+
+    heroTitle: {
+      margin: 0,
+      color: "#f8fafc",
+      fontSize: isMobile ? "42px" : "64px",
+      fontWeight: 900,
+      lineHeight: 0.96,
+      letterSpacing: "-.055em",
+    },
+
+    heroText: {
+      marginTop: "18px",
+      marginBottom: 0,
+      maxWidth: "520px",
+      color: "#93a4bc",
+      fontSize: isMobile ? "14px" : "15px",
+      lineHeight: 1.75,
+    },
+
+    heroStatRow: {
+      display: "flex",
+      gap: "12px",
+      flexWrap: "wrap",
+      marginTop: "30px",
+    },
+
+    heroStatCard: {
+      minWidth: "140px",
+      padding: "14px 16px",
+      borderRadius: "16px",
+      background: "rgba(255,255,255,.03)",
+      border: "none",
+    },
+
+    heroStatLabel: {
+      color: "#7f93ad",
+      fontSize: "11px",
+      fontWeight: 700,
+      letterSpacing: ".12em",
       textTransform: "uppercase",
     },
 
-    planSpeed: {
-      fontSize: "34px",
-      lineHeight: 1,
-      fontWeight: 900,
-      color: "#fff",
-      marginBottom: "12px",
-      letterSpacing: "-.04em",
+    heroStatValue: {
+      marginTop: "8px",
+      color: "#e8f2ff",
+      fontSize: "18px",
+      fontWeight: 800,
     },
 
-    planCached: {
+    heroMeta: {
+      display: "flex",
+      flexDirection: isMobile ? "column" : "row",
+      gap: "10px",
+      marginTop: "26px",
+      marginBottom: "26px",
+    },
+
+    heroMetaItem: {
+      display: "inline-flex",
+      alignItems: "stretch",
+      gap: "8px",
+      padding: "12px 14px",
+      borderRadius: "14px",
+      background: "rgba(255,255,255,.04)",
+      border: "1px solid rgba(148,163,184,.10)",
       color: "#dbeafe",
       fontSize: "14px",
-      marginBottom: "14px",
       fontWeight: 700,
     },
 
-    planMeta: {
-      color: "rgba(255,255,255,.78)",
-      fontSize: "14px",
-      marginBottom: "8px",
-    },
-
-    planPrice: {
-      marginTop: "18px",
-      color: "#7dd3fc",
-      fontSize: "30px",
-      fontWeight: 900,
-      letterSpacing: "-.03em",
-    },
-
-    addonCard: {
-      marginTop: "24px",
-      borderRadius: "24px",
-      padding: "22px 24px",
-      background: "linear-gradient(180deg, rgba(45,212,191,.14), rgba(255,255,255,.04))",
-      border: "1px solid rgba(45,212,191,.22)",
-      display: "flex",
-      flexDirection: isMobile ? "column" : "row",
-      alignItems: isMobile ? "flex-start" : "center",
-      justifyContent: "space-between",
-      gap: "12px",
-    },
-
-    addonTitle: {
-      fontSize: "20px",
-      fontWeight: 900,
-      color: "#fff",
-    },
-
-    addonMeta: {
-      color: "rgba(255,255,255,.82)",
-      fontSize: "14px",
-      fontWeight: 700,
-    },
-
-    addonPrice: {
-      color: "#2dd4bf",
-      fontSize: "24px",
-      fontWeight: 900,
-    },
-
-    deviceGrid: {
-      display: "grid",
-      gridTemplateColumns: isMobile ? "1fr" : "repeat(4, minmax(0, 1fr))",
-      gap: "18px",
-    },
-
-    infoCard: {
-      borderRadius: "22px",
-      padding: "22px",
-      background: "linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04))",
-      border: "1px solid rgba(255,255,255,.10)",
-      boxShadow: "0 14px 40px rgba(0,0,0,.18)",
-    },
-
-    infoTitle: {
-      fontSize: "20px",
-      fontWeight: 900,
-      color: "#fff",
-      marginBottom: "14px",
-    },
-
-    infoLine: {
-      color: "rgba(255,255,255,.82)",
-      fontSize: "14px",
-      marginBottom: "10px",
-      lineHeight: 1.5,
-    },
-
-    contactCard: {
-      borderRadius: "28px",
-      padding: isMobile ? "24px" : "32px",
-      background: "linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04))",
-      border: "1px solid rgba(255,255,255,.10)",
-      display: "flex",
-      flexDirection: isMobile ? "column" : "row",
-      alignItems: isMobile ? "flex-start" : "center",
-      justifyContent: "space-between",
-      gap: "24px",
-      boxShadow: "0 18px 50px rgba(0,0,0,.18)",
-    },
-
-    contactLine: {
-      color: "rgba(255,255,255,.82)",
-      fontSize: "16px",
-      marginBottom: "10px",
-      lineHeight: 1.5,
-    },
-
-    contactActions: {
+    heroActions: {
       display: "flex",
       flexWrap: "wrap",
       gap: "12px",
+      marginTop: "4px",
     },
 
-    loginSection: {
+    heroPrimaryBtn: {
+      height: "50px",
+      padding: "0 18px",
+      borderRadius: "14px",
+      border: "none",
+      background: "linear-gradient(135deg, #67e8f9 0%, #38bdf8 48%, #818cf8 100%)",
+      color: "#04111f",
+      fontSize: "14px",
+      fontWeight: 900,
+      letterSpacing: ".02em",
+      cursor: "pointer",
+      boxShadow: "0 10px 22px rgba(56,189,248,.16)",
+    },
+
+    heroCallBtn: {
+      height: "50px",
+      padding: "0 18px",
+      borderRadius: "14px",
+      border: "1px solid rgba(148,163,184,.18)",
+      background: "rgba(255,255,255,.04)",
+      color: "#f8fafc",
+      fontSize: "14px",
+      fontWeight: 800,
+      letterSpacing: ".02em",
+      display: "inline-flex",
+      alignItems: "stretch",
+      justifyContent: "flex-start",
+      textDecoration: "none",
+      backdropFilter: "blur(8px)",
+    },
+    cardWrap: {
       position: "relative",
-      zIndex: 3,
-      padding: isMobile ? "0 0 44px" : "0 0 70px",
-    },
-
-    loginInner: {
-      maxWidth: "1280px",
-      margin: "0 auto",
-      padding: "0 24px",
       display: "flex",
-      justifyContent: "center",
+      alignItems: "stretch",
+      justifyContent: "flex-start",
     },
 
     cardGlow: {
@@ -778,10 +628,10 @@ function getStyles(isMobile) {
     },
 
     card: {
-      position: "relative",
       width: "100%",
-      maxWidth: "460px",
-      borderRadius: "28px",
+      maxWidth: isMobile ? "100%" : "420px",
+      minHeight: "auto",
+      borderRadius: "0px",
       padding: isMobile ? "26px" : "34px",
       background:
         "linear-gradient(180deg, rgba(8,16,30,.92), rgba(5,10,22,.98))",
@@ -792,7 +642,7 @@ function getStyles(isMobile) {
       boxSizing: "border-box",
       display: "flex",
       flexDirection: "column",
-      justifyContent: "center",
+      justifyContent: "flex-start",
     },
 
     cardTopBar: {
@@ -897,3 +747,24 @@ function getStyles(isMobile) {
     },
   };
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
