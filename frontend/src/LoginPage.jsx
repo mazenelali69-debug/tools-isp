@@ -3,13 +3,22 @@
 const VALID_USERNAME = "admin";
 const VALID_PASSWORD = "morad3alamdar";
 
-function makeDots(count = 22) {
+const PLANS = [
+  { name: "Plan 1", speed: "5 Mbps", cached: "Up to 20 Mbps Cached", daily: "8GB Daily", monthly: "500GB Monthly", price: "$25" },
+  { name: "Plan 2", speed: "6 Mbps", cached: "Up to 30 Mbps Cached", daily: "12GB Daily", monthly: "600GB Monthly", price: "$35" },
+  { name: "Plan 3", speed: "7 Mbps", cached: "Up to 40 Mbps Cached", daily: "15GB Daily", monthly: "700GB Monthly", price: "$45" },
+  { name: "Plan 4", speed: "8 Mbps", cached: "Up to 50 Mbps Cached", daily: "20GB Daily", monthly: "800GB Monthly", price: "$65" },
+  { name: "Plan 5", speed: "9 Mbps", cached: "Up to 60 Mbps Cached", daily: "30GB Daily", monthly: "900GB Monthly", price: "$75" },
+  { name: "Plan 6", speed: "10 Mbps", cached: "Up to 100 Mbps Cached", daily: "40GB Daily", monthly: "1000GB Monthly", price: "$100", featured: true },
+];
+
+function makeDots(count = 20) {
   return Array.from({ length: count }, (_, i) => ({
     id: i,
-    x: 8 + Math.random() * 84,
-    y: 10 + Math.random() * 80,
+    x: 6 + Math.random() * 88,
+    y: 8 + Math.random() * 84,
     size: 2 + Math.random() * 2,
-    opacity: 0.08 + Math.random() * 0.18,
+    opacity: 0.05 + Math.random() * 0.16,
   }));
 }
 
@@ -22,7 +31,7 @@ export default function LoginPage({ onLogin }) {
     typeof window !== "undefined" ? window.innerWidth < 920 : false
   );
 
-  const dots = useMemo(() => makeDots(24), []);
+  const dots = useMemo(() => makeDots(22), []);
 
   useEffect(() => {
     const oldOverflow = document.body.style.overflow;
@@ -75,8 +84,8 @@ export default function LoginPage({ onLogin }) {
             width: `${d.size}px`,
             height: `${d.size}px`,
             borderRadius: "999px",
-            background: "rgba(103,232,249,.9)",
-            boxShadow: "0 0 10px rgba(56,189,248,.25)",
+            background: "rgba(125,211,252,.95)",
+            boxShadow: "0 0 12px rgba(56,189,248,.18)",
             opacity: d.opacity,
             pointerEvents: "none",
           }}
@@ -85,8 +94,8 @@ export default function LoginPage({ onLogin }) {
 
       <div style={styles.topStrip}>
         <div style={styles.topStripInner}>
-          <div style={styles.topStripLeft}>Jabal Mohssen</div>
-          <div style={styles.topStripRight}>Customer Support: 70411518</div>
+          <div>Jabal Mohssen</div>
+          <div>Customer Support 70411518</div>
         </div>
       </div>
 
@@ -118,23 +127,65 @@ export default function LoginPage({ onLogin }) {
       </div>
 
       <section id="home" style={styles.heroSection}>
-        <div style={styles.heroOverlay} />
-        <div style={styles.heroContent}>
-          <div style={styles.heroKicker}>NoComment Network</div>
-          <h1 style={styles.heroTitleLarge}>
-            Fast Internet for
-            <br />
-            Home &amp; Business
-          </h1>
+        <div style={styles.heroInner}>
+          <div style={styles.heroLeft}>
+            <div style={styles.heroKicker}>NoComment Network</div>
+            <h1 style={styles.heroTitle}>
+              Faster internet.
+              <br />
+              Stronger service.
+              <br />
+              Clear pricing.
+            </h1>
 
-          <p style={styles.heroLead}>
-            Stable service, clear plans, unlimited night options, and direct support
-            for Jabal Mohssen and nearby areas.
-          </p>
+            <p style={styles.heroLead}>
+              Home internet plans, direct support, hardware options, and unlimited
+              night upgrades for Jabal Mohssen and nearby areas.
+            </p>
 
-          <div style={styles.heroActionRow}>
-            <a href="#plans" style={styles.heroMainBtn}>View Plans</a>
-            <a href="tel:70411518" style={styles.heroGhostBtn}>Call Now</a>
+            <div style={styles.heroCtas}>
+              <a href="#plans" style={styles.primaryBtn}>Explore Plans</a>
+              <a href="tel:70411518" style={styles.secondaryBtn}>Call Now</a>
+            </div>
+
+            <div style={styles.trustRow}>
+              <div style={styles.trustCard}>
+                <div style={styles.trustNumber}>Fast</div>
+                <div style={styles.trustLabel}>Installation</div>
+              </div>
+              <div style={styles.trustCard}>
+                <div style={styles.trustNumber}>Night</div>
+                <div style={styles.trustLabel}>Open Speed</div>
+              </div>
+              <div style={styles.trustCard}>
+                <div style={styles.trustNumber}>Direct</div>
+                <div style={styles.trustLabel}>Support</div>
+              </div>
+            </div>
+          </div>
+
+          <div style={styles.heroRight}>
+            <div style={styles.visualShell}>
+              <div style={styles.visualGlow} />
+
+              <div style={styles.visualMainCard}>
+                <div style={styles.visualEyebrow}>Featured Plan</div>
+                <div style={styles.visualPlanSpeed}>10 Mbps</div>
+                <div style={styles.visualPlanCached}>Up to 100 Mbps Cached</div>
+                <div style={styles.visualPlanMeta}>40GB Daily • 1000GB Monthly</div>
+                <div style={styles.visualPrice}>$100</div>
+              </div>
+
+              <div style={styles.visualMiniLeft}>
+                <div style={styles.visualMiniLabel}>Free Night</div>
+                <div style={styles.visualMiniValue}>1AM → 1PM</div>
+              </div>
+
+              <div style={styles.visualMiniRight}>
+                <div style={styles.visualMiniLabel}>Call Us</div>
+                <div style={styles.visualMiniValue}>70411518</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -142,34 +193,35 @@ export default function LoginPage({ onLogin }) {
       <section id="plans" style={styles.section}>
         <div style={styles.sectionInner}>
           <div style={styles.sectionKicker}>Internet Plans</div>
-          <h2 style={styles.sectionTitle}>Simple plans. Clear pricing.</h2>
+          <h2 style={styles.sectionTitle}>Plans that sell themselves.</h2>
+          <p style={styles.sectionLead}>
+            All prices, quotas, and cached speeds are visible directly — no hidden steps.
+          </p>
 
           <div style={styles.planGrid}>
-            {[
-              { name: "Plan 1", speed: "5 Mbps", cached: "Up to 20 Mbps Cached", daily: "8GB Daily", monthly: "500GB Monthly", price: "$25" },
-              { name: "Plan 2", speed: "6 Mbps", cached: "Up to 30 Mbps Cached", daily: "12GB Daily", monthly: "600GB Monthly", price: "$35" },
-              { name: "Plan 3", speed: "7 Mbps", cached: "Up to 40 Mbps Cached", daily: "15GB Daily", monthly: "700GB Monthly", price: "$45" },
-              { name: "Plan 4", speed: "8 Mbps", cached: "Up to 50 Mbps Cached", daily: "20GB Daily", monthly: "800GB Monthly", price: "$65" },
-              { name: "Plan 5", speed: "9 Mbps", cached: "Up to 60 Mbps Cached", daily: "30GB Daily", monthly: "900GB Monthly", price: "$75" },
-              { name: "Plan 6", speed: "10 Mbps", cached: "Up to 100 Mbps Cached", daily: "40GB Daily", monthly: "1000GB Monthly", price: "$100", featured: true },
-            ].map((plan) => (
+            {PLANS.map((plan) => (
               <div key={plan.name} style={plan.featured ? styles.planCardFeatured : styles.planCard}>
-                <div style={styles.planNameRow}>
+                <div style={styles.planTop}>
                   <div style={styles.planName}>{plan.name}</div>
-                  {plan.featured ? <div style={styles.planBadge}>Most Popular</div> : null}
+                  {plan.featured ? <div style={styles.planBadge}>Best Value</div> : null}
                 </div>
+
                 <div style={styles.planSpeed}>{plan.speed}</div>
                 <div style={styles.planCached}>{plan.cached}</div>
-                <div style={styles.planMeta}>{plan.daily}</div>
-                <div style={styles.planMeta}>{plan.monthly}</div>
+
+                <div style={styles.planStat}>{plan.daily}</div>
+                <div style={styles.planStat}>{plan.monthly}</div>
+
                 <div style={styles.planPrice}>{plan.price}</div>
               </div>
             ))}
           </div>
 
           <div style={styles.addonCard}>
-            <div style={styles.addonTitle}>Free Night + Open Speed</div>
-            <div style={styles.addonMeta}>1AM → 1PM</div>
+            <div>
+              <div style={styles.addonTitle}>Free Night + Open Speed</div>
+              <div style={styles.addonMeta}>1AM → 1PM</div>
+            </div>
             <div style={styles.addonPrice}>+ $5</div>
           </div>
         </div>
@@ -178,7 +230,7 @@ export default function LoginPage({ onLogin }) {
       <section id="devices" style={styles.sectionAlt}>
         <div style={styles.sectionInner}>
           <div style={styles.sectionKicker}>Devices & Cables</div>
-          <h2 style={styles.sectionTitle}>Ready hardware for every setup.</h2>
+          <h2 style={styles.sectionTitle}>Hardware ready for deployment.</h2>
 
           <div style={styles.deviceGrid}>
             <div style={styles.infoCard}>
@@ -219,11 +271,11 @@ export default function LoginPage({ onLogin }) {
             </div>
 
             <div style={styles.contactActions}>
-              <a href="tel:70411518" style={styles.heroMainBtn}>Call Now</a>
+              <a href="tel:70411518" style={styles.primaryBtn}>Call Now</a>
               <button
                 type="button"
                 onClick={() => setShowLogin((v) => !v)}
-                style={styles.heroGhostButton}
+                style={styles.secondaryButton}
               >
                 Support Login
               </button>
@@ -233,51 +285,46 @@ export default function LoginPage({ onLogin }) {
       </section>
 
       {showLogin && (
-        <section style={styles.loginSection}>
-          <div style={styles.loginInner}>
-            <div style={styles.cardGlow} />
-            <div style={styles.card}>
-              <div style={styles.cardTopBar} />
-              <div style={styles.brand}>NoComment Network</div>
-              <h2 style={styles.cardTitle}>Sign in</h2>
-              <div style={styles.cardSub}>Authorized access only</div>
+        <div style={styles.loginOverlay} onClick={() => setShowLogin(false)}>
+          <div style={styles.loginModal} onClick={(e) => e.stopPropagation()}>
+            <div style={styles.loginTopBar} />
+            <div style={styles.loginBrand}>NoComment Network</div>
+            <h2 style={styles.loginTitle}>Support Login</h2>
+            <div style={styles.loginSub}>Authorized access only</div>
 
-              <form onSubmit={submit} style={styles.form}>
-                <div style={styles.field}>
-                  <label style={styles.label}>Username</label>
-                  <input
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    autoComplete="username"
-                    spellCheck={false}
-                    placeholder="Enter username"
-                    style={styles.input}
-                  />
-                </div>
+            <form onSubmit={submit} style={styles.form}>
+              <div style={styles.field}>
+                <label style={styles.label}>Username</label>
+                <input
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  autoComplete="username"
+                  spellCheck={false}
+                  placeholder="Enter username"
+                  style={styles.input}
+                />
+              </div>
 
-                <div style={styles.field}>
-                  <label style={styles.label}>Password</label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    autoComplete="current-password"
-                    placeholder="Enter password"
-                    style={styles.input}
-                  />
-                </div>
+              <div style={styles.field}>
+                <label style={styles.label}>Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  placeholder="Enter password"
+                  style={styles.input}
+                />
+              </div>
 
-                {err ? <div style={styles.err}>{err}</div> : null}
+              {err ? <div style={styles.err}>{err}</div> : null}
 
-                <button type="submit" style={styles.button}>
-                  Enter Dashboard
-                </button>
-              </form>
-
-              <div style={styles.footer}>Protected Network Control Access</div>
-            </div>
+              <button type="submit" style={styles.loginButton}>
+                Enter Dashboard
+              </button>
+            </form>
           </div>
-        </section>
+        </div>
       )}
     </div>
   );
@@ -288,9 +335,9 @@ function getStyles(isMobile) {
     page: {
       position: "relative",
       minHeight: "100dvh",
-      overflow: "hidden",
-      background: "#07111f",
-      color: "#fff",
+      overflowX: "hidden",
+      background: "#050d1c",
+      color: "#ffffff",
       fontFamily:
         'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     },
@@ -299,106 +346,104 @@ function getStyles(isMobile) {
       position: "absolute",
       inset: 0,
       background:
-        "linear-gradient(135deg, rgba(5,12,24,1) 0%, rgba(7,17,31,1) 45%, rgba(10,22,42,1) 100%)",
+        "linear-gradient(180deg, #06101f 0%, #071425 42%, #09192f 100%)",
     },
 
     grid: {
       position: "absolute",
       inset: 0,
       backgroundImage:
-        "linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px)",
-      backgroundSize: isMobile ? "26px 26px" : "34px 34px",
-      opacity: 0.16,
+        "linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px)",
+      backgroundSize: isMobile ? "28px 28px" : "38px 38px",
+      opacity: 0.18,
     },
 
     glowLeft: {
       position: "absolute",
-      width: isMobile ? "300px" : "520px",
-      height: isMobile ? "300px" : "520px",
-      borderRadius: "999px",
+      width: isMobile ? "320px" : "620px",
+      height: isMobile ? "320px" : "620px",
       left: isMobile ? "-120px" : "-180px",
-      top: isMobile ? "-100px" : "-170px",
+      top: isMobile ? "-80px" : "-180px",
+      borderRadius: "999px",
       background:
-        "radial-gradient(circle, rgba(37,99,235,.18), rgba(37,99,235,0) 68%)",
-      filter: "blur(40px)",
-      opacity: 0.78,
+        "radial-gradient(circle, rgba(59,130,246,.20), rgba(59,130,246,0) 68%)",
+      filter: "blur(46px)",
+      opacity: 0.82,
     },
 
     glowRight: {
       position: "absolute",
-      width: isMobile ? "320px" : "540px",
-      height: isMobile ? "320px" : "540px",
+      width: isMobile ? "340px" : "640px",
+      height: isMobile ? "340px" : "640px",
+      right: isMobile ? "-120px" : "-220px",
+      bottom: isMobile ? "-80px" : "-220px",
       borderRadius: "999px",
-      right: isMobile ? "-140px" : "-200px",
-      bottom: isMobile ? "-120px" : "-190px",
       background:
-        "radial-gradient(circle, rgba(56,189,248,.12), rgba(56,189,248,0) 68%)",
-      filter: "blur(44px)",
-      opacity: 0.86,
+        "radial-gradient(circle, rgba(109,40,217,.22), rgba(109,40,217,0) 68%)",
+      filter: "blur(52px)",
+      opacity: 0.9,
     },
 
     topStrip: {
       position: "sticky",
       top: 0,
-      zIndex: 20,
-      background: "rgba(255,255,255,.06)",
-      borderBottom: "1px solid rgba(255,255,255,.08)",
-      backdropFilter: "blur(10px)",
+      zIndex: 40,
+      background: "rgba(255,255,255,.04)",
+      borderBottom: "1px solid rgba(255,255,255,.06)",
+      backdropFilter: "blur(12px)",
     },
 
     topStripInner: {
       maxWidth: "1280px",
       margin: "0 auto",
       minHeight: "38px",
-      padding: "0 24px",
+      padding: "0 28px",
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      color: "rgba(255,255,255,.88)",
-      fontSize: "13px",
-      fontWeight: 700,
+      color: "rgba(255,255,255,.82)",
+      fontSize: "12px",
+      fontWeight: 800,
+      letterSpacing: ".02em",
     },
-
-    topStripLeft: { opacity: 0.95 },
-    topStripRight: { opacity: 0.95 },
 
     navbar: {
       position: "sticky",
       top: "38px",
-      zIndex: 19,
-      background: "rgba(7,17,31,.58)",
-      backdropFilter: "blur(10px)",
-      borderBottom: "1px solid rgba(255,255,255,.06)",
+      zIndex: 39,
+      background: "rgba(6,16,31,.64)",
+      borderBottom: "1px solid rgba(255,255,255,.05)",
+      backdropFilter: "blur(16px)",
     },
 
     navbarInner: {
       maxWidth: "1280px",
       margin: "0 auto",
-      minHeight: "82px",
-      padding: "0 24px",
+      minHeight: "88px",
+      padding: "0 28px",
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      gap: "18px",
+      gap: "24px",
     },
 
     navLogo: {
-      color: "#ffffff",
       fontSize: isMobile ? "24px" : "28px",
       fontWeight: 900,
-      letterSpacing: "-.03em",
+      letterSpacing: "-.04em",
+      color: "#ffffff",
       flexShrink: 0,
     },
 
     navLinks: {
       display: isMobile ? "none" : "flex",
       alignItems: "center",
-      gap: "28px",
+      gap: "34px",
     },
 
     navLink: {
-      color: "rgba(255,255,255,.95)",
       textDecoration: "none",
+      color: "rgba(255,255,255,.94)",
       fontSize: "15px",
       fontWeight: 700,
     },
@@ -411,158 +456,284 @@ function getStyles(isMobile) {
     },
 
     supportBtn: {
-      height: "44px",
-      padding: "0 16px",
+      height: "46px",
+      padding: "0 18px",
       borderRadius: "999px",
-      border: "1px solid rgba(255,255,255,.24)",
-      background: "rgba(255,255,255,.06)",
+      border: "1px solid rgba(255,255,255,.16)",
+      background: "rgba(255,255,255,.05)",
       color: "#ffffff",
       fontSize: "14px",
       fontWeight: 800,
       cursor: "pointer",
-      backdropFilter: "blur(8px)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,.03)",
     },
 
     callBtn: {
-      height: "44px",
-      padding: "0 20px",
+      height: "46px",
+      padding: "0 22px",
       borderRadius: "999px",
-      background: "linear-gradient(135deg, #2dd4bf 0%, #38bdf8 48%, #818cf8 100%)",
-      color: "#08111f",
-      display: isMobile ? "none" : "inline-flex",
+      border: "none",
+      background: "linear-gradient(135deg, #38bdf8 0%, #60a5fa 48%, #818cf8 100%)",
+      color: "#07111f",
+      textDecoration: "none",
+      display: "inline-flex",
       alignItems: "center",
       justifyContent: "center",
-      textDecoration: "none",
       fontSize: "14px",
       fontWeight: 900,
-      boxShadow: "0 12px 28px rgba(56,189,248,.22)",
+      boxShadow: "0 16px 34px rgba(56,189,248,.22)",
     },
 
     heroSection: {
       position: "relative",
-      width: "100%",
-      minHeight: isMobile ? "520px" : "760px",
+      zIndex: 2,
+      minHeight: isMobile ? "auto" : "820px",
       display: "flex",
       alignItems: "center",
-      paddingTop: isMobile ? "90px" : "120px",
-      paddingBottom: isMobile ? "60px" : "90px",
-      overflow: "hidden",
+      padding: isMobile ? "48px 0 54px" : "60px 0 94px",
     },
 
-    heroOverlay: {
-      position: "absolute",
-      inset: 0,
-      background: "linear-gradient(90deg, rgba(3,7,18,.84) 0%, rgba(3,7,18,.56) 42%, rgba(3,7,18,.18) 100%)",
-      zIndex: 1,
-    },
-
-    heroContent: {
-      position: "relative",
-      zIndex: 2,
+    heroInner: {
       maxWidth: "1280px",
       width: "100%",
       margin: "0 auto",
-      padding: "0 24px",
+      padding: "0 28px",
+      display: "grid",
+      gridTemplateColumns: isMobile ? "1fr" : "1.08fr 0.92fr",
+      gap: isMobile ? "34px" : "44px",
+      alignItems: "center",
+    },
+
+    heroLeft: {
+      position: "relative",
+      zIndex: 2,
+    },
+
+    heroRight: {
+      position: "relative",
+      zIndex: 2,
+      display: "flex",
+      justifyContent: isMobile ? "flex-start" : "flex-end",
     },
 
     heroKicker: {
       color: "#7dd3fc",
       fontSize: "12px",
-      fontWeight: 800,
-      letterSpacing: ".22em",
+      fontWeight: 900,
+      letterSpacing: ".24em",
       textTransform: "uppercase",
-      marginBottom: "14px",
+      marginBottom: "18px",
     },
 
-    heroTitleLarge: {
-      margin: "0 0 18px 0",
+    heroTitle: {
+      margin: "0 0 20px 0",
       color: "#ffffff",
-      fontSize: isMobile ? "52px" : "92px",
+      fontSize: isMobile ? "54px" : "98px",
       fontWeight: 900,
       lineHeight: 0.92,
-      letterSpacing: "-.06em",
-      maxWidth: "760px",
+      letterSpacing: "-.07em",
+      maxWidth: "820px",
     },
 
     heroLead: {
-      margin: "0 0 28px 0",
-      color: "rgba(255,255,255,.82)",
-      fontSize: isMobile ? "16px" : "20px",
-      lineHeight: 1.65,
-      maxWidth: "700px",
+      margin: "0 0 30px 0",
+      color: "rgba(255,255,255,.80)",
+      fontSize: isMobile ? "17px" : "21px",
+      lineHeight: 1.68,
+      maxWidth: "720px",
     },
 
-    heroActionRow: {
+    heroCtas: {
       display: "flex",
       flexWrap: "wrap",
       gap: "14px",
-      marginTop: "10px",
+      marginBottom: "26px",
     },
 
-    heroMainBtn: {
-      minWidth: "160px",
-      height: "54px",
-      padding: "0 22px",
+    primaryBtn: {
+      minWidth: "170px",
+      height: "56px",
+      padding: "0 24px",
       borderRadius: "999px",
-      background: "#6d28d9",
+      background: "linear-gradient(135deg, #7c3aed 0%, #9333ea 60%, #c084fc 100%)",
       color: "#ffffff",
+      textDecoration: "none",
       display: "inline-flex",
       alignItems: "center",
       justifyContent: "center",
-      textDecoration: "none",
       fontSize: "15px",
       fontWeight: 900,
-      boxShadow: "0 12px 28px rgba(109,40,217,.28)",
       border: "none",
+      boxShadow: "0 18px 40px rgba(124,58,237,.30)",
       cursor: "pointer",
     },
 
-    heroGhostBtn: {
-      minWidth: "160px",
-      height: "54px",
-      padding: "0 22px",
+    secondaryBtn: {
+      minWidth: "170px",
+      height: "56px",
+      padding: "0 24px",
       borderRadius: "999px",
-      border: "1px solid rgba(255,255,255,.22)",
-      background: "rgba(255,255,255,.06)",
+      border: "1px solid rgba(255,255,255,.14)",
+      background: "rgba(255,255,255,.05)",
       color: "#ffffff",
+      textDecoration: "none",
       display: "inline-flex",
       alignItems: "center",
       justifyContent: "center",
-      textDecoration: "none",
       fontSize: "15px",
       fontWeight: 800,
-      backdropFilter: "blur(8px)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,.03)",
     },
 
-    heroGhostButton: {
-      minWidth: "160px",
-      height: "54px",
-      padding: "0 22px",
-      borderRadius: "999px",
-      border: "1px solid rgba(255,255,255,.22)",
-      background: "rgba(255,255,255,.06)",
+    trustRow: {
+      display: "grid",
+      gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0, 1fr))",
+      gap: "14px",
+      maxWidth: "760px",
+    },
+
+    trustCard: {
+      borderRadius: "22px",
+      padding: "18px 18px",
+      background: "linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03))",
+      border: "1px solid rgba(255,255,255,.08)",
+      boxShadow: "0 12px 30px rgba(0,0,0,.14)",
+    },
+
+    trustNumber: {
       color: "#ffffff",
-      display: "inline-flex",
+      fontSize: "22px",
+      fontWeight: 900,
+      marginBottom: "4px",
+    },
+
+    trustLabel: {
+      color: "rgba(255,255,255,.70)",
+      fontSize: "13px",
+      fontWeight: 700,
+    },
+
+    visualShell: {
+      position: "relative",
+      width: "100%",
+      maxWidth: "520px",
+      minHeight: isMobile ? "360px" : "520px",
+      display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      textDecoration: "none",
-      fontSize: "15px",
+    },
+
+    visualGlow: {
+      position: "absolute",
+      inset: "8%",
+      borderRadius: "40px",
+      background:
+        "radial-gradient(circle at center, rgba(56,189,248,.14), rgba(124,58,237,.10), rgba(0,0,0,0) 72%)",
+      filter: "blur(26px)",
+    },
+
+    visualMainCard: {
+      position: "relative",
+      zIndex: 3,
+      width: "100%",
+      maxWidth: "420px",
+      borderRadius: "34px",
+      padding: "30px",
+      background: "linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.05))",
+      border: "1px solid rgba(255,255,255,.12)",
+      boxShadow: "0 28px 80px rgba(0,0,0,.28)",
+      backdropFilter: "blur(18px)",
+    },
+
+    visualEyebrow: {
+      color: "#7dd3fc",
+      fontSize: "11px",
+      fontWeight: 900,
+      letterSpacing: ".20em",
+      textTransform: "uppercase",
+      marginBottom: "12px",
+    },
+
+    visualPlanSpeed: {
+      color: "#ffffff",
+      fontSize: isMobile ? "44px" : "58px",
+      fontWeight: 900,
+      lineHeight: 0.96,
+      letterSpacing: "-.05em",
+      marginBottom: "12px",
+    },
+
+    visualPlanCached: {
+      color: "#dbeafe",
+      fontSize: "16px",
+      fontWeight: 700,
+      marginBottom: "14px",
+    },
+
+    visualPlanMeta: {
+      color: "rgba(255,255,255,.76)",
+      fontSize: "14px",
+      lineHeight: 1.5,
+      marginBottom: "18px",
+    },
+
+    visualPrice: {
+      color: "#38bdf8",
+      fontSize: "40px",
+      fontWeight: 900,
+      letterSpacing: "-.04em",
+    },
+
+    visualMiniLeft: {
+      position: "absolute",
+      left: 0,
+      bottom: isMobile ? "4px" : "26px",
+      zIndex: 2,
+      borderRadius: "20px",
+      padding: "16px 18px",
+      background: "linear-gradient(180deg, rgba(124,58,237,.24), rgba(255,255,255,.04))",
+      border: "1px solid rgba(255,255,255,.10)",
+      boxShadow: "0 14px 36px rgba(0,0,0,.18)",
+    },
+
+    visualMiniRight: {
+      position: "absolute",
+      right: 0,
+      top: isMobile ? "0" : "26px",
+      zIndex: 2,
+      borderRadius: "20px",
+      padding: "16px 18px",
+      background: "linear-gradient(180deg, rgba(56,189,248,.20), rgba(255,255,255,.04))",
+      border: "1px solid rgba(255,255,255,.10)",
+      boxShadow: "0 14px 36px rgba(0,0,0,.18)",
+    },
+
+    visualMiniLabel: {
+      color: "rgba(255,255,255,.68)",
+      fontSize: "11px",
       fontWeight: 800,
-      backdropFilter: "blur(8px)",
-      cursor: "pointer",
+      letterSpacing: ".12em",
+      textTransform: "uppercase",
+      marginBottom: "8px",
+    },
+
+    visualMiniValue: {
+      color: "#ffffff",
+      fontSize: "18px",
+      fontWeight: 900,
     },
 
     section: {
       position: "relative",
       zIndex: 2,
-      padding: isMobile ? "44px 0" : "70px 0",
+      padding: isMobile ? "56px 0" : "88px 0",
     },
 
     sectionAlt: {
       position: "relative",
       zIndex: 2,
-      padding: isMobile ? "44px 0" : "70px 0",
-      background: "rgba(255,255,255,.02)",
+      padding: isMobile ? "56px 0" : "88px 0",
+      background: "rgba(255,255,255,.025)",
       borderTop: "1px solid rgba(255,255,255,.05)",
       borderBottom: "1px solid rgba(255,255,255,.05)",
     },
@@ -570,55 +741,65 @@ function getStyles(isMobile) {
     sectionInner: {
       maxWidth: "1280px",
       margin: "0 auto",
-      padding: "0 24px",
+      padding: "0 28px",
     },
 
     sectionKicker: {
       color: "#7dd3fc",
       fontSize: "12px",
-      fontWeight: 800,
-      letterSpacing: ".2em",
+      fontWeight: 900,
+      letterSpacing: ".24em",
       textTransform: "uppercase",
       marginBottom: "10px",
     },
 
     sectionTitle: {
-      margin: "0 0 26px 0",
+      margin: "0 0 16px 0",
       color: "#fff",
-      fontSize: isMobile ? "28px" : "44px",
+      fontSize: isMobile ? "32px" : "54px",
       fontWeight: 900,
-      lineHeight: 1.05,
-      letterSpacing: "-.04em",
+      lineHeight: 0.98,
+      letterSpacing: "-.05em",
+      maxWidth: "760px",
+    },
+
+    sectionLead: {
+      margin: "0 0 28px 0",
+      color: "rgba(255,255,255,.72)",
+      fontSize: "17px",
+      lineHeight: 1.65,
+      maxWidth: "760px",
     },
 
     planGrid: {
       display: "grid",
       gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0, 1fr))",
-      gap: "18px",
+      gap: "20px",
     },
 
     planCard: {
-      borderRadius: "24px",
-      padding: "24px",
-      background: "linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04))",
+      borderRadius: "28px",
+      padding: "26px",
+      background: "linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03))",
       border: "1px solid rgba(255,255,255,.10)",
-      boxShadow: "0 14px 40px rgba(0,0,0,.22)",
+      boxShadow: "0 18px 46px rgba(0,0,0,.18)",
     },
 
     planCardFeatured: {
-      borderRadius: "24px",
-      padding: "24px",
-      background: "linear-gradient(180deg, rgba(109,40,217,.28), rgba(255,255,255,.06))",
-      border: "1px solid rgba(167,139,250,.34)",
-      boxShadow: "0 18px 50px rgba(109,40,217,.18)",
+      borderRadius: "28px",
+      padding: "28px",
+      background: "linear-gradient(180deg, rgba(124,58,237,.34), rgba(255,255,255,.05))",
+      border: "1px solid rgba(196,181,253,.28)",
+      boxShadow: "0 22px 58px rgba(124,58,237,.22)",
+      transform: isMobile ? "none" : "translateY(-10px)",
     },
 
-    planNameRow: {
+    planTop: {
       display: "flex",
-      justifyContent: "space-between",
       alignItems: "center",
+      justifyContent: "space-between",
       gap: "12px",
-      marginBottom: "14px",
+      marginBottom: "16px",
     },
 
     planName: {
@@ -631,18 +812,18 @@ function getStyles(isMobile) {
       padding: "6px 10px",
       borderRadius: "999px",
       background: "rgba(255,255,255,.12)",
-      fontSize: "11px",
-      fontWeight: 800,
       color: "#fff",
-      letterSpacing: ".05em",
+      fontSize: "11px",
+      fontWeight: 900,
       textTransform: "uppercase",
+      letterSpacing: ".06em",
     },
 
     planSpeed: {
-      fontSize: "34px",
-      lineHeight: 1,
+      color: "#ffffff",
+      fontSize: "36px",
       fontWeight: 900,
-      color: "#fff",
+      lineHeight: 1,
       marginBottom: "12px",
       letterSpacing: "-.04em",
     },
@@ -650,11 +831,11 @@ function getStyles(isMobile) {
     planCached: {
       color: "#dbeafe",
       fontSize: "14px",
-      marginBottom: "14px",
       fontWeight: 700,
+      marginBottom: "14px",
     },
 
-    planMeta: {
+    planStat: {
       color: "rgba(255,255,255,.78)",
       fontSize: "14px",
       marginBottom: "8px",
@@ -662,89 +843,91 @@ function getStyles(isMobile) {
 
     planPrice: {
       marginTop: "18px",
-      color: "#7dd3fc",
-      fontSize: "30px",
+      color: "#38bdf8",
+      fontSize: "32px",
       fontWeight: 900,
       letterSpacing: "-.03em",
     },
 
     addonCard: {
       marginTop: "24px",
-      borderRadius: "24px",
-      padding: "22px 24px",
-      background: "linear-gradient(180deg, rgba(45,212,191,.14), rgba(255,255,255,.04))",
+      borderRadius: "26px",
+      padding: "24px 26px",
+      background: "linear-gradient(180deg, rgba(45,212,191,.15), rgba(255,255,255,.04))",
       border: "1px solid rgba(45,212,191,.22)",
       display: "flex",
       flexDirection: isMobile ? "column" : "row",
       alignItems: isMobile ? "flex-start" : "center",
       justifyContent: "space-between",
-      gap: "12px",
+      gap: "14px",
+      boxShadow: "0 18px 44px rgba(0,0,0,.14)",
     },
 
     addonTitle: {
-      fontSize: "20px",
-      fontWeight: 900,
       color: "#fff",
+      fontSize: "22px",
+      fontWeight: 900,
+      marginBottom: "6px",
     },
 
     addonMeta: {
-      color: "rgba(255,255,255,.82)",
+      color: "rgba(255,255,255,.78)",
       fontSize: "14px",
       fontWeight: 700,
     },
 
     addonPrice: {
       color: "#2dd4bf",
-      fontSize: "24px",
+      fontSize: "28px",
       fontWeight: 900,
     },
 
     deviceGrid: {
       display: "grid",
       gridTemplateColumns: isMobile ? "1fr" : "repeat(4, minmax(0, 1fr))",
-      gap: "18px",
+      gap: "20px",
     },
 
     infoCard: {
-      borderRadius: "22px",
-      padding: "22px",
-      background: "linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04))",
+      borderRadius: "24px",
+      padding: "24px",
+      background: "linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03))",
       border: "1px solid rgba(255,255,255,.10)",
-      boxShadow: "0 14px 40px rgba(0,0,0,.18)",
+      boxShadow: "0 18px 44px rgba(0,0,0,.16)",
     },
 
     infoTitle: {
-      fontSize: "20px",
-      fontWeight: 900,
       color: "#fff",
-      marginBottom: "14px",
+      fontSize: "22px",
+      fontWeight: 900,
+      marginBottom: "16px",
     },
 
     infoLine: {
-      color: "rgba(255,255,255,.82)",
+      color: "rgba(255,255,255,.78)",
       fontSize: "14px",
+      lineHeight: 1.6,
       marginBottom: "10px",
-      lineHeight: 1.5,
     },
 
     contactCard: {
-      borderRadius: "28px",
-      padding: isMobile ? "24px" : "32px",
-      background: "linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04))",
+      borderRadius: "30px",
+      padding: isMobile ? "24px" : "34px",
+      background: "linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.04))",
       border: "1px solid rgba(255,255,255,.10)",
       display: "flex",
       flexDirection: isMobile ? "column" : "row",
       alignItems: isMobile ? "flex-start" : "center",
       justifyContent: "space-between",
-      gap: "24px",
-      boxShadow: "0 18px 50px rgba(0,0,0,.18)",
+      gap: "26px",
+      boxShadow: "0 20px 50px rgba(0,0,0,.16)",
     },
 
     contactLine: {
-      color: "rgba(255,255,255,.82)",
+      color: "rgba(255,255,255,.80)",
       fontSize: "16px",
-      marginBottom: "10px",
-      lineHeight: 1.5,
+      lineHeight: 1.6,
+      marginBottom: "8px",
     },
 
     contactActions: {
@@ -753,76 +936,75 @@ function getStyles(isMobile) {
       gap: "12px",
     },
 
-    loginSection: {
-      position: "relative",
-      zIndex: 3,
-      padding: isMobile ? "0 0 44px" : "0 0 70px",
-    },
-
-    loginInner: {
-      maxWidth: "1280px",
-      margin: "0 auto",
+    secondaryButton: {
+      minWidth: "170px",
+      height: "56px",
       padding: "0 24px",
-      display: "flex",
+      borderRadius: "999px",
+      border: "1px solid rgba(255,255,255,.14)",
+      background: "rgba(255,255,255,.05)",
+      color: "#ffffff",
+      textDecoration: "none",
+      display: "inline-flex",
+      alignItems: "center",
       justifyContent: "center",
+      fontSize: "15px",
+      fontWeight: 800,
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,.03)",
+      cursor: "pointer",
     },
 
-    cardGlow: {
-      position: "absolute",
-      inset: "-18px",
-      borderRadius: "34px",
-      background:
-        "radial-gradient(circle at center, rgba(56,189,248,.085), rgba(0,0,0,0) 64%)",
-      filter: "blur(24px)",
-      pointerEvents: "none",
+    loginOverlay: {
+      position: "fixed",
+      inset: 0,
+      zIndex: 100,
+      background: "rgba(3,7,18,.68)",
+      backdropFilter: "blur(10px)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "24px",
     },
 
-    card: {
-      position: "relative",
+    loginModal: {
       width: "100%",
       maxWidth: "460px",
-      borderRadius: "28px",
+      borderRadius: "30px",
       padding: isMobile ? "26px" : "34px",
-      background:
-        "linear-gradient(180deg, rgba(8,16,30,.92), rgba(5,10,22,.98))",
-      border: "1px solid rgba(96,165,250,.14)",
-      boxShadow:
-        "0 18px 50px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.03)",
-      backdropFilter: "blur(18px)",
-      boxSizing: "border-box",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
+      background: "linear-gradient(180deg, rgba(8,16,30,.96), rgba(5,10,22,.99))",
+      border: "1px solid rgba(96,165,250,.16)",
+      boxShadow: "0 28px 80px rgba(0,0,0,.42)",
+      position: "relative",
     },
 
-    cardTopBar: {
-      width: "64px",
-      height: "3px",
+    loginTopBar: {
+      width: "70px",
+      height: "4px",
       borderRadius: "999px",
       background: "linear-gradient(90deg, #67e8f9, #60a5fa)",
       marginBottom: "18px",
       boxShadow: "0 0 16px rgba(56,189,248,.18)",
     },
 
-    brand: {
+    loginBrand: {
       color: "#7dd3fc",
       fontSize: "11px",
-      fontWeight: 800,
+      fontWeight: 900,
       letterSpacing: ".22em",
       textTransform: "uppercase",
       marginBottom: "14px",
     },
 
-    cardTitle: {
+    loginTitle: {
       margin: 0,
       color: "#f8fafc",
-      fontSize: isMobile ? "40px" : "52px",
+      fontSize: isMobile ? "42px" : "52px",
       fontWeight: 900,
       lineHeight: 0.98,
       letterSpacing: "-.05em",
     },
 
-    cardSub: {
+    loginSub: {
       marginTop: "12px",
       marginBottom: "28px",
       color: "#93a4bc",
@@ -872,7 +1054,7 @@ function getStyles(isMobile) {
       fontWeight: 700,
     },
 
-    button: {
+    loginButton: {
       marginTop: "6px",
       height: "58px",
       border: "none",
@@ -884,16 +1066,8 @@ function getStyles(isMobile) {
       color: "#04111f",
       background:
         "linear-gradient(135deg, #67e8f9 0%, #38bdf8 48%, #818cf8 100%)",
-      boxShadow: "0 8px 18px rgba(56,189,248,.12)",
+      boxShadow: "0 10px 24px rgba(56,189,248,.16)",
       transition: "all .16s ease",
-    },
-
-    footer: {
-      marginTop: "18px",
-      color: "#64748b",
-      fontSize: "11px",
-      letterSpacing: ".16em",
-      textTransform: "uppercase",
     },
   };
 }
