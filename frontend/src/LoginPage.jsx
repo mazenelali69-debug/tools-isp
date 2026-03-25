@@ -242,7 +242,7 @@ function SocialRail() {
   );
 }
 
-export default function LoginPage() {
+export default function LoginPage({ onLogin }) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [showLogin, setShowLogin] = useState(false);
   const [username, setUsername] = useState("");
@@ -306,12 +306,20 @@ export default function LoginPage() {
 
     window.setTimeout(() => {
       if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-        localStorage.setItem("nnc_logged_in", "true");
-        window.location.href = "/";
+        sessionStorage.setItem("noc_token", "ok");
+        sessionStorage.setItem("noc_user", username.trim());
+        setLoginError("");
+        setSubmitting(false);
+
+        if (typeof onLogin === "function") {
+          onLogin({ username: username.trim() });
+        } else {
+          window.location.href = "/";
+        }
       } else {
         setLoginError("Invalid username or password.");
+        setSubmitting(false);
       }
-      setSubmitting(false);
     }, 700);
   }
 
@@ -1525,3 +1533,4 @@ function applyResponsiveStyles() {
 
 applyResponsiveStyles();
 window.addEventListener("resize", applyResponsiveStyles);
+
