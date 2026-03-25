@@ -1,4 +1,4 @@
-import { useRef } from "react";
+﻿import { useRef } from "react";
 import DragResizeWindow from "./DragResizeWindow.jsx";
 import TrafficGraph from "./TrafficGraph.jsx";
 
@@ -34,7 +34,7 @@ export default function MonitorCanvasPure({ monitors, live, history, stopMonitor
             key={m.id}
             id={m.id}
             boundsRef={boundsRef}
-            title={`${m.label} (${m.ip}) � ifIndex ${m.ifIndex}`}
+            title={`${m.label} (${m.ip}) — ifIndex ${m.ifIndex}`}
             defaultRect={defaultRect(i)}
           >
             <div>Download: {(down).toFixed?.(3) ?? "0"} Mbps</div>
@@ -55,6 +55,8 @@ export default function MonitorCanvasPure({ monitors, live, history, stopMonitor
     </div>
   );
 }
+
+
 
 
 

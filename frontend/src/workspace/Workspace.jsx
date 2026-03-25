@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+ï»¿import React, { useMemo, useState } from "react";
 import WindowFrame from "./WindowFrame";
 import PingTool from "./tools/PingTool";
 import MonitorTool from "./tools/MonitorTool";
@@ -54,7 +54,7 @@ export default function Workspace({ windows, setWindows, children }) {
             {w.type === "ping" && (
   <PingTool
     ip={w.ip ?? "88.88.88.10"}
-    onIpChange={(next)=> update(w.id, { ip: next, title: "Ping — " + (String(next||"").trim() || "…") })}
+    onIpChange={(next)=> update(w.id, { ip: next, title: "Ping â€” " + (String(next||"").trim() || "â€¦") })}
   />
 )}
 
@@ -82,6 +82,8 @@ export default function Workspace({ windows, setWindows, children }) {
     </div>
   );
 }
+
+
 
 
 

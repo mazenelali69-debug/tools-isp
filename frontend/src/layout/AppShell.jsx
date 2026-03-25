@@ -1,4 +1,4 @@
-import React from "react";
+ï»¿import React from "react";
 import Sidebar from "./Sidebar";
 
 export default function AppShell({ active, setActive, actions, children }) {
@@ -9,7 +9,7 @@ export default function AppShell({ active, setActive, actions, children }) {
       <div className="ti-main">
         <header className="ti-topbar ti-topbar--tight">
           <div className="ti-topbar__left">
-            <div className="ti-topbar__eyebrow"><span className="nocGlow">NocoMment Work tools • WhatsApp 70411518 • mazenelali69@gmail.com</span></div>
+            <div className="ti-topbar__eyebrow"><span className="nocGlow">NocoMment Work tools â€¢ WhatsApp 70411518 â€¢ mazenelali69@gmail.com</span></div>
             
           </div>
 
@@ -33,6 +33,8 @@ export default function AppShell({ active, setActive, actions, children }) {
     </div>
   );
 }
+
+
 
 
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+﻿import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const POLL_MS = 4000;
 
@@ -264,7 +264,7 @@ const DeviceCard = React.memo(function DeviceCard({ item, index }) {
               VLAN1559 Status
             </div>
             <div style={{ fontSize: 14, color: "#d4d9e0" }}>
-              {item.vlan1559Status === "ONLINE" ? "? ONLINE" : "? DOWN"}
+              {item.vlan1559Status === "ONLINE" ? "ONLINE" : "DOWN"}
             </div>
           </div>
         </div>
@@ -358,6 +358,9 @@ export default function TpLinkJetstreamPage() {
     </div>
   );
 }
+
+
+
 
 
 

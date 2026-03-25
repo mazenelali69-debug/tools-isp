@@ -1,4 +1,4 @@
-import React, { useLayoutEffect,  useEffect, useMemo, useState } from "react";
+ï»¿import React, { useLayoutEffect,  useEffect, useMemo, useState } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -264,7 +264,7 @@ export default function AviatHistoryPage() {
     <div style={{ padding: 12, paddingTop: 6, minHeight: "100vh", overflowY: "auto" }}>
       <div style={{ marginBottom: 8 }}>
         <div style={{ opacity: 0.62, fontSize: 11 }}>
-          10-second sampling • live history matrix
+          10-second sampling â€¢ live history matrix
         </div>
       </div>
 
@@ -308,7 +308,7 @@ export default function AviatHistoryPage() {
       <div style={{ display: "grid", gap: 12 }}>
         <ChartPanel
           title="UPLINK"
-          subtitle="Radio1 • Main Internet Source • 3 Gbps"
+          subtitle="Radio1 â€¢ Main Internet Source â€¢ 3 Gbps"
           rows={uplinkRows}
           rxColor="#67e8f9"
           txColor="#34d399"
@@ -325,7 +325,7 @@ export default function AviatHistoryPage() {
         >
           <ChartPanel
             title="Switch B"
-            subtitle="88.88.88.254 • VLAN1559 • TenGigE1/1 • 1 Gbps"
+            subtitle="88.88.88.254 â€¢ VLAN1559 â€¢ TenGigE1/1 â€¢ 1 Gbps"
             rows={switchBRows}
             rxColor="#7dff7a"
             txColor="#b8d84e"
@@ -335,7 +335,7 @@ export default function AviatHistoryPage() {
 
           <ChartPanel
             title="Switch A"
-            subtitle="10.88.88.254 • VLAN2430 • TenGigE1/2 • 1 Gbps"
+            subtitle="10.88.88.254 â€¢ VLAN2430 â€¢ TenGigE1/2 â€¢ 1 Gbps"
             rows={switchARows}
             rxColor="#7aa2ff"
             txColor="#ff9f43"
@@ -347,6 +347,8 @@ export default function AviatHistoryPage() {
     </div>
   );
 }
+
+
 
 
 

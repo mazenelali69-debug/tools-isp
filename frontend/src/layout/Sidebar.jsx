@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+﻿import React, { useMemo, useState } from "react";
 
 function SideIcon({ kind }) {
   const common = {
@@ -247,3 +247,6 @@ export default function Sidebar({ active, setActive }) {
     </aside>
   );
 }
+
+
+

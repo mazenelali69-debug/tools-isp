@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+﻿import React, { useMemo, useRef } from "react";
 
 /**
  * Stable draggable + resizable window frame.
@@ -148,6 +148,8 @@ const vw = document.documentElement.clientWidth - sidebarWidth; const vh = docum
     </div>
   );
 }
+
+
 
 
 

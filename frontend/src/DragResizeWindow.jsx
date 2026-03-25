@@ -1,4 +1,4 @@
-/* TOOLS_WINDOW_CHROME_v1 */
+﻿/* TOOLS_WINDOW_CHROME_v1 */
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -240,7 +240,7 @@ useEffect(() => {
   title="Close"
   aria-label="Close"
 >
-  �
+  ×
 </button>
         </div>
       </div>
@@ -292,6 +292,8 @@ useEffect(() => {
 
 
 /* TOOLSISP_BTN_STOPPROP_v1 */
+
+
 
 
 

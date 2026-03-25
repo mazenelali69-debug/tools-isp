@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+﻿import { useMemo } from "react";
 import {
   AreaChart, Area, Line, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from "recharts";
@@ -72,6 +72,8 @@ export default function TrafficGraph({ points = [], height = 120 }) {
     </div>
   );
 }
+
+
 
 
 

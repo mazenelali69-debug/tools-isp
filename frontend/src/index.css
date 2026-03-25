@@ -1,4 +1,4 @@
-:root {
+Ôªø:root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -959,7 +959,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 
 /* ===== Panels / Cards (conservative) =====
    NOTE: avoids [class*="box"] because it can hit too much.
-   If you want stronger targeting later, weíll map your real classes.
+   If you want stronger targeting later, we‚Äôll map your real classes.
 */
 .uiPro [class*="Ping"],
 .uiPro [class*="Monitor"],
@@ -1708,7 +1708,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
    This block is meant to OVERRIDE everything above (uses !important)
    ===================================== */
 
-/* --- kill the nested ìboxes inside boxesî feel --- */
+/* --- kill the nested ‚Äúboxes inside boxes‚Äù feel --- */
 .uiPro .wsWinBody,
 .uiPro .wsPingRoot,
 .uiPro .wsMonRoot{
@@ -1745,7 +1745,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   padding: 0 12px !important;
 }
 
-/* --- tighten everything (the ìdakhabet l boxî) --- */
+/* --- tighten everything (the ‚Äúdakhabet l box‚Äù) --- */
 .uiPro .wsPingRow,
 .uiPro .wsMonTop,
 .uiPro .wsMonFoot{
@@ -1774,7 +1774,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   box-shadow: 0 0 0 3px rgba(97,218,251,.10) !important;
 }
 
-/* --- buttons: smaller, less ìtoyî --- */
+/* --- buttons: smaller, less ‚Äútoy‚Äù --- */
 .uiPro .wsPingBtn,
 .uiPro .wsMonBtn,
 .uiPro .topBtn,
@@ -1870,7 +1870,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   line-height: 1.35 !important;
 }
 
-/* --- Monitor cards: remove ìlayer cakeî --- */
+/* --- Monitor cards: remove ‚Äúlayer cake‚Äù --- */
 .uiPro .wsMonCards{
   gap: 10px !important;
 }
@@ -2037,7 +2037,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   border: 1px solid rgba(255,255,255,.12) !important;
 }
 
-/* 5) Kill any accidental inner ìcardsî inside Ping window */
+/* 5) Kill any accidental inner ‚Äúcards‚Äù inside Ping window */
 .uiPro .wsPingRoot > div{
   box-shadow: none !important;
   backdrop-filter: none !important;
@@ -2069,7 +2069,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
   display: none !important;
 }
 
-/* prevent ìround cap bubbleî at the start of the fill */
+/* prevent ‚Äúround cap bubble‚Äù at the start of the fill */
 .uiPro .wsPingFill,
 .uiPro .plFill{
   min-width: 0 !important;
@@ -2208,7 +2208,7 @@ html, body { overflow-x:auto !important; overflow-y: auto !important; height: 10
 
 
 /* =========================================================
-   TOOLS-ISP V2 ó NOC PREMIUM FOUNDATION
+   TOOLS-ISP V2 ‚Äî NOC PREMIUM FOUNDATION
    ========================================================= */
 
 :root{
@@ -2796,7 +2796,7 @@ body{
 /* ========================================================= */
 
 /* =========================================================
-   TOOLS-ISP V2 ó CLEAN RIGHT-SIDE DASHBOARD REBUILD
+   TOOLS-ISP V2 ‚Äî CLEAN RIGHT-SIDE DASHBOARD REBUILD
    ========================================================= */
 
 .ti-topbar--tight{
@@ -3123,7 +3123,7 @@ body{
 /* ========================================================= */
 
 /* =========================================================
-   TOOLS-ISP V2 ó VISUAL POLISH BEFORE ALERTS
+   TOOLS-ISP V2 ‚Äî VISUAL POLISH BEFORE ALERTS
    ========================================================= */
 
 .ti-rankRow{
@@ -6603,4 +6603,5 @@ html, body, #root {
   transform: scale(1.03);
   box-shadow: 0 0 20px rgba(56,189,248,0.5);
 }
+
 

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 
 const API_BASE = "";
 const WINDOW = 24;
@@ -393,6 +393,9 @@ export default function EthernetTrafficPage(){
     </div>
   );
 }
+
+
+
 
 
 

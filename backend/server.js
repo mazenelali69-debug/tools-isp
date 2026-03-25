@@ -2506,7 +2506,9 @@ const NOC_ALERT_CFG = {
   ethDownFailCount: 2,
   trafficStopFailCount: 3,
   trafficStopMaxMbps: 1.0,
-  trafficRecoverMinMbps: 2.0
+  trafficRecoverMinMbps: 2.0,
+trafficLowUtilPct: 50,
+trafficRecoverUtilPct: 55
 };
 
 const nocAlertState = {
@@ -4172,6 +4174,8 @@ if (!global.__uplinkRealHistoryPollerStarted) {
   }, 10000);
 }
 // ===== UPLINK_REAL_HISTORY_POLLER_END =====
+
+
 
 
 

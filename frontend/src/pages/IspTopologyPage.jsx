@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+ï»¿import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const VIEWBOX_WIDTH = 1800;
 const VIEWBOX_HEIGHT = 900;
@@ -476,7 +476,7 @@ export default function IspTopologyPage() {
         <div>
           <div style={{ fontSize: 24, fontWeight: 800 }}>Network Map</div>
           <div style={{ fontSize: 13, color: "#94a3b8", marginTop: 4 }}>
-            Live topology • Drag nodes • Utilization colors • Traffic thickness
+            Live topology â€¢ Drag nodes â€¢ Utilization colors â€¢ Traffic thickness
           </div>
           <div style={{ fontSize: 12, color: "#64748b", marginTop: 6 }}>
             Last update: {lastUpdated || "-"}
@@ -699,5 +699,7 @@ const buttonStyle = {
   fontWeight: 700,
   cursor: "pointer",
 };
+
+
 
 

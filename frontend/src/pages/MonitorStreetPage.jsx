@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+ï»¿import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const WINDOW = 24;
 
@@ -50,11 +50,11 @@ function fmtPingText(pingMs, packetLoss){
   const loss = num(packetLoss);
   if(loss >= 100) return "timeout";
   if(loss > 0){
-    if(Number.isFinite(Number(pingMs))) return `PL ${Math.round(loss)}% • ${Math.round(Number(pingMs))} ms`;
+    if(Number.isFinite(Number(pingMs))) return `PL ${Math.round(loss)}% â€¢ ${Math.round(Number(pingMs))} ms`;
     return `PL ${Math.round(loss)}%`;
   }
   if(Number.isFinite(Number(pingMs))) return `${Math.round(Number(pingMs))} ms`;
-  return "—";
+  return "â€”";
 }
 
 function Sparkline({ values = [], label = "" }){
@@ -587,6 +587,8 @@ export default function MonitorStreetPage(){
     </div>
   );
 }
+
+
 
 
 

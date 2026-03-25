@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+ï»¿import React, { useEffect, useMemo, useState } from "react";
 
 const CAPACITY = {
   uplink: 3000,
@@ -152,15 +152,15 @@ function buildCards(data, parts) {
       ...uplink,
       title: "UPLINK CORE",
       subtitle: "Radio1 Main Internet Source",
-      meta: "155.15.59.4 • 3 Gbps core path • Aviat WTM4200",
+      meta: "155.15.59.4 â€¢ 3 Gbps core path â€¢ Aviat WTM4200",
       capacityMbps: CAPACITY.uplink
     },
     switchB: switchB
       ? {
           ...switchB,
           title: "Switch B",
-          subtitle: "88.88.88.254 • VLAN1559 • TenGigE1/1",
-          meta: "Distribution segment • 1 Gbps",
+          subtitle: "88.88.88.254 â€¢ VLAN1559 â€¢ TenGigE1/1",
+          meta: "Distribution segment â€¢ 1 Gbps",
           capacityMbps: CAPACITY.switchB
         }
       : null,
@@ -168,8 +168,8 @@ function buildCards(data, parts) {
       ? {
           ...switchA,
           title: "Switch A",
-          subtitle: "10.88.88.254 • VLAN2430 • TenGigE1/2",
-          meta: "Distribution segment • 1 Gbps",
+          subtitle: "10.88.88.254 â€¢ VLAN2430 â€¢ TenGigE1/2",
+          meta: "Distribution segment â€¢ 1 Gbps",
           capacityMbps: CAPACITY.switchA
         }
       : null
@@ -549,7 +549,7 @@ export default function AviatWTM4200Page() {
                 marginBottom: 12
               }}
             >
-              Aviat WTM4200 • Live Operations Surface
+              Aviat WTM4200 â€¢ Live Operations Surface
             </div>
 
             <div
@@ -651,6 +651,8 @@ export default function AviatWTM4200Page() {
     </div>
   );
 }
+
+
 
 
 

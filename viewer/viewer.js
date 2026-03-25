@@ -28,3 +28,4 @@ socket.on("monitor:update", (msg) => {
 
 socket.on("disconnect", (r)=> console.log("⚠ Disconnected:", r));
 socket.on("connect_error", (e)=> console.log("❌ connect_error:", e.message || e));
+

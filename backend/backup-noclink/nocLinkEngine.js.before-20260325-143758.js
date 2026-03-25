@@ -11,9 +11,6 @@ const TELEGRAM_CHAT_ID = "8292425726";
 const state = new Map();
 
 function runSnmpwalk(ip, oidOrName) {
-  if (PING_ONLY.includes(ip)) {
-    return "";
-  }
   return new Promise((resolve, reject) => {
     execFile(
       "snmpwalk",
@@ -47,7 +44,7 @@ function parseTable(output, prefix) {
 
   for (const line of lines) {
     const m = line.match(new RegExp("^" + prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\.(\\d+)\\s*=\\s*.+?:\\s*(.+)$"));
-    if (!m) continue;
+    if (!m) return;
     const idx = Number(m[1]);
     const val = String(m[2]).trim().replace(/^"|"$/g, "");
     map.set(idx, val);
@@ -170,19 +167,13 @@ function getState(ip) {
 
 async function checkIp(ip) {
   try {
-    // skip SNMP completely for ping-only targets
-if (PING_ONLY.includes(ip)) {
+    if (PING_ONLY.includes(ip)) {
+  // skip SNMP completely
   return;
 }
 
 const best = await detectBestInterface(ip);
-    if (!best) {
-  await sendTelegram(`?? LINK DOWN
-IP: ${ip}
-Reason: SNMP Timeout
-Time: ${new Date().toISOString()}`);
-  return;
-}
+    if (!best) return;
 
     const st = getState(ip);
 
@@ -252,5 +243,7 @@ function startNocLinkEngine() {
 }
 
 module.exports = { startNocLinkEngine };
+
+
 
 

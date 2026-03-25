@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 
 const STORAGE_KEY = "tools-isp:pings:v1";
 const STORAGE_UI_KEY = "tools-isp:ui:v1";
@@ -43,16 +43,16 @@ function getPacketLossPct(out) {
   if (!out) return null;
   const s = String(out);
   const lines = s.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
-  const tail = lines.slice(-50); // آخر 50 نتيجة
+  const tail = lines.slice(-50); // Ø¢Ø®Ø± 50 Ù†ØªÙŠØ¬Ø©
   let sent = 0;
   let lost = 0;
   for (const l of tail) {
-    // نجاح
+    // Ù†Ø¬Ø§Ø­
     if (/^reply from/i.test(l) || /bytes=\d+/i.test(l)) {
       sent++;
       continue;
     }
-    // فشل (ويندوز + حالات شائعة)
+    // ÙØ´Ù„ (ÙˆÙŠÙ†Ø¯ÙˆØ² + Ø­Ø§Ù„Ø§Øª Ø´Ø§Ø¦Ø¹Ø©)
     if (/request timed out/i.test(l) || /destination host unreachable/i.test(l) || /general failure/i.test(l) || /transmit failed/i.test(l) || /unreachable/i.test(l)) {
       sent++;
       lost++;
@@ -390,7 +390,7 @@ async function fetchInterfaces() {
     // show header + keep running
     setPingField(id, { out: "Pinging " + target + " ...\n", running: true });
 
-    // ✅ SSE live stream
+    // âœ… SSE live stream
     const url = API + "/api/ping-sse?ip=" + encodeURIComponent(target);
     const es = new EventSource(url);
     pingSrcRef.current[id] = es;
@@ -408,7 +408,7 @@ async function fetchInterfaces() {
         return { ...pp, out: next, _scroll: Date.now() };
       }));
 
-      // ✅ Auto-scroll output to bottom (after DOM updates)
+      // âœ… Auto-scroll output to bottom (after DOM updates)
       setTimeout(() => {
         try {
           const el = document.querySelector(`[data-ping-out="${id}"]`);
@@ -507,7 +507,7 @@ async function fetchInterfaces() {
         return sel ? `#${sel.ifIndex} - ${sel.ifName}` : `#${ifIndex}`;
       })()}
     </span>
-    <span className="ddCaret">▾</span>
+    <span className="ddCaret">â–¾</span>
   </button>
 
   {ifOpen ? (
@@ -552,6 +552,8 @@ async function fetchInterfaces() {
     </div>
   );
 }
+
+
 
 
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+ï»¿import React, { useEffect, useMemo, useState } from "react";
 
 const RANGES = ["5m", "30m", "1h", "1d", "30d"];
 const VIEWS = [
@@ -750,7 +750,7 @@ export default function AviatHistoryPage() {
                 <div style={{ fontSize: 22, fontWeight: 900, opacity: 0.72 }}>#{idx + 1}</div>
                 <div>
                   <div style={{ fontWeight: 900 }}>{r.label}</div>
-                  <div style={{ opacity: 0.65, marginTop: 4, fontSize: 12 }}>{r.source} • timeline</div>
+                  <div style={{ opacity: 0.65, marginTop: 4, fontSize: 12 }}>{r.source} â€¢ timeline</div>
                 </div>
                 <div style={{ color: "#63ffa3", fontWeight: 900 }}>Avg {fmtMbps(r.avg)}</div>
                 <div style={{ color: "#78a9ff", fontWeight: 900 }}>Peak {fmtMbps(r.peak)}</div>
@@ -797,12 +797,14 @@ export default function AviatHistoryPage() {
           Latest sample
         </div>
         <div style={{ fontSize: 18, fontWeight: 800 }}>
-          {stats.ts ? `${fmtTime(stats.ts)} • uplink ${fmtMbps(stats.uplink)} • switchB ${fmtMbps(stats.switchB)} • switchA ${fmtMbps(stats.switchA)}` : "No sample"}
+          {stats.ts ? `${fmtTime(stats.ts)} â€¢ uplink ${fmtMbps(stats.uplink)} â€¢ switchB ${fmtMbps(stats.switchB)} â€¢ switchA ${fmtMbps(stats.switchA)}` : "No sample"}
         </div>
       </div>
     </div>
   );
 }
+
+
 
 
 

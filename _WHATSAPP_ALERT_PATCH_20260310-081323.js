@@ -1,4 +1,4 @@
-require("dotenv").config();
+﻿require("dotenv").config();
 const netNeighbors = require("net");
 const { spawn } = require("child_process");
 const { execFile } = require("child_process");
@@ -1012,7 +1012,7 @@ app.post("/api/debug/walk-ifdescr", async (req, res) => {
 });
 
 //
-// API: Universal interfaces via SNMP CLI (snmpwalk) � works across vendors
+// API: Universal interfaces via SNMP CLI (snmpwalk) — works across vendors
 // POST /api/interfaces-cli  { ip, community }
 // returns: { ok:true, count, interfaces:[{ifIndex, ifName}] }
 //
@@ -2206,5 +2206,6 @@ app.get("/api/test/whatsapp-alert", async (req, res) => {
 // =====================================
 // CALLMEBOT_WHATSAPP_TEST_ROUTE_END
 // =====================================
+
 
 

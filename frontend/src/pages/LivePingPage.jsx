@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+﻿import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const API_BASE = import.meta.env?.VITE_API_BASE || "";
 
@@ -361,7 +361,7 @@ export default function LivePingPage(){
                     >
                       <div style={{ opacity: 0.78, fontSize: 12, marginBottom: 4 }}>Latency</div>
                       <div style={{ fontSize: 18, fontWeight: 900, color: "#8cd2ff" }}>
-                        {lastMs != null ? `${Math.round(lastMs)} ms` : "�"}
+                        {lastMs != null ? `${Math.round(lastMs)} ms` : "—"}
                       </div>
                     </div>
 
@@ -449,6 +449,8 @@ export default function LivePingPage(){
     </div>
   );
 }
+
+
 
 
 

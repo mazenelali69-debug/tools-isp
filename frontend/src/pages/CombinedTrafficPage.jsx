@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -263,7 +263,7 @@ export default function CombinedTrafficPage(){
 
         <div style={{ position: "relative", zIndex: 1 }}>
           <div style={{ marginBottom: 8, fontWeight: 800, fontSize: 18 }}>
-            History � {range}
+            History — {range}
           </div>
 
           {histErr ? (
@@ -329,6 +329,8 @@ export default function CombinedTrafficPage(){
     </div>
   );
 }
+
+
 
 
 
