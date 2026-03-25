@@ -18,225 +18,282 @@ const HERO_SLIDES = [
   {
     eyebrow: "DIRECT ISP EXPERIENCE",
     titleA: "Fast setup.",
-    titleB: "Clear plans.",
+    titleB: "Clean pricing.",
     titleC: "Direct support.",
     description:
-      "Modern internet packages with quick communication, clean pricing, and direct contact when you need help.",
+      "A full landing page rebuild with cleaner hierarchy, stronger visual balance, faster actions, and a more premium network brand feel.",
     primaryLabel: "View Plans",
-    secondaryLabel: "Call Now",
-  },
-  {
-    eyebrow: "HOME + BUSINESS READY",
-    titleA: "Stable service.",
-    titleB: "Real contact.",
-    titleC: "No wasted time.",
-    description:
-      "Built for customers who want reliable installation, simple package choices, and support that answers fast.",
-    primaryLabel: "See Coverage",
     secondaryLabel: "Support Login",
   },
   {
-    eyebrow: "SMART NETWORK ACCESS",
-    titleA: "Better signal.",
-    titleB: "Better speed.",
-    titleC: "Better support.",
+    eyebrow: "SMART INTERNET PACKAGES",
+    titleA: "Better layout.",
+    titleB: "Better clarity.",
+    titleC: "Better conversion.",
     description:
-      "A stronger digital front page for your network brand with premium visuals, better structure, and faster actions.",
-    primaryLabel: "Explore Devices",
-    secondaryLabel: "Contact Us",
+      "Your plans, devices, and direct contact actions are now presented in a proper structure that feels modern instead of noisy.",
+    primaryLabel: "Explore Packages",
+    secondaryLabel: "Call Now",
+  },
+  {
+    eyebrow: "NO WASTED SPACE",
+    titleA: "No ugly top bar.",
+    titleB: "No messy boxes.",
+    titleC: "Just clean UI.",
+    description:
+      "This version replaces the old heavy Wi-Fi block with a refined hero visual and stronger responsive spacing across the full page.",
+    primaryLabel: "See Devices",
+    secondaryLabel: "Open Contact",
   },
 ];
 
 const PLANS = [
   {
     name: "Night 8",
+    price: "$25",
     speed: "8 Mbps",
     cached: "Up to 30 Mbps cached",
     daily: "8 GB daily",
     monthly: "500 GB monthly",
-    price: "$25",
-    accent: "violet",
     badge: "Popular",
+    featured: false,
   },
   {
     name: "Night 12",
+    price: "$35",
     speed: "12 Mbps",
     cached: "Up to 45 Mbps cached",
     daily: "12 GB daily",
     monthly: "700 GB monthly",
-    price: "$35",
-    accent: "blue",
-    badge: "Balanced",
+    badge: "Recommended",
+    featured: true,
   },
   {
     name: "Night 20",
+    price: "$50",
     speed: "20 Mbps",
     cached: "Up to 60 Mbps cached",
     daily: "18 GB daily",
     monthly: "950 GB monthly",
-    price: "$50",
-    accent: "cyan",
     badge: "Fast",
+    featured: false,
   },
   {
     name: "Night Max",
+    price: "$70",
     speed: "30 Mbps",
     cached: "Up to 80 Mbps cached",
     daily: "25 GB daily",
     monthly: "1.4 TB monthly",
-    price: "$70",
-    accent: "violet",
     badge: "Pro",
+    featured: false,
   },
   {
     name: "Business Core",
+    price: "$120",
     speed: "50 Mbps",
     cached: "Priority traffic",
     daily: "Unlimited usage",
     monthly: "Business policy",
-    price: "$120",
-    accent: "blue",
     badge: "Business",
+    featured: false,
   },
   {
     name: "Business Plus",
+    price: "$180",
     speed: "100 Mbps",
     cached: "Priority + support",
     daily: "Unlimited usage",
     monthly: "Business policy",
-    price: "$180",
-    accent: "cyan",
     badge: "Premium",
+    featured: false,
   },
 ];
 
 const DEVICES = [
   {
     name: "Dual Band CPE",
-    desc: "Stable wireless coverage for apartments and homes.",
+    desc: "Stable signal delivery for homes, apartments, and everyday customer coverage.",
     tag: "Home Ready",
   },
   {
     name: "Outdoor Receiver",
-    desc: "Cleaner long-distance signal for difficult areas.",
+    desc: "Longer reach and stronger wireless capture for difficult streets and roofs.",
     tag: "Long Range",
   },
   {
     name: "Business Router",
-    desc: "Better distribution and stronger control for offices.",
+    desc: "Cleaner distribution and more reliable internal networking for office use.",
     tag: "Business",
   },
   {
     name: "Mesh Extension",
-    desc: "Expand coverage inside large homes and multi-floor spaces.",
+    desc: "Better indoor spread for multi-floor homes and larger customer spaces.",
     tag: "Wide Coverage",
   },
 ];
 
-const CONTACT_CARDS = [
+const CONTACTS = [
   {
-    title: "WhatsApp",
-    value: BRAND.phoneDisplay,
+    name: "WhatsApp",
+    value: "Chat directly now",
     href: BRAND.whatsapp,
-    hint: "Chat directly with support",
+    icon: "whatsapp",
+    hint: "Direct support on WhatsApp",
   },
   {
-    title: "Facebook",
-    value: "NoComment.lb",
+    name: "Facebook",
+    value: "Visit our page",
     href: BRAND.facebook,
-    hint: "Visit our official page",
+    icon: "facebook",
+    hint: "See updates and page info",
   },
   {
-    title: "Location",
-    value: "Open on Google Maps",
+    name: "Location",
+    value: "Open Google Maps",
     href: BRAND.location,
-    hint: "See office / service location",
+    icon: "location",
+    hint: "Open our location directly",
   },
 ];
 
-function WifiIllustration() {
+function WhatsAppIcon({ size = 18 }) {
   return (
-    <div style={styles.illustrationShell}>
-      <div style={styles.illustrationGlowA} />
-      <div style={styles.illustrationGlowB} />
-      <div style={styles.illustrationGrid} />
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path
+        d="M27.2 15.2C27.2 21.5 22 26.6 15.7 26.6C13.6 26.6 11.7 26 10 24.9L5.2 26.2L6.5 21.6C5.2 19.7 4.5 17.5 4.5 15.2C4.5 8.9 9.6 3.8 15.9 3.8C22.1 3.8 27.2 8.9 27.2 15.2Z"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M11.7 10.7C12.1 10.2 12.5 10.1 12.9 10.1C13.2 10.1 13.5 10.1 13.8 10.8C14.1 11.4 14.8 13 14.9 13.2C15 13.4 15.1 13.7 14.9 14C14.7 14.3 14.6 14.5 14.4 14.7C14.2 14.9 14 15.1 13.8 15.3C13.6 15.5 13.4 15.7 13.6 16C13.8 16.4 14.5 17.6 15.6 18.6C17 19.8 18.1 20.2 18.6 20.4C18.9 20.5 19.1 20.5 19.3 20.3C19.6 20 19.9 19.6 20.2 19.2C20.4 18.9 20.7 18.8 21 18.9C21.4 19.1 23.2 20 23.5 20.1C23.9 20.3 24.1 20.4 24.2 20.7C24.3 21 24.3 22.1 23.5 22.9C22.8 23.6 21.7 24 20.5 23.8C19.3 23.6 17.7 23.1 15.9 21.9C14 20.7 12.8 19.2 11.8 17.7C10.7 16 10.1 14.2 10.1 12.9C10.1 12.1 10.5 11.3 11.1 10.8L11.7 10.7Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
 
-      <div style={styles.routerCard}>
-        <div style={styles.routerTopLine} />
-        <div style={styles.routerBody}>
-          <div style={styles.routerDot} />
-          <div style={styles.routerDot} />
-          <div style={styles.routerDot} />
+function FacebookIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path
+        d="M18.7 27V17.1H21.9L22.4 13.4H18.7V11C18.7 9.9 19 9.2 20.6 9.2H22.5V5.9C22.2 5.8 21.1 5.7 19.8 5.7C17 5.7 15.1 7.4 15.1 10.5V13.4H12V17.1H15.1V27H18.7Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function LocationIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path
+        d="M16 27.2C16 27.2 24 20.1 24 13.6C24 9.2 20.4 5.7 16 5.7C11.6 5.7 8 9.2 8 13.6C8 20.1 16 27.2 16 27.2Z"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="16" cy="13.6" r="2.8" fill="currentColor" />
+    </svg>
+  );
+}
+
+function SignalVisual() {
+  return (
+    <div style={styles.signalWrap}>
+      <div style={styles.signalBlurA} />
+      <div style={styles.signalBlurB} />
+      <div style={styles.signalNoise} />
+
+      <div style={styles.heroPanelTop}>
+        <div style={styles.heroPanelTopLeft}>
+          <div style={styles.heroPanelChip}>Premium UI</div>
+          <div style={styles.heroPanelTitle}>Network Landing Experience</div>
+        </div>
+        <div style={styles.statusPill}>
+          <span style={styles.statusDot} />
+          Online
         </div>
       </div>
 
-      <div style={styles.wifiArcLarge} />
-      <div style={styles.wifiArcMedium} />
-      <div style={styles.wifiArcSmall} />
-
-      <div style={styles.infoChipLeft}>
-        <span style={styles.infoChipKicker}>Coverage</span>
-        <strong>Optimized</strong>
+      <div style={styles.centerRingOuter}>
+        <div style={styles.centerRingMid}>
+          <div style={styles.centerRingInner}>
+            <div style={styles.centerCore}>
+              <span style={styles.centerCoreText}>ISP</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div style={styles.infoChipRight}>
-        <span style={styles.infoChipKicker}>Support</span>
-        <strong>Fast reply</strong>
+      <div style={styles.arcOne} />
+      <div style={styles.arcTwo} />
+      <div style={styles.arcThree} />
+
+      <div style={styles.floatCardLeft}>
+        <span style={styles.floatCardKicker}>Support</span>
+        <strong style={styles.floatCardValue}>Fast reply</strong>
       </div>
 
-      <div style={styles.bottomInfoBar}>
-        <div style={styles.bottomInfoItem}>
-          <span style={styles.bottomInfoLabel}>Plans</span>
-          <strong>6+</strong>
+      <div style={styles.floatCardRight}>
+        <span style={styles.floatCardKicker}>Plans</span>
+        <strong style={styles.floatCardValue}>Cleaner layout</strong>
+      </div>
+
+      <div style={styles.metricsBar}>
+        <div style={styles.metricBox}>
+          <span style={styles.metricLabel}>Coverage</span>
+          <strong style={styles.metricValue}>Optimized</strong>
         </div>
-        <div style={styles.bottomInfoItem}>
-          <span style={styles.bottomInfoLabel}>Setup</span>
-          <strong>Quick</strong>
+        <div style={styles.metricBox}>
+          <span style={styles.metricLabel}>Access</span>
+          <strong style={styles.metricValue}>Direct</strong>
         </div>
-        <div style={styles.bottomInfoItem}>
-          <span style={styles.bottomInfoLabel}>Status</span>
-          <strong>Online</strong>
+        <div style={styles.metricBox}>
+          <span style={styles.metricLabel}>Action</span>
+          <strong style={styles.metricValue}>Instant</strong>
         </div>
       </div>
     </div>
   );
 }
 
-function PlanIcon() {
+function SmallArrowIcon() {
   return (
-    <div style={styles.smallIconWrap}>
-      <div style={styles.smallIconInner}>↗</div>
-    </div>
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M5 15L15 5M15 5H7.5M15 5V12.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
 
-function DeviceIcon() {
+function BoxSparkIcon() {
   return (
-    <div style={styles.smallIconWrap}>
-      <div style={styles.smallIconInner}>◉</div>
-    </div>
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M10 2L11.6 6.1L16 7.7L11.6 9.3L10 13.4L8.4 9.3L4 7.7L8.4 6.1L10 2Z" fill="currentColor" />
+    </svg>
   );
 }
 
-function ContactIcon() {
-  return (
-    <div style={styles.smallIconWrap}>
-      <div style={styles.smallIconInner}>✦</div>
-    </div>
-  );
+function ContactIcon({ kind }) {
+  if (kind === "whatsapp") return <WhatsAppIcon size={18} />;
+  if (kind === "facebook") return <FacebookIcon size={18} />;
+  return <LocationIcon size={18} />;
 }
 
-function SocialRail() {
+function SocialDock() {
   return (
-    <div style={styles.socialRail}>
-      <a href={BRAND.whatsapp} target="_blank" rel="noreferrer" style={styles.socialBtn} title="WhatsApp">
-        <span style={styles.socialIcon}>W</span>
+    <div style={styles.socialDock}>
+      <a href={BRAND.whatsapp} target="_blank" rel="noreferrer" style={styles.socialDockBtn} title="WhatsApp">
+        <WhatsAppIcon size={18} />
       </a>
-      <a href={BRAND.facebook} target="_blank" rel="noreferrer" style={styles.socialBtn} title="Facebook">
-        <span style={styles.socialIcon}>f</span>
+      <a href={BRAND.facebook} target="_blank" rel="noreferrer" style={styles.socialDockBtn} title="Facebook">
+        <FacebookIcon size={18} />
       </a>
-      <a href={BRAND.location} target="_blank" rel="noreferrer" style={styles.socialBtn} title="Location">
-        <span style={styles.socialIcon}>⌖</span>
+      <a href={BRAND.location} target="_blank" rel="noreferrer" style={styles.socialDockBtn} title="Location">
+        <LocationIcon size={18} />
       </a>
     </div>
   );
@@ -245,15 +302,16 @@ function SocialRail() {
 export default function LoginPage({ onLogin }) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [showLogin, setShowLogin] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 900);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [loginError, setLoginError] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 980);
 
   useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth < 980);
+    const onResize = () => setIsMobile(window.innerWidth < 900);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
@@ -261,13 +319,13 @@ export default function LoginPage({ onLogin }) {
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 4500);
+    }, 4200);
     return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
     document.body.style.margin = "0";
-    document.body.style.background = "#020817";
+    document.body.style.background = "#020617";
     return () => {
       document.body.style.background = "";
     };
@@ -278,25 +336,22 @@ export default function LoginPage({ onLogin }) {
   function scrollToId(id) {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    setMenuOpen(false);
   }
 
-  function handlePrimaryAction(label) {
-    if (label.toLowerCase().includes("plan")) scrollToId("plans");
-    else if (label.toLowerCase().includes("coverage")) scrollToId("contact");
-    else if (label.toLowerCase().includes("device")) scrollToId("devices");
-    else scrollToId("plans");
+  function handlePrimary(label) {
+    const l = label.toLowerCase();
+    if (l.includes("plan") || l.includes("package")) return scrollToId("plans");
+    if (l.includes("device")) return scrollToId("devices");
+    return scrollToId("plans");
   }
 
-  function handleSecondaryAction(label) {
-    if (label.toLowerCase().includes("call")) {
-      window.location.href = `tel:${BRAND.phoneDisplay}`;
-      return;
-    }
-    if (label.toLowerCase().includes("login")) {
-      setShowLogin(true);
-      return;
-    }
-    scrollToId("contact");
+  function handleSecondary(label) {
+    const l = label.toLowerCase();
+    if (l.includes("login")) return setShowLogin(true);
+    if (l.includes("call")) return (window.location.href = `tel:${BRAND.phoneDisplay}`);
+    if (l.includes("contact")) return scrollToId("contact");
+    return scrollToId("contact");
   }
 
   function handleLoginSubmit(e) {
@@ -320,48 +375,70 @@ export default function LoginPage({ onLogin }) {
         setLoginError("Invalid username or password.");
         setSubmitting(false);
       }
-    }, 700);
+    }, 650);
   }
 
   return (
     <div style={styles.page}>
       <div style={styles.bgBase} />
-      <div style={styles.bgOrbA} />
-      <div style={styles.bgOrbB} />
-      <div style={styles.bgLines} />
+      <div style={styles.bgGlowA} />
+      <div style={styles.bgGlowB} />
+      <div style={styles.bgGrid} />
+      <div style={styles.bgVignette} />
 
-      <SocialRail />
+      <SocialDock />
 
       <header style={styles.header}>
         <div style={styles.headerInner}>
-          <button style={styles.logoWrap} onClick={() => scrollToId("home")}>
-            <span style={styles.logoText}>{BRAND.name}</span>
+          <button style={styles.brandBtn} onClick={() => scrollToId("home")}>
+            <span style={styles.brandText}>{BRAND.name}</span>
           </button>
 
-          {!isMobile && (
+          {!isMobile ? (
             <nav style={styles.nav}>
               <button style={styles.navLink} onClick={() => scrollToId("home")}>Home</button>
               <button style={styles.navLink} onClick={() => scrollToId("plans")}>Plans</button>
               <button style={styles.navLink} onClick={() => scrollToId("devices")}>Devices</button>
               <button style={styles.navLink} onClick={() => scrollToId("contact")}>Contact</button>
             </nav>
+          ) : (
+            <button style={styles.menuBtn} onClick={() => setMenuOpen((v) => !v)} aria-label="Open menu">
+              <span style={styles.menuBar} />
+              <span style={styles.menuBar} />
+              <span style={styles.menuBar} />
+            </button>
           )}
 
-          <div style={styles.headerActions}>
-            <button style={styles.headerGhostBtn} onClick={() => setShowLogin(true)}>
+          {!isMobile && (
+            <div style={styles.headerActions}>
+              <button style={styles.headerGhostBtn} onClick={() => setShowLogin(true)}>
+                Support Login
+              </button>
+              <a href={`tel:${BRAND.phoneDisplay}`} style={styles.headerMainBtn}>
+                Call Now
+              </a>
+            </div>
+          )}
+        </div>
+
+        {isMobile && menuOpen && (
+          <div style={styles.mobileMenu}>
+            <button style={styles.mobileLink} onClick={() => scrollToId("home")}>Home</button>
+            <button style={styles.mobileLink} onClick={() => scrollToId("plans")}>Plans</button>
+            <button style={styles.mobileLink} onClick={() => scrollToId("devices")}>Devices</button>
+            <button style={styles.mobileLink} onClick={() => scrollToId("contact")}>Contact</button>
+            <button style={styles.mobilePrimary} onClick={() => { setMenuOpen(false); setShowLogin(true); }}>
               Support Login
             </button>
-            <a href={`tel:${BRAND.phoneDisplay}`} style={styles.headerPrimaryBtn}>
-              Call Now
-            </a>
+            <a href={`tel:${BRAND.phoneDisplay}`} style={styles.mobileSecondary}>Call Now</a>
           </div>
-        </div>
+        )}
       </header>
 
       <main style={styles.main}>
         <section id="home" style={styles.heroSection}>
           <div style={styles.heroGrid}>
-            <div style={styles.heroCopy}>
+            <div style={styles.heroLeft}>
               <div style={styles.eyebrow}>{slide.eyebrow}</div>
 
               <h1 style={styles.heroTitle}>
@@ -370,47 +447,40 @@ export default function LoginPage({ onLogin }) {
                 <span style={styles.heroAccent}>{slide.titleC}</span>
               </h1>
 
-              <p style={styles.heroDescription}>{slide.description}</p>
+              <p style={styles.heroText}>{slide.description}</p>
 
-              <div style={styles.heroActions}>
-                <button
-                  style={styles.heroPrimary}
-                  onClick={() => handlePrimaryAction(slide.primaryLabel)}
-                >
+              <div style={styles.heroButtons}>
+                <button style={styles.heroMainBtn} onClick={() => handlePrimary(slide.primaryLabel)}>
                   {slide.primaryLabel}
                 </button>
-
-                <button
-                  style={styles.heroSecondary}
-                  onClick={() => handleSecondaryAction(slide.secondaryLabel)}
-                >
+                <button style={styles.heroAltBtn} onClick={() => handleSecondary(slide.secondaryLabel)}>
                   {slide.secondaryLabel}
                 </button>
               </div>
 
-              <div style={styles.heroMetaGrid}>
-                <div style={styles.metaCard}>
-                  <span style={styles.metaLabel}>Coverage</span>
-                  <strong style={styles.metaValue}>Jabal Mohssen</strong>
+              <div style={styles.quickStats}>
+                <div style={styles.quickStatCard}>
+                  <span style={styles.quickStatLabel}>Coverage</span>
+                  <strong style={styles.quickStatValue}>Jabal Mohssen</strong>
                 </div>
-                <div style={styles.metaCard}>
-                  <span style={styles.metaLabel}>Support</span>
-                  <strong style={styles.metaValue}>Direct contact</strong>
+                <div style={styles.quickStatCard}>
+                  <span style={styles.quickStatLabel}>Contact</span>
+                  <strong style={styles.quickStatValue}>Direct action</strong>
                 </div>
-                <div style={styles.metaCard}>
-                  <span style={styles.metaLabel}>Network</span>
-                  <strong style={styles.metaValue}>Modern setup</strong>
+                <div style={styles.quickStatCard}>
+                  <span style={styles.quickStatLabel}>Design</span>
+                  <strong style={styles.quickStatValue}>V2 premium</strong>
                 </div>
               </div>
 
-              <div style={styles.dotsRow}>
+              <div style={styles.sliderDots}>
                 {HERO_SLIDES.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setActiveSlide(index)}
                     style={{
-                      ...styles.dot,
-                      ...(activeSlide === index ? styles.dotActive : {}),
+                      ...styles.sliderDot,
+                      ...(index === activeSlide ? styles.sliderDotActive : {}),
                     }}
                     aria-label={`Slide ${index + 1}`}
                   />
@@ -418,8 +488,8 @@ export default function LoginPage({ onLogin }) {
               </div>
             </div>
 
-            <div style={styles.heroVisual}>
-              <WifiIllustration />
+            <div style={styles.heroRight}>
+              <SignalVisual />
             </div>
           </div>
         </section>
@@ -427,45 +497,50 @@ export default function LoginPage({ onLogin }) {
         <section id="plans" style={styles.section}>
           <div style={styles.sectionHead}>
             <div>
-              <div style={styles.sectionEyebrow}>Packages</div>
-              <h2 style={styles.sectionTitle}>Plans that look cleaner and sell better.</h2>
+              <div style={styles.sectionKicker}>Packages</div>
+              <h2 style={styles.sectionTitle}>Plans rebuilt to feel cleaner, sharper, and easier to sell.</h2>
             </div>
             <p style={styles.sectionText}>
-              Better hierarchy, cleaner pricing blocks, stronger layout, and less visual mess.
+              Better spacing, clearer hierarchy, stronger badges, and a highlighted package for faster customer focus.
             </p>
           </div>
 
-          <div style={styles.cardsGrid}>
+          <div style={styles.planGrid}>
             {PLANS.map((plan) => (
               <article
                 key={plan.name}
                 style={{
                   ...styles.planCard,
-                  ...(plan.accent === "violet"
-                    ? styles.planCardViolet
-                    : plan.accent === "cyan"
-                    ? styles.planCardCyan
-                    : styles.planCardBlue),
+                  ...(plan.featured ? styles.planCardFeatured : {}),
                 }}
               >
-                <div style={styles.planTop}>
-                  <div style={styles.planNameWrap}>
-                    <span style={styles.planBadge}>{plan.badge}</span>
-                    <h3 style={styles.planName}>{plan.name}</h3>
+                <div style={styles.planHeader}>
+                  <div style={styles.planBadge}>{plan.badge}</div>
+                  <div style={styles.planArrowWrap}>
+                    <SmallArrowIcon />
                   </div>
-                  <PlanIcon />
                 </div>
 
+                <h3 style={styles.planName}>{plan.name}</h3>
                 <div style={styles.planPrice}>{plan.price}</div>
                 <div style={styles.planSpeed}>{plan.speed}</div>
 
-                <div style={styles.planList}>
-                  <div style={styles.planListItem}><span>Cached</span><strong>{plan.cached}</strong></div>
-                  <div style={styles.planListItem}><span>Daily</span><strong>{plan.daily}</strong></div>
-                  <div style={styles.planListItem}><span>Monthly</span><strong>{plan.monthly}</strong></div>
+                <div style={styles.planSpecs}>
+                  <div style={styles.planSpecRow}>
+                    <span>Cached</span>
+                    <strong>{plan.cached}</strong>
+                  </div>
+                  <div style={styles.planSpecRow}>
+                    <span>Daily</span>
+                    <strong>{plan.daily}</strong>
+                  </div>
+                  <div style={styles.planSpecRow}>
+                    <span>Monthly</span>
+                    <strong>{plan.monthly}</strong>
+                  </div>
                 </div>
 
-                <a href={`tel:${BRAND.phoneDisplay}`} style={styles.planBtn}>
+                <a href={`tel:${BRAND.phoneDisplay}`} style={styles.planAction}>
                   Request Plan
                 </a>
               </article>
@@ -476,19 +551,21 @@ export default function LoginPage({ onLogin }) {
         <section id="devices" style={styles.section}>
           <div style={styles.sectionHead}>
             <div>
-              <div style={styles.sectionEyebrow}>Equipment</div>
-              <h2 style={styles.sectionTitle}>Devices shown in a cleaner premium layout.</h2>
+              <div style={styles.sectionKicker}>Equipment</div>
+              <h2 style={styles.sectionTitle}>Device boxes upgraded to look lighter and more premium.</h2>
             </div>
             <p style={styles.sectionText}>
-              Device cards rebuilt with less clutter, stronger spacing, and a better visual rhythm.
+              Less visual noise, better spacing, proper card rhythm, and a cleaner presentation for customer-facing hardware.
             </p>
           </div>
 
-          <div style={styles.devicesGrid}>
+          <div style={styles.deviceGrid}>
             {DEVICES.map((device) => (
               <article key={device.name} style={styles.deviceCard}>
-                <div style={styles.deviceHeader}>
-                  <DeviceIcon />
+                <div style={styles.deviceTop}>
+                  <div style={styles.deviceIconBox}>
+                    <BoxSparkIcon />
+                  </div>
                   <span style={styles.deviceTag}>{device.tag}</span>
                 </div>
                 <h3 style={styles.deviceName}>{device.name}</h3>
@@ -501,28 +578,22 @@ export default function LoginPage({ onLogin }) {
         <section id="contact" style={styles.section}>
           <div style={styles.sectionHead}>
             <div>
-              <div style={styles.sectionEyebrow}>Reach Us</div>
-              <h2 style={styles.sectionTitle}>Direct actions without the old annoying top bar.</h2>
+              <div style={styles.sectionKicker}>Direct Actions</div>
+              <h2 style={styles.sectionTitle}>WhatsApp, Facebook, and location in a cleaner action block.</h2>
             </div>
             <p style={styles.sectionText}>
-              WhatsApp, Facebook, and Location are now proper direct actions, not random wasted space.
+              No ugly top bar, no wasted area, and no random links. Just proper direct contact actions.
             </p>
           </div>
 
           <div style={styles.contactGrid}>
-            {CONTACT_CARDS.map((item) => (
-              <a
-                key={item.title}
-                href={item.href}
-                target="_blank"
-                rel="noreferrer"
-                style={styles.contactCard}
-              >
-                <div style={styles.contactCardTop}>
-                  <ContactIcon />
-                  <span style={styles.contactTitle}>{item.title}</span>
+            {CONTACTS.map((item) => (
+              <a key={item.name} href={item.href} target="_blank" rel="noreferrer" style={styles.contactCard}>
+                <div style={styles.contactIconWrap}>
+                  <ContactIcon kind={item.icon} />
                 </div>
-                <strong style={styles.contactValue}>{item.value}</strong>
+                <div style={styles.contactName}>{item.name}</div>
+                <div style={styles.contactValue}>{item.value}</div>
                 <p style={styles.contactHint}>{item.hint}</p>
               </a>
             ))}
@@ -533,10 +604,10 @@ export default function LoginPage({ onLogin }) {
       {showLogin && (
         <div style={styles.modalOverlay} onClick={() => setShowLogin(false)}>
           <div style={styles.modalCard} onClick={(e) => e.stopPropagation()}>
-            <div style={styles.modalTopBar} />
-            <div style={styles.modalEyebrow}>{BRAND.network}</div>
+            <div style={styles.modalLine} />
+            <div style={styles.modalKicker}>{BRAND.network}</div>
             <h3 style={styles.modalTitle}>Support Login</h3>
-            <p style={styles.modalText}>Authorized access only</p>
+            <p style={styles.modalText}>Authorized dashboard access only.</p>
 
             <form style={styles.form} onSubmit={handleLoginSubmit}>
               <label style={styles.label}>Username</label>
@@ -550,17 +621,13 @@ export default function LoginPage({ onLogin }) {
               <label style={styles.label}>Password</label>
               <div style={styles.passwordWrap}>
                 <input
-                  style={styles.inputPassword}
+                  style={styles.passwordInput}
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter password"
                 />
-                <button
-                  type="button"
-                  style={styles.showBtn}
-                  onClick={() => setShowPassword((prev) => !prev)}
-                >
+                <button type="button" style={styles.showBtn} onClick={() => setShowPassword((v) => !v)}>
                   {showPassword ? "Hide" : "Show"}
                 </button>
               </div>
@@ -578,80 +645,86 @@ export default function LoginPage({ onLogin }) {
   );
 }
 
-const glass = "rgba(15, 23, 42, 0.72)";
-const line = "rgba(148, 163, 184, 0.16)";
+const glass = "rgba(15, 23, 42, 0.74)";
+const line = "rgba(148, 163, 184, 0.15)";
 const textMain = "#f8fafc";
-const textSoft = "rgba(226, 232, 240, 0.8)";
-const textMute = "rgba(148, 163, 184, 0.95)";
-const gradientA = "linear-gradient(135deg, rgba(168,85,247,0.95), rgba(96,165,250,0.95))";
-const gradientB = "linear-gradient(135deg, rgba(34,211,238,0.95), rgba(96,165,250,0.95))";
+const textSoft = "rgba(226, 232, 240, 0.82)";
+const textMuted = "rgba(148, 163, 184, 0.96)";
+const gradientMain = "linear-gradient(135deg, #7dd3fc 0%, #60a5fa 50%, #c084fc 100%)";
+const gradientButton = "linear-gradient(135deg, #7dd3fc 0%, #60a5fa 55%, #c084fc 100%)";
+const gradientCard = "linear-gradient(180deg, rgba(20,28,48,0.92), rgba(11,18,32,0.92))";
 
 const styles = {
   page: {
     minHeight: "100vh",
-    color: textMain,
-    background:
-      "radial-gradient(circle at top, rgba(37, 99, 235, 0.18), transparent 30%), linear-gradient(180deg, #020617 0%, #020817 45%, #020617 100%)",
-    fontFamily:
-      'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     position: "relative",
     overflow: "hidden",
+    color: textMain,
+    background: "linear-gradient(180deg, #020617 0%, #020817 50%, #020617 100%)",
+    fontFamily:
+      'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
   },
 
   bgBase: {
     position: "fixed",
     inset: 0,
-    background:
-      "linear-gradient(180deg, rgba(2,6,23,0.92), rgba(2,8,23,0.96))",
+    background: "linear-gradient(180deg, rgba(2,6,23,0.94), rgba(2,8,23,0.98))",
     pointerEvents: "none",
   },
 
-  bgOrbA: {
+  bgGlowA: {
     position: "fixed",
-    top: "-120px",
-    right: "-80px",
-    width: "420px",
-    height: "420px",
+    top: "-180px",
+    right: "-100px",
+    width: "520px",
+    height: "520px",
     borderRadius: "999px",
-    background: "radial-gradient(circle, rgba(56,189,248,0.22), transparent 66%)",
+    background: "radial-gradient(circle, rgba(96,165,250,0.18), transparent 66%)",
     filter: "blur(24px)",
     pointerEvents: "none",
   },
 
-  bgOrbB: {
+  bgGlowB: {
     position: "fixed",
     left: "-120px",
-    top: "220px",
-    width: "380px",
-    height: "380px",
+    top: "260px",
+    width: "440px",
+    height: "440px",
     borderRadius: "999px",
-    background: "radial-gradient(circle, rgba(168,85,247,0.16), transparent 70%)",
+    background: "radial-gradient(circle, rgba(192,132,252,0.14), transparent 66%)",
     filter: "blur(24px)",
     pointerEvents: "none",
   },
 
-  bgLines: {
+  bgGrid: {
     position: "fixed",
     inset: 0,
-    opacity: 0.08,
+    opacity: 0.07,
     backgroundImage:
       "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
-    backgroundSize: "64px 64px",
+    backgroundSize: "58px 58px",
+    pointerEvents: "none",
+  },
+
+  bgVignette: {
+    position: "fixed",
+    inset: 0,
+    background: "radial-gradient(circle at center, transparent 20%, rgba(2,6,23,0.38) 100%)",
     pointerEvents: "none",
   },
 
   header: {
     position: "sticky",
     top: 0,
-    zIndex: 40,
+    zIndex: 50,
     backdropFilter: "blur(18px)",
-    background: "rgba(2, 6, 23, 0.6)",
+    background: "rgba(2,6,23,0.58)",
     borderBottom: `1px solid ${line}`,
   },
 
   headerInner: {
     width: "min(1240px, calc(100% - 32px))",
-    minHeight: "82px",
+    minHeight: "84px",
     margin: "0 auto",
     display: "flex",
     alignItems: "center",
@@ -659,7 +732,7 @@ const styles = {
     gap: "18px",
   },
 
-  logoWrap: {
+  brandBtn: {
     border: 0,
     background: "transparent",
     color: textMain,
@@ -667,10 +740,10 @@ const styles = {
     cursor: "pointer",
   },
 
-  logoText: {
+  brandText: {
     fontSize: "2rem",
-    fontWeight: 900,
-    letterSpacing: "-0.06em",
+    fontWeight: 950,
+    letterSpacing: "-0.07em",
   },
 
   nav: {
@@ -683,44 +756,133 @@ const styles = {
     border: 0,
     background: "transparent",
     color: textSoft,
-    fontSize: "0.98rem",
-    fontWeight: 700,
+    fontWeight: 800,
+    fontSize: "0.96rem",
     cursor: "pointer",
-    transition: "0.2s ease",
+    padding: "8px 10px",
+    borderRadius: "12px",
   },
 
   headerActions: {
     display: "flex",
     alignItems: "center",
     gap: "12px",
-    flexWrap: "wrap",
-    justifyContent: "flex-end",
   },
 
   headerGhostBtn: {
-    border: `1px solid ${line}`,
-    background: "rgba(15, 23, 42, 0.75)",
-    color: textMain,
     minHeight: "46px",
     padding: "0 18px",
     borderRadius: "14px",
-    fontWeight: 800,
+    border: `1px solid ${line}`,
+    background: "rgba(15,23,42,0.72)",
+    color: textMain,
+    fontWeight: 900,
     cursor: "pointer",
-    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
   },
 
-  headerPrimaryBtn: {
+  headerMainBtn: {
     minHeight: "46px",
     padding: "0 18px",
     borderRadius: "14px",
-    fontWeight: 900,
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
     textDecoration: "none",
     color: "#08111f",
-    background: gradientA,
-    boxShadow: "0 12px 30px rgba(96, 165, 250, 0.24)",
+    background: gradientButton,
+    fontWeight: 900,
+    boxShadow: "0 14px 36px rgba(96,165,250,0.22)",
+  },
+
+  menuBtn: {
+    width: "48px",
+    height: "48px",
+    borderRadius: "14px",
+    border: `1px solid ${line}`,
+    background: "rgba(15,23,42,0.78)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "4px",
+    cursor: "pointer",
+  },
+
+  menuBar: {
+    width: "18px",
+    height: "2px",
+    borderRadius: "999px",
+    background: "#f8fafc",
+  },
+
+  mobileMenu: {
+    width: "min(1240px, calc(100% - 32px))",
+    margin: "0 auto 14px",
+    borderRadius: "22px",
+    background: "rgba(8,15,32,0.96)",
+    border: `1px solid ${line}`,
+    boxShadow: "0 18px 40px rgba(2,8,23,0.3)",
+    padding: "14px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+  },
+
+  mobileLink: {
+    minHeight: "44px",
+    borderRadius: "14px",
+    border: `1px solid ${line}`,
+    background: "rgba(255,255,255,0.03)",
+    color: textMain,
+    fontWeight: 800,
+    cursor: "pointer",
+  },
+
+  mobilePrimary: {
+    minHeight: "48px",
+    borderRadius: "14px",
+    border: 0,
+    background: gradientButton,
+    color: "#08111f",
+    fontWeight: 900,
+    cursor: "pointer",
+  },
+
+  mobileSecondary: {
+    minHeight: "48px",
+    borderRadius: "14px",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textDecoration: "none",
+    border: `1px solid ${line}`,
+    background: "rgba(255,255,255,0.04)",
+    color: textMain,
+    fontWeight: 900,
+  },
+
+  socialDock: {
+    position: "fixed",
+    right: "18px",
+    bottom: "18px",
+    zIndex: 60,
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+  },
+
+  socialDockBtn: {
+    width: "56px",
+    height: "56px",
+    borderRadius: "18px",
+    display: "grid",
+    placeItems: "center",
+    textDecoration: "none",
+    color: textMain,
+    background: "rgba(15,23,42,0.82)",
+    border: `1px solid ${line}`,
+    backdropFilter: "blur(16px)",
+    boxShadow: "0 16px 34px rgba(2,8,23,0.32)",
   },
 
   main: {
@@ -728,316 +890,388 @@ const styles = {
     zIndex: 2,
     width: "min(1240px, calc(100% - 32px))",
     margin: "0 auto",
-    paddingBottom: "80px",
+    paddingBottom: "88px",
   },
 
   heroSection: {
-    padding: "44px 0 28px",
+    padding: "44px 0 26px",
   },
 
   heroGrid: {
     display: "grid",
-    gridTemplateColumns: "minmax(0, 1.02fr) minmax(420px, 0.98fr)",
+    gridTemplateColumns: "minmax(0, 1.02fr) minmax(440px, 0.98fr)",
     gap: "34px",
     alignItems: "center",
   },
 
-  heroCopy: {
+  heroLeft: {
     display: "flex",
     flexDirection: "column",
     gap: "18px",
   },
 
   eyebrow: {
-    display: "inline-flex",
     width: "fit-content",
     padding: "10px 16px",
     borderRadius: "999px",
-    fontSize: "0.78rem",
-    fontWeight: 900,
-    letterSpacing: "0.24em",
-    color: "#7dd3fc",
-    background: "rgba(15, 23, 42, 0.7)",
+    background: "rgba(15,23,42,0.72)",
     border: `1px solid ${line}`,
-    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)",
+    color: "#7dd3fc",
+    fontWeight: 900,
+    fontSize: "0.78rem",
+    letterSpacing: "0.24em",
+    textTransform: "uppercase",
   },
 
   heroTitle: {
     margin: 0,
     display: "flex",
     flexDirection: "column",
-    gap: "2px",
-    fontSize: "clamp(3.6rem, 8vw, 6.2rem)",
-    lineHeight: 0.9,
+    gap: "4px",
     fontWeight: 950,
+    fontSize: "clamp(3.4rem, 8vw, 6rem)",
+    lineHeight: 0.92,
     letterSpacing: "-0.08em",
-    maxWidth: "680px",
+    maxWidth: "720px",
   },
 
   heroAccent: {
-    background: "linear-gradient(135deg, #7dd3fc, #c084fc)",
+    background: gradientMain,
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
 
-  heroDescription: {
+  heroText: {
     margin: 0,
-    maxWidth: "690px",
+    maxWidth: "700px",
+    fontSize: "1.18rem",
+    lineHeight: 1.72,
     color: textSoft,
-    fontSize: "1.24rem",
-    lineHeight: 1.7,
   },
 
-  heroActions: {
+  heroButtons: {
     display: "flex",
     gap: "14px",
     flexWrap: "wrap",
-    marginTop: "8px",
+    marginTop: "6px",
   },
 
-  heroPrimary: {
+  heroMainBtn: {
     minHeight: "58px",
-    padding: "0 28px",
-    border: 0,
+    padding: "0 26px",
     borderRadius: "18px",
+    border: 0,
+    background: gradientButton,
+    color: "#08111f",
     fontWeight: 900,
     fontSize: "1rem",
-    color: "#08111f",
-    background: gradientA,
     cursor: "pointer",
-    boxShadow: "0 16px 40px rgba(168, 85, 247, 0.28)",
+    boxShadow: "0 16px 40px rgba(96,165,250,0.22)",
   },
 
-  heroSecondary: {
+  heroAltBtn: {
     minHeight: "58px",
-    padding: "0 28px",
+    padding: "0 26px",
     borderRadius: "18px",
     border: `1px solid ${line}`,
-    background: "rgba(15, 23, 42, 0.72)",
+    background: "rgba(15,23,42,0.72)",
     color: textMain,
     fontWeight: 900,
     fontSize: "1rem",
     cursor: "pointer",
   },
 
-  heroMetaGrid: {
+  quickStats: {
     display: "grid",
     gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
     gap: "14px",
     marginTop: "8px",
   },
 
-  metaCard: {
+  quickStatCard: {
     minHeight: "112px",
     borderRadius: "24px",
     padding: "18px 20px",
     background: glass,
     border: `1px solid ${line}`,
-    boxShadow: "0 14px 40px rgba(2, 8, 23, 0.24), inset 0 1px 0 rgba(255,255,255,0.05)",
+    boxShadow: "0 16px 38px rgba(2,8,23,0.24)",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
   },
 
-  metaLabel: {
-    color: textMute,
-    fontSize: "0.82rem",
+  quickStatLabel: {
+    color: textMuted,
     fontWeight: 800,
+    fontSize: "0.8rem",
     textTransform: "uppercase",
     letterSpacing: "0.12em",
   },
 
-  metaValue: {
-    fontSize: "1.28rem",
+  quickStatValue: {
+    fontSize: "1.24rem",
     fontWeight: 900,
   },
 
-  dotsRow: {
+  sliderDots: {
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    marginTop: "4px",
+    marginTop: "2px",
   },
 
-  dot: {
+  sliderDot: {
     width: "34px",
     height: "8px",
     borderRadius: "999px",
     border: 0,
-    background: "rgba(148, 163, 184, 0.26)",
+    background: "rgba(148,163,184,0.26)",
     cursor: "pointer",
   },
 
-  dotActive: {
-    width: "48px",
-    background: gradientA,
+  sliderDotActive: {
+    width: "50px",
+    background: gradientButton,
   },
 
-  heroVisual: {
+  heroRight: {
     minWidth: 0,
   },
 
-  illustrationShell: {
+  signalWrap: {
     position: "relative",
     minHeight: "660px",
-    borderRadius: "36px",
-    border: `1px solid ${line}`,
-    background:
-      "linear-gradient(180deg, rgba(15,23,42,0.82), rgba(8,15,32,0.84))",
-    boxShadow:
-      "0 32px 80px rgba(2, 8, 23, 0.38), inset 0 1px 0 rgba(255,255,255,0.04)",
+    borderRadius: "34px",
     overflow: "hidden",
+    background: "linear-gradient(180deg, rgba(9,16,30,0.95), rgba(8,14,26,0.92))",
+    border: `1px solid ${line}`,
+    boxShadow: "0 30px 80px rgba(2,8,23,0.38)",
   },
 
-  illustrationGlowA: {
+  signalBlurA: {
     position: "absolute",
-    top: "5%",
-    right: "5%",
-    width: "260px",
-    height: "260px",
+    right: "4%",
+    top: "6%",
+    width: "250px",
+    height: "250px",
     borderRadius: "999px",
-    background: "radial-gradient(circle, rgba(56,189,248,0.26), transparent 68%)",
+    background: "radial-gradient(circle, rgba(96,165,250,0.24), transparent 68%)",
     filter: "blur(12px)",
   },
 
-  illustrationGlowB: {
+  signalBlurB: {
     position: "absolute",
-    left: "8%",
-    bottom: "10%",
+    left: "10%",
+    bottom: "8%",
     width: "220px",
     height: "220px",
     borderRadius: "999px",
-    background: "radial-gradient(circle, rgba(168,85,247,0.18), transparent 68%)",
-    filter: "blur(12px)",
+    background: "radial-gradient(circle, rgba(192,132,252,0.18), transparent 68%)",
+    filter: "blur(14px)",
   },
 
-  illustrationGrid: {
+  signalNoise: {
     position: "absolute",
     inset: 0,
     opacity: 0.08,
     backgroundImage:
       "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
-    backgroundSize: "46px 46px",
+    backgroundSize: "42px 42px",
   },
 
-  routerCard: {
-    position: "absolute",
-    top: "18%",
-    left: "50%",
-    transform: "translateX(-50%)",
-    width: "270px",
-    height: "150px",
-    borderRadius: "28px",
-    background:
-      "linear-gradient(180deg, rgba(17,24,39,0.92), rgba(15,23,42,0.85))",
-    border: `1px solid rgba(148,163,184,0.18)`,
-    boxShadow: "0 20px 60px rgba(2, 8, 23, 0.42)",
-    overflow: "hidden",
-  },
-
-  routerTopLine: {
-    width: "100%",
-    height: "6px",
-    background: gradientA,
-  },
-
-  routerBody: {
-    height: "calc(100% - 6px)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "16px",
-  },
-
-  routerDot: {
-    width: "14px",
-    height: "14px",
-    borderRadius: "999px",
-    background: "#f8fafc",
-    boxShadow: "0 0 18px rgba(255,255,255,0.32)",
-  },
-
-  wifiArcLarge: {
-    position: "absolute",
-    top: "39%",
-    left: "50%",
-    transform: "translateX(-50%)",
-    width: "260px",
-    height: "130px",
-    borderTopLeftRadius: "200px",
-    borderTopRightRadius: "200px",
-    border: "16px solid transparent",
-    borderTopColor: "#7dd3fc",
-    opacity: 0.95,
-  },
-
-  wifiArcMedium: {
-    position: "absolute",
-    top: "46%",
-    left: "50%",
-    transform: "translateX(-50%)",
-    width: "170px",
-    height: "84px",
-    borderTopLeftRadius: "160px",
-    borderTopRightRadius: "160px",
-    border: "14px solid transparent",
-    borderTopColor: "#c084fc",
-    opacity: 0.95,
-  },
-
-  wifiArcSmall: {
-    position: "absolute",
-    top: "53%",
-    left: "50%",
-    transform: "translateX(-50%)",
-    width: "86px",
-    height: "42px",
-    borderTopLeftRadius: "120px",
-    borderTopRightRadius: "120px",
-    border: "12px solid transparent",
-    borderTopColor: "#ffffff",
-    opacity: 0.95,
-  },
-
-  infoChipLeft: {
+  heroPanelTop: {
     position: "absolute",
     left: "5%",
-    top: "48%",
-    minWidth: "136px",
-    padding: "16px 18px",
-    borderRadius: "20px",
-    background: "rgba(15, 23, 42, 0.72)",
-    border: `1px solid ${line}`,
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px",
-    boxShadow: "0 18px 40px rgba(2,8,23,0.26)",
-  },
-
-  infoChipRight: {
-    position: "absolute",
     right: "5%",
-    top: "42%",
-    minWidth: "136px",
-    padding: "16px 18px",
-    borderRadius: "20px",
-    background: "rgba(15, 23, 42, 0.72)",
-    border: `1px solid ${line}`,
+    top: "5%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "12px",
+    flexWrap: "wrap",
+  },
+
+  heroPanelTopLeft: {
     display: "flex",
     flexDirection: "column",
     gap: "8px",
-    boxShadow: "0 18px 40px rgba(2,8,23,0.26)",
   },
 
-  infoChipKicker: {
-    color: textMute,
-    fontSize: "0.78rem",
+  heroPanelChip: {
+    width: "fit-content",
+    padding: "8px 12px",
+    borderRadius: "999px",
+    background: "rgba(255,255,255,0.05)",
+    border: `1px solid ${line}`,
+    color: "#cbd5e1",
+    fontWeight: 900,
+    fontSize: "0.75rem",
     textTransform: "uppercase",
     letterSpacing: "0.14em",
+  },
+
+  heroPanelTitle: {
+    fontSize: "1.02rem",
+    color: textSoft,
     fontWeight: 800,
   },
 
-  bottomInfoBar: {
+  statusPill: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "8px",
+    minHeight: "40px",
+    padding: "0 14px",
+    borderRadius: "999px",
+    background: "rgba(10,18,32,0.78)",
+    border: `1px solid ${line}`,
+    color: textMain,
+    fontWeight: 800,
+  },
+
+  statusDot: {
+    width: "10px",
+    height: "10px",
+    borderRadius: "999px",
+    background: "#22c55e",
+    boxShadow: "0 0 16px rgba(34,197,94,0.7)",
+  },
+
+  centerRingOuter: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -52%)",
+    width: "290px",
+    height: "290px",
+    borderRadius: "999px",
+    background: "rgba(255,255,255,0.02)",
+    border: "1px solid rgba(125,211,252,0.18)",
+    display: "grid",
+    placeItems: "center",
+    boxShadow: "0 0 0 24px rgba(125,211,252,0.03)",
+  },
+
+  centerRingMid: {
+    width: "220px",
+    height: "220px",
+    borderRadius: "999px",
+    border: "1px solid rgba(192,132,252,0.2)",
+    display: "grid",
+    placeItems: "center",
+    boxShadow: "0 0 0 18px rgba(192,132,252,0.03)",
+  },
+
+  centerRingInner: {
+    width: "150px",
+    height: "150px",
+    borderRadius: "999px",
+    background: "linear-gradient(180deg, rgba(22,32,56,0.96), rgba(10,18,32,0.96))",
+    border: `1px solid rgba(255,255,255,0.08)`,
+    display: "grid",
+    placeItems: "center",
+  },
+
+  centerCore: {
+    width: "92px",
+    height: "92px",
+    borderRadius: "999px",
+    background: gradientButton,
+    display: "grid",
+    placeItems: "center",
+    boxShadow: "0 18px 38px rgba(96,165,250,0.24)",
+  },
+
+  centerCoreText: {
+    fontWeight: 950,
+    color: "#08111f",
+    letterSpacing: "-0.04em",
+    fontSize: "1.25rem",
+  },
+
+  arcOne: {
+    position: "absolute",
+    top: "22%",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "440px",
+    height: "220px",
+    borderTopLeftRadius: "240px",
+    borderTopRightRadius: "240px",
+    border: "15px solid transparent",
+    borderTopColor: "rgba(125,211,252,0.78)",
+  },
+
+  arcTwo: {
+    position: "absolute",
+    top: "29%",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "330px",
+    height: "165px",
+    borderTopLeftRadius: "220px",
+    borderTopRightRadius: "220px",
+    border: "13px solid transparent",
+    borderTopColor: "rgba(96,165,250,0.72)",
+  },
+
+  arcThree: {
+    position: "absolute",
+    top: "36%",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "220px",
+    height: "110px",
+    borderTopLeftRadius: "180px",
+    borderTopRightRadius: "180px",
+    border: "11px solid transparent",
+    borderTopColor: "rgba(192,132,252,0.8)",
+  },
+
+  floatCardLeft: {
+    position: "absolute",
+    left: "5%",
+    top: "48%",
+    minWidth: "148px",
+    padding: "16px 18px",
+    borderRadius: "20px",
+    background: "rgba(15,23,42,0.74)",
+    border: `1px solid ${line}`,
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    boxShadow: "0 16px 34px rgba(2,8,23,0.24)",
+  },
+
+  floatCardRight: {
+    position: "absolute",
+    right: "5%",
+    top: "42%",
+    minWidth: "148px",
+    padding: "16px 18px",
+    borderRadius: "20px",
+    background: "rgba(15,23,42,0.74)",
+    border: `1px solid ${line}`,
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    boxShadow: "0 16px 34px rgba(2,8,23,0.24)",
+  },
+
+  floatCardKicker: {
+    color: textMuted,
+    fontWeight: 800,
+    fontSize: "0.76rem",
+    textTransform: "uppercase",
+    letterSpacing: "0.14em",
+  },
+
+  floatCardValue: {
+    fontWeight: 900,
+    fontSize: "1rem",
+  },
+
+  metricsBar: {
     position: "absolute",
     left: "5%",
     right: "5%",
@@ -1047,29 +1281,32 @@ const styles = {
     gap: "14px",
   },
 
-  bottomInfoItem: {
-    minHeight: "112px",
+  metricBox: {
+    minHeight: "108px",
     borderRadius: "22px",
-    background:
-      "linear-gradient(180deg, rgba(30,41,59,0.72), rgba(15,23,42,0.82))",
-    border: `1px solid ${line}`,
     padding: "18px 20px",
+    background: "linear-gradient(180deg, rgba(20,28,48,0.86), rgba(11,18,32,0.86))",
+    border: `1px solid ${line}`,
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
-    boxShadow: "0 18px 40px rgba(2,8,23,0.22)",
   },
 
-  bottomInfoLabel: {
-    color: textMute,
-    fontSize: "0.78rem",
+  metricLabel: {
+    color: textMuted,
+    fontWeight: 800,
+    fontSize: "0.76rem",
     textTransform: "uppercase",
     letterSpacing: "0.14em",
-    fontWeight: 800,
+  },
+
+  metricValue: {
+    fontWeight: 900,
+    fontSize: "1.18rem",
   },
 
   section: {
-    padding: "56px 0 18px",
+    padding: "58px 0 18px",
   },
 
   sectionHead: {
@@ -1081,12 +1318,12 @@ const styles = {
     marginBottom: "24px",
   },
 
-  sectionEyebrow: {
+  sectionKicker: {
     color: "#7dd3fc",
     fontWeight: 900,
+    fontSize: "0.78rem",
     letterSpacing: "0.18em",
     textTransform: "uppercase",
-    fontSize: "0.78rem",
     marginBottom: "10px",
   },
 
@@ -1095,7 +1332,7 @@ const styles = {
     fontSize: "clamp(2rem, 4vw, 3rem)",
     lineHeight: 1.02,
     letterSpacing: "-0.05em",
-    maxWidth: "760px",
+    maxWidth: "770px",
   },
 
   sectionText: {
@@ -1106,99 +1343,94 @@ const styles = {
     lineHeight: 1.75,
   },
 
-  cardsGrid: {
+  planGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
     gap: "18px",
   },
 
   planCard: {
-    position: "relative",
-    minHeight: "360px",
-    borderRadius: "28px",
+    minHeight: "372px",
+    borderRadius: "30px",
     padding: "22px",
+    background: gradientCard,
     border: `1px solid ${line}`,
-    background: glass,
-    boxShadow: "0 20px 52px rgba(2,8,23,0.24)",
+    boxShadow: "0 22px 54px rgba(2,8,23,0.24)",
     display: "flex",
     flexDirection: "column",
     gap: "16px",
+    position: "relative",
     overflow: "hidden",
   },
 
-  planCardViolet: {
-    background:
-      "linear-gradient(180deg, rgba(29, 19, 57, 0.86), rgba(15, 23, 42, 0.9))",
+  planCardFeatured: {
+    transform: "translateY(-4px)",
+    boxShadow: "0 28px 62px rgba(96,165,250,0.22)",
+    border: "1px solid rgba(125,211,252,0.26)",
   },
 
-  planCardBlue: {
-    background:
-      "linear-gradient(180deg, rgba(16, 35, 58, 0.86), rgba(15, 23, 42, 0.9))",
-  },
-
-  planCardCyan: {
-    background:
-      "linear-gradient(180deg, rgba(9, 44, 56, 0.86), rgba(15, 23, 42, 0.9))",
-  },
-
-  planTop: {
+  planHeader: {
     display: "flex",
     alignItems: "flex-start",
     justifyContent: "space-between",
     gap: "12px",
   },
 
-  planNameWrap: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-
   planBadge: {
-    width: "fit-content",
     padding: "8px 12px",
     borderRadius: "999px",
-    background: "rgba(255,255,255,0.08)",
+    background: "rgba(255,255,255,0.06)",
     border: `1px solid ${line}`,
     color: "#cbd5e1",
-    fontSize: "0.76rem",
     fontWeight: 900,
+    fontSize: "0.75rem",
     textTransform: "uppercase",
     letterSpacing: "0.14em",
   },
 
+  planArrowWrap: {
+    width: "44px",
+    height: "44px",
+    borderRadius: "14px",
+    display: "grid",
+    placeItems: "center",
+    background: "rgba(255,255,255,0.04)",
+    border: `1px solid ${line}`,
+    color: "#7dd3fc",
+  },
+
   planName: {
     margin: 0,
-    fontSize: "1.42rem",
+    fontSize: "1.44rem",
     fontWeight: 900,
     letterSpacing: "-0.04em",
   },
 
   planPrice: {
-    fontSize: "2.5rem",
     fontWeight: 950,
+    fontSize: "2.5rem",
     letterSpacing: "-0.06em",
   },
 
   planSpeed: {
     color: "#7dd3fc",
     fontWeight: 900,
-    fontSize: "1.08rem",
+    fontSize: "1.04rem",
   },
 
-  planList: {
+  planSpecs: {
     display: "flex",
     flexDirection: "column",
     gap: "10px",
     marginTop: "4px",
   },
 
-  planListItem: {
+  planSpecRow: {
     minHeight: "58px",
     borderRadius: "16px",
+    padding: "12px 14px",
     background: "rgba(255,255,255,0.04)",
     border: `1px solid rgba(255,255,255,0.06)`,
-    padding: "12px 14px",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
@@ -1207,7 +1439,7 @@ const styles = {
     fontSize: "0.92rem",
   },
 
-  planBtn: {
+  planAction: {
     marginTop: "auto",
     minHeight: "52px",
     borderRadius: "16px",
@@ -1216,35 +1448,45 @@ const styles = {
     justifyContent: "center",
     textDecoration: "none",
     fontWeight: 900,
+    background: gradientButton,
     color: "#08111f",
-    background: gradientB,
-    boxShadow: "0 14px 34px rgba(56,189,248,0.24)",
+    boxShadow: "0 14px 34px rgba(96,165,250,0.22)",
   },
 
-  devicesGrid: {
+  deviceGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
     gap: "18px",
   },
 
   deviceCard: {
-    minHeight: "220px",
+    minHeight: "228px",
     borderRadius: "28px",
     padding: "22px",
+    background: gradientCard,
     border: `1px solid ${line}`,
-    background:
-      "linear-gradient(180deg, rgba(15,23,42,0.82), rgba(11,18,32,0.88))",
-    boxShadow: "0 20px 52px rgba(2,8,23,0.2)",
+    boxShadow: "0 22px 52px rgba(2,8,23,0.2)",
     display: "flex",
     flexDirection: "column",
     gap: "14px",
   },
 
-  deviceHeader: {
+  deviceTop: {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
     gap: "12px",
+  },
+
+  deviceIconBox: {
+    width: "50px",
+    height: "50px",
+    borderRadius: "16px",
+    display: "grid",
+    placeItems: "center",
+    background: "rgba(255,255,255,0.05)",
+    border: `1px solid ${line}`,
+    color: "#7dd3fc",
   },
 
   deviceTag: {
@@ -1261,7 +1503,7 @@ const styles = {
 
   deviceName: {
     margin: 0,
-    fontSize: "1.36rem",
+    fontSize: "1.34rem",
     fontWeight: 900,
     letterSpacing: "-0.04em",
   },
@@ -1269,8 +1511,8 @@ const styles = {
   deviceDesc: {
     margin: 0,
     color: textSoft,
-    lineHeight: 1.75,
     fontSize: "1rem",
+    lineHeight: 1.75,
   },
 
   contactGrid: {
@@ -1280,38 +1522,41 @@ const styles = {
   },
 
   contactCard: {
-    minHeight: "210px",
-    borderRadius: "28px",
+    minHeight: "224px",
+    borderRadius: "30px",
     padding: "22px",
+    background: gradientCard,
+    border: `1px solid ${line}`,
+    boxShadow: "0 22px 52px rgba(2,8,23,0.2)",
     textDecoration: "none",
     color: textMain,
-    border: `1px solid ${line}`,
-    background:
-      "linear-gradient(180deg, rgba(15,23,42,0.82), rgba(9,16,29,0.9))",
-    boxShadow: "0 20px 52px rgba(2,8,23,0.2)",
     display: "flex",
     flexDirection: "column",
     gap: "14px",
   },
 
-  contactCardTop: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: "12px",
+  contactIconWrap: {
+    width: "52px",
+    height: "52px",
+    borderRadius: "18px",
+    display: "grid",
+    placeItems: "center",
+    background: "rgba(255,255,255,0.05)",
+    border: `1px solid ${line}`,
+    color: "#7dd3fc",
   },
 
-  contactTitle: {
-    fontSize: "0.84rem",
-    color: textMute,
+  contactName: {
+    color: textMuted,
+    fontWeight: 900,
+    fontSize: "0.78rem",
     textTransform: "uppercase",
     letterSpacing: "0.18em",
-    fontWeight: 900,
   },
 
   contactValue: {
     fontSize: "1.42rem",
-    lineHeight: 1.2,
+    fontWeight: 900,
     letterSpacing: "-0.04em",
   },
 
@@ -1321,57 +1566,11 @@ const styles = {
     lineHeight: 1.7,
   },
 
-  smallIconWrap: {
-    width: "48px",
-    height: "48px",
-    borderRadius: "16px",
-    display: "grid",
-    placeItems: "center",
-    background: "rgba(255,255,255,0.05)",
-    border: `1px solid ${line}`,
-    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
-  },
-
-  smallIconInner: {
-    fontSize: "1.1rem",
-    fontWeight: 900,
-    color: "#7dd3fc",
-  },
-
-  socialRail: {
-    position: "fixed",
-    right: "18px",
-    bottom: "18px",
-    zIndex: 60,
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-
-  socialBtn: {
-    width: "54px",
-    height: "54px",
-    borderRadius: "18px",
-    display: "grid",
-    placeItems: "center",
-    textDecoration: "none",
-    color: textMain,
-    background: "rgba(15,23,42,0.82)",
-    border: `1px solid ${line}`,
-    backdropFilter: "blur(14px)",
-    boxShadow: "0 16px 34px rgba(2,8,23,0.32)",
-  },
-
-  socialIcon: {
-    fontSize: "1.18rem",
-    fontWeight: 900,
-  },
-
   modalOverlay: {
     position: "fixed",
     inset: 0,
-    zIndex: 90,
-    background: "rgba(2, 6, 23, 0.6)",
+    zIndex: 100,
+    background: "rgba(2,6,23,0.66)",
     backdropFilter: "blur(14px)",
     display: "grid",
     placeItems: "center",
@@ -1380,26 +1579,25 @@ const styles = {
 
   modalCard: {
     width: "min(100%, 470px)",
-    borderRadius: "28px",
+    borderRadius: "30px",
     padding: "22px",
-    background:
-      "linear-gradient(180deg, rgba(8,15,32,0.96), rgba(6,11,24,0.96))",
+    background: "linear-gradient(180deg, rgba(8,15,32,0.97), rgba(5,10,22,0.97))",
     border: `1px solid rgba(148,163,184,0.2)`,
-    boxShadow: "0 30px 80px rgba(2,8,23,0.45)",
+    boxShadow: "0 32px 80px rgba(2,8,23,0.46)",
   },
 
-  modalTopBar: {
+  modalLine: {
     width: "100%",
     height: "4px",
     borderRadius: "999px",
-    background: gradientA,
+    background: gradientButton,
     marginBottom: "18px",
   },
 
-  modalEyebrow: {
+  modalKicker: {
     color: "#7dd3fc",
-    fontSize: "0.78rem",
     fontWeight: 900,
+    fontSize: "0.78rem",
     letterSpacing: "0.24em",
     textTransform: "uppercase",
     marginBottom: "10px",
@@ -1407,7 +1605,7 @@ const styles = {
 
   modalTitle: {
     margin: 0,
-    fontSize: "3rem",
+    fontSize: "2.8rem",
     lineHeight: 0.95,
     letterSpacing: "-0.07em",
   },
@@ -1432,15 +1630,14 @@ const styles = {
   },
 
   input: {
-    minHeight: "52px",
+    minHeight: "54px",
     borderRadius: "18px",
-    border: `1px solid rgba(59,130,246,0.22)`,
+    border: "1px solid rgba(96,165,250,0.2)",
     padding: "0 16px",
     outline: "none",
     background: "rgba(15,23,42,0.78)",
     color: textMain,
     fontSize: "1rem",
-    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
   },
 
   passwordWrap: {
@@ -1449,17 +1646,16 @@ const styles = {
     alignItems: "center",
   },
 
-  inputPassword: {
+  passwordInput: {
     width: "100%",
-    minHeight: "52px",
+    minHeight: "54px",
     borderRadius: "18px",
-    border: `1px solid rgba(59,130,246,0.22)`,
+    border: "1px solid rgba(96,165,250,0.2)",
     padding: "0 92px 0 16px",
     outline: "none",
     background: "rgba(15,23,42,0.78)",
     color: textMain,
     fontSize: "1rem",
-    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
   },
 
   showBtn: {
@@ -1468,7 +1664,7 @@ const styles = {
     height: "38px",
     padding: "0 14px",
     borderRadius: "12px",
-    border: `1px solid rgba(148,163,184,0.18)`,
+    border: `1px solid ${line}`,
     background: "rgba(255,255,255,0.06)",
     color: textMain,
     fontWeight: 800,
@@ -1485,52 +1681,59 @@ const styles = {
   submitBtn: {
     marginTop: "10px",
     minHeight: "54px",
-    border: 0,
     borderRadius: "18px",
-    background: gradientB,
+    border: 0,
+    background: gradientButton,
     color: "#08111f",
     fontWeight: 900,
     fontSize: "1.02rem",
     cursor: "pointer",
-    boxShadow: "0 16px 40px rgba(96,165,250,0.26)",
+    boxShadow: "0 16px 40px rgba(96,165,250,0.24)",
   },
 };
 
 function applyResponsiveStyles() {
   if (typeof window === "undefined") return;
-  const width = window.innerWidth;
+  const w = window.innerWidth;
 
-  if (width < 1180) {
+  if (w < 1180) {
     styles.heroGrid.gridTemplateColumns = "1fr";
-    styles.cardsGrid.gridTemplateColumns = "repeat(2, minmax(0, 1fr))";
-    styles.devicesGrid.gridTemplateColumns = "repeat(2, minmax(0, 1fr))";
+    styles.planGrid.gridTemplateColumns = "repeat(2, minmax(0, 1fr))";
+    styles.deviceGrid.gridTemplateColumns = "repeat(2, minmax(0, 1fr))";
     styles.contactGrid.gridTemplateColumns = "repeat(2, minmax(0, 1fr))";
-    styles.heroMetaGrid.gridTemplateColumns = "repeat(3, minmax(0, 1fr))";
   } else {
-    styles.heroGrid.gridTemplateColumns = "minmax(0, 1.02fr) minmax(420px, 0.98fr)";
-    styles.cardsGrid.gridTemplateColumns = "repeat(3, minmax(0, 1fr))";
-    styles.devicesGrid.gridTemplateColumns = "repeat(4, minmax(0, 1fr))";
+    styles.heroGrid.gridTemplateColumns = "minmax(0, 1.02fr) minmax(440px, 0.98fr)";
+    styles.planGrid.gridTemplateColumns = "repeat(3, minmax(0, 1fr))";
+    styles.deviceGrid.gridTemplateColumns = "repeat(4, minmax(0, 1fr))";
     styles.contactGrid.gridTemplateColumns = "repeat(3, minmax(0, 1fr))";
-    styles.heroMetaGrid.gridTemplateColumns = "repeat(3, minmax(0, 1fr))";
   }
 
-  if (width < 760) {
+  if (w < 760) {
     styles.headerInner.width = "min(100%, calc(100% - 20px))";
     styles.main.width = "min(100%, calc(100% - 20px))";
-    styles.heroSection.padding = "26px 0 16px";
+    styles.heroSection.padding = "26px 0 12px";
     styles.heroTitle.fontSize = "clamp(2.4rem, 12vw, 4rem)";
-    styles.heroDescription.fontSize = "1rem";
-    styles.heroMetaGrid.gridTemplateColumns = "1fr";
-    styles.cardsGrid.gridTemplateColumns = "1fr";
-    styles.devicesGrid.gridTemplateColumns = "1fr";
+    styles.heroText.fontSize = "1rem";
+    styles.quickStats.gridTemplateColumns = "1fr";
+    styles.planGrid.gridTemplateColumns = "1fr";
+    styles.deviceGrid.gridTemplateColumns = "1fr";
     styles.contactGrid.gridTemplateColumns = "1fr";
-    styles.bottomInfoBar.gridTemplateColumns = "1fr";
-    styles.illustrationShell.minHeight = "540px";
-    styles.socialRail.right = "12px";
-    styles.socialRail.bottom = "12px";
+    styles.metricsBar.gridTemplateColumns = "1fr";
+    styles.signalWrap.minHeight = "560px";
+    styles.floatCardLeft.display = "none";
+    styles.floatCardRight.display = "none";
+    styles.socialDock.right = "12px";
+    styles.socialDock.bottom = "12px";
+  } else {
+    styles.quickStats.gridTemplateColumns = "repeat(3, minmax(0, 1fr))";
+    styles.metricsBar.gridTemplateColumns = "repeat(3, minmax(0, 1fr))";
+    styles.signalWrap.minHeight = "660px";
+    styles.floatCardLeft.display = "flex";
+    styles.floatCardRight.display = "flex";
+    styles.socialDock.right = "18px";
+    styles.socialDock.bottom = "18px";
   }
 }
 
 applyResponsiveStyles();
 window.addEventListener("resize", applyResponsiveStyles);
-
