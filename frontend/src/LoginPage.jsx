@@ -83,6 +83,17 @@ export default function LoginPage({ onLogin }) {
         />
       ))}
 
+      <div style={styles.topBar}>
+        <div style={styles.topBrand}>NoComment</div>
+        <button
+          type="button"
+          onClick={() => setShowLogin((v) => !v)}
+          style={styles.topLoginBtn}
+        >
+          Support Login
+        </button>
+      </div>
+
       <div style={styles.shell}>
         <section style={styles.hero}>
           <div style={styles.heroAccent} />
@@ -221,6 +232,40 @@ function getStyles(isMobile) {
         "radial-gradient(circle, rgba(56,189,248,.12), rgba(56,189,248,0) 68%)",
       filter: "blur(44px)",
       opacity: 0.86,
+    },
+
+    topBar: {
+      position: "absolute",
+      top: isMobile ? "16px" : "22px",
+      left: isMobile ? "16px" : "24px",
+      right: isMobile ? "16px" : "24px",
+      zIndex: 5,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: "12px",
+    },
+
+    topBrand: {
+      color: "#e8f2ff",
+      fontSize: isMobile ? "14px" : "15px",
+      fontWeight: 900,
+      letterSpacing: ".04em",
+      textTransform: "uppercase",
+    },
+
+    topLoginBtn: {
+      height: "42px",
+      padding: "0 16px",
+      borderRadius: "12px",
+      border: "1px solid rgba(148,163,184,.18)",
+      background: "rgba(255,255,255,.05)",
+      color: "#f8fafc",
+      fontSize: "13px",
+      fontWeight: 800,
+      letterSpacing: ".03em",
+      cursor: "pointer",
+      backdropFilter: "blur(8px)",
     },
 
     shell: {
@@ -450,6 +495,8 @@ function getStyles(isMobile) {
     },
   };
 }
+
+
 
 
 
