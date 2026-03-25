@@ -19,10 +19,10 @@ const HERO_SLIDES = [
     sub: "Up to 100 Mbps Cached",
     meta: "40GB Daily • 1000GB Monthly",
     price: "$100",
-    leftLabel: "Free Night",
-    leftValue: "1AM → 1PM",
-    rightLabel: "Call Us",
-    rightValue: "70411518",
+    miniLeftLabel: "Free Night",
+    miniLeftValue: "1AM → 1PM",
+    miniRightLabel: "Call Us",
+    miniRightValue: "70411518",
   },
   {
     eyebrow: "Support",
@@ -30,25 +30,25 @@ const HERO_SLIDES = [
     sub: "Fast response for customers",
     meta: "Phone support • setup help • quick follow-up",
     price: "24/7",
-    leftLabel: "Coverage",
-    leftValue: "Jabal Mohssen",
-    rightLabel: "Status",
-    rightValue: "Online",
+    miniLeftLabel: "Coverage",
+    miniLeftValue: "Jabal Mohssen",
+    miniRightLabel: "Status",
+    miniRightValue: "Online",
   },
   {
-    eyebrow: "Hardware",
-    title: "Ready Devices",
+    eyebrow: "Devices",
+    title: "Ready Hardware",
     sub: "Routers, cables, and setup options",
     meta: "Tenda • Netis • V-Sol • Cat 5E • Cat 6E++",
     price: "Stock",
-    leftLabel: "Install",
-    leftValue: "Fast",
-    rightLabel: "Upgrade",
-    rightValue: "Available",
-  },
+    miniLeftLabel: "Install",
+    miniLeftValue: "Fast",
+    miniRightLabel: "Upgrade",
+    miniRightValue: "Available",
+  }
 ];
 
-function makeDots(count = 22) {
+function makeDots(count = 20) {
   return Array.from({ length: count }, (_, i) => ({
     id: i,
     x: 6 + Math.random() * 88,
@@ -69,8 +69,6 @@ export default function LoginPage({ onLogin }) {
   );
 
   const dots = useMemo(() => makeDots(22), []);
-  const hero = HERO_SLIDES[heroIndex];
-  const styles = getStyles(isMobile);
 
   useEffect(() => {
     const oldOverflow = document.body.style.overflow;
@@ -91,6 +89,7 @@ export default function LoginPage({ onLogin }) {
     const timer = setInterval(() => {
       setHeroIndex((prev) => (prev + 1) % HERO_SLIDES.length);
     }, 10000);
+
     return () => clearInterval(timer);
   }, []);
 
@@ -110,6 +109,9 @@ export default function LoginPage({ onLogin }) {
 
     setErr("Invalid credentials");
   }
+
+  const styles = getStyles(isMobile);
+  const hero = HERO_SLIDES[heroIndex];
 
   return (
     <div style={styles.page}>
@@ -157,7 +159,7 @@ export default function LoginPage({ onLogin }) {
           <div style={styles.navActions}>
             <button
               type="button"
-              onClick={() => setShowLogin(true)}
+              onClick={() => setShowLogin((v) => !v)}
               style={styles.supportBtn}
             >
               Support Login
@@ -174,7 +176,6 @@ export default function LoginPage({ onLogin }) {
         <div style={styles.heroInner}>
           <div style={styles.heroLeft}>
             <div style={styles.heroKicker}>NoComment Network</div>
-
             <h1 style={styles.heroTitle}>
               Faster internet.
               <br />
@@ -214,6 +215,7 @@ export default function LoginPage({ onLogin }) {
               <div style={styles.visualGlow} />
 
               <div style={styles.visualMainCard}>
+                <div style={styles.visualMainCard}>
                 <div style={styles.visualEyebrow}>{hero.eyebrow}</div>
                 <div style={styles.visualPlanSpeed}>{hero.title}</div>
                 <div style={styles.visualPlanCached}>{hero.sub}</div>
@@ -222,13 +224,13 @@ export default function LoginPage({ onLogin }) {
               </div>
 
               <div style={styles.visualMiniLeft}>
-                <div style={styles.visualMiniLabel}>{hero.leftLabel}</div>
-                <div style={styles.visualMiniValue}>{hero.leftValue}</div>
+                <div style={styles.visualMiniLabel}>{hero.miniLeftLabel}</div>
+                <div style={styles.visualMiniValue}>{hero.miniLeftValue}</div>
               </div>
 
               <div style={styles.visualMiniRight}>
-                <div style={styles.visualMiniLabel}>{hero.rightLabel}</div>
-                <div style={styles.visualMiniValue}>{hero.rightValue}</div>
+                <div style={styles.visualMiniLabel}>{hero.miniRightLabel}</div>
+                <div style={styles.visualMiniValue}>{hero.miniRightValue}</div>
               </div>
 
               <div style={styles.visualDots}>
@@ -292,12 +294,12 @@ export default function LoginPage({ onLogin }) {
             <div style={styles.infoCard}>
               <div style={styles.infoTitle}>Tenda</div>
               <div style={styles.infoLine}>N300 4G — $20</div>
-              <div style={styles.infoLine}>AC1200 4G & 5G — $25</div>
+              <div style={styles.infoLine}>AC1200 4G &amp; 5G — $25</div>
             </div>
 
             <div style={styles.infoCard}>
               <div style={styles.infoTitle}>Netis</div>
-              <div style={styles.infoLine}>N3 4G & 5G — $25</div>
+              <div style={styles.infoLine}>N3 4G &amp; 5G — $25</div>
             </div>
 
             <div style={styles.infoCard}>
@@ -330,7 +332,7 @@ export default function LoginPage({ onLogin }) {
               <a href="tel:70411518" style={styles.primaryBtn}>Call Now</a>
               <button
                 type="button"
-                onClick={() => setShowLogin(true)}
+                onClick={() => setShowLogin((v) => !v)}
                 style={styles.secondaryButton}
               >
                 Support Login
@@ -1159,3 +1161,4 @@ function getStyles(isMobile) {
     },
   };
 }
+
