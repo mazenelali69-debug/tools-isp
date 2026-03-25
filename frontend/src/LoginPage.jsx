@@ -17,6 +17,7 @@ export default function LoginPage({ onLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
+  const [showLogin, setShowLogin] = useState(false);
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 920 : false
   );
@@ -449,5 +450,7 @@ function getStyles(isMobile) {
     },
   };
 }
+
+
 
 
