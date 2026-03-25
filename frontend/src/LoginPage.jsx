@@ -116,7 +116,7 @@ export default function LoginPage({ onLogin }) {
           </div>
         </section>
 
-        <section style={styles.cardWrap}>
+        {showLogin && (<section style={styles.cardWrap}>
           <div style={styles.cardGlow} />
           <div style={styles.card}>
             <div style={styles.cardTopBar} />
@@ -171,9 +171,7 @@ export default function LoginPage({ onLogin }) {
 
             <div style={styles.footer}>Protected Network Control Access</div>
           </div>
-        </section>
-      </div>
-    </div>
+        </section>)} </div> </div>
   );
 }
 
@@ -495,6 +493,7 @@ function getStyles(isMobile) {
     },
   };
 }
+
 
 
 
