@@ -1,0 +1,38 @@
+﻿<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1600" height="900" fill="url(#bg)"/>
+<circle cx="1300" cy="170" r="240" fill="url(#glow1)" fill-opacity="0.65"/>
+<circle cx="220" cy="760" r="260" fill="url(#glow2)" fill-opacity="0.55"/>
+<rect x="128" y="170" width="580" height="500" rx="40" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.16)"/>
+<rect x="184" y="230" width="160" height="20" rx="10" fill="rgba(255,255,255,0.18)"/>
+<rect x="184" y="274" width="300" height="26" rx="13" fill="rgba(255,255,255,0.12)"/>
+<rect x="184" y="332" width="470" height="120" rx="28" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.14)"/>
+<rect x="224" y="376" width="110" height="48" rx="24" fill="#8B5CF6"/>
+<rect x="356" y="376" width="110" height="48" rx="24" fill="#38BDF8"/>
+<rect x="488" y="376" width="126" height="48" rx="24" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.18)"/>
+<rect x="184" y="498" width="210" height="78" rx="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.14)"/>
+<rect x="426" y="498" width="228" height="78" rx="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.14)"/>
+<rect x="960" y="180" width="330" height="220" rx="34" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.18)"/>
+<path d="M1090 250C1134 192 1218 192 1262 250" stroke="#7DD3FC" stroke-width="16" stroke-linecap="round"/>
+<path d="M1118 298C1149 258 1203 258 1234 298" stroke="#C084FC" stroke-width="14" stroke-linecap="round"/>
+<path d="M1154 342C1168 326 1185 326 1199 342" stroke="white" stroke-width="12" stroke-linecap="round"/>
+<circle cx="1176" cy="376" r="13" fill="white"/>
+<rect x="1022" y="468" width="304" height="154" rx="30" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.16)"/>
+<rect x="1062" y="510" width="160" height="18" rx="9" fill="rgba(255,255,255,0.18)"/>
+<rect x="1062" y="548" width="220" height="16" rx="8" fill="rgba(255,255,255,0.10)"/>
+<rect x="1062" y="584" width="120" height="40" rx="20" fill="#38BDF8"/>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900">
+<stop stop-color="#06101F"/>
+<stop offset="0.52" stop-color="#101827"/>
+<stop offset="1" stop-color="#0A1730"/>
+</linearGradient>
+<radialGradient id="glow1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1300 170) rotate(90) scale(240)">
+<stop stop-color="#38BDF8"/>
+<stop offset="1" stop-color="#38BDF8" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="glow2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(220 760) rotate(90) scale(260)">
+<stop stop-color="#8B5CF6"/>
+<stop offset="1" stop-color="#8B5CF6" stop-opacity="0"/>
+</radialGradient>
+</defs>
+</svg>

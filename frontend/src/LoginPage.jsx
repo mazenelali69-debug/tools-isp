@@ -3,380 +3,564 @@
 const VALID_USERNAME = "admin";
 const VALID_PASSWORD = "morad3alamdar";
 
-const PLANS = [
-  { name: "Plan 1", speed: "5 Mbps", cached: "Up to 20 Mbps Cached", daily: "8GB Daily", monthly: "500GB Monthly", price: "$25" },
-  { name: "Plan 2", speed: "6 Mbps", cached: "Up to 30 Mbps Cached", daily: "12GB Daily", monthly: "600GB Monthly", price: "$35" },
-  { name: "Plan 3", speed: "7 Mbps", cached: "Up to 40 Mbps Cached", daily: "15GB Daily", monthly: "700GB Monthly", price: "$45" },
-  { name: "Plan 4", speed: "8 Mbps", cached: "Up to 50 Mbps Cached", daily: "20GB Daily", monthly: "800GB Monthly", price: "$65" },
-  { name: "Plan 5", speed: "9 Mbps", cached: "Up to 60 Mbps Cached", daily: "30GB Daily", monthly: "900GB Monthly", price: "$75" },
-  { name: "Plan 6", speed: "10 Mbps", cached: "Up to 100 Mbps Cached", daily: "40GB Daily", monthly: "1000GB Monthly", price: "$100", featured: true },
-];
+const BRAND = {
+  name: "NoComment",
+  network: "NOCOMMENT NETWORK",
+  phoneDisplay: "70411518",
+  phoneIntl: "96170411518",
+  facebook: "https://www.facebook.com/nocomment.lb/",
+  whatsapp: "https://wa.me/96170411518",
+  location:
+    "https://www.google.com/search?sca_esv=5c685c3490d49ca4&sxsrf=ANbL-n42jIJIVD_C_u63mQueNeiKVKxulw:1774462014416&kgmid=/g/11v5_5rfkq&q=NoComment-ISP&shem=dlvs1&shndl=30&source=sh/x/loc/uni/m1/1&kgs=83c38a6d71611246&utm_source=dlvs1,sh/x/loc/uni/m1/1",
+};
 
 const HERO_SLIDES = [
   {
-    eyebrow: "Featured Plan",
-    title: "10 Mbps",
-    sub: "Up to 100 Mbps Cached",
-    meta: "40GB Daily • 1000GB Monthly",
-    price: "$100",
-    leftLabel: "Free Night",
-    leftValue: "1AM → 1PM",
-    rightLabel: "Call Us",
-    rightValue: "70411518",
+    eyebrow: "DIRECT ISP EXPERIENCE",
+    titleA: "Fast setup.",
+    titleB: "Clear plans.",
+    titleC: "Direct support.",
+    description:
+      "Modern internet packages with quick communication, clean pricing, and direct contact when you need help.",
+    primaryLabel: "View Plans",
+    secondaryLabel: "Call Now",
   },
   {
-    eyebrow: "Support",
-    title: "Direct Help",
-    sub: "Fast response for customers",
-    meta: "Phone support • setup help • quick follow-up",
-    price: "24/7",
-    leftLabel: "Coverage",
-    leftValue: "Jabal Mohssen",
-    rightLabel: "Status",
-    rightValue: "Online",
+    eyebrow: "HOME + BUSINESS READY",
+    titleA: "Stable service.",
+    titleB: "Real contact.",
+    titleC: "No wasted time.",
+    description:
+      "Built for customers who want reliable installation, simple package choices, and support that answers fast.",
+    primaryLabel: "See Coverage",
+    secondaryLabel: "Support Login",
   },
   {
-    eyebrow: "Hardware",
-    title: "Ready Devices",
-    sub: "Routers, cables, and setup options",
-    meta: "Tenda • Netis • V-Sol • Cat 5E • Cat 6E++",
-    price: "Stock",
-    leftLabel: "Install",
-    leftValue: "Fast",
-    rightLabel: "Upgrade",
-    rightValue: "Available",
+    eyebrow: "SMART NETWORK ACCESS",
+    titleA: "Better signal.",
+    titleB: "Better speed.",
+    titleC: "Better support.",
+    description:
+      "A stronger digital front page for your network brand with premium visuals, better structure, and faster actions.",
+    primaryLabel: "Explore Devices",
+    secondaryLabel: "Contact Us",
   },
 ];
 
-function makeDots(count = 22) {
-  return Array.from({ length: count }, (_, i) => ({
-    id: i,
-    x: 6 + Math.random() * 88,
-    y: 8 + Math.random() * 84,
-    size: 2 + Math.random() * 2,
-    opacity: 0.05 + Math.random() * 0.16,
-  }));
+const PLANS = [
+  {
+    name: "Night 8",
+    speed: "8 Mbps",
+    cached: "Up to 30 Mbps cached",
+    daily: "8 GB daily",
+    monthly: "500 GB monthly",
+    price: "$25",
+    accent: "violet",
+    badge: "Popular",
+  },
+  {
+    name: "Night 12",
+    speed: "12 Mbps",
+    cached: "Up to 45 Mbps cached",
+    daily: "12 GB daily",
+    monthly: "700 GB monthly",
+    price: "$35",
+    accent: "blue",
+    badge: "Balanced",
+  },
+  {
+    name: "Night 20",
+    speed: "20 Mbps",
+    cached: "Up to 60 Mbps cached",
+    daily: "18 GB daily",
+    monthly: "950 GB monthly",
+    price: "$50",
+    accent: "cyan",
+    badge: "Fast",
+  },
+  {
+    name: "Night Max",
+    speed: "30 Mbps",
+    cached: "Up to 80 Mbps cached",
+    daily: "25 GB daily",
+    monthly: "1.4 TB monthly",
+    price: "$70",
+    accent: "violet",
+    badge: "Pro",
+  },
+  {
+    name: "Business Core",
+    speed: "50 Mbps",
+    cached: "Priority traffic",
+    daily: "Unlimited usage",
+    monthly: "Business policy",
+    price: "$120",
+    accent: "blue",
+    badge: "Business",
+  },
+  {
+    name: "Business Plus",
+    speed: "100 Mbps",
+    cached: "Priority + support",
+    daily: "Unlimited usage",
+    monthly: "Business policy",
+    price: "$180",
+    accent: "cyan",
+    badge: "Premium",
+  },
+];
+
+const DEVICES = [
+  {
+    name: "Dual Band CPE",
+    desc: "Stable wireless coverage for apartments and homes.",
+    tag: "Home Ready",
+  },
+  {
+    name: "Outdoor Receiver",
+    desc: "Cleaner long-distance signal for difficult areas.",
+    tag: "Long Range",
+  },
+  {
+    name: "Business Router",
+    desc: "Better distribution and stronger control for offices.",
+    tag: "Business",
+  },
+  {
+    name: "Mesh Extension",
+    desc: "Expand coverage inside large homes and multi-floor spaces.",
+    tag: "Wide Coverage",
+  },
+];
+
+const CONTACT_CARDS = [
+  {
+    title: "WhatsApp",
+    value: BRAND.phoneDisplay,
+    href: BRAND.whatsapp,
+    hint: "Chat directly with support",
+  },
+  {
+    title: "Facebook",
+    value: "NoComment.lb",
+    href: BRAND.facebook,
+    hint: "Visit our official page",
+  },
+  {
+    title: "Location",
+    value: "Open on Google Maps",
+    href: BRAND.location,
+    hint: "See office / service location",
+  },
+];
+
+function WifiIllustration() {
+  return (
+    <div style={styles.illustrationShell}>
+      <div style={styles.illustrationGlowA} />
+      <div style={styles.illustrationGlowB} />
+      <div style={styles.illustrationGrid} />
+
+      <div style={styles.routerCard}>
+        <div style={styles.routerTopLine} />
+        <div style={styles.routerBody}>
+          <div style={styles.routerDot} />
+          <div style={styles.routerDot} />
+          <div style={styles.routerDot} />
+        </div>
+      </div>
+
+      <div style={styles.wifiArcLarge} />
+      <div style={styles.wifiArcMedium} />
+      <div style={styles.wifiArcSmall} />
+
+      <div style={styles.infoChipLeft}>
+        <span style={styles.infoChipKicker}>Coverage</span>
+        <strong>Optimized</strong>
+      </div>
+
+      <div style={styles.infoChipRight}>
+        <span style={styles.infoChipKicker}>Support</span>
+        <strong>Fast reply</strong>
+      </div>
+
+      <div style={styles.bottomInfoBar}>
+        <div style={styles.bottomInfoItem}>
+          <span style={styles.bottomInfoLabel}>Plans</span>
+          <strong>6+</strong>
+        </div>
+        <div style={styles.bottomInfoItem}>
+          <span style={styles.bottomInfoLabel}>Setup</span>
+          <strong>Quick</strong>
+        </div>
+        <div style={styles.bottomInfoItem}>
+          <span style={styles.bottomInfoLabel}>Status</span>
+          <strong>Online</strong>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default function LoginPage({ onLogin }) {
+function PlanIcon() {
+  return (
+    <div style={styles.smallIconWrap}>
+      <div style={styles.smallIconInner}>↗</div>
+    </div>
+  );
+}
+
+function DeviceIcon() {
+  return (
+    <div style={styles.smallIconWrap}>
+      <div style={styles.smallIconInner}>◉</div>
+    </div>
+  );
+}
+
+function ContactIcon() {
+  return (
+    <div style={styles.smallIconWrap}>
+      <div style={styles.smallIconInner}>✦</div>
+    </div>
+  );
+}
+
+function SocialRail() {
+  return (
+    <div style={styles.socialRail}>
+      <a href={BRAND.whatsapp} target="_blank" rel="noreferrer" style={styles.socialBtn} title="WhatsApp">
+        <span style={styles.socialIcon}>W</span>
+      </a>
+      <a href={BRAND.facebook} target="_blank" rel="noreferrer" style={styles.socialBtn} title="Facebook">
+        <span style={styles.socialIcon}>f</span>
+      </a>
+      <a href={BRAND.location} target="_blank" rel="noreferrer" style={styles.socialBtn} title="Location">
+        <span style={styles.socialIcon}>⌖</span>
+      </a>
+    </div>
+  );
+}
+
+export default function LoginPage() {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [showLogin, setShowLogin] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [err, setErr] = useState("");
-  const [showLogin, setShowLogin] = useState(false);
-  const [heroIndex, setHeroIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== "undefined" ? window.innerWidth < 920 : false
-  );
-
-  const dots = useMemo(() => makeDots(22), []);
-  const hero = HERO_SLIDES[heroIndex];
-  const styles = getStyles(isMobile);
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 980);
 
   useEffect(() => {
-    const oldOverflow = document.body.style.overflow;
-    document.body.style.overflow = "auto";
-
-    function onResize() {
-      setIsMobile(window.innerWidth < 920);
-    }
-
+    const onResize = () => setIsMobile(window.innerWidth < 980);
     window.addEventListener("resize", onResize);
-    return () => {
-      document.body.style.overflow = oldOverflow;
-      window.removeEventListener("resize", onResize);
-    };
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setHeroIndex((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 10000);
+      setActiveSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 4500);
     return () => clearInterval(timer);
   }, []);
 
-  function submit(e) {
-    e.preventDefault();
+  useEffect(() => {
+    document.body.style.margin = "0";
+    document.body.style.background = "#020817";
+    return () => {
+      document.body.style.background = "";
+    };
+  }, []);
 
-    const u = String(username || "").trim();
-    const p = String(password || "");
+  const slide = useMemo(() => HERO_SLIDES[activeSlide], [activeSlide]);
 
-    if (u === VALID_USERNAME && p === VALID_PASSWORD) {
-      sessionStorage.setItem("noc_token", "ok");
-      sessionStorage.setItem("noc_user", u);
-      setErr("");
-      onLogin?.();
+  function scrollToId(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function handlePrimaryAction(label) {
+    if (label.toLowerCase().includes("plan")) scrollToId("plans");
+    else if (label.toLowerCase().includes("coverage")) scrollToId("contact");
+    else if (label.toLowerCase().includes("device")) scrollToId("devices");
+    else scrollToId("plans");
+  }
+
+  function handleSecondaryAction(label) {
+    if (label.toLowerCase().includes("call")) {
+      window.location.href = `tel:${BRAND.phoneDisplay}`;
       return;
     }
+    if (label.toLowerCase().includes("login")) {
+      setShowLogin(true);
+      return;
+    }
+    scrollToId("contact");
+  }
 
-    setErr("Invalid credentials");
+  function handleLoginSubmit(e) {
+    e.preventDefault();
+    setSubmitting(true);
+    setLoginError("");
+
+    window.setTimeout(() => {
+      if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+        localStorage.setItem("nnc_logged_in", "true");
+        window.location.href = "/";
+      } else {
+        setLoginError("Invalid username or password.");
+      }
+      setSubmitting(false);
+    }, 700);
   }
 
   return (
     <div style={styles.page}>
-      <div style={styles.bg} />
-      <div style={styles.grid} />
-      <div style={styles.glowLeft} />
-      <div style={styles.glowRight} />
+      <div style={styles.bgBase} />
+      <div style={styles.bgOrbA} />
+      <div style={styles.bgOrbB} />
+      <div style={styles.bgLines} />
 
-      {dots.map((d) => (
-        <span
-          key={d.id}
-          style={{
-            position: "absolute",
-            left: `${d.x}%`,
-            top: `${d.y}%`,
-            width: `${d.size}px`,
-            height: `${d.size}px`,
-            borderRadius: "999px",
-            background: "rgba(125,211,252,.95)",
-            boxShadow: "0 0 12px rgba(56,189,248,.18)",
-            opacity: d.opacity,
-            pointerEvents: "none",
-          }}
-        />
-      ))}
+      <SocialRail />
 
-      <div style={styles.topStrip}>
-        <div style={styles.topStripInner}>
-          <div>Jabal Mohssen</div>
-          <div>Customer Support 70411518</div>
-        </div>
-      </div>
+      <header style={styles.header}>
+        <div style={styles.headerInner}>
+          <button style={styles.logoWrap} onClick={() => scrollToId("home")}>
+            <span style={styles.logoText}>{BRAND.name}</span>
+          </button>
 
-      <div style={styles.navbar}>
-        <div style={styles.navbarInner}>
-          <div style={styles.navLogo}>NoComment</div>
+          {!isMobile && (
+            <nav style={styles.nav}>
+              <button style={styles.navLink} onClick={() => scrollToId("home")}>Home</button>
+              <button style={styles.navLink} onClick={() => scrollToId("plans")}>Plans</button>
+              <button style={styles.navLink} onClick={() => scrollToId("devices")}>Devices</button>
+              <button style={styles.navLink} onClick={() => scrollToId("contact")}>Contact</button>
+            </nav>
+          )}
 
-          <div style={styles.navLinks}>
-            <a href="#home" style={styles.navLink}>Home</a>
-            <a href="#plans" style={styles.navLink}>Plans</a>
-            <a href="#devices" style={styles.navLink}>Devices</a>
-            <a href="#contact" style={styles.navLink}>Contact</a>
-          </div>
-
-          <div style={styles.navActions}>
-            <button
-              type="button"
-              onClick={() => setShowLogin(true)}
-              style={styles.supportBtn}
-            >
+          <div style={styles.headerActions}>
+            <button style={styles.headerGhostBtn} onClick={() => setShowLogin(true)}>
               Support Login
             </button>
-
-            <a href="tel:70411518" style={styles.callBtn}>
+            <a href={`tel:${BRAND.phoneDisplay}`} style={styles.headerPrimaryBtn}>
               Call Now
             </a>
           </div>
         </div>
-      </div>
+      </header>
 
-      <section id="home" style={styles.heroSection}>
-        <div style={styles.heroInner}>
-          <div style={styles.heroLeft}>
-            <div style={styles.heroKicker}>NoComment Network</div>
+      <main style={styles.main}>
+        <section id="home" style={styles.heroSection}>
+          <div style={styles.heroGrid}>
+            <div style={styles.heroCopy}>
+              <div style={styles.eyebrow}>{slide.eyebrow}</div>
 
-            <h1 style={styles.heroTitle}>
-              Faster internet.
-              <br />
-              Stronger service.
-              <br />
-              Clear pricing.
-            </h1>
+              <h1 style={styles.heroTitle}>
+                <span>{slide.titleA}</span>
+                <span>{slide.titleB}</span>
+                <span style={styles.heroAccent}>{slide.titleC}</span>
+              </h1>
 
-            <p style={styles.heroLead}>
-              Home internet plans, direct support, hardware options, and unlimited
-              night upgrades for Jabal Mohssen and nearby areas.
-            </p>
+              <p style={styles.heroDescription}>{slide.description}</p>
 
-            <div style={styles.heroCtas}>
-              <a href="#plans" style={styles.primaryBtn}>Explore Plans</a>
-              <a href="tel:70411518" style={styles.secondaryBtn}>Call Now</a>
-            </div>
+              <div style={styles.heroActions}>
+                <button
+                  style={styles.heroPrimary}
+                  onClick={() => handlePrimaryAction(slide.primaryLabel)}
+                >
+                  {slide.primaryLabel}
+                </button>
 
-            <div style={styles.trustRow}>
-              <div style={styles.trustCard}>
-                <div style={styles.trustNumber}>Fast</div>
-                <div style={styles.trustLabel}>Installation</div>
-              </div>
-              <div style={styles.trustCard}>
-                <div style={styles.trustNumber}>Night</div>
-                <div style={styles.trustLabel}>Open Speed</div>
-              </div>
-              <div style={styles.trustCard}>
-                <div style={styles.trustNumber}>Direct</div>
-                <div style={styles.trustLabel}>Support</div>
-              </div>
-            </div>
-          </div>
-
-          <div style={styles.heroRight}>
-            <div style={styles.visualShell}>
-              <div style={styles.visualGlow} />
-
-              <div style={styles.visualMainCard}>
-                <div style={styles.visualEyebrow}>{hero.eyebrow}</div>
-                <div style={styles.visualPlanSpeed}>{hero.title}</div>
-                <div style={styles.visualPlanCached}>{hero.sub}</div>
-                <div style={styles.visualPlanMeta}>{hero.meta}</div>
-                <div style={styles.visualPrice}>{hero.price}</div>
+                <button
+                  style={styles.heroSecondary}
+                  onClick={() => handleSecondaryAction(slide.secondaryLabel)}
+                >
+                  {slide.secondaryLabel}
+                </button>
               </div>
 
-              <div style={styles.visualMiniLeft}>
-                <div style={styles.visualMiniLabel}>{hero.leftLabel}</div>
-                <div style={styles.visualMiniValue}>{hero.leftValue}</div>
+              <div style={styles.heroMetaGrid}>
+                <div style={styles.metaCard}>
+                  <span style={styles.metaLabel}>Coverage</span>
+                  <strong style={styles.metaValue}>Jabal Mohssen</strong>
+                </div>
+                <div style={styles.metaCard}>
+                  <span style={styles.metaLabel}>Support</span>
+                  <strong style={styles.metaValue}>Direct contact</strong>
+                </div>
+                <div style={styles.metaCard}>
+                  <span style={styles.metaLabel}>Network</span>
+                  <strong style={styles.metaValue}>Modern setup</strong>
+                </div>
               </div>
 
-              <div style={styles.visualMiniRight}>
-                <div style={styles.visualMiniLabel}>{hero.rightLabel}</div>
-                <div style={styles.visualMiniValue}>{hero.rightValue}</div>
-              </div>
-
-              <div style={styles.visualDots}>
-                {HERO_SLIDES.map((_, idx) => (
+              <div style={styles.dotsRow}>
+                {HERO_SLIDES.map((_, index) => (
                   <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setHeroIndex(idx)}
-                    style={idx === heroIndex ? styles.visualDotActive : styles.visualDot}
+                    key={index}
+                    onClick={() => setActiveSlide(index)}
+                    style={{
+                      ...styles.dot,
+                      ...(activeSlide === index ? styles.dotActive : {}),
+                    }}
+                    aria-label={`Slide ${index + 1}`}
                   />
                 ))}
               </div>
             </div>
+
+            <div style={styles.heroVisual}>
+              <WifiIllustration />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="plans" style={styles.section}>
-        <div style={styles.sectionInner}>
-          <div style={styles.sectionKicker}>Internet Plans</div>
-          <h2 style={styles.sectionTitle}>Plans that sell themselves.</h2>
-          <p style={styles.sectionLead}>
-            All prices, quotas, and cached speeds are visible directly — no hidden steps.
-          </p>
+        <section id="plans" style={styles.section}>
+          <div style={styles.sectionHead}>
+            <div>
+              <div style={styles.sectionEyebrow}>Packages</div>
+              <h2 style={styles.sectionTitle}>Plans that look cleaner and sell better.</h2>
+            </div>
+            <p style={styles.sectionText}>
+              Better hierarchy, cleaner pricing blocks, stronger layout, and less visual mess.
+            </p>
+          </div>
 
-          <div style={styles.planGrid}>
+          <div style={styles.cardsGrid}>
             {PLANS.map((plan) => (
-              <div key={plan.name} style={plan.featured ? styles.planCardFeatured : styles.planCard}>
+              <article
+                key={plan.name}
+                style={{
+                  ...styles.planCard,
+                  ...(plan.accent === "violet"
+                    ? styles.planCardViolet
+                    : plan.accent === "cyan"
+                    ? styles.planCardCyan
+                    : styles.planCardBlue),
+                }}
+              >
                 <div style={styles.planTop}>
-                  <div style={styles.planName}>{plan.name}</div>
-                  {plan.featured ? <div style={styles.planBadge}>Best Value</div> : null}
+                  <div style={styles.planNameWrap}>
+                    <span style={styles.planBadge}>{plan.badge}</span>
+                    <h3 style={styles.planName}>{plan.name}</h3>
+                  </div>
+                  <PlanIcon />
                 </div>
 
-                <div style={styles.planSpeed}>{plan.speed}</div>
-                <div style={styles.planCached}>{plan.cached}</div>
-
-                <div style={styles.planStat}>{plan.daily}</div>
-                <div style={styles.planStat}>{plan.monthly}</div>
-
                 <div style={styles.planPrice}>{plan.price}</div>
-              </div>
+                <div style={styles.planSpeed}>{plan.speed}</div>
+
+                <div style={styles.planList}>
+                  <div style={styles.planListItem}><span>Cached</span><strong>{plan.cached}</strong></div>
+                  <div style={styles.planListItem}><span>Daily</span><strong>{plan.daily}</strong></div>
+                  <div style={styles.planListItem}><span>Monthly</span><strong>{plan.monthly}</strong></div>
+                </div>
+
+                <a href={`tel:${BRAND.phoneDisplay}`} style={styles.planBtn}>
+                  Request Plan
+                </a>
+              </article>
             ))}
           </div>
+        </section>
 
-          <div style={styles.addonCard}>
+        <section id="devices" style={styles.section}>
+          <div style={styles.sectionHead}>
             <div>
-              <div style={styles.addonTitle}>Free Night + Open Speed</div>
-              <div style={styles.addonMeta}>1AM → 1PM</div>
+              <div style={styles.sectionEyebrow}>Equipment</div>
+              <h2 style={styles.sectionTitle}>Devices shown in a cleaner premium layout.</h2>
             </div>
-            <div style={styles.addonPrice}>+ $5</div>
+            <p style={styles.sectionText}>
+              Device cards rebuilt with less clutter, stronger spacing, and a better visual rhythm.
+            </p>
           </div>
-        </div>
-      </section>
 
-      <section id="devices" style={styles.sectionAlt}>
-        <div style={styles.sectionInner}>
-          <div style={styles.sectionKicker}>Devices & Cables</div>
-          <h2 style={styles.sectionTitle}>Hardware ready for deployment.</h2>
-
-          <div style={styles.deviceGrid}>
-            <div style={styles.infoCard}>
-              <div style={styles.infoTitle}>Tenda</div>
-              <div style={styles.infoLine}>N300 4G — $20</div>
-              <div style={styles.infoLine}>AC1200 4G & 5G — $25</div>
-            </div>
-
-            <div style={styles.infoCard}>
-              <div style={styles.infoTitle}>Netis</div>
-              <div style={styles.infoLine}>N3 4G & 5G — $25</div>
-            </div>
-
-            <div style={styles.infoCard}>
-              <div style={styles.infoTitle}>V-Sol</div>
-              <div style={styles.infoLine}>AC3000 4G / 5G / 6G — $40</div>
-              <div style={styles.infoLine}>AC3200 4G / 5G / 6G / 7G — $100</div>
-            </div>
-
-            <div style={styles.infoCard}>
-              <div style={styles.infoTitle}>Cables</div>
-              <div style={styles.infoLine}>Cat 5E — $0.30 / m</div>
-              <div style={styles.infoLine}>Cat 6E++ — $0.40 / m</div>
-            </div>
+          <div style={styles.devicesGrid}>
+            {DEVICES.map((device) => (
+              <article key={device.name} style={styles.deviceCard}>
+                <div style={styles.deviceHeader}>
+                  <DeviceIcon />
+                  <span style={styles.deviceTag}>{device.tag}</span>
+                </div>
+                <h3 style={styles.deviceName}>{device.name}</h3>
+                <p style={styles.deviceDesc}>{device.desc}</p>
+              </article>
+            ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="contact" style={styles.section}>
-        <div style={styles.sectionInner}>
-          <div style={styles.contactCard}>
+        <section id="contact" style={styles.section}>
+          <div style={styles.sectionHead}>
             <div>
-              <div style={styles.sectionKicker}>Contact</div>
-              <h2 style={styles.sectionTitle}>Talk to NoComment directly.</h2>
-              <div style={styles.contactLine}>Phone: 70411518</div>
-              <div style={styles.contactLine}>Location: Jabal Mohssen</div>
-              <div style={styles.contactLine}>Network: NoComment</div>
+              <div style={styles.sectionEyebrow}>Reach Us</div>
+              <h2 style={styles.sectionTitle}>Direct actions without the old annoying top bar.</h2>
             </div>
+            <p style={styles.sectionText}>
+              WhatsApp, Facebook, and Location are now proper direct actions, not random wasted space.
+            </p>
+          </div>
 
-            <div style={styles.contactActions}>
-              <a href="tel:70411518" style={styles.primaryBtn}>Call Now</a>
-              <button
-                type="button"
-                onClick={() => setShowLogin(true)}
-                style={styles.secondaryButton}
+          <div style={styles.contactGrid}>
+            {CONTACT_CARDS.map((item) => (
+              <a
+                key={item.title}
+                href={item.href}
+                target="_blank"
+                rel="noreferrer"
+                style={styles.contactCard}
               >
-                Support Login
-              </button>
-            </div>
+                <div style={styles.contactCardTop}>
+                  <ContactIcon />
+                  <span style={styles.contactTitle}>{item.title}</span>
+                </div>
+                <strong style={styles.contactValue}>{item.value}</strong>
+                <p style={styles.contactHint}>{item.hint}</p>
+              </a>
+            ))}
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
       {showLogin && (
-        <div style={styles.loginOverlay} onClick={() => setShowLogin(false)}>
-          <div style={styles.loginModal} onClick={(e) => e.stopPropagation()}>
-            <div style={styles.loginTopBar} />
-            <div style={styles.loginBrand}>NoComment Network</div>
-            <h2 style={styles.loginTitle}>Support Login</h2>
-            <div style={styles.loginSub}>Authorized access only</div>
+        <div style={styles.modalOverlay} onClick={() => setShowLogin(false)}>
+          <div style={styles.modalCard} onClick={(e) => e.stopPropagation()}>
+            <div style={styles.modalTopBar} />
+            <div style={styles.modalEyebrow}>{BRAND.network}</div>
+            <h3 style={styles.modalTitle}>Support Login</h3>
+            <p style={styles.modalText}>Authorized access only</p>
 
-            <form onSubmit={submit} style={styles.form}>
-              <div style={styles.field}>
-                <label style={styles.label}>Username</label>
-                <input
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  autoComplete="username"
-                  spellCheck={false}
-                  placeholder="Enter username"
-                  style={styles.input}
-                />
-              </div>
+            <form style={styles.form} onSubmit={handleLoginSubmit}>
+              <label style={styles.label}>Username</label>
+              <input
+                style={styles.input}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter username"
+              />
 
-              <div style={styles.field}>
-                <label style={styles.label}>Password</label>
+              <label style={styles.label}>Password</label>
+              <div style={styles.passwordWrap}>
                 <input
-                  type="password"
+                  style={styles.inputPassword}
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="current-password"
                   placeholder="Enter password"
-                  style={styles.input}
                 />
+                <button
+                  type="button"
+                  style={styles.showBtn}
+                  onClick={() => setShowPassword((prev) => !prev)}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
               </div>
 
-              {err ? <div style={styles.err}>{err}</div> : null}
+              {loginError ? <div style={styles.errorText}>{loginError}</div> : null}
 
-              <button type="submit" style={styles.loginButton}>
-                Enter Dashboard
+              <button type="submit" style={styles.submitBtn} disabled={submitting}>
+                {submitting ? "Checking..." : "Enter Dashboard"}
               </button>
             </form>
           </div>
@@ -386,776 +570,958 @@ export default function LoginPage({ onLogin }) {
   );
 }
 
-function getStyles(isMobile) {
-  return {
-    page: {
-      position: "relative",
-      minHeight: "100dvh",
-      overflowX: "hidden",
-      background: "#050d1c",
-      color: "#ffffff",
-      fontFamily:
-        'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-    },
-
-    bg: {
-      position: "absolute",
-      inset: 0,
-      background:
-        "linear-gradient(180deg, #06101f 0%, #071425 42%, #09192f 100%)",
-    },
-
-    grid: {
-      position: "absolute",
-      inset: 0,
-      backgroundImage:
-        "linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px)",
-      backgroundSize: isMobile ? "28px 28px" : "38px 38px",
-      opacity: 0.18,
-    },
-
-    glowLeft: {
-      position: "absolute",
-      width: isMobile ? "320px" : "620px",
-      height: isMobile ? "320px" : "620px",
-      left: isMobile ? "-120px" : "-180px",
-      top: isMobile ? "-80px" : "-180px",
-      borderRadius: "999px",
-      background:
-        "radial-gradient(circle, rgba(59,130,246,.20), rgba(59,130,246,0) 68%)",
-      filter: "blur(46px)",
-      opacity: 0.82,
-    },
-
-    glowRight: {
-      position: "absolute",
-      width: isMobile ? "340px" : "640px",
-      height: isMobile ? "340px" : "640px",
-      right: isMobile ? "-120px" : "-220px",
-      bottom: isMobile ? "-80px" : "-220px",
-      borderRadius: "999px",
-      background:
-        "radial-gradient(circle, rgba(109,40,217,.22), rgba(109,40,217,0) 68%)",
-      filter: "blur(52px)",
-      opacity: 0.9,
-    },
-
-    topStrip: {
-      position: "sticky",
-      top: 0,
-      zIndex: 40,
-      background: "rgba(255,255,255,.04)",
-      borderBottom: "1px solid rgba(255,255,255,.06)",
-      backdropFilter: "blur(12px)",
-    },
-
-    topStripInner: {
-      maxWidth: "1280px",
-      margin: "0 auto",
-      minHeight: "38px",
-      padding: "0 28px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      color: "rgba(255,255,255,.82)",
-      fontSize: "12px",
-      fontWeight: 800,
-      letterSpacing: ".02em",
-    },
-
-    navbar: {
-      position: "sticky",
-      top: "38px",
-      zIndex: 39,
-      background: "rgba(6,16,31,.64)",
-      borderBottom: "1px solid rgba(255,255,255,.05)",
-      backdropFilter: "blur(16px)",
-    },
-
-    navbarInner: {
-      maxWidth: "1280px",
-      margin: "0 auto",
-      minHeight: "88px",
-      padding: "0 28px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      gap: "24px",
-    },
-
-    navLogo: {
-      fontSize: isMobile ? "24px" : "28px",
-      fontWeight: 900,
-      letterSpacing: "-.04em",
-      color: "#ffffff",
-      flexShrink: 0,
-    },
-
-    navLinks: {
-      display: isMobile ? "none" : "flex",
-      alignItems: "center",
-      gap: "34px",
-    },
-
-    navLink: {
-      textDecoration: "none",
-      color: "rgba(255,255,255,.94)",
-      fontSize: "15px",
-      fontWeight: 700,
-    },
-
-    navActions: {
-      display: "flex",
-      alignItems: "center",
-      gap: "12px",
-      flexShrink: 0,
-    },
-
-    supportBtn: {
-      height: "46px",
-      padding: "0 18px",
-      borderRadius: "999px",
-      border: "1px solid rgba(255,255,255,.16)",
-      background: "rgba(255,255,255,.05)",
-      color: "#ffffff",
-      fontSize: "14px",
-      fontWeight: 800,
-      cursor: "pointer",
-      boxShadow: "inset 0 1px 0 rgba(255,255,255,.03)",
-    },
-
-    callBtn: {
-      height: "46px",
-      padding: "0 22px",
-      borderRadius: "999px",
-      border: "none",
-      background: "linear-gradient(135deg, #38bdf8 0%, #60a5fa 48%, #818cf8 100%)",
-      color: "#07111f",
-      textDecoration: "none",
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: "14px",
-      fontWeight: 900,
-      boxShadow: "0 16px 34px rgba(56,189,248,.22)",
-    },
-
-    heroSection: {
-      position: "relative",
-      zIndex: 2,
-      minHeight: isMobile ? "auto" : "820px",
-      display: "flex",
-      alignItems: "center",
-      padding: isMobile ? "48px 0 54px" : "60px 0 94px",
-    },
-
-    heroInner: {
-      maxWidth: "1280px",
-      width: "100%",
-      margin: "0 auto",
-      padding: "0 28px",
-      display: "grid",
-      gridTemplateColumns: isMobile ? "1fr" : "1.08fr 0.92fr",
-      gap: isMobile ? "34px" : "44px",
-      alignItems: "center",
-    },
-
-    heroLeft: {
-      position: "relative",
-      zIndex: 2,
-    },
-
-    heroRight: {
-      position: "relative",
-      zIndex: 2,
-      display: "flex",
-      justifyContent: isMobile ? "flex-start" : "flex-end",
-    },
-
-    heroKicker: {
-      color: "#7dd3fc",
-      fontSize: "12px",
-      fontWeight: 900,
-      letterSpacing: ".24em",
-      textTransform: "uppercase",
-      marginBottom: "18px",
-    },
-
-    heroTitle: {
-      margin: "0 0 20px 0",
-      color: "#ffffff",
-      fontSize: isMobile ? "54px" : "98px",
-      fontWeight: 900,
-      lineHeight: 0.92,
-      letterSpacing: "-.07em",
-      maxWidth: "820px",
-    },
-
-    heroLead: {
-      margin: "0 0 30px 0",
-      color: "rgba(255,255,255,.80)",
-      fontSize: isMobile ? "17px" : "21px",
-      lineHeight: 1.68,
-      maxWidth: "720px",
-    },
-
-    heroCtas: {
-      display: "flex",
-      flexWrap: "wrap",
-      gap: "14px",
-      marginBottom: "26px",
-    },
-
-    primaryBtn: {
-      minWidth: "170px",
-      height: "56px",
-      padding: "0 24px",
-      borderRadius: "999px",
-      background: "linear-gradient(135deg, #7c3aed 0%, #9333ea 60%, #c084fc 100%)",
-      color: "#ffffff",
-      textDecoration: "none",
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: "15px",
-      fontWeight: 900,
-      border: "none",
-      boxShadow: "0 18px 40px rgba(124,58,237,.30)",
-      cursor: "pointer",
-    },
-
-    secondaryBtn: {
-      minWidth: "170px",
-      height: "56px",
-      padding: "0 24px",
-      borderRadius: "999px",
-      border: "1px solid rgba(255,255,255,.14)",
-      background: "rgba(255,255,255,.05)",
-      color: "#ffffff",
-      textDecoration: "none",
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: "15px",
-      fontWeight: 800,
-      boxShadow: "inset 0 1px 0 rgba(255,255,255,.03)",
-    },
-
-    trustRow: {
-      display: "grid",
-      gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0, 1fr))",
-      gap: "14px",
-      maxWidth: "760px",
-    },
-
-    trustCard: {
-      borderRadius: "22px",
-      padding: "18px 18px",
-      background: "linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03))",
-      border: "1px solid rgba(255,255,255,.08)",
-      boxShadow: "0 12px 30px rgba(0,0,0,.14)",
-    },
-
-    trustNumber: {
-      color: "#ffffff",
-      fontSize: "22px",
-      fontWeight: 900,
-      marginBottom: "4px",
-    },
-
-    trustLabel: {
-      color: "rgba(255,255,255,.70)",
-      fontSize: "13px",
-      fontWeight: 700,
-    },
-
-    visualShell: {
-      position: "relative",
-      width: "100%",
-      maxWidth: "520px",
-      minHeight: isMobile ? "360px" : "520px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-
-    visualGlow: {
-      position: "absolute",
-      inset: "8%",
-      borderRadius: "40px",
-      background:
-        "radial-gradient(circle at center, rgba(56,189,248,.14), rgba(124,58,237,.10), rgba(0,0,0,0) 72%)",
-      filter: "blur(26px)",
-    },
-
-    visualMainCard: {
-      position: "relative",
-      zIndex: 3,
-      width: "100%",
-      maxWidth: "420px",
-      borderRadius: "34px",
-      padding: "30px",
-      background: "linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.05))",
-      border: "1px solid rgba(255,255,255,.12)",
-      boxShadow: "0 28px 80px rgba(0,0,0,.28)",
-      backdropFilter: "blur(18px)",
-    },
-
-    visualEyebrow: {
-      color: "#7dd3fc",
-      fontSize: "11px",
-      fontWeight: 900,
-      letterSpacing: ".20em",
-      textTransform: "uppercase",
-      marginBottom: "12px",
-    },
-
-    visualPlanSpeed: {
-      color: "#ffffff",
-      fontSize: isMobile ? "44px" : "58px",
-      fontWeight: 900,
-      lineHeight: 0.96,
-      letterSpacing: "-.05em",
-      marginBottom: "12px",
-    },
-
-    visualPlanCached: {
-      color: "#dbeafe",
-      fontSize: "16px",
-      fontWeight: 700,
-      marginBottom: "14px",
-    },
-
-    visualPlanMeta: {
-      color: "rgba(255,255,255,.76)",
-      fontSize: "14px",
-      lineHeight: 1.5,
-      marginBottom: "18px",
-    },
-
-    visualPrice: {
-      color: "#38bdf8",
-      fontSize: "40px",
-      fontWeight: 900,
-      letterSpacing: "-.04em",
-    },
-
-    visualMiniLeft: {
-      position: "absolute",
-      left: 0,
-      bottom: isMobile ? "4px" : "26px",
-      zIndex: 2,
-      borderRadius: "20px",
-      padding: "16px 18px",
-      background: "linear-gradient(180deg, rgba(124,58,237,.24), rgba(255,255,255,.04))",
-      border: "1px solid rgba(255,255,255,.10)",
-      boxShadow: "0 14px 36px rgba(0,0,0,.18)",
-    },
-
-    visualMiniRight: {
-      position: "absolute",
-      right: 0,
-      top: isMobile ? "0" : "26px",
-      zIndex: 2,
-      borderRadius: "20px",
-      padding: "16px 18px",
-      background: "linear-gradient(180deg, rgba(56,189,248,.20), rgba(255,255,255,.04))",
-      border: "1px solid rgba(255,255,255,.10)",
-      boxShadow: "0 14px 36px rgba(0,0,0,.18)",
-    },
-
-    visualDots: {
-      position: "absolute",
-      left: "50%",
-      bottom: isMobile ? "-6px" : "-10px",
-      transform: "translateX(-50%)",
-      display: "flex",
-      alignItems: "center",
-      gap: "10px",
-      zIndex: 5,
-    },
-
-    visualDot: {
-      width: "10px",
-      height: "10px",
-      borderRadius: "999px",
-      border: "1px solid rgba(255,255,255,.22)",
-      background: "rgba(255,255,255,.18)",
-      cursor: "pointer",
-      padding: 0,
-    },
-
-    visualDotActive: {
-      width: "28px",
-      height: "10px",
-      borderRadius: "999px",
-      border: "1px solid rgba(125,211,252,.34)",
-      background: "linear-gradient(90deg, #38bdf8, #8b5cf6)",
-      cursor: "pointer",
-      padding: 0,
-      boxShadow: "0 0 18px rgba(56,189,248,.20)",
-    },
-
-    visualMiniLabel: {
-      color: "rgba(255,255,255,.68)",
-      fontSize: "11px",
-      fontWeight: 800,
-      letterSpacing: ".12em",
-      textTransform: "uppercase",
-      marginBottom: "8px",
-    },
-
-    visualMiniValue: {
-      color: "#ffffff",
-      fontSize: "18px",
-      fontWeight: 900,
-    },
-
-    section: {
-      position: "relative",
-      zIndex: 2,
-      padding: isMobile ? "56px 0" : "88px 0",
-    },
-
-    sectionAlt: {
-      position: "relative",
-      zIndex: 2,
-      padding: isMobile ? "56px 0" : "88px 0",
-      background: "rgba(255,255,255,.025)",
-      borderTop: "1px solid rgba(255,255,255,.05)",
-      borderBottom: "1px solid rgba(255,255,255,.05)",
-    },
-
-    sectionInner: {
-      maxWidth: "1280px",
-      margin: "0 auto",
-      padding: "0 28px",
-    },
-
-    sectionKicker: {
-      color: "#7dd3fc",
-      fontSize: "12px",
-      fontWeight: 900,
-      letterSpacing: ".24em",
-      textTransform: "uppercase",
-      marginBottom: "10px",
-    },
-
-    sectionTitle: {
-      margin: "0 0 16px 0",
-      color: "#fff",
-      fontSize: isMobile ? "32px" : "54px",
-      fontWeight: 900,
-      lineHeight: 0.98,
-      letterSpacing: "-.05em",
-      maxWidth: "760px",
-    },
-
-    sectionLead: {
-      margin: "0 0 28px 0",
-      color: "rgba(255,255,255,.72)",
-      fontSize: "17px",
-      lineHeight: 1.65,
-      maxWidth: "760px",
-    },
-
-    planGrid: {
-      display: "grid",
-      gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0, 1fr))",
-      gap: "20px",
-    },
-
-    planCard: {
-      borderRadius: "28px",
-      padding: "26px",
-      background: "linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03))",
-      border: "1px solid rgba(255,255,255,.10)",
-      boxShadow: "0 18px 46px rgba(0,0,0,.18)",
-    },
-
-    planCardFeatured: {
-      borderRadius: "28px",
-      padding: "28px",
-      background: "linear-gradient(180deg, rgba(124,58,237,.34), rgba(255,255,255,.05))",
-      border: "1px solid rgba(196,181,253,.28)",
-      boxShadow: "0 22px 58px rgba(124,58,237,.22)",
-      transform: isMobile ? "none" : "translateY(-10px)",
-    },
-
-    planTop: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      gap: "12px",
-      marginBottom: "16px",
-    },
-
-    planName: {
-      fontSize: "18px",
-      fontWeight: 900,
-      color: "#fff",
-    },
-
-    planBadge: {
-      padding: "6px 10px",
-      borderRadius: "999px",
-      background: "rgba(255,255,255,.12)",
-      color: "#fff",
-      fontSize: "11px",
-      fontWeight: 900,
-      textTransform: "uppercase",
-      letterSpacing: ".06em",
-    },
-
-    planSpeed: {
-      color: "#ffffff",
-      fontSize: "36px",
-      fontWeight: 900,
-      lineHeight: 1,
-      marginBottom: "12px",
-      letterSpacing: "-.04em",
-    },
-
-    planCached: {
-      color: "#dbeafe",
-      fontSize: "14px",
-      fontWeight: 700,
-      marginBottom: "14px",
-    },
-
-    planStat: {
-      color: "rgba(255,255,255,.78)",
-      fontSize: "14px",
-      marginBottom: "8px",
-    },
-
-    planPrice: {
-      marginTop: "18px",
-      color: "#38bdf8",
-      fontSize: "32px",
-      fontWeight: 900,
-      letterSpacing: "-.03em",
-    },
-
-    addonCard: {
-      marginTop: "24px",
-      borderRadius: "26px",
-      padding: "24px 26px",
-      background: "linear-gradient(180deg, rgba(45,212,191,.15), rgba(255,255,255,.04))",
-      border: "1px solid rgba(45,212,191,.22)",
-      display: "flex",
-      flexDirection: isMobile ? "column" : "row",
-      alignItems: isMobile ? "flex-start" : "center",
-      justifyContent: "space-between",
-      gap: "14px",
-      boxShadow: "0 18px 44px rgba(0,0,0,.14)",
-    },
-
-    addonTitle: {
-      color: "#fff",
-      fontSize: "22px",
-      fontWeight: 900,
-      marginBottom: "6px",
-    },
-
-    addonMeta: {
-      color: "rgba(255,255,255,.78)",
-      fontSize: "14px",
-      fontWeight: 700,
-    },
-
-    addonPrice: {
-      color: "#2dd4bf",
-      fontSize: "28px",
-      fontWeight: 900,
-    },
-
-    deviceGrid: {
-      display: "grid",
-      gridTemplateColumns: isMobile ? "1fr" : "repeat(4, minmax(0, 1fr))",
-      gap: "20px",
-    },
-
-    infoCard: {
-      borderRadius: "24px",
-      padding: "24px",
-      background: "linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03))",
-      border: "1px solid rgba(255,255,255,.10)",
-      boxShadow: "0 18px 44px rgba(0,0,0,.16)",
-    },
-
-    infoTitle: {
-      color: "#fff",
-      fontSize: "22px",
-      fontWeight: 900,
-      marginBottom: "16px",
-    },
-
-    infoLine: {
-      color: "rgba(255,255,255,.78)",
-      fontSize: "14px",
-      lineHeight: 1.6,
-      marginBottom: "10px",
-    },
-
-    contactCard: {
-      borderRadius: "30px",
-      padding: isMobile ? "24px" : "34px",
-      background: "linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.04))",
-      border: "1px solid rgba(255,255,255,.10)",
-      display: "flex",
-      flexDirection: isMobile ? "column" : "row",
-      alignItems: isMobile ? "flex-start" : "center",
-      justifyContent: "space-between",
-      gap: "26px",
-      boxShadow: "0 20px 50px rgba(0,0,0,.16)",
-    },
-
-    contactLine: {
-      color: "rgba(255,255,255,.80)",
-      fontSize: "16px",
-      lineHeight: 1.6,
-      marginBottom: "8px",
-    },
-
-    contactActions: {
-      display: "flex",
-      flexWrap: "wrap",
-      gap: "12px",
-    },
-
-    secondaryButton: {
-      minWidth: "170px",
-      height: "56px",
-      padding: "0 24px",
-      borderRadius: "999px",
-      border: "1px solid rgba(255,255,255,.14)",
-      background: "rgba(255,255,255,.05)",
-      color: "#ffffff",
-      textDecoration: "none",
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: "15px",
-      fontWeight: 800,
-      boxShadow: "inset 0 1px 0 rgba(255,255,255,.03)",
-      cursor: "pointer",
-    },
-
-    loginOverlay: {
-      position: "fixed",
-      inset: 0,
-      zIndex: 100,
-      background: "rgba(3,7,18,.68)",
-      backdropFilter: "blur(10px)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "24px",
-    },
-
-    loginModal: {
-      width: "100%",
-      maxWidth: "460px",
-      borderRadius: "30px",
-      padding: isMobile ? "26px" : "34px",
-      background: "linear-gradient(180deg, rgba(8,16,30,.96), rgba(5,10,22,.99))",
-      border: "1px solid rgba(96,165,250,.16)",
-      boxShadow: "0 28px 80px rgba(0,0,0,.42)",
-      position: "relative",
-    },
-
-    loginTopBar: {
-      width: "70px",
-      height: "4px",
-      borderRadius: "999px",
-      background: "linear-gradient(90deg, #67e8f9, #60a5fa)",
-      marginBottom: "18px",
-      boxShadow: "0 0 16px rgba(56,189,248,.18)",
-    },
-
-    loginBrand: {
-      color: "#7dd3fc",
-      fontSize: "11px",
-      fontWeight: 900,
-      letterSpacing: ".22em",
-      textTransform: "uppercase",
-      marginBottom: "14px",
-    },
-
-    loginTitle: {
-      margin: 0,
-      color: "#f8fafc",
-      fontSize: isMobile ? "42px" : "52px",
-      fontWeight: 900,
-      lineHeight: 0.98,
-      letterSpacing: "-.05em",
-    },
-
-    loginSub: {
-      marginTop: "12px",
-      marginBottom: "28px",
-      color: "#93a4bc",
-      fontSize: "14px",
-    },
-
-    form: {
-      display: "flex",
-      flexDirection: "column",
-    },
-
-    field: {
-      marginBottom: "18px",
-    },
-
-    label: {
-      display: "block",
-      marginBottom: "8px",
-      color: "#d3deea",
-      fontSize: "12px",
-      fontWeight: 800,
-      letterSpacing: ".08em",
-      textTransform: "uppercase",
-    },
-
-    input: {
-      width: "100%",
-      height: "58px",
-      borderRadius: "16px",
-      border: "1px solid rgba(148,163,184,.14)",
-      background: "rgba(2,6,23,.82)",
-      color: "#f8fafc",
-      padding: "0 18px",
-      boxSizing: "border-box",
-      fontSize: "15px",
-      transition: "all .16s ease",
-    },
-
-    err: {
-      marginBottom: "14px",
-      padding: "12px 14px",
-      borderRadius: "14px",
-      background: "rgba(127,29,29,.22)",
-      border: "1px solid rgba(248,113,113,.18)",
-      color: "#fecaca",
-      fontSize: "13px",
-      fontWeight: 700,
-    },
-
-    loginButton: {
-      marginTop: "6px",
-      height: "58px",
-      border: "none",
-      borderRadius: "16px",
-      cursor: "pointer",
-      fontWeight: 900,
-      fontSize: "15px",
-      letterSpacing: ".03em",
-      color: "#04111f",
-      background:
-        "linear-gradient(135deg, #67e8f9 0%, #38bdf8 48%, #818cf8 100%)",
-      boxShadow: "0 10px 24px rgba(56,189,248,.16)",
-      transition: "all .16s ease",
-    },
-  };
+const glass = "rgba(15, 23, 42, 0.72)";
+const line = "rgba(148, 163, 184, 0.16)";
+const textMain = "#f8fafc";
+const textSoft = "rgba(226, 232, 240, 0.8)";
+const textMute = "rgba(148, 163, 184, 0.95)";
+const gradientA = "linear-gradient(135deg, rgba(168,85,247,0.95), rgba(96,165,250,0.95))";
+const gradientB = "linear-gradient(135deg, rgba(34,211,238,0.95), rgba(96,165,250,0.95))";
+
+const styles = {
+  page: {
+    minHeight: "100vh",
+    color: textMain,
+    background:
+      "radial-gradient(circle at top, rgba(37, 99, 235, 0.18), transparent 30%), linear-gradient(180deg, #020617 0%, #020817 45%, #020617 100%)",
+    fontFamily:
+      'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    position: "relative",
+    overflow: "hidden",
+  },
+
+  bgBase: {
+    position: "fixed",
+    inset: 0,
+    background:
+      "linear-gradient(180deg, rgba(2,6,23,0.92), rgba(2,8,23,0.96))",
+    pointerEvents: "none",
+  },
+
+  bgOrbA: {
+    position: "fixed",
+    top: "-120px",
+    right: "-80px",
+    width: "420px",
+    height: "420px",
+    borderRadius: "999px",
+    background: "radial-gradient(circle, rgba(56,189,248,0.22), transparent 66%)",
+    filter: "blur(24px)",
+    pointerEvents: "none",
+  },
+
+  bgOrbB: {
+    position: "fixed",
+    left: "-120px",
+    top: "220px",
+    width: "380px",
+    height: "380px",
+    borderRadius: "999px",
+    background: "radial-gradient(circle, rgba(168,85,247,0.16), transparent 70%)",
+    filter: "blur(24px)",
+    pointerEvents: "none",
+  },
+
+  bgLines: {
+    position: "fixed",
+    inset: 0,
+    opacity: 0.08,
+    backgroundImage:
+      "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
+    backgroundSize: "64px 64px",
+    pointerEvents: "none",
+  },
+
+  header: {
+    position: "sticky",
+    top: 0,
+    zIndex: 40,
+    backdropFilter: "blur(18px)",
+    background: "rgba(2, 6, 23, 0.6)",
+    borderBottom: `1px solid ${line}`,
+  },
+
+  headerInner: {
+    width: "min(1240px, calc(100% - 32px))",
+    minHeight: "82px",
+    margin: "0 auto",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "18px",
+  },
+
+  logoWrap: {
+    border: 0,
+    background: "transparent",
+    color: textMain,
+    padding: 0,
+    cursor: "pointer",
+  },
+
+  logoText: {
+    fontSize: "2rem",
+    fontWeight: 900,
+    letterSpacing: "-0.06em",
+  },
+
+  nav: {
+    display: "flex",
+    alignItems: "center",
+    gap: "18px",
+  },
+
+  navLink: {
+    border: 0,
+    background: "transparent",
+    color: textSoft,
+    fontSize: "0.98rem",
+    fontWeight: 700,
+    cursor: "pointer",
+    transition: "0.2s ease",
+  },
+
+  headerActions: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    flexWrap: "wrap",
+    justifyContent: "flex-end",
+  },
+
+  headerGhostBtn: {
+    border: `1px solid ${line}`,
+    background: "rgba(15, 23, 42, 0.75)",
+    color: textMain,
+    minHeight: "46px",
+    padding: "0 18px",
+    borderRadius: "14px",
+    fontWeight: 800,
+    cursor: "pointer",
+    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
+  },
+
+  headerPrimaryBtn: {
+    minHeight: "46px",
+    padding: "0 18px",
+    borderRadius: "14px",
+    fontWeight: 900,
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textDecoration: "none",
+    color: "#08111f",
+    background: gradientA,
+    boxShadow: "0 12px 30px rgba(96, 165, 250, 0.24)",
+  },
+
+  main: {
+    position: "relative",
+    zIndex: 2,
+    width: "min(1240px, calc(100% - 32px))",
+    margin: "0 auto",
+    paddingBottom: "80px",
+  },
+
+  heroSection: {
+    padding: "44px 0 28px",
+  },
+
+  heroGrid: {
+    display: "grid",
+    gridTemplateColumns: "minmax(0, 1.02fr) minmax(420px, 0.98fr)",
+    gap: "34px",
+    alignItems: "center",
+  },
+
+  heroCopy: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "18px",
+  },
+
+  eyebrow: {
+    display: "inline-flex",
+    width: "fit-content",
+    padding: "10px 16px",
+    borderRadius: "999px",
+    fontSize: "0.78rem",
+    fontWeight: 900,
+    letterSpacing: "0.24em",
+    color: "#7dd3fc",
+    background: "rgba(15, 23, 42, 0.7)",
+    border: `1px solid ${line}`,
+    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)",
+  },
+
+  heroTitle: {
+    margin: 0,
+    display: "flex",
+    flexDirection: "column",
+    gap: "2px",
+    fontSize: "clamp(3.6rem, 8vw, 6.2rem)",
+    lineHeight: 0.9,
+    fontWeight: 950,
+    letterSpacing: "-0.08em",
+    maxWidth: "680px",
+  },
+
+  heroAccent: {
+    background: "linear-gradient(135deg, #7dd3fc, #c084fc)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  },
+
+  heroDescription: {
+    margin: 0,
+    maxWidth: "690px",
+    color: textSoft,
+    fontSize: "1.24rem",
+    lineHeight: 1.7,
+  },
+
+  heroActions: {
+    display: "flex",
+    gap: "14px",
+    flexWrap: "wrap",
+    marginTop: "8px",
+  },
+
+  heroPrimary: {
+    minHeight: "58px",
+    padding: "0 28px",
+    border: 0,
+    borderRadius: "18px",
+    fontWeight: 900,
+    fontSize: "1rem",
+    color: "#08111f",
+    background: gradientA,
+    cursor: "pointer",
+    boxShadow: "0 16px 40px rgba(168, 85, 247, 0.28)",
+  },
+
+  heroSecondary: {
+    minHeight: "58px",
+    padding: "0 28px",
+    borderRadius: "18px",
+    border: `1px solid ${line}`,
+    background: "rgba(15, 23, 42, 0.72)",
+    color: textMain,
+    fontWeight: 900,
+    fontSize: "1rem",
+    cursor: "pointer",
+  },
+
+  heroMetaGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+    gap: "14px",
+    marginTop: "8px",
+  },
+
+  metaCard: {
+    minHeight: "112px",
+    borderRadius: "24px",
+    padding: "18px 20px",
+    background: glass,
+    border: `1px solid ${line}`,
+    boxShadow: "0 14px 40px rgba(2, 8, 23, 0.24), inset 0 1px 0 rgba(255,255,255,0.05)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+
+  metaLabel: {
+    color: textMute,
+    fontSize: "0.82rem",
+    fontWeight: 800,
+    textTransform: "uppercase",
+    letterSpacing: "0.12em",
+  },
+
+  metaValue: {
+    fontSize: "1.28rem",
+    fontWeight: 900,
+  },
+
+  dotsRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    marginTop: "4px",
+  },
+
+  dot: {
+    width: "34px",
+    height: "8px",
+    borderRadius: "999px",
+    border: 0,
+    background: "rgba(148, 163, 184, 0.26)",
+    cursor: "pointer",
+  },
+
+  dotActive: {
+    width: "48px",
+    background: gradientA,
+  },
+
+  heroVisual: {
+    minWidth: 0,
+  },
+
+  illustrationShell: {
+    position: "relative",
+    minHeight: "660px",
+    borderRadius: "36px",
+    border: `1px solid ${line}`,
+    background:
+      "linear-gradient(180deg, rgba(15,23,42,0.82), rgba(8,15,32,0.84))",
+    boxShadow:
+      "0 32px 80px rgba(2, 8, 23, 0.38), inset 0 1px 0 rgba(255,255,255,0.04)",
+    overflow: "hidden",
+  },
+
+  illustrationGlowA: {
+    position: "absolute",
+    top: "5%",
+    right: "5%",
+    width: "260px",
+    height: "260px",
+    borderRadius: "999px",
+    background: "radial-gradient(circle, rgba(56,189,248,0.26), transparent 68%)",
+    filter: "blur(12px)",
+  },
+
+  illustrationGlowB: {
+    position: "absolute",
+    left: "8%",
+    bottom: "10%",
+    width: "220px",
+    height: "220px",
+    borderRadius: "999px",
+    background: "radial-gradient(circle, rgba(168,85,247,0.18), transparent 68%)",
+    filter: "blur(12px)",
+  },
+
+  illustrationGrid: {
+    position: "absolute",
+    inset: 0,
+    opacity: 0.08,
+    backgroundImage:
+      "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
+    backgroundSize: "46px 46px",
+  },
+
+  routerCard: {
+    position: "absolute",
+    top: "18%",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "270px",
+    height: "150px",
+    borderRadius: "28px",
+    background:
+      "linear-gradient(180deg, rgba(17,24,39,0.92), rgba(15,23,42,0.85))",
+    border: `1px solid rgba(148,163,184,0.18)`,
+    boxShadow: "0 20px 60px rgba(2, 8, 23, 0.42)",
+    overflow: "hidden",
+  },
+
+  routerTopLine: {
+    width: "100%",
+    height: "6px",
+    background: gradientA,
+  },
+
+  routerBody: {
+    height: "calc(100% - 6px)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "16px",
+  },
+
+  routerDot: {
+    width: "14px",
+    height: "14px",
+    borderRadius: "999px",
+    background: "#f8fafc",
+    boxShadow: "0 0 18px rgba(255,255,255,0.32)",
+  },
+
+  wifiArcLarge: {
+    position: "absolute",
+    top: "39%",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "260px",
+    height: "130px",
+    borderTopLeftRadius: "200px",
+    borderTopRightRadius: "200px",
+    border: "16px solid transparent",
+    borderTopColor: "#7dd3fc",
+    opacity: 0.95,
+  },
+
+  wifiArcMedium: {
+    position: "absolute",
+    top: "46%",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "170px",
+    height: "84px",
+    borderTopLeftRadius: "160px",
+    borderTopRightRadius: "160px",
+    border: "14px solid transparent",
+    borderTopColor: "#c084fc",
+    opacity: 0.95,
+  },
+
+  wifiArcSmall: {
+    position: "absolute",
+    top: "53%",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "86px",
+    height: "42px",
+    borderTopLeftRadius: "120px",
+    borderTopRightRadius: "120px",
+    border: "12px solid transparent",
+    borderTopColor: "#ffffff",
+    opacity: 0.95,
+  },
+
+  infoChipLeft: {
+    position: "absolute",
+    left: "5%",
+    top: "48%",
+    minWidth: "136px",
+    padding: "16px 18px",
+    borderRadius: "20px",
+    background: "rgba(15, 23, 42, 0.72)",
+    border: `1px solid ${line}`,
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    boxShadow: "0 18px 40px rgba(2,8,23,0.26)",
+  },
+
+  infoChipRight: {
+    position: "absolute",
+    right: "5%",
+    top: "42%",
+    minWidth: "136px",
+    padding: "16px 18px",
+    borderRadius: "20px",
+    background: "rgba(15, 23, 42, 0.72)",
+    border: `1px solid ${line}`,
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    boxShadow: "0 18px 40px rgba(2,8,23,0.26)",
+  },
+
+  infoChipKicker: {
+    color: textMute,
+    fontSize: "0.78rem",
+    textTransform: "uppercase",
+    letterSpacing: "0.14em",
+    fontWeight: 800,
+  },
+
+  bottomInfoBar: {
+    position: "absolute",
+    left: "5%",
+    right: "5%",
+    bottom: "5%",
+    display: "grid",
+    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+    gap: "14px",
+  },
+
+  bottomInfoItem: {
+    minHeight: "112px",
+    borderRadius: "22px",
+    background:
+      "linear-gradient(180deg, rgba(30,41,59,0.72), rgba(15,23,42,0.82))",
+    border: `1px solid ${line}`,
+    padding: "18px 20px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    boxShadow: "0 18px 40px rgba(2,8,23,0.22)",
+  },
+
+  bottomInfoLabel: {
+    color: textMute,
+    fontSize: "0.78rem",
+    textTransform: "uppercase",
+    letterSpacing: "0.14em",
+    fontWeight: 800,
+  },
+
+  section: {
+    padding: "56px 0 18px",
+  },
+
+  sectionHead: {
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    gap: "18px",
+    flexWrap: "wrap",
+    marginBottom: "24px",
+  },
+
+  sectionEyebrow: {
+    color: "#7dd3fc",
+    fontWeight: 900,
+    letterSpacing: "0.18em",
+    textTransform: "uppercase",
+    fontSize: "0.78rem",
+    marginBottom: "10px",
+  },
+
+  sectionTitle: {
+    margin: 0,
+    fontSize: "clamp(2rem, 4vw, 3rem)",
+    lineHeight: 1.02,
+    letterSpacing: "-0.05em",
+    maxWidth: "760px",
+  },
+
+  sectionText: {
+    margin: 0,
+    maxWidth: "560px",
+    color: textSoft,
+    fontSize: "1.02rem",
+    lineHeight: 1.75,
+  },
+
+  cardsGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+    gap: "18px",
+  },
+
+  planCard: {
+    position: "relative",
+    minHeight: "360px",
+    borderRadius: "28px",
+    padding: "22px",
+    border: `1px solid ${line}`,
+    background: glass,
+    boxShadow: "0 20px 52px rgba(2,8,23,0.24)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+    overflow: "hidden",
+  },
+
+  planCardViolet: {
+    background:
+      "linear-gradient(180deg, rgba(29, 19, 57, 0.86), rgba(15, 23, 42, 0.9))",
+  },
+
+  planCardBlue: {
+    background:
+      "linear-gradient(180deg, rgba(16, 35, 58, 0.86), rgba(15, 23, 42, 0.9))",
+  },
+
+  planCardCyan: {
+    background:
+      "linear-gradient(180deg, rgba(9, 44, 56, 0.86), rgba(15, 23, 42, 0.9))",
+  },
+
+  planTop: {
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    gap: "12px",
+  },
+
+  planNameWrap: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+  },
+
+  planBadge: {
+    width: "fit-content",
+    padding: "8px 12px",
+    borderRadius: "999px",
+    background: "rgba(255,255,255,0.08)",
+    border: `1px solid ${line}`,
+    color: "#cbd5e1",
+    fontSize: "0.76rem",
+    fontWeight: 900,
+    textTransform: "uppercase",
+    letterSpacing: "0.14em",
+  },
+
+  planName: {
+    margin: 0,
+    fontSize: "1.42rem",
+    fontWeight: 900,
+    letterSpacing: "-0.04em",
+  },
+
+  planPrice: {
+    fontSize: "2.5rem",
+    fontWeight: 950,
+    letterSpacing: "-0.06em",
+  },
+
+  planSpeed: {
+    color: "#7dd3fc",
+    fontWeight: 900,
+    fontSize: "1.08rem",
+  },
+
+  planList: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+    marginTop: "4px",
+  },
+
+  planListItem: {
+    minHeight: "58px",
+    borderRadius: "16px",
+    background: "rgba(255,255,255,0.04)",
+    border: `1px solid rgba(255,255,255,0.06)`,
+    padding: "12px 14px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "12px",
+    color: textSoft,
+    fontSize: "0.92rem",
+  },
+
+  planBtn: {
+    marginTop: "auto",
+    minHeight: "52px",
+    borderRadius: "16px",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textDecoration: "none",
+    fontWeight: 900,
+    color: "#08111f",
+    background: gradientB,
+    boxShadow: "0 14px 34px rgba(56,189,248,0.24)",
+  },
+
+  devicesGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+    gap: "18px",
+  },
+
+  deviceCard: {
+    minHeight: "220px",
+    borderRadius: "28px",
+    padding: "22px",
+    border: `1px solid ${line}`,
+    background:
+      "linear-gradient(180deg, rgba(15,23,42,0.82), rgba(11,18,32,0.88))",
+    boxShadow: "0 20px 52px rgba(2,8,23,0.2)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "14px",
+  },
+
+  deviceHeader: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "12px",
+  },
+
+  deviceTag: {
+    padding: "8px 12px",
+    borderRadius: "999px",
+    fontSize: "0.74rem",
+    fontWeight: 900,
+    letterSpacing: "0.12em",
+    textTransform: "uppercase",
+    color: "#cbd5e1",
+    background: "rgba(255,255,255,0.06)",
+    border: `1px solid ${line}`,
+  },
+
+  deviceName: {
+    margin: 0,
+    fontSize: "1.36rem",
+    fontWeight: 900,
+    letterSpacing: "-0.04em",
+  },
+
+  deviceDesc: {
+    margin: 0,
+    color: textSoft,
+    lineHeight: 1.75,
+    fontSize: "1rem",
+  },
+
+  contactGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+    gap: "18px",
+  },
+
+  contactCard: {
+    minHeight: "210px",
+    borderRadius: "28px",
+    padding: "22px",
+    textDecoration: "none",
+    color: textMain,
+    border: `1px solid ${line}`,
+    background:
+      "linear-gradient(180deg, rgba(15,23,42,0.82), rgba(9,16,29,0.9))",
+    boxShadow: "0 20px 52px rgba(2,8,23,0.2)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "14px",
+  },
+
+  contactCardTop: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "12px",
+  },
+
+  contactTitle: {
+    fontSize: "0.84rem",
+    color: textMute,
+    textTransform: "uppercase",
+    letterSpacing: "0.18em",
+    fontWeight: 900,
+  },
+
+  contactValue: {
+    fontSize: "1.42rem",
+    lineHeight: 1.2,
+    letterSpacing: "-0.04em",
+  },
+
+  contactHint: {
+    margin: 0,
+    color: textSoft,
+    lineHeight: 1.7,
+  },
+
+  smallIconWrap: {
+    width: "48px",
+    height: "48px",
+    borderRadius: "16px",
+    display: "grid",
+    placeItems: "center",
+    background: "rgba(255,255,255,0.05)",
+    border: `1px solid ${line}`,
+    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
+  },
+
+  smallIconInner: {
+    fontSize: "1.1rem",
+    fontWeight: 900,
+    color: "#7dd3fc",
+  },
+
+  socialRail: {
+    position: "fixed",
+    right: "18px",
+    bottom: "18px",
+    zIndex: 60,
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+  },
+
+  socialBtn: {
+    width: "54px",
+    height: "54px",
+    borderRadius: "18px",
+    display: "grid",
+    placeItems: "center",
+    textDecoration: "none",
+    color: textMain,
+    background: "rgba(15,23,42,0.82)",
+    border: `1px solid ${line}`,
+    backdropFilter: "blur(14px)",
+    boxShadow: "0 16px 34px rgba(2,8,23,0.32)",
+  },
+
+  socialIcon: {
+    fontSize: "1.18rem",
+    fontWeight: 900,
+  },
+
+  modalOverlay: {
+    position: "fixed",
+    inset: 0,
+    zIndex: 90,
+    background: "rgba(2, 6, 23, 0.6)",
+    backdropFilter: "blur(14px)",
+    display: "grid",
+    placeItems: "center",
+    padding: "16px",
+  },
+
+  modalCard: {
+    width: "min(100%, 470px)",
+    borderRadius: "28px",
+    padding: "22px",
+    background:
+      "linear-gradient(180deg, rgba(8,15,32,0.96), rgba(6,11,24,0.96))",
+    border: `1px solid rgba(148,163,184,0.2)`,
+    boxShadow: "0 30px 80px rgba(2,8,23,0.45)",
+  },
+
+  modalTopBar: {
+    width: "100%",
+    height: "4px",
+    borderRadius: "999px",
+    background: gradientA,
+    marginBottom: "18px",
+  },
+
+  modalEyebrow: {
+    color: "#7dd3fc",
+    fontSize: "0.78rem",
+    fontWeight: 900,
+    letterSpacing: "0.24em",
+    textTransform: "uppercase",
+    marginBottom: "10px",
+  },
+
+  modalTitle: {
+    margin: 0,
+    fontSize: "3rem",
+    lineHeight: 0.95,
+    letterSpacing: "-0.07em",
+  },
+
+  modalText: {
+    marginTop: "8px",
+    marginBottom: "18px",
+    color: textSoft,
+  },
+
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+  },
+
+  label: {
+    fontSize: "0.92rem",
+    fontWeight: 800,
+    color: "#e2e8f0",
+    marginTop: "6px",
+  },
+
+  input: {
+    minHeight: "52px",
+    borderRadius: "18px",
+    border: `1px solid rgba(59,130,246,0.22)`,
+    padding: "0 16px",
+    outline: "none",
+    background: "rgba(15,23,42,0.78)",
+    color: textMain,
+    fontSize: "1rem",
+    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
+  },
+
+  passwordWrap: {
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+  },
+
+  inputPassword: {
+    width: "100%",
+    minHeight: "52px",
+    borderRadius: "18px",
+    border: `1px solid rgba(59,130,246,0.22)`,
+    padding: "0 92px 0 16px",
+    outline: "none",
+    background: "rgba(15,23,42,0.78)",
+    color: textMain,
+    fontSize: "1rem",
+    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
+  },
+
+  showBtn: {
+    position: "absolute",
+    right: "8px",
+    height: "38px",
+    padding: "0 14px",
+    borderRadius: "12px",
+    border: `1px solid rgba(148,163,184,0.18)`,
+    background: "rgba(255,255,255,0.06)",
+    color: textMain,
+    fontWeight: 800,
+    cursor: "pointer",
+  },
+
+  errorText: {
+    marginTop: "6px",
+    color: "#fca5a5",
+    fontWeight: 700,
+    fontSize: "0.92rem",
+  },
+
+  submitBtn: {
+    marginTop: "10px",
+    minHeight: "54px",
+    border: 0,
+    borderRadius: "18px",
+    background: gradientB,
+    color: "#08111f",
+    fontWeight: 900,
+    fontSize: "1.02rem",
+    cursor: "pointer",
+    boxShadow: "0 16px 40px rgba(96,165,250,0.26)",
+  },
+};
+
+function applyResponsiveStyles() {
+  if (typeof window === "undefined") return;
+  const width = window.innerWidth;
+
+  if (width < 1180) {
+    styles.heroGrid.gridTemplateColumns = "1fr";
+    styles.cardsGrid.gridTemplateColumns = "repeat(2, minmax(0, 1fr))";
+    styles.devicesGrid.gridTemplateColumns = "repeat(2, minmax(0, 1fr))";
+    styles.contactGrid.gridTemplateColumns = "repeat(2, minmax(0, 1fr))";
+    styles.heroMetaGrid.gridTemplateColumns = "repeat(3, minmax(0, 1fr))";
+  } else {
+    styles.heroGrid.gridTemplateColumns = "minmax(0, 1.02fr) minmax(420px, 0.98fr)";
+    styles.cardsGrid.gridTemplateColumns = "repeat(3, minmax(0, 1fr))";
+    styles.devicesGrid.gridTemplateColumns = "repeat(4, minmax(0, 1fr))";
+    styles.contactGrid.gridTemplateColumns = "repeat(3, minmax(0, 1fr))";
+    styles.heroMetaGrid.gridTemplateColumns = "repeat(3, minmax(0, 1fr))";
+  }
+
+  if (width < 760) {
+    styles.headerInner.width = "min(100%, calc(100% - 20px))";
+    styles.main.width = "min(100%, calc(100% - 20px))";
+    styles.heroSection.padding = "26px 0 16px";
+    styles.heroTitle.fontSize = "clamp(2.4rem, 12vw, 4rem)";
+    styles.heroDescription.fontSize = "1rem";
+    styles.heroMetaGrid.gridTemplateColumns = "1fr";
+    styles.cardsGrid.gridTemplateColumns = "1fr";
+    styles.devicesGrid.gridTemplateColumns = "1fr";
+    styles.contactGrid.gridTemplateColumns = "1fr";
+    styles.bottomInfoBar.gridTemplateColumns = "1fr";
+    styles.illustrationShell.minHeight = "540px";
+    styles.socialRail.right = "12px";
+    styles.socialRail.bottom = "12px";
+  }
 }
+
+applyResponsiveStyles();
+window.addEventListener("resize", applyResponsiveStyles);
