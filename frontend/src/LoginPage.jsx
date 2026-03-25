@@ -97,25 +97,27 @@ export default function LoginPage({ onLogin }) {
       <div style={styles.shell}>
         <section style={styles.hero}>
           <div style={styles.heroAccent} />
-          <div style={styles.heroKicker}>Operations Layer</div>
-          <h1 style={styles.heroTitle}>Network Control</h1>
+          <div style={styles.heroKicker}>NoComment Network</div>
+          <h1 style={styles.heroTitle}>NoComment Internet</h1>
           <p style={styles.heroText}>
-            Secure access to monitoring, visibility, and control for the active
-            infrastructure environment.
+            Fast • Stable • Unlimited Night
           </p>
 
-          <div style={styles.heroStatRow}>
-            <div style={styles.heroStatCard}>
-              <div style={styles.heroStatLabel}>Status</div>
-              <div style={styles.heroStatValue}>Protected</div>
-            </div>
-            <div style={styles.heroStatCard}>
-              <div style={styles.heroStatLabel}>Access</div>
-              <div style={styles.heroStatValue}>Restricted</div>
-            </div>
+          <div style={styles.heroMeta}>
+            <div style={styles.heroMetaItem}>📍 Jabal Mohssen</div>
+            <div style={styles.heroMetaItem}>📞 70411518</div>
+          </div>
+
+          <div style={styles.heroActions}>
+            <button type="button" style={styles.heroPrimaryBtn}>
+              View Plans
+            </button>
+
+            <a href="tel:70411518" style={styles.heroCallBtn}>
+              Call Now
+            </a>
           </div>
         </section>
-
         {showLogin && (<section style={styles.cardWrap}>
           <div style={styles.cardGlow} />
           <div style={styles.card}>
@@ -356,6 +358,64 @@ function getStyles(isMobile) {
       fontWeight: 800,
     },
 
+    heroMeta: {
+      display: "flex",
+      flexDirection: isMobile ? "column" : "row",
+      gap: "10px",
+      marginTop: "26px",
+      marginBottom: "26px",
+    },
+
+    heroMetaItem: {
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "8px",
+      padding: "12px 14px",
+      borderRadius: "14px",
+      background: "rgba(255,255,255,.04)",
+      border: "1px solid rgba(148,163,184,.10)",
+      color: "#dbeafe",
+      fontSize: "14px",
+      fontWeight: 700,
+    },
+
+    heroActions: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "12px",
+      marginTop: "4px",
+    },
+
+    heroPrimaryBtn: {
+      height: "50px",
+      padding: "0 18px",
+      borderRadius: "14px",
+      border: "none",
+      background: "linear-gradient(135deg, #67e8f9 0%, #38bdf8 48%, #818cf8 100%)",
+      color: "#04111f",
+      fontSize: "14px",
+      fontWeight: 900,
+      letterSpacing: ".02em",
+      cursor: "pointer",
+      boxShadow: "0 10px 22px rgba(56,189,248,.16)",
+    },
+
+    heroCallBtn: {
+      height: "50px",
+      padding: "0 18px",
+      borderRadius: "14px",
+      border: "1px solid rgba(148,163,184,.18)",
+      background: "rgba(255,255,255,.04)",
+      color: "#f8fafc",
+      fontSize: "14px",
+      fontWeight: 800,
+      letterSpacing: ".02em",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      textDecoration: "none",
+      backdropFilter: "blur(8px)",
+    },
     cardWrap: {
       position: "relative",
       display: "flex",
@@ -493,6 +553,8 @@ function getStyles(isMobile) {
     },
   };
 }
+
+
 
 
 
