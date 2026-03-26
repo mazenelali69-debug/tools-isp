@@ -1,295 +1,503 @@
-﻿import React, { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 
-const LINKS = [
-
-  // CORE
-  { id: "core", name: "NOC Core", ip: "127.0.0.1", community: "public", ifIndex: 1, x: 50, y: 42 },
-
-  // DISTRIBUTION (TOP)
-  { id: "redwan", name: "Redwan", ip: "88.88.88.4", community: "public", ifIndex: 3, x: 18, y: 18 },
-  { id: "fadel", name: "Fadel Center", ip: "88.88.88.5", community: "public", ifIndex: 4, x: 38, y: 14 },
-  { id: "pharmacy", name: "Pharmacy", ip: "88.88.88.9", community: "public", ifIndex: 6, x: 62, y: 14 },
-  { id: "c5c", name: "C5C", ip: "88.88.88.10", community: "public", ifIndex: 5, x: 82, y: 18 },
-
-  // ACCESS (BOTTOM)
-  { id: "davo", name: "Davo", ip: "88.88.88.15", community: "public", ifIndex: 5, x: 22, y: 72 },
-  { id: "fastweb1", name: "FastWeb-1", ip: "10.88.88.111", community: "public", ifIndex: 6, x: 40, y: 76 },
-  { id: "fastweb2", name: "FastWeb-2", ip: "10.88.88.111", community: "public", ifIndex: 2, x: 60, y: 76 },
-  { id: "dalla", name: "Dalla", ip: "10.88.88.111", community: "public", ifIndex: 3, x: 78, y: 72 }
-
-];
-
-const EDGES = [
-  ["redwan", "fadel"],
-  ["fadel", "pharmacy"],
-  ["pharmacy", "c5c"],
-  ["redwan", "davo"],
-  ["davo", "fastweb1"],
-  ["fastweb1", "fastweb2"],
-  ["fastweb2", "dalla"],
-  ["fadel", "fastweb1"],
-  ["pharmacy", "fastweb2"]
-];
-
-function num(v) {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : 0;
+function fmt(v, suffix = "") {
+  return v == null || Number.isNaN(Number(v)) ? "--" : `${Number(v).toFixed(1)}${suffix}`;
 }
 
-function fmtMbps(v) {
-  const n = num(v);
-  if (n >= 1000) return (n / 1000).toFixed(2) + " Gbps";
-  return n.toFixed(2) + " Mbps";
+function fmtWhole(v, suffix = "") {
+  return v == null || Number.isNaN(Number(v)) ? "--" : `${Math.round(Number(v))}${suffix}`;
 }
 
-function fmtPing(v) {
-  const n = Number(v);
-  return Number.isFinite(n) ? Math.round(n) + " ms" : "timeout";
+function gaugeColor(v) {
+  const n = Number(v || 0);
+  if (n >= 80) return "#6cff7e";
+  if (n >= 60) return "#cce85f";
+  if (n >= 40) return "#ffbe55";
+  return "#ff6672";
 }
 
-function toneByTraffic(v) {
-  const n = num(v);
-  if (n >= 180) return "critical";
-  if (n >= 110) return "high";
-  if (n >= 45) return "warn";
-  return "healthy";
+function arcPath(value, radius = 60) {
+  const clamped = Math.max(0, Math.min(100, Number(value || 0)));
+  const start = 180;
+  const end = 180 + (clamped / 100) * 180;
+  const cx = 90;
+  const cy = 90;
+
+  const polar = (a) => {
+    const rad = (a - 90) * Math.PI / 180;
+    return { x: cx + radius * Math.cos(rad), y: cy + radius * Math.sin(rad) };
+  };
+
+  const s = polar(start);
+  const e = polar(end);
+  const large = end - start > 180 ? 1 : 0;
+
+  return `M ${s.x} ${s.y} A ${radius} ${radius} 0 ${large} 1 ${e.x} ${e.y}`;
 }
 
-function useMapData() {
-  const [rows, setRows] = useState(() =>
-    LINKS.map(x => ({
-      ...x,
-      rxMbps: 0,
-      txMbps: 0,
-      totalMbps: 0,
-      pingMs: null,
-      alive: false,
-      packetLoss: 0
-    }))
-  );
-
-  useEffect(() => {
-    let dead = false;
-    const pingState = new Map();
-
-    async function loadTraffic() {
-      try {
-        const res = await fetch("/api/eth/snapshot", { cache: "no-store" });
-        const js = await res.json();
-
-        if (!res.ok || !js?.ok || !Array.isArray(js?.data)) {
-          throw new Error(js?.error || `HTTP ${res.status}`);
-        }
-
-        const byId = new Map(
-          js.data.map((row) => [String(row?.id || "").toLowerCase(), row])
-        );
-
-        const next = LINKS.map((t) => {
-          const row = js.data.find(x => x.ip === t.ip);
-
-          const rx = num(row?.rxMbps);
-          const tx = num(row?.txMbps);
-
-          return {
-            id: t.id,
-            rxMbps: rx,
-            txMbps: tx,
-            totalMbps: rx + tx
-          };
-        });
-
-        if (dead) return;
-
-        setRows(prev => prev.map(r => {
-          const m = next.find(x => x.id === r.id);
-          return m ? { ...r, ...m } : r;
-        }));
-      } catch (e) {
-        console.error("NetworkMap loadTraffic failed:", e?.message || e);
-
-        if (dead) return;
-
-        setRows(prev => prev.map(r => ({
-          ...r,
-          rxMbps: 0,
-          txMbps: 0,
-          totalMbps: 0
-        })));
-      }
-    }
-
-    async function loadPing() {
-      const next = await Promise.all(LINKS.map(async (t) => {
-        try {
-          const url = `/api/ping/once?ip=${encodeURIComponent(t.ip)}`;
-          const res = await fetch(url, { cache: "no-store" });
-          const js = await res.json();
-
-          if (!res.ok || !js?.ok) throw new Error(js?.error || `HTTP ${res.status}`);
-
-          const alive = !!js?.alive;
-          const timeMs = Number.isFinite(Number(js?.timeMs)) ? Number(js.timeMs) : null;
-
-          const prev = pingState.get(t.id) || { total: 0, loss: 0 };
-          const total = prev.total + 1;
-          const loss = prev.loss + (alive ? 0 : 1);
-          pingState.set(t.id, { total, loss });
-
-          return {
-            id: t.id,
-            alive,
-            pingMs: alive ? timeMs : null,
-            packetLoss: total > 0 ? (loss * 100 / total) : 0
-          };
-        } catch {
-          const prev = pingState.get(t.id) || { total: 0, loss: 0 };
-          const total = prev.total + 1;
-          const loss = prev.loss + 1;
-          pingState.set(t.id, { total, loss });
-
-          return {
-            id: t.id,
-            alive: false,
-            pingMs: null,
-            packetLoss: total > 0 ? (loss * 100 / total) : 100
-          };
-        }
-      }));
-
-      if (dead) return;
-
-      setRows(prev => prev.map(r => {
-        const m = next.find(x => x.id === r.id);
-        return m ? { ...r, ...m } : r;
-      }));
-    }
-
-    loadTraffic();
-    loadPing();
-
-    const t1 = setInterval(loadTraffic, 2200);
-    const t2 = setInterval(loadPing, 2600);
-
-    return () => {
-      dead = true;
-      clearInterval(t1);
-      clearInterval(t2);
-    };
-  }, []);
-
-  return rows;
-}
-
-export default function NetworkMapPage() {
-  const rows = useMapData();
-
-  const byId = useMemo(() => {
-    const m = new Map();
-    for (const r of rows) m.set(r.id, r);
-    return m;
-  }, [rows]);
-
-  const stats = useMemo(() => {
-    const total = rows.reduce((s, x) => s + num(x.totalMbps), 0);
-    const up = rows.filter(x => x.alive).length;
-    const alert = rows.filter(x => num(x.packetLoss) > 0).length;
-    return { total, up, alert };
-  }, [rows]);
-
+function Gauge({ title, value, subtitle }) {
+  const c = gaugeColor(value);
   return (
-    <div className="nmap-page">
-      <section className="nmap-hero">
-        <div>
-          <div className="nmap-hero__eyebrow">Topology live view</div>
-          <div className="nmap-hero__title">Network Map</div>
-          <div className="nmap-hero__sub">
-            Live ISP map for your 8 monitored links with traffic and ping state.
-          </div>
-        </div>
-
-        <div className="nmap-hero__stats">
-          <div className="nmap-stat">
-            <span>Total traffic</span>
-            <strong>{fmtMbps(stats.total)}</strong>
-          </div>
-          <div className="nmap-stat">
-            <span>Alive nodes</span>
-            <strong>{stats.up} / {rows.length}</strong>
-          </div>
-          <div className={"nmap-stat " + (stats.alert > 0 ? "is-alert" : "")}>
-            <span>Loss alerts</span>
-            <strong>{stats.alert}</strong>
-          </div>
-        </div>
-      </section>
-
-      <section className="nmap-board">
-        {EDGES.map(([a, b], i) => {
-          const A = byId.get(a);
-          const B = byId.get(b);
-          if (!A || !B) return null;
-
-          const mx = (A.x + B.x) / 2;
-          const my = (A.y + B.y) / 2;
-          const dx = B.x - A.x;
-          const dy = B.y - A.y;
-          const len = Math.sqrt((dx * dx) + (dy * dy));
-          const ang = Math.atan2(dy, dx) * 180 / Math.PI;
-          const active = A.alive && B.alive;
-          const hot = num(A.totalMbps) > 120 || num(B.totalMbps) > 120;
-
-          return (
-            <div
-              key={i}
-              className={`nmap-edge ${active ? "is-up" : "is-down"} ${hot ? "is-hot" : ""}`}
-              style={{
-                left: `${mx}%`,
-                top: `${my}%`,
-                width: `${len}%`,
-                transform: `translate(-50%, -50%) rotate(${ang}deg)`
-              }}
-            />
-          );
-        })}
-
-        {rows.map((row) => {
-          const tone = toneByTraffic(row.totalMbps);
-          const loss = num(row.packetLoss);
-
-          return (
-            <div
-              key={row.id}
-              className={`nmap-node is-${tone} ${row.alive ? "is-up" : "is-down"} ${loss > 0 ? "is-loss" : ""}`}
-              style={{ left: `${row.x}%`, top: `${row.y}%` }}
-            >
-              <div className="nmap-node__dot" />
-              <div className="nmap-node__card">
-                <div className="nmap-node__name">{row.name}</div>
-                <div className="nmap-node__traffic">{fmtMbps(row.totalMbps)}</div>
-                <div className={`nmap-node__ping ${loss > 0 ? "is-loss" : ""}`}>
-                  {fmtPing(row.pingMs)}
-                  {loss > 0 ? ` • PL ${Math.round(loss)}%` : ""}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </section>
+    <div style={styles.gaugeCard}>
+      <svg viewBox="0 0 180 112" style={styles.gaugeSvg}>
+        <path d="M 30 90 A 60 60 0 0 1 150 90" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="16" strokeLinecap="round" />
+        <path d={arcPath(value)} fill="none" stroke={c} strokeWidth="16" strokeLinecap="round" style={{ filter: `drop-shadow(0 0 10px ${c})` }} />
+        <text x="90" y="70" textAnchor="middle" style={styles.gaugeTitle}>{title}</text>
+        <text x="90" y="97" textAnchor="middle" style={styles.gaugeValue}>{fmtWhole(value, "%")}</text>
+      </svg>
+      <div style={styles.gaugeSub}>{subtitle}</div>
     </div>
   );
 }
 
+function UsageBar({ label, value }) {
+  const n = Math.max(0, Math.min(100, Number(value || 0)));
+  const color = gaugeColor(n);
+  return (
+    <div style={styles.usageRow}>
+      <div style={styles.usageLabel}>{label}</div>
+      <div style={styles.usageTrack}>
+        <div style={{ ...styles.usageFill, width: `${n}%`, background: color, boxShadow: `0 0 8px ${color}` }} />
+      </div>
+      <div style={styles.usagePct}>{fmtWhole(n, "%")}</div>
+    </div>
+  );
+}
 
+function TopCard({ item }) {
+  return (
+    <div style={styles.topCard}>
+      <div style={styles.topHead}>
+        <div>
+          <div style={styles.topTitle}>{item.name}</div>
+          <div style={styles.topSub}>{item.ip}</div>
+        </div>
+        <div style={{ ...styles.topState, color: item.status === "UP" ? "#6cff7e" : "#ff6672" }}>{item.status}</div>
+      </div>
 
+      <div style={styles.topMetricRow}>
+        <div style={styles.topMetric}>
+          <div style={styles.topMetricLabel}>Ping</div>
+          <div style={styles.topMetricValue}>{fmt(item.pingMs, " ms")}</div>
+        </div>
+        <div style={styles.topMetric}>
+          <div style={styles.topMetricLabel}>Jitter</div>
+          <div style={styles.topMetricValue}>{fmt(item.jitterMs, " ms")}</div>
+        </div>
+        <div style={styles.topMetric}>
+          <div style={styles.topMetricLabel}>Loss</div>
+          <div style={styles.topMetricValue}>{fmtWhole(item.packetLossPct, "%")}</div>
+        </div>
+      </div>
 
+      <UsageBar label="health" value={item.health} />
+    </div>
+  );
+}
 
+function DeviceCard({ item }) {
+  const hasCpu = item.cpu != null;
+  const load = hasCpu ? Math.min(100, Math.round(item.cpu * 1.9)) : item.health;
 
+  return (
+    <div style={styles.deviceCard}>
+      <div style={styles.deviceHead}>
+        <div>
+          <div style={styles.deviceName}>{item.name}</div>
+          <div style={styles.deviceIp}>{item.ip}</div>
+        </div>
+        <div style={{ ...styles.deviceStatus, color: item.status === "UP" ? "#6cff7e" : "#ff6672" }}>
+          {item.status}
+        </div>
+      </div>
 
+      <div style={styles.deviceBody}>
+        <div style={styles.leftCol}>
+          <div style={styles.metaRow}><span style={styles.metaLabel}>Uptime</span><span style={styles.metaValue}>{item.uptime || "N/A"}</span></div>
+          <div style={styles.metaRow}><span style={styles.metaLabel}>Ping</span><span style={styles.metaValue}>{fmt(item.pingMs, " ms")}</span></div>
+          <div style={styles.metaRow}><span style={styles.metaLabel}>Jitter</span><span style={styles.metaValue}>{fmt(item.jitterMs, " ms")}</span></div>
+          <div style={styles.metaRow}><span style={styles.metaLabel}>Loss</span><span style={styles.metaValue}>{fmtWhole(item.packetLossPct, "%")}</span></div>
 
+          <div style={styles.barsWrap}>
+            <UsageBar label="Health" value={item.health} />
+            <UsageBar label="CPU" value={hasCpu ? item.cpu : 0} />
+            <UsageBar label="Load" value={load} />
+          </div>
+        </div>
 
+        <div style={styles.rightCol}>
+          <Gauge title="Health" value={item.health} subtitle="status quality" />
+          <Gauge title={hasCpu ? "CPU" : "Signal"} value={hasCpu ? item.cpu : item.health} subtitle={hasCpu ? "processor load" : "fallback view"} />
+        </div>
+      </div>
+    </div>
+  );
+}
 
+export default function NetworkMapPage() {
+  const [services, setServices] = useState([]);
+  const [devices, setDevices] = useState([]);
+  const [errorText, setErrorText] = useState("");
+  const [lastUpdate, setLastUpdate] = useState("");
 
+  async function load() {
+    try {
+      const res = await fetch("/api/mikrotik/uptime", { cache: "no-store" });
+      const js = await res.json();
+      if (!res.ok || !js?.ok) throw new Error(js?.error || "Failed to load dashboard");
 
+      const sortedDevices = Array.isArray(js.devices) ? [...js.devices].sort((a, b) => {
+        if (a.top && !b.top) return -1;
+        if (!a.top && b.top) return 1;
+        if (a.name === "AviatLink") return -1;
+        if (b.name === "AviatLink") return 1;
+        return 0;
+      }) : [];
 
+      setServices(Array.isArray(js.services) ? js.services : []);
+      setDevices(sortedDevices);
+      setLastUpdate(new Date().toLocaleTimeString());
+      setErrorText("");
+    } catch (e) {
+      setServices([]);
+      setDevices([]);
+      setErrorText(e?.message || "Failed to load dashboard");
+    }
+  }
 
+  useEffect(() => {
+    load();
+    const t = setInterval(load, 15000);
+    return () => clearInterval(t);
+  }, []);
+
+  const totals = useMemo(() => {
+    const all = [...services, ...devices];
+    return {
+      total: all.length,
+      up: all.filter(x => x.status === "UP").length,
+      down: all.filter(x => x.status !== "UP").length
+    };
+  }, [services, devices]);
+
+  return (
+    <div style={styles.page}>
+      <div style={styles.hero}>
+        <div>
+          <div style={styles.eyebrow}>MikroTik uptime view</div>
+          <div style={styles.heroTitle}>MikroTik NOC Dashboard</div>
+          <div style={styles.heroSub}>Real uptime + CPU + service health · Last update: {lastUpdate || "-"}</div>
+        </div>
+
+        <div style={styles.heroStats}>
+          <div style={styles.statBox}><div style={styles.statLabel}>TOTAL</div><div style={styles.statValue}>{totals.total}</div></div>
+          <div style={styles.statBox}><div style={styles.statLabel}>UP</div><div style={{ ...styles.statValue, color: "#6cff7e" }}>{totals.up}</div></div>
+          <div style={styles.statBox}><div style={styles.statLabel}>DOWN</div><div style={{ ...styles.statValue, color: "#ff6672" }}>{totals.down}</div></div>
+        </div>
+      </div>
+
+      {errorText ? <div style={styles.errorBox}>{errorText}</div> : null}
+
+      <div style={styles.topGrid}>
+        {services.map((item) => <TopCard key={item.name} item={item} />)}
+      </div>
+
+      <div style={styles.deviceGrid}>
+        {devices.map((item) => <DeviceCard key={`${item.name}-${item.ip}`} item={item} />)}
+      </div>
+    </div>
+  );
+}
+
+const styles = {
+  page: {
+    padding: 14,
+    color: "#ecffff",
+    minHeight: "100%",
+    background: "linear-gradient(180deg, rgba(3,11,18,0.18), rgba(2,8,15,0))"
+  },
+
+  hero: {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: 12,
+    flexWrap: "wrap",
+    alignItems: "flex-start",
+    marginBottom: 10
+  },
+
+  eyebrow: {
+    fontSize: 11,
+    color: "#66deff",
+    textTransform: "uppercase",
+    letterSpacing: "0.22em",
+    marginBottom: 5
+  },
+
+  heroTitle: {
+    fontSize: 24,
+    fontWeight: 900,
+    lineHeight: 1.1,
+    color: "#ffffff"
+  },
+
+  heroSub: {
+    marginTop: 6,
+    fontSize: 12,
+    color: "#9ec6d0"
+  },
+
+  heroStats: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, minmax(110px, 1fr))",
+    gap: 8,
+    minWidth: 360
+  },
+
+  statBox: {
+    padding: "11px 13px",
+    borderRadius: 10,
+    background: "linear-gradient(180deg, rgba(8,25,36,0.95), rgba(4,14,20,0.98))",
+    border: "1px solid rgba(79,185,224,0.18)"
+  },
+
+  statLabel: {
+    fontSize: 10,
+    color: "#88adb8",
+    textTransform: "uppercase",
+    letterSpacing: "0.16em",
+    marginBottom: 8
+  },
+
+  statValue: {
+    fontSize: 22,
+    fontWeight: 900,
+    color: "#f6ffff"
+  },
+
+  errorBox: {
+    marginBottom: 10,
+    padding: "10px 12px",
+    borderRadius: 10,
+    background: "rgba(127,29,29,0.35)",
+    border: "1px solid rgba(255,102,114,0.20)",
+    color: "#ffd4d7"
+  },
+
+  topGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(4, minmax(0,1fr))",
+    gap: 8,
+    marginBottom: 10
+  },
+
+  topCard: {
+    minHeight: 112,
+    padding: 10,
+    borderRadius: 10,
+    background: "linear-gradient(180deg, rgba(7,22,28,0.98), rgba(4,14,20,1))",
+    border: "1px solid rgba(79,185,224,0.16)",
+    boxShadow: "0 8px 18px rgba(0,0,0,0.18)"
+  },
+
+  topHead: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: 8
+  },
+
+  topTitle: {
+    fontSize: 13,
+    fontWeight: 800,
+    color: "#f0ffff"
+  },
+
+  topSub: {
+    fontSize: 10,
+    color: "#8baeb8",
+    marginTop: 2
+  },
+
+  topState: {
+    fontSize: 26,
+    fontWeight: 900,
+    lineHeight: 1
+  },
+
+  topMetricRow: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, minmax(0,1fr))",
+    gap: 6,
+    marginTop: 10,
+    marginBottom: 8
+  },
+
+  topMetric: {
+    borderRadius: 8,
+    padding: "6px 7px",
+    background: "rgba(255,255,255,0.025)",
+    border: "1px solid rgba(255,255,255,0.045)"
+  },
+
+  topMetricLabel: {
+    fontSize: 9,
+    color: "#8aacb5",
+    textTransform: "uppercase",
+    marginBottom: 4
+  },
+
+  topMetricValue: {
+    fontSize: 11,
+    fontWeight: 800,
+    color: "#f5ffff"
+  },
+
+  deviceGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(4, minmax(0,1fr))",
+    gap: 8
+  },
+
+  deviceCard: {
+    padding: 10,
+    borderRadius: 10,
+    background: "linear-gradient(180deg, rgba(7,22,28,0.98), rgba(4,14,20,1))",
+    border: "1px solid rgba(79,185,224,0.16)",
+    boxShadow: "0 10px 20px rgba(0,0,0,0.18)",
+    minHeight: 258
+  },
+
+  deviceHead: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: 8,
+    marginBottom: 8
+  },
+
+  deviceName: {
+    fontSize: 15,
+    fontWeight: 900,
+    color: "#f6ffff",
+    lineHeight: 1.15
+  },
+
+  deviceIp: {
+    marginTop: 2,
+    fontSize: 10,
+    color: "#8caeb8"
+  },
+
+  deviceStatus: {
+    fontSize: 34,
+    lineHeight: 1,
+    fontWeight: 900
+  },
+
+  deviceBody: {
+    display: "grid",
+    gridTemplateColumns: "1.1fr 0.9fr",
+    gap: 8
+  },
+
+  leftCol: {
+    minWidth: 0
+  },
+
+  rightCol: {
+    display: "grid",
+    gap: 6
+  },
+
+  metaRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: 8,
+    padding: "5px 0",
+    borderBottom: "1px solid rgba(255,255,255,0.04)"
+  },
+
+  metaLabel: {
+    fontSize: 10,
+    color: "#8eaeb7"
+  },
+
+  metaValue: {
+    fontSize: 11,
+    fontWeight: 800,
+    color: "#f2ffff",
+    textAlign: "right"
+  },
+
+  barsWrap: {
+    marginTop: 10,
+    display: "grid",
+    gap: 6
+  },
+
+  usageRow: {
+    display: "grid",
+    gridTemplateColumns: "52px 1fr 34px",
+    gap: 6,
+    alignItems: "center"
+  },
+
+  usageLabel: {
+    fontSize: 10,
+    color: "#8eaeb7"
+  },
+
+  usageTrack: {
+    height: 10,
+    borderRadius: 999,
+    overflow: "hidden",
+    background: "rgba(255,255,255,0.05)",
+    border: "1px solid rgba(255,255,255,0.04)"
+  },
+
+  usageFill: {
+    height: "100%",
+    borderRadius: 999
+  },
+
+  usagePct: {
+    fontSize: 10,
+    fontWeight: 800,
+    color: "#e5fff0",
+    textAlign: "right"
+  },
+
+  gaugeCard: {
+    borderRadius: 8,
+    padding: 4,
+    background: "rgba(255,255,255,0.02)",
+    border: "1px solid rgba(255,255,255,0.045)"
+  },
+
+  gaugeSvg: {
+    width: "100%",
+    height: 84,
+    display: "block"
+  },
+
+  gaugeTitle: {
+    fill: "#ff7c88",
+    fontSize: 12,
+    fontWeight: 800
+  },
+
+  gaugeValue: {
+    fill: "#f5ffff",
+    fontSize: 17,
+    fontWeight: 900
+  },
+
+  gaugeSub: {
+    marginTop: -5,
+    textAlign: "center",
+    fontSize: 9,
+    color: "#8aadb7",
+    textTransform: "uppercase"
+  }
+};
