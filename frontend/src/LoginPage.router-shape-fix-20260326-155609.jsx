@@ -1545,7 +1545,9 @@ function Styles() {
         background: rgba(255,255,255,.04);
         box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
       }
-            
+            .device-machine {
+        margin-bottom: 16px;
+      }
 
       
 
@@ -1578,116 +1580,68 @@ function Styles() {
         background: rgba(255,255,255,.04);
         border: 1px solid rgba(148,163,184,.25);
         box-shadow: inset 0 1px 2px rgba(0,0,0,.5);
-      }      
-
-      
-
-      
-
-      
-
-            .device-machine {
-        margin-bottom: 18px;
-        padding-top: 2px;
-      }
-
-      .router3d {
+      }      .machine-real {
         position: relative;
-        height: 78px;
-        border-radius: 16px;
-        background:
-          linear-gradient(180deg, rgba(10,14,24,.98), rgba(2,6,18,.98));
-        border: 1px solid rgba(148,163,184,.14);
-        transform: perspective(700px) rotateX(10deg);
-        transform-origin: center top;
+        height: 58px;
+        border-radius: 12px;
+
+        background: linear-gradient(180deg, #020617, #01040f);
+
+        border: 1px solid rgba(148,163,184,.12);
+
         box-shadow:
-          0 18px 34px rgba(0,0,0,.40),
-          inset 0 1px 0 rgba(255,255,255,.04),
-          inset 0 -10px 18px rgba(0,0,0,.55);
-        overflow: visible;
+          inset 0 1px 2px rgba(255,255,255,.03),
+          inset 0 -4px 12px rgba(0,0,0,.7),
+          0 12px 30px rgba(0,0,0,.6);
       }
 
-      .router3d-top-glow {
+      .top-edge {
         position: absolute;
         top: 0;
-        left: 10px;
-        right: 10px;
+        left: 0;
+        right: 0;
         height: 2px;
-        border-radius: 999px;
-        background: linear-gradient(90deg, rgba(56,189,248,.92), rgba(168,85,247,.85));
-        opacity: .9;
-        box-shadow:
-          0 0 8px rgba(56,189,248,.22),
-          0 0 14px rgba(168,85,247,.12);
+
+        background: linear-gradient(90deg, #38bdf8, #a855f7);
+        opacity: .5;
       }
 
-      .router3d-led {
+      .led {
         position: absolute;
-        top: 14px;
-        left: 16px;
-        width: 7px;
-        height: 7px;
+        top: 10px;
+        left: 12px;
+
+        width: 6px;
+        height: 6px;
         border-radius: 999px;
+
         background: #22d3ee;
+
         box-shadow:
-          0 0 8px rgba(34,211,238,.95),
-          0 0 16px rgba(34,211,238,.35);
+          0 0 6px rgba(34,211,238,.9),
+          0 0 14px rgba(34,211,238,.4);
       }
 
-      .router3d-brand-line {
-        position: absolute;
-        top: 15px;
-        left: 32px;
-        width: 56px;
-        height: 4px;
-        border-radius: 999px;
-        background: linear-gradient(90deg, rgba(103,232,249,.92), rgba(168,85,247,.75));
-        opacity: .9;
-      }
-
-      .router3d-front {
-        position: absolute;
-        left: 8px;
-        right: 8px;
-        bottom: 8px;
-        height: 22px;
-        border-radius: 10px;
-        background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.18));
-        border: 1px solid rgba(148,163,184,.10);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
-      }
-
-      .router3d-ports {
+      .ports {
         position: absolute;
         right: 12px;
-        top: 5px;
+        bottom: 10px;
         display: flex;
-        gap: 5px;
+        gap: 6px;
       }
 
-      .router3d-ports span {
+      .ports span {
         width: 12px;
-        height: 9px;
+        height: 8px;
         border-radius: 2px;
-        background: rgba(2,6,18,.92);
-        border: 1px solid rgba(148,163,184,.26);
-        box-shadow:
-          inset 0 1px 1px rgba(255,255,255,.04),
-          inset 0 -2px 4px rgba(0,0,0,.7);
-      }
 
-      .router3d-shadow {
-        position: absolute;
-        left: 18px;
-        right: 18px;
-        bottom: -8px;
-        height: 14px;
-        border-radius: 999px;
-        background: radial-gradient(ellipse at center, rgba(0,0,0,.42), transparent 72%);
-        filter: blur(4px);
-        pointer-events: none;
-      }
-.feature-row {
+        background: #020617;
+        border: 1px solid rgba(148,163,184,.25);
+
+        box-shadow:
+          inset 0 1px 1px rgba(255,255,255,.05),
+          inset 0 -2px 4px rgba(0,0,0,.8);
+      }.feature-row {
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
@@ -2460,22 +2414,18 @@ export default function LoginPage({ onLogin }) {
       </div>
 
       <div className="device-machine">
-  <div className="router3d">
-    <div className="router3d-top-glow"></div>
-    <div className="router3d-led"></div>
-    <div className="router3d-brand-line"></div>
-    <div className="router3d-front">
-      <div className="router3d-ports">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+        <div className="machine-real">
+          <div className="top-edge"></div>
+          <div className="led"></div>
+          <div className="ports">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
       </div>
-    </div>
-    <div className="router3d-shadow"></div>
-  </div>
-</div>
 
       <h3 className="device-name">{device.name}</h3>
       <div className="device-type">{device.type}</div>
@@ -2690,7 +2640,6 @@ export default function LoginPage({ onLogin }) {
     </div>
   );
 }
-
 
 
 
