@@ -2008,83 +2008,7 @@ function Styles() {
         100% { opacity: .55; box-shadow: 0 0 0 rgba(255,255,255,0); }
       }
 
-      
-      .device-machine {
-        height: 96px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 2px 0 12px;
-        border-radius: 18px;
-        border: 1px solid rgba(148, 163, 184, 0.10);
-        background:
-          radial-gradient(circle at 50% 0%, rgba(255,255,255,.03), transparent 55%),
-          linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      }
-
-      .noc-router-icon {
-        width: 112px;
-        height: 74px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #38bdf8;
-        opacity: .96;
-        filter:
-          drop-shadow(0 0 8px rgba(56,189,248,.18))
-          drop-shadow(0 10px 18px rgba(2,8,23,.30));
-        transition: transform .18s ease, color .18s ease, filter .18s ease, opacity .18s ease;
-      }
-
-      .noc-router-icon svg {
-        width: 100%;
-        height: 100%;
-        overflow: visible;
-      }
-
-      .device-machine.is-4g .noc-router-icon {
-        color: #38bdf8;
-      }
-
-      .device-machine.is-5g .noc-router-icon {
-        color: #8b5cf6;
-      }
-
-      .device-machine.is-gigabit .noc-router-icon {
-        color: #22c55e;
-      }
-
-      .device-card:hover .noc-router-icon {
-        transform: translateY(-2px) scale(1.04);
-        filter:
-          drop-shadow(0 0 12px rgba(125,211,252,.24))
-          drop-shadow(0 14px 24px rgba(2,8,23,.34));
-      }
-
-      .device-card:hover .device-machine.is-4g .noc-router-icon {
-        color: #67e8f9;
-      }
-
-      .device-card:hover .device-machine.is-5g .noc-router-icon {
-        color: #c084fc;
-      }
-
-      .device-card:hover .device-machine.is-gigabit .noc-router-icon {
-        color: #4ade80;
-      }
-
-      .device-machine::after {
-        content: "";
-        position: absolute;
-        width: 120px;
-        height: 14px;
-        border-radius: 999px;
-        background: radial-gradient(ellipse at center, rgba(0,0,0,.28), transparent 72%);
-        filter: blur(4px);
-        transform: translateY(28px);
-        pointer-events: none;
-      }
-@media (max-width: 1200px) {
+      @media (max-width: 1200px) {
         .hero-grid,
         .section-head,
         .contact-grid,
@@ -2535,23 +2459,25 @@ export default function LoginPage({ onLogin }) {
         <span className="pill">{device.type}</span>
       </div>
 
-      <div className={`device-machine ${String(device.type).toLowerCase().includes("gigabit") ? "is-gigabit" : String(device.type).toLowerCase().includes("5g") ? "is-5g" : "is-4g"}`}>
-  <div className="noc-router-icon" aria-hidden="true">
-    <svg viewBox="0 0 96 64" fill="none">
-      <path d="M24 18V34" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-      <path d="M72 18V34" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-      <rect x="18" y="30" width="60" height="20" rx="6" stroke="currentColor" strokeWidth="3"/>
-      <rect x="24" y="36" width="14" height="4" rx="2" fill="currentColor"/>
-      <circle cx="62" cy="38" r="1.8" fill="currentColor"/>
-      <circle cx="67" cy="38" r="1.8" fill="currentColor"/>
-      <circle cx="72" cy="38" r="1.8" fill="currentColor"/>
-      <path d="M36 16C42 10 54 10 60 16" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-      <path d="M40 20C44 16 52 16 56 20" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-      <path d="M44 24C46 22 50 22 52 24" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-    </svg>
+      <div className="device-machine">
+  <div className="router3d">
+    <div className="router3d-top-glow"></div>
+    <div className="router3d-led"></div>
+    <div className="router3d-brand-line"></div>
+    <div className="router3d-front">
+      <div className="router3d-ports">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <div className="router3d-shadow"></div>
   </div>
 </div>
-<h3 className="device-name">{device.name}</h3>
+
+      <h3 className="device-name">{device.name}</h3>
       <div className="device-type">{device.type}</div>
       <p className="device-note">{device.note}</p>
 
@@ -2764,8 +2690,6 @@ export default function LoginPage({ onLogin }) {
     </div>
   );
 }
-
-
 
 
 
