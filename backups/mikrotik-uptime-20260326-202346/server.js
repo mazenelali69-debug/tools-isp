@@ -1,4 +1,4 @@
-﻿
+
 const { exec, execFileSync } = require("child_process");
 
 function checkVlan1559(cb){
@@ -25,8 +25,7 @@ const { v4: uuidv4 } = require("uuid");
 process.on("uncaughtException", (err) => console.error("?? UncaughtException:", err));
 process.on("unhandledRejection", (err) => console.error("?? UnhandledRejection:", err));
 
-const historyRouter = require("./routes/history")
-const mikrotikUptimeRouter = require("./routes/mikrotikUptime");
+const historyRouter = require("./routes/history");
 const authRouter = require("./routes/auth");
 const { appendUplinkHistory } = require("./lib/historyStore");
 const app = express();
@@ -123,7 +122,6 @@ function recordUplinkHistorySample(payload) {
 
 
 app.use("/api/history", historyRouter);
-app.use("/api/mikrotik", mikrotikUptimeRouter);
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
@@ -1087,7 +1085,7 @@ app.post("/api/debug/walk-ifdescr", async (req, res) => {
 });
 
 //
-// API: Universal interfaces via SNMP CLI (snmpwalk) — works across vendors
+// API: Universal interfaces via SNMP CLI (snmpwalk) � works across vendors
 // POST /api/interfaces-cli  { ip, community }
 // returns: { ok:true, count, interfaces:[{ifIndex, ifName}] }
 //
@@ -4176,9 +4174,6 @@ if (!global.__uplinkRealHistoryPollerStarted) {
   }, 10000);
 }
 // ===== UPLINK_REAL_HISTORY_POLLER_END =====
-
-
-
 
 
 
