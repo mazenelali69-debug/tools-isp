@@ -11,7 +11,7 @@ import AppShell from "./layout/AppShell";
 import NeighborsPanel from "./NeighborsPanel";
 import LivePingPage from "./pages/LivePingPage";
 import MonitorStreetPage from "./pages/MonitorStreetPage";
-import NetworkMapPage from "./pages/NetworkMapPage";
+import MikroTikUptimePage from "./pages/MikroTikUptimePage";
 import TpLinkJetstreamPage from "./pages/TpLinkJetstreamPage";
 import WeatherTripoliPageV3 from "./pages/WeatherTripoliPageV3.jsx";
 import Workspace from "./workspace/Workspace";
@@ -120,7 +120,7 @@ export default function App() {
       ) : active === "monitorstreet" ? (
         <MonitorStreetPage />
       ) : active === "networkmap" ? (
-        <NetworkMapPage />
+        <MikroTikUptimePage />
       ) : active === "isptopology" ? (
         <IspTopologyPage />
       ) : active === "weathertripoli" ? (
@@ -131,6 +131,7 @@ export default function App() {
     </AppShell>
   );
 }
+
 
 
 
