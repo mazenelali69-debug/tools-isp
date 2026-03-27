@@ -1,504 +1,949 @@
-﻿import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
 
-function fmt(v, suffix = "") {
-  return v == null || Number.isNaN(Number(v)) ? "--" : `${Number(v).toFixed(1)}${suffix}`;
+const EXCLUDED_IPS = new Set([
+  "10.88.88.253",
+  "10.88.88.252",
+  "10.88.88.251",
+  "88.88.88.49",
+  "88.88.88.250",
+  "88.88.88.252",
+]);
+
+const REFRESH_MS = 15000;
+const TRAFFIC_REFRESH_MS = 5000;
+const HISTORY_LIMIT = 20;
+const SNMP_COMMUNITY = "public";
+
+const FIXED_IFINDEX = {
+  "88.88.88.4": 3,
+  "88.88.88.5": 2,
+  "88.88.88.6": 2,
+  "88.88.88.7": 2,
+  "88.88.88.8": 3,
+  "88.88.88.9": 2,
+  "88.88.88.10": 3,
+  "88.88.88.11": 4,
+  "88.88.88.12": 3,
+  "88.88.88.13": 3,
+  "88.88.88.14": 5,
+  "88.88.88.15": 3,
+  "88.88.88.16": 2,
+  "88.88.88.17": 3,
+  "88.88.88.18": 2,
+  "88.88.88.19": 6,
+  "88.88.88.20": 3,
+  "88.88.88.21": 2,
+  "88.88.88.22": 1,
+  "88.88.88.23": 2,
+  "88.88.88.24": 3,
+  "88.88.88.25": 2,
+  "88.88.88.26": 3,
+  "88.88.88.30": 4,
+  "88.88.88.31": 2,
+  "88.88.88.35": 1,
+  "88.88.88.249": 1,
+  "155.15.59.4": 1537,
+  "88.88.88.251": 49153,
+  "88.88.88.252": 49155,
+  "88.88.88.253": 49153,
+  "88.88.88.254": 49156,
+  "10.88.88.111": 2,
+  "10.88.88.254": 49154
+};
+
+function toNum(value, fallback = null) {
+  if (value === null || value === undefined || value === "") return fallback;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
 }
 
-function fmtWhole(v, suffix = "") {
-  return v == null || Number.isNaN(Number(v)) ? "--" : `${Math.round(Number(v))}${suffix}`;
+function pickFirst(obj, keys, fallback = "") {
+  for (const key of keys) {
+    const value = obj?.[key];
+    if (value !== null && value !== undefined && String(value).trim() !== "") {
+      return value;
+    }
+  }
+  return fallback;
 }
 
-function gaugeColor(v) {
-  const n = Number(v || 0);
-  if (n >= 80) return "#6cff7e";
-  if (n >= 60) return "#cce85f";
-  if (n >= 40) return "#ffbe55";
-  return "#ff6672";
+function extractList(payload) {
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload?.items)) return payload.items;
+  if (Array.isArray(payload?.data)) return payload.data;
+  if (Array.isArray(payload?.devices)) return payload.devices;
+  if (Array.isArray(payload?.results)) return payload.results;
+  if (Array.isArray(payload?.rows)) return payload.rows;
+  if (Array.isArray(payload?.targets)) return payload.targets;
+  if (Array.isArray(payload?.monitors)) return payload.monitors;
+  return [];
 }
 
-function arcPath(value, radius = 60) {
-  const clamped = Math.max(0, Math.min(100, Number(value || 0)));
-  const start = 180;
-  const end = 180 + (clamped / 100) * 180;
-  const cx = 90;
-  const cy = 90;
+function normalizeDevice(item, index) {
+  const ip = String(
+    pickFirst(item, ["ip", "host", "address", "target", "deviceIp", "ipAddress"], "")
+  ).trim();
 
-  const polar = (a) => {
-    const rad = (a - 90) * Math.PI / 180;
-    return { x: cx + radius * Math.cos(rad), y: cy + radius * Math.sin(rad) };
+  const name = String(
+    pickFirst(item, ["name", "label", "deviceName", "title", "identity"], ip ? "Device " + ip : "Device " + (index + 1))
+  ).trim();
+
+  const ping = toNum(pickFirst(item, ["ping", "pingMs", "latency", "avgPing"], null));
+  const jitter = toNum(pickFirst(item, ["jitter", "jitterMs", "avgJitter"], 0), 0);
+  const packetLoss = toNum(pickFirst(item, ["packetLoss", "loss", "lossPct"], 0), 0);
+  const cpu = toNum(pickFirst(item, ["cpu", "cpuLoad", "cpuUsage"], null));
+  const load = toNum(pickFirst(item, ["load", "loadPct", "trafficLoad"], null));
+
+  const uptimeText = String(
+    pickFirst(item, ["uptime", "uptimeText", "humanUptime", "uptimeHuman"], "No uptime data")
+  ).trim();
+
+  const rawStatus = String(pickFirst(item, ["status", "state"], "")).trim().toUpperCase();
+
+  let status = "UP";
+  if (rawStatus === "DOWN" || rawStatus === "OFFLINE") {
+    status = "DOWN";
+  } else if (rawStatus === "DEGRADED" || rawStatus === "WARN" || rawStatus === "WARNING") {
+    status = "DEGRADED";
+  } else if (packetLoss >= 35 || (ping !== null && ping >= 120) || jitter >= 30) {
+    status = "DEGRADED";
+  } else if (ping === null && cpu === null && !ip && !name) {
+    status = "UNKNOWN";
+  }
+
+  const severity =
+    status === "DOWN" ? 1000 :
+    status === "DEGRADED" ? 700 :
+    status === "UNKNOWN" ? 500 : 100;
+
+  const risk =
+    severity +
+    (packetLoss ?? 0) * 8 +
+    (ping ?? 0) * 2 +
+    (jitter ?? 0) * 3 +
+    (cpu ?? 0) * 1.2;
+
+  return {
+    id: item?.id ?? ip ?? name ?? ("dev-" + index),
+    name,
+    ip,
+    ping,
+    jitter,
+    packetLoss,
+    cpu,
+    load,
+    uptimeText,
+    status,
+    risk,
+    ifIndex: ip ? (FIXED_IFINDEX[ip] ?? null) : null,
   };
-
-  const s = polar(start);
-  const e = polar(end);
-  const large = end - start > 180 ? 1 : 0;
-
-  return `M ${s.x} ${s.y} A ${radius} ${radius} 0 ${large} 1 ${e.x} ${e.y}`;
 }
 
-function Gauge({ title, value, subtitle }) {
-  const c = gaugeColor(value);
+function fmtMs(v) {
+  return v === null || v === undefined ? "--" : Math.round(v) + " ms";
+}
+
+function fmtPct(v) {
+  return v === null || v === undefined ? "--" : Math.round(v) + "%";
+}
+
+function fmtTime(ts) {
+  if (!ts) return "--";
+  return new Date(ts).toLocaleTimeString();
+}
+
+function fmtMbps(v) {
+  if (v === null || v === undefined || !Number.isFinite(v)) return "--";
+  if (v >= 1000) return (v / 1000).toFixed(2) + " Gbps";
+  if (v >= 100) return v.toFixed(0) + " Mbps";
+  if (v >= 10) return v.toFixed(1) + " Mbps";
+  return v.toFixed(2) + " Mbps";
+}
+
+function getStableTrafficMax(values) {
+  const valid = values.filter((v) => Number.isFinite(v));
+  if (!valid.length) return 100;
+  const peak = Math.max(...valid, 1);
+
+  if (peak <= 10) return 10;
+  if (peak <= 25) return 25;
+  if (peak <= 50) return 50;
+  if (peak <= 100) return 100;
+  if (peak <= 250) return 250;
+  if (peak <= 500) return 500;
+  if (peak <= 1000) return 1000;
+  return Math.ceil(peak / 500) * 500;
+}
+
+function avg(list) {
+  if (!list.length) return null;
+  return list.reduce((a, b) => a + b, 0) / list.length;
+}
+
+function statusMeta(status) {
+  switch (status) {
+    case "UP":
+      return {
+        text: "UP",
+        fg: "#4ade80",
+        bg: "rgba(74,222,128,0.10)",
+        border: "rgba(74,222,128,0.24)",
+        row: "rgba(74,222,128,0.03)",
+      };
+    case "DEGRADED":
+      return {
+        text: "DEGRADED",
+        fg: "#fbbf24",
+        bg: "rgba(251,191,36,0.10)",
+        border: "rgba(251,191,36,0.26)",
+        row: "rgba(251,191,36,0.04)",
+      };
+    case "DOWN":
+      return {
+        text: "DOWN",
+        fg: "#fb7185",
+        bg: "rgba(251,113,133,0.10)",
+        border: "rgba(251,113,133,0.28)",
+        row: "rgba(251,113,133,0.05)",
+      };
+    default:
+      return {
+        text: "UNKNOWN",
+        fg: "#94a3b8",
+        bg: "rgba(148,163,184,0.10)",
+        border: "rgba(148,163,184,0.22)",
+        row: "rgba(148,163,184,0.03)",
+      };
+  }
+}
+
+function metricColor(value, good, warn) {
+  if (value === null || value === undefined) return "#64748b";
+  if (value <= good) return "#4ade80";
+  if (value <= warn) return "#fbbf24";
+  return "#fb7185";
+}
+
+function TinyBar({ value, max, color }) {
+  const safe = Number.isFinite(value) ? value : 0;
+  const pct = Math.max(0, Math.min(100, (safe / max) * 100));
+
   return (
-    <div style={styles.gaugeCard}>
-      <svg viewBox="0 0 180 112" style={styles.gaugeSvg}>
-        <path d="M 30 90 A 60 60 0 0 1 150 90" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="16" strokeLinecap="round" />
-        <path d={arcPath(value)} fill="none" stroke={c} strokeWidth="16" strokeLinecap="round" style={{ filter: `drop-shadow(0 0 10px ${c})` }} />
-        <text x="90" y="70" textAnchor="middle" style={styles.gaugeTitle}>{title}</text>
-        <text x="90" y="97" textAnchor="middle" style={styles.gaugeValue}>{fmtWhole(value, "%")}</text>
-      </svg>
-      <div style={styles.gaugeSub}>{subtitle}</div>
+    <div
+      style={{
+        marginTop: 6,
+        height: 4,
+        borderRadius: 999,
+        overflow: "hidden",
+        background: "rgba(255,255,255,0.06)",
+      }}
+    >
+      <div
+        style={{
+          width: pct + "%",
+          height: "100%",
+          borderRadius: 999,
+          background: color,
+        }}
+      />
     </div>
   );
 }
 
-function UsageBar({ label, value }) {
-  const n = Math.max(0, Math.min(100, Number(value || 0)));
-  const color = gaugeColor(n);
+function SummaryCard({ label, value, hint, accent }) {
   return (
-    <div style={styles.usageRow}>
-      <div style={styles.usageLabel}>{label}</div>
-      <div style={styles.usageTrack}>
-        <div style={{ ...styles.usageFill, width: `${n}%`, background: color, boxShadow: `0 0 8px ${color}` }} />
+    <div
+      style={{
+        borderRadius: 14,
+        padding: 14,
+        background: "#0e1623",
+        border: "1px solid rgba(255,255,255,0.06)",
+        boxShadow: "0 10px 24px rgba(0,0,0,0.18)",
+        display: "grid",
+        gap: 6,
+        minHeight: 92,
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: "50%",
+            background: accent,
+          }}
+        />
+        <div style={{ fontSize: 11, color: "rgba(214,224,243,0.60)", textTransform: "uppercase", letterSpacing: "0.14em" }}>
+          {label}
+        </div>
       </div>
-      <div style={styles.usagePct}>{fmtWhole(n, "%")}</div>
+      <div style={{ fontSize: 29, fontWeight: 950, color: "#f8fbff", letterSpacing: "-0.04em" }}>
+        {value}
+      </div>
+      <div style={{ fontSize: 12, color: "rgba(214,224,243,0.64)" }}>
+        {hint}
+      </div>
     </div>
   );
 }
 
-function TopCard({ item }) {
+function buildSparklineGeometry(values, width, height, maxOverride = null) {
+  const valid = values.filter((v) => Number.isFinite(v));
+  if (!valid.length) return { linePoints: "", areaPoints: "", lastX: 0, lastY: 0 };
+
+  const rawMax = maxOverride !== null && maxOverride !== undefined
+    ? Math.max(maxOverride, ...valid, 1)
+    : Math.max(...valid, 1);
+
+  const rawMin = Math.min(...valid);
+  let minValue = rawMin;
+  let maxValue = rawMax;
+
+  if (maxValue - minValue < 1) {
+    minValue = Math.max(0, rawMin - 1);
+    maxValue = rawMax + 1;
+  } else {
+    const pad = (maxValue - minValue) * 0.18;
+    minValue = Math.max(0, minValue - pad);
+    maxValue = maxValue + pad;
+  }
+
+  const stepX = valid.length > 1 ? width / (valid.length - 1) : width;
+
+  const points = valid.map((value, index) => {
+    const x = index * stepX;
+    const normalized = (value - minValue) / Math.max(0.0001, maxValue - minValue);
+    const y = height - normalized * height;
+    return { x, y };
+  });
+
+  const linePoints = points.map((p) => p.x.toFixed(2) + "," + p.y.toFixed(2)).join(" ");
+  const first = points[0];
+  const last = points[points.length - 1];
+  const areaPoints =
+    first.x.toFixed(2) + "," + height.toFixed(2) + " " +
+    linePoints + " " +
+    last.x.toFixed(2) + "," + height.toFixed(2);
+
+  return {
+    linePoints,
+    areaPoints,
+    lastX: last.x,
+    lastY: last.y,
+  };
+}
+
+function TrafficSpark({ series, color, label, valueText }) {
+  const boxRef = useRef(null);
+  const [hover, setHover] = useState(null);
+
+  const stableMax = getStableTrafficMax(series);
+  const geom = buildSparklineGeometry(series, 180, 46, stableMax);
+  const hasData = geom.linePoints.length > 0;
+
+  function handleMove(e) {
+    if (!boxRef.current || !series.length) return;
+    const rect = boxRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const ratio = Math.max(0, Math.min(1, x / rect.width));
+    const index = Math.max(0, Math.min(series.length - 1, Math.round(ratio * (series.length - 1))));
+    const value = series[index];
+
+    if (!Number.isFinite(value)) {
+      setHover(null);
+      return;
+    }
+
+    setHover({
+      x,
+      index,
+      value,
+    });
+  }
+
   return (
-    <div style={styles.topCard}>
-      <div style={styles.topHead}>
-        <div>
-          <div style={styles.topTitle}>{item.name}</div>
-          <div style={styles.topSub}>{item.ip}</div>
+    <div
+      ref={boxRef}
+      style={{
+        position: "relative",
+        minWidth: 196,
+        width: 196,
+        borderRadius: 12,
+        padding: 10,
+        background: "rgba(255,255,255,0.02)",
+        border: "1px solid rgba(255,255,255,0.05)",
+      }}
+      onMouseMove={handleMove}
+      onMouseLeave={() => setHover(null)}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center" }}>
+        <div style={{ fontSize: 10, color: "rgba(214,224,243,0.54)", textTransform: "uppercase", letterSpacing: "0.12em" }}>
+          {label}
         </div>
-        <div style={{ ...styles.topState, color: item.status === "UP" ? "#6cff7e" : "#ff6672" }}>{item.status}</div>
+        <div style={{ fontSize: 12, fontWeight: 800, color: "#f8fbff" }}>
+          {valueText}
+        </div>
       </div>
 
-      <div style={styles.topMetricRow}>
-        <div style={styles.topMetric}>
-          <div style={styles.topMetricLabel}>Ping</div>
-          <div style={styles.topMetricValue}>{fmt(item.pingMs, " ms")}</div>
-        </div>
-        <div style={styles.topMetric}>
-          <div style={styles.topMetricLabel}>Jitter</div>
-          <div style={styles.topMetricValue}>{fmt(item.jitterMs, " ms")}</div>
-        </div>
-        <div style={styles.topMetric}>
-          <div style={styles.topMetricLabel}>Loss</div>
-          <div style={styles.topMetricValue}>{fmtWhole(item.packetLossPct, "%")}</div>
-        </div>
+      <div style={{ marginTop: 8, height: 50 }}>
+        {hasData ? (
+          <svg width="180" height="46" viewBox="0 0 180 46" style={{ display: "block", width: "100%", height: 46 }}>
+            <line x1="0" y1="45" x2="180" y2="45" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+            <line x1="0" y1="30" x2="180" y2="30" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+            <line x1="0" y1="15" x2="180" y2="15" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+
+            <polygon
+              points={geom.areaPoints}
+              fill={color}
+              opacity="0.16"
+            />
+
+            <polyline
+              fill="none"
+              stroke={color}
+              strokeWidth="2.4"
+              points={geom.linePoints}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+
+            <circle
+              cx={geom.lastX}
+              cy={geom.lastY}
+              r="2.8"
+              fill={color}
+            />
+
+            {hover && (
+              <>
+                <line
+                  x1={Math.max(0, Math.min(180, hover.x))}
+                  y1="0"
+                  x2={Math.max(0, Math.min(180, hover.x))}
+                  y2="46"
+                  stroke="rgba(255,255,255,0.18)"
+                  strokeWidth="1"
+                  strokeDasharray="3 3"
+                />
+              </>
+            )}
+          </svg>
+        ) : (
+          <div style={{ height: 46, display: "flex", alignItems: "center", color: "rgba(214,224,243,0.42)", fontSize: 11 }}>
+            Waiting for traffic...
+          </div>
+        )}
       </div>
 
-      <UsageBar label="health" value={item.health} />
+      {hover && (
+        <div
+          style={{
+            position: "absolute",
+            left: Math.max(12, Math.min(160, hover.x)),
+            top: -6,
+            transform: "translateX(-50%)",
+            background: "rgba(2,6,23,0.96)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: 8,
+            padding: "6px 8px",
+            fontSize: 11,
+            fontWeight: 700,
+            color: "#f8fbff",
+            pointerEvents: "none",
+            boxShadow: "0 12px 24px rgba(0,0,0,0.28)",
+            whiteSpace: "nowrap",
+            zIndex: 5,
+          }}
+        >
+          {fmtMbps(hover.value)}
+        </div>
+      )}
     </div>
   );
 }
 
-function DeviceCard({ item }) {
-  const hasCpu = item.cpu != null;
-  const load = hasCpu ? Math.min(100, Math.round(item.cpu * 1.9)) : item.health;
+function DeviceRow({ item, zebra, trafficHistory }) {
+  const meta = statusMeta(item.status);
+  const pingTone = metricColor(item.ping, 40, 100);
+  const jitterTone = metricColor(item.jitter, 10, 25);
+  const lossTone = metricColor(item.packetLoss, 1, 10);
+
+  const traffic = trafficHistory[item.id] || { rxMbps: [], txMbps: [], lastIfIndex: null };
+  const rxSeries = traffic.rxMbps || [];
+  const txSeries = traffic.txMbps || [];
+
+  const currentRx = rxSeries.length ? rxSeries[rxSeries.length - 1] : null;
+  const currentTx = txSeries.length ? txSeries[txSeries.length - 1] : null;
+
+    const isAviat = item.ip === "155.15.59.4";
+  const rxTone = item.ip === "155.15.59.4" ? "#ff2fa3" : "#a855f7";
+  const txTone = item.ip === "155.15.59.4" ? "#ff2b2b" : "#facc15";
 
   return (
-    <div style={styles.deviceCard}>
-      <div style={styles.deviceHead}>
-        <div>
-          <div style={styles.deviceName}>{item.name}</div>
-          <div style={styles.deviceIp}>{item.ip}</div>
-        </div>
-        <div style={{ ...styles.deviceStatus, color: item.status === "UP" ? "#6cff7e" : "#ff6672" }}>
-          {item.status}
-        </div>
-      </div>
-
-      <div style={styles.deviceBody}>
-        <div style={styles.leftCol}>
-          <div style={styles.metaRow}><span style={styles.metaLabel}>Uptime</span><span style={styles.metaValue}>{item.uptime || "N/A"}</span></div>
-          <div style={styles.metaRow}><span style={styles.metaLabel}>Ping</span><span style={styles.metaValue}>{fmt(item.pingMs, " ms")}</span></div>
-          <div style={styles.metaRow}><span style={styles.metaLabel}>Jitter</span><span style={styles.metaValue}>{fmt(item.jitterMs, " ms")}</span></div>
-          <div style={styles.metaRow}><span style={styles.metaLabel}>Loss</span><span style={styles.metaValue}>{fmtWhole(item.packetLossPct, "%")}</span></div>
-
-          <div style={styles.barsWrap}>
-            <UsageBar label="Health" value={item.health} />
-            <UsageBar label="CPU" value={hasCpu ? item.cpu : 0} />
-            <UsageBar label="Load" value={load} />
+    <tr
+      style={{
+        background: item.status === "DOWN" ? meta.row : zebra ? "rgba(255,255,255,0.012)" : "transparent",
+      }}
+    >
+      <td style={{ padding: "14px 14px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        <div style={{ display: "grid", gap: 5 }}>
+          <div style={{ fontSize: 14, fontWeight: 900, color: "#f8fbff", lineHeight: 1.2 }}>
+            {item.name}
+          </div>
+          <div
+            style={{
+              fontSize: 11,
+              color: "rgba(214,224,243,0.68)",
+              fontFamily: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+            }}
+          >
+            {item.ip || "No IP"}
           </div>
         </div>
+      </td>
 
-        <div style={styles.rightCol}>
-          <Gauge title="Health" value={item.health} subtitle="status quality" />
-          <Gauge title={hasCpu ? "CPU" : "Signal"} value={hasCpu ? item.cpu : item.health} subtitle={hasCpu ? "processor load" : "fallback view"} />
+      <td style={{ padding: "14px 10px", borderBottom: "1px solid rgba(255,255,255,0.05)", width: 110 }}>
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            padding: "6px 10px",
+            borderRadius: 999,
+            background: meta.bg,
+            border: "1px solid " + meta.border,
+            color: meta.fg,
+            fontSize: 11,
+            fontWeight: 900,
+            letterSpacing: "0.10em",
+          }}
+        >
+          <span
+            style={{
+              width: 7,
+              height: 7,
+              borderRadius: "50%",
+              background: meta.fg,
+            }}
+          />
+          {meta.text}
         </div>
-      </div>
-    </div>
+      </td>
+
+      <td style={{ padding: "14px 10px", borderBottom: "1px solid rgba(255,255,255,0.05)", minWidth: 100 }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "#f8fbff" }}>{fmtMs(item.ping)}</div>
+        <TinyBar value={item.ping ?? 0} max={180} color={pingTone} />
+      </td>
+
+      <td style={{ padding: "14px 10px", borderBottom: "1px solid rgba(255,255,255,0.05)", minWidth: 100 }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "#f8fbff" }}>{fmtMs(item.jitter)}</div>
+        <TinyBar value={item.jitter ?? 0} max={60} color={jitterTone} />
+      </td>
+
+      <td style={{ padding: "14px 10px", borderBottom: "1px solid rgba(255,255,255,0.05)", minWidth: 100 }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "#f8fbff" }}>{fmtPct(item.packetLoss)}</div>
+        <TinyBar value={item.packetLoss ?? 0} max={100} color={lossTone} />
+      </td>
+
+      <td style={{ padding: "14px 10px", borderBottom: "1px solid rgba(255,255,255,0.05)", minWidth: 430 }}>
+        {item.ifIndex ? (
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <TrafficSpark
+              series={rxSeries}
+              color={rxTone}
+              label={"DOWNLOAD"}
+              valueText={fmtMbps(currentRx)}
+            />
+            <TrafficSpark
+              series={txSeries}
+              color={txTone}
+              label={"UPLOAD"}
+              valueText={fmtMbps(currentTx)}
+            />
+          </div>
+        ) : (
+          <div style={{ fontSize: 12, color: "rgba(214,224,243,0.48)" }}>
+            No uplink map yet.
+          </div>
+        )}
+      </td>
+
+      <td style={{ padding: "14px 10px", borderBottom: "1px solid rgba(255,255,255,0.05)", minWidth: 90 }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "#f8fbff" }}>{fmtPct(item.load)}</div>
+      </td>
+
+      <td style={{ padding: "14px 14px", borderBottom: "1px solid rgba(255,255,255,0.05)", minWidth: 220 }}>
+        <div style={{ fontSize: 13, color: "rgba(228,235,248,0.86)", lineHeight: 1.35 }}>
+          {item.uptimeText}
+        </div>
+      </td>
+    </tr>
   );
 }
 
 export default function MikroTikUptimePage() {
-  const [services, setServices] = useState([]);
-  const [devices, setDevices] = useState([]);
-  const [errorText, setErrorText] = useState("");
-  const [lastUpdate, setLastUpdate] = useState("");
-
-  async function load() {
-    try {
-      const res = await fetch("/api/mikrotik/uptime", { cache: "no-store" });
-      const js = await res.json();
-      if (!res.ok || !js?.ok) throw new Error(js?.error || "Failed to load dashboard");
-
-      const sortedDevices = Array.isArray(js.devices) ? [...js.devices].sort((a, b) => {
-        if (a.top && !b.top) return -1;
-        if (!a.top && b.top) return 1;
-        if (a.name === "AviatLink") return -1;
-        if (b.name === "AviatLink") return 1;
-        return 0;
-      }) : [];
-
-      setServices(Array.isArray(js.services) ? js.services : []);
-      setDevices(sortedDevices);
-      setLastUpdate(new Date().toLocaleTimeString());
-      setErrorText("");
-    } catch (e) {
-      setServices([]);
-      setDevices([]);
-      setErrorText(e?.message || "Failed to load dashboard");
-    }
-  }
+  const [rows, setRows] = useState([]);
+  const [trafficHistory, setTrafficHistory] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    load();
-    const t = setInterval(load, 15000);
-    return () => clearInterval(t);
+    let alive = true;
+
+    async function loadUptime() {
+      try {
+        const response = await fetch("/api/mikrotik/uptime", {
+          cache: "no-store",
+          headers: { Accept: "application/json" },
+        });
+
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+
+        const payload = await response.json();
+        const list = extractList(payload);
+
+        const normalized = list
+          .map((item, index) => normalizeDevice(item, index))
+          .filter((item) => !EXCLUDED_IPS.has(item.ip))
+          .filter((item) => item.name || item.ip)
+          ;
+
+        if (!alive) return;
+
+        setRows(normalized);
+        setError("");
+        setLastUpdated(new Date().toISOString());
+      } catch (err) {
+        if (!alive) return;
+        setError(err?.message || "Failed to load");
+      } finally {
+        if (alive) setLoading(false);
+      }
+    }
+
+    loadUptime();
+    const timer = setInterval(loadUptime, REFRESH_MS);
+
+    return () => {
+      alive = false;
+      clearInterval(timer);
+    };
   }, []);
 
-  const totals = useMemo(() => {
-    const all = [...services, ...devices];
-    return {
-      total: all.length,
-      up: all.filter(x => x.status === "UP").length,
-      down: all.filter(x => x.status !== "UP").length
+  useEffect(() => {
+    if (!rows.length) return;
+
+    let cancelled = false;
+
+    async function loadTrafficOnce() {
+      const updates = [];
+
+      await Promise.all(
+        rows.map(async (item) => {
+          if (!item.ip || !item.ifIndex) return;
+
+          try {
+            const url =
+              "/api/eth/throughput?ip=" +
+              encodeURIComponent(item.ip) +
+              "&ifIndex=" +
+              encodeURIComponent(item.ifIndex) +
+              "&community=" +
+              encodeURIComponent(SNMP_COMMUNITY) +
+              "&ms=2000";
+
+            const response = await fetch(url, {
+              cache: "no-store",
+              headers: { Accept: "application/json" },
+            });
+
+            if (!response.ok) return;
+
+            const data = await response.json();
+            const rxMbps = Number(data?.rxMbps);
+            const txMbps = Number(data?.txMbps);
+
+            if (!Number.isFinite(rxMbps) || !Number.isFinite(txMbps)) return;
+
+            updates.push({
+              id: item.id,
+              ifIndex: item.ifIndex,
+              rxMbps,
+              txMbps,
+            });
+          } catch {
+            // ignore per-device traffic failure
+          }
+        })
+      );
+
+      if (cancelled || !updates.length) return;
+
+      setTrafficHistory((prev) => {
+        const next = { ...prev };
+
+        for (const item of rows) {
+          if (!next[item.id]) {
+            next[item.id] = { rxMbps: [], txMbps: [], lastIfIndex: item.ifIndex ?? null };
+          }
+        }
+
+        for (const update of updates) {
+          const oldItem = next[update.id] || { rxMbps: [], txMbps: [], lastIfIndex: null };
+
+          next[update.id] = {
+            rxMbps: [...oldItem.rxMbps, update.rxMbps].slice(-HISTORY_LIMIT),
+            txMbps: [...oldItem.txMbps, update.txMbps].slice(-HISTORY_LIMIT),
+            lastIfIndex: update.ifIndex,
+          };
+        }
+
+        return next;
+      });
+    }
+
+    loadTrafficOnce();
+    const timer = setInterval(loadTrafficOnce, TRAFFIC_REFRESH_MS);
+
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
     };
-  }, [services, devices]);
+  }, [rows]);
+
+  const stats = useMemo(() => {
+    const total = rows.length;
+    const up = rows.filter((x) => x.status === "UP").length;
+    const degraded = rows.filter((x) => x.status === "DEGRADED").length;
+    const down = rows.filter((x) => x.status === "DOWN").length;
+
+    const pingVals = rows.map((x) => x.ping).filter((x) => x !== null && x !== undefined);
+    const lossVals = rows.map((x) => x.packetLoss).filter((x) => x !== null && x !== undefined);
+
+    const allRx = Object.values(trafficHistory)
+      .flatMap((entry) => Array.isArray(entry?.rxMbps) ? entry.rxMbps : [])
+      .filter((x) => Number.isFinite(x));
+
+    const allTx = Object.values(trafficHistory)
+      .flatMap((entry) => Array.isArray(entry?.txMbps) ? entry.txMbps : [])
+      .filter((x) => Number.isFinite(x));
+
+    const avgPingValue = avg(pingVals);
+    const avgLossValue = avg(lossVals);
+    const avgRxValue = avg(allRx);
+    const avgTxValue = avg(allTx);
+
+    return {
+      total,
+      up,
+      degraded,
+      down,
+      avgPing: avgPingValue === null || avgPingValue === undefined ? null : Math.round(avgPingValue),
+      avgLoss: avgLossValue === null || avgLossValue === undefined ? null : Math.round(avgLossValue),
+      avgRx: avgRxValue === null || avgRxValue === undefined ? null : avgRxValue,
+      avgTx: avgTxValue === null || avgTxValue === undefined ? null : avgTxValue,
+    };
+  }, [rows, trafficHistory]);
 
   return (
-    <div style={styles.page}>
-      <div style={styles.hero}>
-        <div>
-          <div style={styles.eyebrow}>MikroTik uptime view</div>
-          <div style={styles.heroTitle}>MikroTik NOC Dashboard</div>
-          <div style={styles.heroSub}>Real uptime + CPU + service health · Last update: {lastUpdate || "-"}</div>
+    <div
+      style={{
+        minHeight: "100%",
+        padding: "16px 16px 28px",
+        background: "linear-gradient(180deg, #070b11 0%, #09101a 50%, #070b11 100%)",
+        color: "#e8eef9",
+      }}
+    >
+      <div style={{ maxWidth: 1900, margin: "0 auto", display: "grid", gap: 14 }}>
+        <div
+          style={{
+            borderRadius: 18,
+            background: "#0b1320",
+            border: "1px solid rgba(255,255,255,0.06)",
+            boxShadow: "0 18px 40px rgba(0,0,0,0.22)",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              padding: "14px 16px",
+              borderBottom: "1px solid rgba(255,255,255,0.06)",
+              display: "flex",
+              justifyContent: "space-between",
+              gap: 12,
+              alignItems: "center",
+              flexWrap: "wrap",
+              background: "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0))",
+            }}
+          >
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.18em", color: "rgba(214,224,243,0.56)", fontWeight: 900 }}>
+                NoComment NOC
+              </div>
+              <div style={{ marginTop: 6, fontSize: 28, fontWeight: 1000, letterSpacing: "-0.05em", color: "#f8fbff" }}>
+                MikroTik Fleet Monitoring
+              </div>
+              <div style={{ marginTop: 7, fontSize: 13, color: "rgba(214,224,243,0.70)" }}>
+                Real per-device RX/TX throughput using known uplink ifIndex mapping.
+              </div>
+            </div>
+
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+              <div
+                style={{
+                  padding: "9px 12px",
+                  borderRadius: 12,
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.06)",
+                  fontSize: 12,
+                  color: "rgba(224,232,246,0.86)",
+                }}
+              >
+                Refresh: <strong style={{ color: "#f8fbff" }}>15s</strong>
+              </div>
+
+              <div
+                style={{
+                  padding: "9px 12px",
+                  borderRadius: 12,
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.06)",
+                  fontSize: 12,
+                  color: "rgba(224,232,246,0.86)",
+                }}
+              >
+                Updated: <strong style={{ color: "#f8fbff" }}>{fmtTime(lastUpdated)}</strong>
+              </div>
+
+              <div
+                style={{
+                  padding: "9px 12px",
+                  borderRadius: 12,
+                  background: error ? "rgba(251,113,133,0.10)" : "rgba(74,222,128,0.10)",
+                  border: error ? "1px solid rgba(251,113,133,0.22)" : "1px solid rgba(74,222,128,0.22)",
+                  fontSize: 12,
+                  fontWeight: 900,
+                  color: error ? "#ffb3c0" : "#9ff0b7",
+                }}
+              >
+                {error ? "API ERROR" : loading ? "LOADING" : "LIVE FEED"}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ padding: 14, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
+            <SummaryCard label="Total" value={String(stats.total)} hint="Visible after filter" accent="#60a5fa" />
+            <SummaryCard label="Up" value={String(stats.up)} hint="Healthy responders" accent="#4ade80" />
+            <SummaryCard label="Degraded" value={String(stats.degraded)} hint="Needs review" accent="#fbbf24" />
+            <SummaryCard label="Down" value={String(stats.down)} hint="Offline / failed" accent="#fb7185" />
+            <SummaryCard label="Avg Ping" value={stats.avgPing === null ? "--" : stats.avgPing + " ms"} hint="Fleet latency" accent="#22d3ee" />
+            <SummaryCard label="Avg RX" value={fmtMbps(stats.avgRx)} hint="Average receive throughput" accent="#22d3ee" />
+            <SummaryCard label="Avg TX" value={fmtMbps(stats.avgTx)} hint="Average transmit throughput" accent="#60a5fa" />
+            <SummaryCard label="Avg Loss" value={stats.avgLoss === null ? "--" : stats.avgLoss + "%"} hint="Packet loss" accent="#f59e0b" />
+          </div>
         </div>
 
-        <div style={styles.heroStats}>
-          <div style={styles.statBox}><div style={styles.statLabel}>TOTAL</div><div style={styles.statValue}>{totals.total}</div></div>
-          <div style={styles.statBox}><div style={styles.statLabel}>UP</div><div style={{ ...styles.statValue, color: "#6cff7e" }}>{totals.up}</div></div>
-          <div style={styles.statBox}><div style={styles.statLabel}>DOWN</div><div style={{ ...styles.statValue, color: "#ff6672" }}>{totals.down}</div></div>
+        <div
+          style={{
+            borderRadius: 18,
+            background: "#0b1320",
+            border: "1px solid rgba(255,255,255,0.06)",
+            boxShadow: "0 18px 40px rgba(0,0,0,0.20)",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              padding: "13px 14px",
+              borderBottom: "1px solid rgba(255,255,255,0.06)",
+              display: "flex",
+              justifyContent: "space-between",
+              gap: 12,
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 950, color: "#f8fbff", letterSpacing: "-0.02em" }}>
+                Devices Matrix
+              </div>
+              <div style={{ marginTop: 4, fontSize: 12, color: "rgba(214,224,243,0.64)" }}>
+                Real devices with mapped uplink RX/TX throughput graphs.
+              </div>
+            </div>
+
+            <div style={{ fontSize: 12, color: "rgba(214,224,243,0.62)" }}>
+              Rows: <strong style={{ color: "#f8fbff" }}>{rows.length}</strong>
+            </div>
+          </div>
+
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1450 }}>
+              <thead>
+                <tr style={{ background: "rgba(255,255,255,0.025)" }}>
+                  {["Device", "Status", "Ping", "Jitter", "Loss", "Traffic Graphs", "Load", "Uptime"].map((label) => (
+                    <th
+                      key={label}
+                      style={{
+                        textAlign: "left",
+                        padding: "12px 14px",
+                        fontSize: 11,
+                        color: "rgba(214,224,243,0.56)",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.14em",
+                        borderBottom: "1px solid rgba(255,255,255,0.06)",
+                        position: "sticky",
+                        top: 0,
+                        background: "#0f1724",
+                        zIndex: 1,
+                      }}
+                    >
+                      {label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+
+              <tbody>
+                {!loading && rows.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={8}
+                      style={{
+                        padding: 26,
+                        textAlign: "center",
+                        color: "rgba(214,224,243,0.72)",
+                        fontSize: 14,
+                        fontWeight: 700,
+                      }}
+                    >
+                      No devices available after current filtering.
+                    </td>
+                  </tr>
+                ) : (
+                  rows.map((item, index) => (
+                    <DeviceRow
+                      key={item.id}
+                      item={item}
+                      zebra={index % 2 === 1}
+                      trafficHistory={trafficHistory}
+                    />
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-
-      {errorText ? <div style={styles.errorBox}>{errorText}</div> : null}
-
-      <div style={styles.topGrid}>
-        {services.map((item) => <TopCard key={item.name} item={item} />)}
-      </div>
-
-      <div style={styles.deviceGrid}>
-        {devices.map((item) => <DeviceCard key={`${item.name}-${item.ip}`} item={item} />)}
       </div>
     </div>
   );
 }
 
-const styles = {
-  page: {
-    padding: 14,
-    color: "#ecffff",
-    minHeight: "100%",
-    background: "linear-gradient(180deg, rgba(3,11,18,0.18), rgba(2,8,15,0))"
-  },
 
-  hero: {
-    display: "flex",
-    justifyContent: "space-between",
-    gap: 12,
-    flexWrap: "wrap",
-    alignItems: "flex-start",
-    marginBottom: 10
-  },
 
-  eyebrow: {
-    fontSize: 11,
-    color: "#66deff",
-    textTransform: "uppercase",
-    letterSpacing: "0.22em",
-    marginBottom: 5
-  },
 
-  heroTitle: {
-    fontSize: 24,
-    fontWeight: 900,
-    lineHeight: 1.1,
-    color: "#ffffff"
-  },
 
-  heroSub: {
-    marginTop: 6,
-    fontSize: 12,
-    color: "#9ec6d0"
-  },
-
-  heroStats: {
-    display: "grid",
-    gridTemplateColumns: "repeat(3, minmax(110px, 1fr))",
-    gap: 8,
-    minWidth: 360
-  },
-
-  statBox: {
-    padding: "11px 13px",
-    borderRadius: 10,
-    background: "linear-gradient(180deg, rgba(8,25,36,0.95), rgba(4,14,20,0.98))",
-    border: "1px solid rgba(79,185,224,0.18)"
-  },
-
-  statLabel: {
-    fontSize: 10,
-    color: "#88adb8",
-    textTransform: "uppercase",
-    letterSpacing: "0.16em",
-    marginBottom: 8
-  },
-
-  statValue: {
-    fontSize: 22,
-    fontWeight: 900,
-    color: "#f6ffff"
-  },
-
-  errorBox: {
-    marginBottom: 10,
-    padding: "10px 12px",
-    borderRadius: 10,
-    background: "rgba(127,29,29,0.35)",
-    border: "1px solid rgba(255,102,114,0.20)",
-    color: "#ffd4d7"
-  },
-
-  topGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(4, minmax(0,1fr))",
-    gap: 8,
-    marginBottom: 10
-  },
-
-  topCard: {
-    minHeight: 112,
-    padding: 10,
-    borderRadius: 10,
-    background: "linear-gradient(180deg, rgba(7,22,28,0.98), rgba(4,14,20,1))",
-    border: "1px solid rgba(79,185,224,0.16)",
-    boxShadow: "0 8px 18px rgba(0,0,0,0.18)"
-  },
-
-  topHead: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    gap: 8
-  },
-
-  topTitle: {
-    fontSize: 13,
-    fontWeight: 800,
-    color: "#f0ffff"
-  },
-
-  topSub: {
-    fontSize: 10,
-    color: "#8baeb8",
-    marginTop: 2
-  },
-
-  topState: {
-    fontSize: 26,
-    fontWeight: 900,
-    lineHeight: 1
-  },
-
-  topMetricRow: {
-    display: "grid",
-    gridTemplateColumns: "repeat(3, minmax(0,1fr))",
-    gap: 6,
-    marginTop: 10,
-    marginBottom: 8
-  },
-
-  topMetric: {
-    borderRadius: 8,
-    padding: "6px 7px",
-    background: "rgba(255,255,255,0.025)",
-    border: "1px solid rgba(255,255,255,0.045)"
-  },
-
-  topMetricLabel: {
-    fontSize: 9,
-    color: "#8aacb5",
-    textTransform: "uppercase",
-    marginBottom: 4
-  },
-
-  topMetricValue: {
-    fontSize: 11,
-    fontWeight: 800,
-    color: "#f5ffff"
-  },
-
-  deviceGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(4, minmax(0,1fr))",
-    gap: 8
-  },
-
-  deviceCard: {
-    padding: 10,
-    borderRadius: 10,
-    background: "linear-gradient(180deg, rgba(7,22,28,0.98), rgba(4,14,20,1))",
-    border: "1px solid rgba(79,185,224,0.16)",
-    boxShadow: "0 10px 20px rgba(0,0,0,0.18)",
-    minHeight: 258
-  },
-
-  deviceHead: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    gap: 8,
-    marginBottom: 8
-  },
-
-  deviceName: {
-    fontSize: 15,
-    fontWeight: 900,
-    color: "#f6ffff",
-    lineHeight: 1.15
-  },
-
-  deviceIp: {
-    marginTop: 2,
-    fontSize: 10,
-    color: "#8caeb8"
-  },
-
-  deviceStatus: {
-    fontSize: 34,
-    lineHeight: 1,
-    fontWeight: 900
-  },
-
-  deviceBody: {
-    display: "grid",
-    gridTemplateColumns: "1.1fr 0.9fr",
-    gap: 8
-  },
-
-  leftCol: {
-    minWidth: 0
-  },
-
-  rightCol: {
-    display: "grid",
-    gap: 6
-  },
-
-  metaRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    gap: 8,
-    padding: "5px 0",
-    borderBottom: "1px solid rgba(255,255,255,0.04)"
-  },
-
-  metaLabel: {
-    fontSize: 10,
-    color: "#8eaeb7"
-  },
-
-  metaValue: {
-    fontSize: 11,
-    fontWeight: 800,
-    color: "#f2ffff",
-    textAlign: "right"
-  },
-
-  barsWrap: {
-    marginTop: 10,
-    display: "grid",
-    gap: 6
-  },
-
-  usageRow: {
-    display: "grid",
-    gridTemplateColumns: "52px 1fr 34px",
-    gap: 6,
-    alignItems: "center"
-  },
-
-  usageLabel: {
-    fontSize: 10,
-    color: "#8eaeb7"
-  },
-
-  usageTrack: {
-    height: 10,
-    borderRadius: 999,
-    overflow: "hidden",
-    background: "rgba(255,255,255,0.05)",
-    border: "1px solid rgba(255,255,255,0.04)"
-  },
-
-  usageFill: {
-    height: "100%",
-    borderRadius: 999
-  },
-
-  usagePct: {
-    fontSize: 10,
-    fontWeight: 800,
-    color: "#e5fff0",
-    textAlign: "right"
-  },
-
-  gaugeCard: {
-    borderRadius: 8,
-    padding: 4,
-    background: "rgba(255,255,255,0.02)",
-    border: "1px solid rgba(255,255,255,0.045)"
-  },
-
-  gaugeSvg: {
-    width: "100%",
-    height: 84,
-    display: "block"
-  },
-
-  gaugeTitle: {
-    fill: "#ff7c88",
-    fontSize: 12,
-    fontWeight: 800
-  },
-
-  gaugeValue: {
-    fill: "#f5ffff",
-    fontSize: 17,
-    fontWeight: 900
-  },
-
-  gaugeSub: {
-    marginTop: -5,
-    textAlign: "center",
-    fontSize: 9,
-    color: "#8aadb7",
-    textTransform: "uppercase"
-  }
-};
 
