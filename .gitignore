@@ -76,3 +76,4 @@ dump.pm2
 
 # startup scripts (optional)
 startup-tools.ps1
+audit-*
