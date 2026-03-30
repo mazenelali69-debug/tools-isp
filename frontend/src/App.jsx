@@ -17,6 +17,7 @@ import WeatherTripoliPageV3 from "./pages/WeatherTripoliPageV3.jsx";
 import Workspace from "./workspace/Workspace";
 
 const STORAGE_KEY = "toolsisp_windows_v1";
+const LAST_PAGE_KEY = "toolsisp_last_page_v1";
 
 function uid() {
   return "w_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
@@ -24,6 +25,94 @@ function uid() {
 
 export default function App() {
   const [active, setActive] = useState("dashboard");
+
+// 🔥 URL SYNC START
+const ALLOWED_PAGES = new Set([
+  "dashboard",
+  "tplinkjetstream",
+  "neighbors",
+  "liveping",
+  "aviatwtm4200",
+  "aviathistory",
+  "combined",
+  "ethernet",
+  "uplink",
+  "history",
+  "monitorstreet",
+  "networkmap",
+  "isptopology",
+  "weathertripoli"
+]);
+
+function normalizePage(value) {
+  const page = String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/^\/+/, "")
+    .replace(/\/+$/, "");
+
+  return ALLOWED_PAGES.has(page) ? page : "dashboard";
+}
+
+function getPageFromURL() {
+  const path = String(window.location.pathname || "").trim();
+
+  if (!path || path === "/") {
+    try {
+      const remembered = localStorage.getItem(LAST_PAGE_KEY);
+      return normalizePage(remembered || "dashboard");
+    } catch {
+      return "dashboard";
+    }
+  }
+
+  return normalizePage(path);
+}
+
+function pushURL(page, replace = false) {
+  const safePage = normalizePage(page);
+  const url = "/" + safePage;
+
+  if (window.location.pathname !== url) {
+    if (replace) {
+      window.history.replaceState({}, "", url);
+    } else {
+      window.history.pushState({}, "", url);
+    }
+  }
+}
+
+useEffect(() => {
+  const initialPage = getPageFromURL();
+  if (initialPage !== active) {
+    setActive(initialPage);
+  }
+  pushURL(initialPage, true);
+
+  const onPop = () => {
+    const page = getPageFromURL();
+    setActive(page);
+  };
+
+  window.addEventListener("popstate", onPop);
+  return () => window.removeEventListener("popstate", onPop);
+}, []);
+
+useEffect(() => {
+  const safeActive = normalizePage(active);
+
+  if (safeActive !== active) {
+    setActive(safeActive);
+    return;
+  }
+
+  try {
+    localStorage.setItem(LAST_PAGE_KEY, safeActive);
+  } catch {}
+
+  pushURL(safeActive, false);
+}, [active]);
+// 🔥 URL SYNC END
 
   const [windows, setWindows] = useState(() => {
     try {
@@ -131,6 +220,9 @@ export default function App() {
     </AppShell>
   );
 }
+
+
+
 
 
 
