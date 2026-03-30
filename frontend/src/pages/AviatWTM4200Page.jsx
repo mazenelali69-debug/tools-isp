@@ -81,7 +81,7 @@ function toneFromValue(value, cap) {
     line: "#38d8ff",
     soft: "rgba(56,216,255,0.13)",
     border: "rgba(56,216,255,0.26)"
-    };
+  };
 }
 
 function statusTone(loading, error) {
@@ -364,7 +364,6 @@ function MiniStat({ title, value, accent, sub }) {
 
 function PressureBar({ value, cap }) {
   const pct = util(value, cap);
-  const tone = toneFromValue(value, cap);
 
   return (
     <div style={{ marginTop: 14 }}>
@@ -386,7 +385,7 @@ function PressureBar({ value, cap }) {
         >
           Capacity Pressure
         </div>
-        <div style={{ fontSize: 14, fontWeight: 900, color: tone.text }}>{pct}%</div>
+        <div style={{ fontSize: 14, fontWeight: 900, color: "#96f0ff" }}>{pct}%</div>
       </div>
 
       <div
@@ -417,11 +416,134 @@ function PressureBar({ value, cap }) {
   );
 }
 
-function LinkPanel({ card }) {
+function LinkMiniGraph({ history, totalKey, txKey, txColor, totalColor, fillColor, peakLabel }) {
+  const data = Array.isArray(history)
+    ? history.map((row, i) => ({
+        i,
+        t: row?.t || "",
+        total: num(row?.[totalKey]),
+        tx: num(row?.[txKey])
+      }))
+    : [];
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        height: 118,
+        marginBottom: 16,
+        borderRadius: 22,
+        overflow: "hidden",
+        background:
+          "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 100%)",
+        border: "1px solid rgba(255,255,255,0.075)",
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.025), 0 14px 34px rgba(0,0,0,0.16)"
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          left: 12,
+          top: 10,
+          zIndex: 5,
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          padding: "6px 10px",
+          borderRadius: 999,
+          background: "rgba(4,12,28,0.62)",
+          border: "1px solid rgba(255,255,255,0.08)"
+        }}
+      >
+        <span style={{ width: 8, height: 8, borderRadius: 999, background: totalColor, boxShadow: "0 0 10px " + totalColor }} />
+        <span style={{ fontSize: 10, fontWeight: 900, color: "#d7e4fb", letterSpacing: 1 }}>LIVE TRAFFIC</span>
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          right: 12,
+          top: 10,
+          zIndex: 5,
+          padding: "6px 10px",
+          borderRadius: 999,
+          background: "rgba(4,12,28,0.62)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          fontSize: 10,
+          fontWeight: 900,
+          color: "#e6efff"
+        }}
+      >
+        Peak {peakLabel}
+      </div>
+
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={data} margin={{ top: 18, right: 10, left: 10, bottom: 8 }}>
+          <defs>
+            <linearGradient id={"fill_" + totalKey} x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stopColor={fillColor} stopOpacity={0.52} />
+              <stop offset="100%" stopColor={fillColor} stopOpacity={0.02} />
+            </linearGradient>
+            <linearGradient id={"txfill_" + txKey} x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stopColor={txColor} stopOpacity={0.22} />
+              <stop offset="100%" stopColor={txColor} stopOpacity={0.01} />
+            </linearGradient>
+          </defs>
+
+          <CartesianGrid stroke="rgba(255,255,255,0.05)" vertical={false} />
+          <XAxis hide dataKey="i" />
+          <YAxis hide />
+          <Tooltip
+            cursor={{ stroke: "rgba(255,255,255,0.10)", strokeDasharray: "4 5" }}
+            contentStyle={{
+              background: "rgba(5,12,26,0.96)",
+              border: "1px solid rgba(255,255,255,0.10)",
+              borderRadius: 14
+            }}
+            labelFormatter={(_, payload) => payload?.[0]?.payload?.t || ""}
+            formatter={(value, name) => [fmt(value) + " Mbps", String(name).toUpperCase()]}
+          />
+
+          <Area
+            type="monotone"
+            dataKey="total"
+            stroke={totalColor}
+            fill={"url(#fill_" + totalKey + ")"}
+            strokeWidth={2.3}
+            fillOpacity={1}
+            dot={false}
+            activeDot={{ r: 3.5, fill: totalColor, stroke: "#fff", strokeWidth: 0.5 }}
+          />
+
+          <Area
+            type="monotone"
+            dataKey="tx"
+            stroke={txColor}
+            fill={"url(#txfill_" + txKey + ")"}
+            strokeWidth={1.8}
+            fillOpacity={1}
+            dot={false}
+            activeDot={{ r: 3, fill: txColor, stroke: "#fff", strokeWidth: 0.5 }}
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+function LinkPanel({ card, history, totalKey, txKey, totalColor, txColor, fillColor }) {
   if (!card) return null;
 
   const tone = toneFromValue(card.totalMbps, card.cap);
   const pct = util(card.totalMbps, card.cap);
+
+  const avg = Array.isArray(history) && history.length
+    ? history.reduce((s, row) => s + num(row?.[totalKey]), 0) / history.length
+    : 0;
+
+  const peak = Array.isArray(history)
+    ? history.reduce((m, row) => Math.max(m, num(row?.[totalKey])), 0)
+    : 0;
 
   return (
     <div
@@ -430,7 +552,7 @@ function LinkPanel({ card }) {
         overflow: "hidden",
         borderRadius: 30,
         padding: 24,
-        minHeight: 345,
+        minHeight: 430,
         background:
           "radial-gradient(circle at 15% 0%, rgba(131,84,255,0.14) 0%, rgba(131,84,255,0) 32%)," +
           "radial-gradient(circle at 100% 100%, rgba(0,214,255,0.12) 0%, rgba(0,214,255,0) 34%)," +
@@ -481,8 +603,7 @@ function LinkPanel({ card }) {
               lineHeight: 1.15,
               fontWeight: 950,
               color: "#f4f8ff",
-              letterSpacing: -0.4,
-              textWrap: "balance"
+              letterSpacing: -0.4
             }}
           >
             {card.subtitle}
@@ -518,6 +639,16 @@ function LinkPanel({ card }) {
           {tone.label}
         </div>
       </div>
+
+      <LinkMiniGraph
+        history={history}
+        totalKey={totalKey}
+        txKey={txKey}
+        totalColor={totalColor}
+        txColor={txColor}
+        fillColor={fillColor}
+        peakLabel={fmt(peak)}
+      />
 
       <div
         style={{
@@ -623,9 +754,12 @@ function LinkPanel({ card }) {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 8
+              gap: 10
             }}
           >
+            <div style={{ fontSize: 12, color: "#8ba6cf", fontWeight: 800 }}>
+              Avg {fmt(avg)}
+            </div>
             <div
               style={{
                 width: 8,
@@ -758,8 +892,11 @@ export default function AviatWTM4200Page() {
           rx: num(combined.rxMbps),
           tx: num(combined.txMbps),
           uplink: num(cards?.uplink?.totalMbps),
+          uplinkTx: num(cards?.uplink?.txMbps),
           switchA: num(cards?.switchA?.totalMbps),
-          switchB: num(cards?.switchB?.totalMbps)
+          switchATx: num(cards?.switchA?.txMbps),
+          switchB: num(cards?.switchB?.totalMbps),
+          switchBTx: num(cards?.switchB?.txMbps)
         };
 
         setHistory((prev) => pushPoint(prev, point));
@@ -800,8 +937,11 @@ export default function AviatWTM4200Page() {
     rx: 0,
     tx: 0,
     uplink: 0,
+    uplinkTx: 0,
     switchA: 0,
-    switchB: 0
+    switchATx: 0,
+    switchB: 0,
+    switchBTx: 0
   };
 
   const peakTotal = chartPeak(history, "total");
@@ -856,12 +996,7 @@ export default function AviatWTM4200Page() {
         }
       `}</style>
 
-      <div
-        style={{
-          display: "grid",
-          gap: 18
-        }}
-      >
+      <div style={{ display: "grid", gap: 18 }}>
         <div
           style={{
             display: "flex",
@@ -940,13 +1075,7 @@ export default function AviatWTM4200Page() {
           </div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 12
-          }}
-        >
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
           <Pill label="Mode" value="Aviat WTM4200 Live" accent="#8fe9ff" />
           <Pill label="Device" value="155.15.59.4" accent="#93d8ff" />
           <Pill label="Polling" value={String(POLL_MS / 1000) + "s"} accent="#7effb5" />
@@ -1245,60 +1374,23 @@ export default function AviatWTM4200Page() {
                   Telemetry Pulse
                 </div>
 
-                <div
-                  style={{
-                    display: "grid",
-                    gap: 12
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: 12,
-                      color: "#9bb3d8",
-                      fontSize: 14
-                    }}
-                  >
+                <div style={{ display: "grid", gap: 12 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "#9bb3d8", fontSize: 14 }}>
                     <span>Engine</span>
                     <strong style={{ color: "#f1f7ff" }}>{error ? "Partial" : "Stable"}</strong>
                   </div>
 
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: 12,
-                      color: "#9bb3d8",
-                      fontSize: 14
-                    }}
-                  >
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "#9bb3d8", fontSize: 14 }}>
                     <span>Polling Interval</span>
                     <strong style={{ color: "#f1f7ff" }}>{POLL_MS / 1000}s</strong>
                   </div>
 
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: 12,
-                      color: "#9bb3d8",
-                      fontSize: 14
-                    }}
-                  >
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "#9bb3d8", fontSize: 14 }}>
                     <span>Live Window</span>
                     <strong style={{ color: "#f1f7ff" }}>{MAX_POINTS}s</strong>
                   </div>
 
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: 12,
-                      color: "#9bb3d8",
-                      fontSize: 14
-                    }}
-                  >
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "#9bb3d8", fontSize: 14 }}>
                     <span>Last Tick</span>
                     <strong style={{ color: "#f1f7ff" }}>{latest.t}</strong>
                   </div>
@@ -1317,12 +1409,35 @@ export default function AviatWTM4200Page() {
             gap: 16
           }}
         >
-          <LinkPanel card={cards.uplink} />
-          <LinkPanel card={cards.switchB} />
-          <LinkPanel card={cards.switchA} />
+          <LinkPanel
+            card={cards.uplink}
+            history={history}
+            totalKey="uplink"
+            txKey="uplinkTx"
+            totalColor="#7eeeff"
+            txColor="#7effbc"
+            fillColor="#45d7ff"
+          />
+          <LinkPanel
+            card={cards.switchB}
+            history={history}
+            totalKey="switchB"
+            txKey="switchBTx"
+            totalColor="#c79cff"
+            txColor="#7effbc"
+            fillColor="#9b68ff"
+          />
+          <LinkPanel
+            card={cards.switchA}
+            history={history}
+            totalKey="switchA"
+            txKey="switchATx"
+            totalColor="#7effbc"
+            txColor="#7eeeff"
+            fillColor="#29e39a"
+          />
         </div>
       </div>
     </div>
   );
 }
-
