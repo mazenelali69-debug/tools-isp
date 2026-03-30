@@ -1,81 +1,113 @@
 ﻿import React, { useEffect, useMemo, useState } from "react";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ReferenceLine
+} from "recharts";
+
+const API_URL = "/api/aviatwtm4200/live";
+const POLL_MS = 1000;
+const MAX_POINTS = 90;
 
 const CAPACITY = {
+  combined: 5000,
   uplink: 3000,
-  switchB: 1000,
-  switchA: 1000
+  switchA: 1000,
+  switchB: 1000
 };
 
 function num(v) {
-  const x = Number(v);
-  return Number.isFinite(x) ? x : 0;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
 }
 
 function fmt(v) {
   return num(v).toFixed(2);
 }
 
-function utilPct(value, capacity) {
-  const p = (num(value) / Math.max(1, num(capacity))) * 100;
-  return Math.max(0, Math.round(p));
+function compactMbps(v) {
+  const x = num(v);
+  if (x >= 1000) return (x / 1000).toFixed(2) + " Gbps";
+  return x.toFixed(2) + " Mbps";
 }
 
-function toneFor(value, capacity) {
-  const p = utilPct(value, capacity);
+function shortTime(ts) {
+  try {
+    return new Date(ts).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
+  } catch {
+    return "--:--:--";
+  }
+}
+
+function util(value, cap) {
+  return Math.max(0, Math.min(100, Math.round((num(value) / Math.max(1, num(cap))) * 100)));
+}
+
+function toneFromValue(value, cap) {
+  const p = util(value, cap);
 
   if (p >= 90) {
     return {
-      name: "CRITICAL",
-      text: "#ffb8c5",
-      border: "rgba(255,94,122,0.42)",
-      soft: "rgba(255,94,122,0.08)",
-      bar: "linear-gradient(90deg, #ffb0be 0%, #ff5c7a 100%)"
+      label: "CRITICAL",
+      text: "#ffbad2",
+      line: "#ff5c97",
+      soft: "rgba(255,92,151,0.16)",
+      border: "rgba(255,92,151,0.34)"
     };
   }
 
   if (p >= 70) {
     return {
-      name: "HIGH",
-      text: "#ffe08f",
-      border: "rgba(255,198,91,0.34)",
-      soft: "rgba(255,198,91,0.07)",
-      bar: "linear-gradient(90deg, #ffe08f 0%, #ffc24c 100%)"
+      label: "HIGH",
+      text: "#ffd889",
+      line: "#ffbf47",
+      soft: "rgba(255,191,71,0.14)",
+      border: "rgba(255,191,71,0.30)"
     };
   }
 
   return {
-    name: "NORMAL",
-    text: "#8fe9ff",
-    border: "rgba(63,204,255,0.26)",
-    soft: "rgba(63,204,255,0.06)",
-    bar: "linear-gradient(90deg, #78efff 0%, #37bfff 100%)"
-  };
+    label: "NORMAL",
+    text: "#96f0ff",
+    line: "#38d8ff",
+    soft: "rgba(56,216,255,0.13)",
+    border: "rgba(56,216,255,0.26)"
+    };
 }
 
-function statusTone(err, loading) {
-  if (err) {
+function statusTone(loading, error) {
+  if (error) {
     return {
       label: "DEGRADED",
-      text: "#ffb8c5",
-      border: "rgba(255,94,122,0.36)",
-      bg: "rgba(255,94,122,0.07)"
+      text: "#ffbad2",
+      bg: "rgba(255,92,151,0.10)",
+      border: "rgba(255,92,151,0.34)"
     };
   }
 
   if (loading) {
     return {
-      label: "LOADING",
-      text: "#ffe08f",
-      border: "rgba(255,198,91,0.30)",
-      bg: "rgba(255,198,91,0.07)"
+      label: "SYNCING",
+      text: "#ffe08a",
+      bg: "rgba(255,191,71,0.08)",
+      border: "rgba(255,191,71,0.24)"
     };
   }
 
   return {
     label: "LIVE",
     text: "#a9ffd5",
-    border: "rgba(72,255,176,0.24)",
-    bg: "rgba(72,255,176,0.06)"
+    bg: "rgba(72,255,176,0.08)",
+    border: "rgba(72,255,176,0.24)"
   };
 }
 
@@ -88,38 +120,37 @@ function normalizePart(obj, fallbackKey, fallbackName) {
 
   return {
     key: String(obj.key || fallbackKey || "").toLowerCase(),
-    name: obj.name || fallbackName,
+    name: String(obj.name || fallbackName || "").trim(),
     rxMbps: rx,
     txMbps: tx,
     totalMbps: total,
-    status: String(obj.status || (obj.ok === false ? "down" : "up")).toLowerCase(),
-    raw: obj
+    status: String(obj.status || (obj.ok === false ? "down" : "up")).toLowerCase()
   };
 }
 
-function getApiParts(data) {
+function getParts(data) {
   const out = [];
 
   if (data?.radio) out.push(normalizePart(data.radio, "radio", "Radio1"));
-  if (data?.switchA) out.push(normalizePart(data.switchA, "swa", "Switch A"));
-  if (data?.switchB) out.push(normalizePart(data.switchB, "swb", "Switch B"));
+  if (data?.switchA) out.push(normalizePart(data.switchA, "switcha", "Switch A"));
+  if (data?.switchB) out.push(normalizePart(data.switchB, "switchb", "Switch B"));
 
   if (Array.isArray(data?.parts)) {
-    data.parts.forEach((p, i) => out.push(normalizePart(p, `part${i + 1}`, `Part ${i + 1}`)));
+    data.parts.forEach((p, i) => out.push(normalizePart(p, "part" + (i + 1), "Part " + (i + 1))));
   }
 
   const seen = new Set();
   return out.filter(Boolean).filter((p) => {
-    const k = `${p.key}|${p.name}`.toLowerCase();
-    if (seen.has(k)) return false;
-    seen.add(k);
+    const key = (p.key + "|" + p.name).toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
     return true;
   });
 }
 
 function buildCards(data, parts) {
   let uplink = parts.find(
-    (p) => p.key.includes("radio") || String(p.name).toLowerCase().includes("radio")
+    (p) => p.key.includes("radio") || p.name.toLowerCase().includes("radio")
   );
 
   if (!uplink) {
@@ -133,18 +164,20 @@ function buildCards(data, parts) {
     };
   }
 
-  const switchB = parts.find(
-    (p) =>
-      p.key === "swb" ||
-      String(p.name).toLowerCase().includes("switch b") ||
-      String(p.name).toLowerCase().includes("tengige1/1")
-  );
-
   const switchA = parts.find(
     (p) =>
+      p.key === "switcha" ||
       p.key === "swa" ||
-      String(p.name).toLowerCase().includes("switch a") ||
-      String(p.name).toLowerCase().includes("tengige1/2")
+      p.name.toLowerCase().includes("switch a") ||
+      p.name.toLowerCase().includes("tengige1/2")
+  );
+
+  const switchB = parts.find(
+    (p) =>
+      p.key === "switchb" ||
+      p.key === "swb" ||
+      p.name.toLowerCase().includes("switch b") ||
+      p.name.toLowerCase().includes("tengige1/1")
   );
 
   return {
@@ -153,24 +186,24 @@ function buildCards(data, parts) {
       title: "UPLINK CORE",
       subtitle: "Radio1 Main Internet Source",
       meta: "155.15.59.4 • 3 Gbps core path • Aviat WTM4200",
-      capacityMbps: CAPACITY.uplink
+      cap: CAPACITY.uplink
     },
-    switchB: switchB
-      ? {
-          ...switchB,
-          title: "Switch B",
-          subtitle: "88.88.88.254 • VLAN1559 • TenGigE1/1",
-          meta: "Distribution segment • 1 Gbps",
-          capacityMbps: CAPACITY.switchB
-        }
-      : null,
     switchA: switchA
       ? {
           ...switchA,
-          title: "Switch A",
+          title: "SWITCH A",
           subtitle: "10.88.88.254 • VLAN2430 • TenGigE1/2",
           meta: "Distribution segment • 1 Gbps",
-          capacityMbps: CAPACITY.switchA
+          cap: CAPACITY.switchA
+        }
+      : null,
+    switchB: switchB
+      ? {
+          ...switchB,
+          title: "SWITCH B",
+          subtitle: "88.88.88.254 • VLAN1559 • TenGigE1/1",
+          meta: "Distribution segment • 1 Gbps",
+          cap: CAPACITY.switchB
         }
       : null
   };
@@ -185,20 +218,35 @@ function getCombined(data, cards) {
     return { rxMbps: rx, txMbps: tx, totalMbps: total };
   }
 
-  return [cards.uplink, cards.switchB, cards.switchA]
+  return [cards.uplink, cards.switchA, cards.switchB]
     .filter(Boolean)
     .reduce(
-      (acc, c) => {
-        acc.rxMbps += num(c.rxMbps);
-        acc.txMbps += num(c.txMbps);
-        acc.totalMbps += num(c.totalMbps);
+      (acc, item) => {
+        acc.rxMbps += num(item.rxMbps);
+        acc.txMbps += num(item.txMbps);
+        acc.totalMbps += num(item.totalMbps);
         return acc;
       },
       { rxMbps: 0, txMbps: 0, totalMbps: 0 }
     );
 }
 
-function Chip({ label, value, accent = "#8fe9ff" }) {
+function pushPoint(prev, point) {
+  const next = [...prev, point];
+  if (next.length > MAX_POINTS) return next.slice(-MAX_POINTS);
+  return next;
+}
+
+function chartPeak(history, key) {
+  return history.reduce((m, row) => Math.max(m, num(row?.[key])), 0);
+}
+
+function chartAvg(history, key) {
+  if (!history.length) return 0;
+  return history.reduce((s, row) => s + num(row?.[key]), 0) / history.length;
+}
+
+function Pill({ label, value, accent = "#9ae7ff" }) {
   return (
     <div
       style={{
@@ -207,88 +255,138 @@ function Chip({ label, value, accent = "#8fe9ff" }) {
         gap: 8,
         padding: "10px 14px",
         borderRadius: 999,
-        background: "rgba(255,255,255,0.035)",
-        border: "1px solid rgba(255,255,255,0.07)",
-        boxShadow: "0 10px 20px rgba(0,0,0,0.16)"
+        background: "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.025) 100%)",
+        border: "1px solid rgba(255,255,255,0.08)",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.18)"
       }}
     >
       <span
         style={{
           fontSize: 11,
-          color: "#6f8cb8",
-          letterSpacing: 1.05,
-          textTransform: "uppercase"
+          letterSpacing: 1.2,
+          textTransform: "uppercase",
+          color: "#6f8fc5"
         }}
       >
         {label}
       </span>
-      <span style={{ fontSize: 13, fontWeight: 900, color: accent }}>{value}</span>
+      <span style={{ fontSize: 13, fontWeight: 900, color: accent }}>
+        {value}
+      </span>
     </div>
   );
 }
 
-function HeroMetric({ label, value, sub, color }) {
+function MetricCard({ label, value, color, hint }) {
   return (
     <div
       style={{
         borderRadius: 24,
         padding: 18,
-        background: "linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)",
-        border: "1px solid rgba(255,255,255,0.07)"
+        minHeight: 116,
+        background: "linear-gradient(180deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.018) 100%)",
+        border: "1px solid rgba(255,255,255,0.075)",
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.03), 0 16px 45px rgba(0,0,0,0.20)"
       }}
     >
       <div
         style={{
           fontSize: 11,
-          color: "#7392bf",
-          letterSpacing: 1.35,
+          letterSpacing: 1.3,
           textTransform: "uppercase",
-          marginBottom: 10
+          color: "#7394c9",
+          marginBottom: 12
         }}
       >
         {label}
       </div>
+
       <div
         style={{
-          fontSize: 36,
+          fontSize: 38,
           lineHeight: 1,
           fontWeight: 950,
           color
         }}
       >
         {fmt(value)}
-        <span style={{ fontSize: 17, marginLeft: 8, color: "#98b0d6" }}>Mbps</span>
+        <span
+          style={{
+            fontSize: 16,
+            marginLeft: 8,
+            color: "#95add1",
+            fontWeight: 800
+          }}
+        >
+          Mbps
+        </span>
       </div>
-      <div style={{ marginTop: 10, color: "#96aed4", fontSize: 13 }}>{sub}</div>
+
+      <div
+        style={{
+          marginTop: 10,
+          fontSize: 13,
+          color: "#8ea6cd"
+        }}
+      >
+        {hint}
+      </div>
     </div>
   );
 }
 
-function UtilBar({ value, capacity }) {
-  const percent = utilPct(value, capacity);
-  const tone = toneFor(value, capacity);
+function MiniStat({ title, value, accent, sub }) {
+  return (
+    <div
+      style={{
+        borderRadius: 20,
+        padding: 16,
+        background: "linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.016) 100%)",
+        border: "1px solid rgba(255,255,255,0.07)"
+      }}
+    >
+      <div
+        style={{
+          fontSize: 10,
+          letterSpacing: 1.2,
+          textTransform: "uppercase",
+          color: "#6786b9",
+          marginBottom: 8
+        }}
+      >
+        {title}
+      </div>
+      <div style={{ fontSize: 30, fontWeight: 950, color: accent }}>{value}</div>
+      <div style={{ fontSize: 12, color: "#89a4cd", marginTop: 6 }}>{sub}</div>
+    </div>
+  );
+}
+
+function PressureBar({ value, cap }) {
+  const pct = util(value, cap);
+  const tone = toneFromValue(value, cap);
 
   return (
-    <div>
+    <div style={{ marginTop: 14 }}>
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
+          justifyContent: "space-between",
           marginBottom: 8
         }}
       >
         <div
           style={{
             fontSize: 11,
-            color: "#7392bf",
-            letterSpacing: 1.25,
-            textTransform: "uppercase"
+            letterSpacing: 1.2,
+            textTransform: "uppercase",
+            color: "#7393c4"
           }}
         >
           Capacity Pressure
         </div>
-        <div style={{ color: tone.text, fontWeight: 900, fontSize: 13 }}>{percent}%</div>
+        <div style={{ fontSize: 14, fontWeight: 900, color: tone.text }}>{pct}%</div>
       </div>
 
       <div
@@ -302,9 +400,16 @@ function UtilBar({ value, capacity }) {
       >
         <div
           style={{
-            width: `${Math.min(100, percent)}%`,
+            width: pct + "%",
             height: "100%",
-            background: tone.bar
+            borderRadius: 999,
+            background:
+              pct >= 90
+                ? "linear-gradient(90deg, #ffbed0 0%, #ff5d97 100%)"
+                : pct >= 70
+                ? "linear-gradient(90deg, #ffe189 0%, #ffbc43 100%)"
+                : "linear-gradient(90deg, #7ff2ff 0%, #35c8ff 100%)",
+            boxShadow: "0 0 24px rgba(53,200,255,0.45)"
           }}
         />
       </div>
@@ -312,78 +417,37 @@ function UtilBar({ value, capacity }) {
   );
 }
 
-function RailCard({ title, value, sub, color = "#fff", border = "rgba(255,255,255,0.08)" }) {
-  return (
-    <div
-      style={{
-        borderRadius: 22,
-        padding: 16,
-        background: "linear-gradient(180deg, rgba(10,16,29,0.98) 0%, rgba(7,12,23,0.98) 100%)",
-        border: `1px solid ${border}`
-      }}
-    >
-      <div
-        style={{
-          fontSize: 11,
-          color: "#6f8cb8",
-          letterSpacing: 1.2,
-          textTransform: "uppercase",
-          marginBottom: 8
-        }}
-      >
-        {title}
-      </div>
-      <div style={{ color, fontSize: 28, lineHeight: 1.05, fontWeight: 950 }}>{value}</div>
-      <div style={{ marginTop: 10, color: "#9bb3d8", fontSize: 14, lineHeight: 1.5 }}>{sub}</div>
-    </div>
-  );
-}
+function LinkPanel({ card }) {
+  if (!card) return null;
 
-function TrafficPanel({ card, large = false }) {
-  if (!card) {
-    return (
-      <div
-        style={{
-          borderRadius: 30,
-          padding: 22,
-          background: "linear-gradient(180deg, rgba(8,15,27,0.98) 0%, rgba(5,10,19,0.98) 100%)",
-          border: "1px solid rgba(255,255,255,0.08)"
-        }}
-      >
-        <div style={{ fontSize: 22, fontWeight: 900, color: "#fff" }}>No Data</div>
-      </div>
-    );
-  }
-
-  const tone = toneFor(card.totalMbps, card.capacityMbps);
+  const tone = toneFromValue(card.totalMbps, card.cap);
 
   return (
     <div
       style={{
-        borderRadius: 30,
-        padding: large ? 24 : 22,
-        background:
-          "radial-gradient(circle at top right, rgba(0,162,255,0.09), transparent 24%), linear-gradient(180deg, rgba(8,15,27,0.985) 0%, rgba(4,9,18,0.995) 100%)",
-        border: `1px solid ${tone.border}`,
-        boxShadow: "0 24px 56px rgba(0,0,0,0.24)"
+        borderRadius: 28,
+        padding: 22,
+        background: "linear-gradient(180deg, rgba(5,16,38,0.92) 0%, rgba(3,11,27,0.97) 100%)",
+        border: "1px solid " + tone.border,
+        boxShadow: "0 24px 60px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.03)"
       }}
     >
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
-          gap: 12,
           alignItems: "flex-start",
+          justifyContent: "space-between",
+          gap: 16,
           marginBottom: 16
         }}
       >
-        <div style={{ minWidth: 0 }}>
+        <div>
           <div
             style={{
               fontSize: 11,
-              color: "#7392bf",
-              letterSpacing: 1.45,
+              letterSpacing: 1.4,
               textTransform: "uppercase",
+              color: "#7392bf",
               marginBottom: 8
             }}
           >
@@ -391,271 +455,673 @@ function TrafficPanel({ card, large = false }) {
           </div>
           <div
             style={{
-              fontSize: large ? 34 : 26,
-              lineHeight: 1.02,
+              fontSize: 24,
+              lineHeight: 1.14,
               fontWeight: 950,
-              color: "#fff"
+              color: "#f4f8ff"
             }}
           >
             {card.subtitle}
           </div>
-          <div style={{ marginTop: 10, color: "#97afd5", fontSize: 14, lineHeight: 1.5 }}>{card.meta}</div>
+          <div
+            style={{
+              marginTop: 10,
+              fontSize: 14,
+              color: "#88a5d0"
+            }}
+          >
+            {card.meta}
+          </div>
         </div>
 
         <div
           style={{
-            padding: "8px 12px",
+            padding: "10px 14px",
             borderRadius: 999,
+            border: "1px solid " + tone.border,
             background: tone.soft,
-            border: `1px solid ${tone.border}`,
             color: tone.text,
-            fontSize: 12,
             fontWeight: 900,
-            letterSpacing: 1.2,
-            whiteSpace: "nowrap"
+            fontSize: 13,
+            letterSpacing: 0.9
           }}
         >
-          {tone.name}
+          {tone.label}
         </div>
       </div>
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: large ? "1fr 1fr 1.15fr" : "repeat(3, minmax(120px, 1fr))",
-          gap: 12,
-          marginBottom: 16
+          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+          gap: 14
         }}
       >
-        <div style={{ borderRadius: 20, padding: 18, background: "rgba(255,255,255,0.035)", border: "1px solid rgba(255,255,255,0.07)" }}>
-          <div style={{ fontSize: 11, color: "#7392bf", marginBottom: 8, letterSpacing: 1.2, textTransform: "uppercase" }}>RX</div>
-          <div style={{ fontSize: large ? 42 : 26, lineHeight: 1, fontWeight: 950, color: "#8fe9ff" }}>{fmt(card.rxMbps)}</div>
-          <div style={{ marginTop: 8, fontSize: 12, color: "#98b0d6" }}>Mbps</div>
-        </div>
-
-        <div style={{ borderRadius: 20, padding: 18, background: "rgba(255,255,255,0.035)", border: "1px solid rgba(255,255,255,0.07)" }}>
-          <div style={{ fontSize: 11, color: "#7392bf", marginBottom: 8, letterSpacing: 1.2, textTransform: "uppercase" }}>TX</div>
-          <div style={{ fontSize: large ? 42 : 26, lineHeight: 1, fontWeight: 950, color: "#9cffd7" }}>{fmt(card.txMbps)}</div>
-          <div style={{ marginTop: 8, fontSize: 12, color: "#98b0d6" }}>Mbps</div>
-        </div>
-
-        <div style={{ borderRadius: 20, padding: 18, background: "rgba(255,255,255,0.04)", border: `1px solid ${tone.border}` }}>
-          <div style={{ fontSize: 11, color: "#7392bf", marginBottom: 8, letterSpacing: 1.2, textTransform: "uppercase" }}>Total</div>
-          <div style={{ fontSize: large ? 54 : 30, lineHeight: 1, fontWeight: 950, color: tone.text }}>{fmt(card.totalMbps)}</div>
-          <div style={{ marginTop: 8, fontSize: 12, color: "#98b0d6" }}>Mbps</div>
-        </div>
+        <MiniStat
+          title="RX"
+          value={fmt(card.rxMbps)}
+          accent="#84eeff"
+          sub="Inbound path load"
+        />
+        <MiniStat
+          title="TX"
+          value={fmt(card.txMbps)}
+          accent="#7effb5"
+          sub="Outbound path load"
+        />
+        <MiniStat
+          title="TOTAL"
+          value={fmt(card.totalMbps)}
+          accent="#d6c1ff"
+          sub={"Capacity " + compactMbps(card.cap)}
+        />
       </div>
 
-      <UtilBar value={card.totalMbps} capacity={card.capacityMbps} />
+      <PressureBar value={card.totalMbps} cap={card.cap} />
     </div>
   );
 }
 
 export default function AviatWTM4200Page() {
-  const [data, setData] = useState(null);
-  const [err, setErr] = useState("");
   const [loading, setLoading] = useState(true);
-  const [tick, setTick] = useState(0);
-  const [lastOkAt, setLastOkAt] = useState("");
+  const [error, setError] = useState("");
+  const [snapshot, setSnapshot] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [firstPaint, setFirstPaint] = useState(true);
 
   useEffect(() => {
-    let dead = false;
+    let active = true;
 
-    async function load() {
+    async function pull() {
       try {
-        const res = await fetch("/api/aviatwtm4200/live", { cache: "no-store" });
+        const res = await fetch(API_URL, { cache: "no-store" });
         const json = await res.json();
 
-        if (dead) return;
+        if (!active) return;
 
-        setData(json);
-        setErr("");
-        setLastOkAt(new Date().toLocaleTimeString());
+        if (!res.ok || json?.ok === false) {
+          throw new Error(json?.error || "aviat live failed");
+        }
+
+        setSnapshot(json);
+        setError("");
+
+        const ts = Date.now();
+        const parts = getParts(json);
+        const cards = buildCards(json, parts);
+        const combined = getCombined(json, cards);
+
+        const point = {
+          ts,
+          t: shortTime(ts),
+          total: num(combined.totalMbps),
+          rx: num(combined.rxMbps),
+          tx: num(combined.txMbps),
+          uplink: num(cards?.uplink?.totalMbps),
+          switchA: num(cards?.switchA?.totalMbps),
+          switchB: num(cards?.switchB?.totalMbps)
+        };
+
+        setHistory((prev) => pushPoint(prev, point));
       } catch (e) {
-        if (dead) return;
-        setErr(String(e?.message || e || "Load failed"));
+        if (!active) return;
+        setError(String(e?.message || e || "live poll failed"));
       } finally {
-        if (!dead) setLoading(false);
+        if (active) setLoading(false);
       }
     }
 
-    load();
+    pull();
+    const timer = setInterval(pull, POLL_MS);
 
-    const id = setInterval(() => {
-      setTick((v) => v + 1);
-      load();
-    }, 3000);
+    const animTimer = setTimeout(() => {
+      if (active) setFirstPaint(false);
+    }, 950);
 
     return () => {
-      dead = true;
-      clearInterval(id);
+      active = false;
+      clearInterval(timer);
+      clearTimeout(animTimer);
     };
   }, []);
 
-  const parts = useMemo(() => getApiParts(data), [data]);
-  const cards = useMemo(() => buildCards(data, parts), [data, parts]);
-  const combined = useMemo(() => getCombined(data, cards), [data, cards]);
-  const live = statusTone(err, loading);
-  const aggregatePressure = utilPct(
-    combined.totalMbps,
-    CAPACITY.uplink + CAPACITY.switchA + CAPACITY.switchB
+  const parts = useMemo(() => getParts(snapshot), [snapshot]);
+  const cards = useMemo(() => buildCards(snapshot, parts), [snapshot, parts]);
+  const combined = useMemo(() => getCombined(snapshot, cards), [snapshot, cards]);
+  const combinedTone = useMemo(
+    () => toneFromValue(combined.totalMbps, CAPACITY.combined),
+    [combined.totalMbps]
   );
+  const liveTone = useMemo(() => statusTone(loading, error), [loading, error]);
+
+  const latest = history[history.length - 1] || {
+    t: "--:--:--",
+    total: 0,
+    rx: 0,
+    tx: 0,
+    uplink: 0,
+    switchA: 0,
+    switchB: 0
+  };
+
+  const peakTotal = chartPeak(history, "total");
+  const avgTotal = chartAvg(history, "total");
+  const peakRx = chartPeak(history, "rx");
+  const peakTx = chartPeak(history, "tx");
 
   return (
     <div
       style={{
         minHeight: "100%",
-        padding: 20,
+        padding: "22px 22px 34px",
+        color: "#eaf2ff",
         background:
-          "radial-gradient(circle at 0% 0%, rgba(0,168,255,0.12), transparent 18%), radial-gradient(circle at 100% 0%, rgba(69,54,255,0.09), transparent 18%), linear-gradient(180deg, #060f1b 0%, #030814 100%)",
-        color: "#fff"
+          "radial-gradient(circle at 20% 0%, rgba(88,0,255,0.16) 0%, rgba(88,0,255,0) 30%)," +
+          "radial-gradient(circle at 85% 12%, rgba(0,183,255,0.14) 0%, rgba(0,183,255,0) 28%)," +
+          "linear-gradient(180deg, #020915 0%, #031022 48%, #020813 100%)"
       }}
     >
-      <div style={{ maxWidth: '100%', margin: "0 auto" }}>
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
-          <Chip label="Mode" value="Aviat WTM4200 Live" />
-          <Chip label="Device" value="155.15.59.4" />
-          <Chip label="Polling" value="3s" accent="#9cffd7" />
-          <Chip label="Uplink" value="3 Gbps" />
-          <Chip label="Switch B" value="1 Gbps" />
-          <Chip label="Switch A" value="1 Gbps" />
-          <Chip label="Tick" value={tick} accent="#ffe08f" />
+      <style>{`
+        @keyframes aviatCenterBurst {
+          0% {
+            clip-path: inset(0 50% 0 50% round 28px);
+            opacity: 0.28;
+            transform: scaleX(0.88) scaleY(0.96);
+            filter: saturate(0.8) blur(4px);
+          }
+          62% {
+            clip-path: inset(0 12% 0 12% round 28px);
+            opacity: 0.88;
+            transform: scaleX(1.02) scaleY(1);
+            filter: saturate(1.12) blur(0px);
+          }
+          100% {
+            clip-path: inset(0 0 0 0 round 28px);
+            opacity: 1;
+            transform: scaleX(1) scaleY(1);
+            filter: saturate(1) blur(0px);
+          }
+        }
+
+        @keyframes aviatPulseDot {
+          0% { transform: scale(1); opacity: 0.95; box-shadow: 0 0 0 0 rgba(93,255,180,0.48); }
+          70% { transform: scale(1.08); opacity: 1; box-shadow: 0 0 0 12px rgba(93,255,180,0); }
+          100% { transform: scale(1); opacity: 0.95; box-shadow: 0 0 0 0 rgba(93,255,180,0); }
+        }
+
+        @keyframes aviatFloat {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-3px); }
+          100% { transform: translateY(0px); }
+        }
+      `}</style>
+
+      <div
+        style={{
+          display: "grid",
+          gap: 18
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 14
+          }}
+        >
+          <div>
+            <div
+              style={{
+                fontSize: 11,
+                letterSpacing: 1.45,
+                textTransform: "uppercase",
+                color: "#6e8cc0",
+                marginBottom: 10
+              }}
+            >
+              AVIAT WTM4200 • LIVE GRAPHING SURFACE
+            </div>
+
+            <div
+              style={{
+                fontSize: 54,
+                fontWeight: 1000,
+                lineHeight: 0.98,
+                letterSpacing: -1.8,
+                color: "#f6fbff"
+              }}
+            >
+              Brutal Live Traffic Matrix
+            </div>
+
+            <div
+              style={{
+                marginTop: 12,
+                maxWidth: 1100,
+                fontSize: 16,
+                lineHeight: 1.65,
+                color: "#8ca7cf"
+              }}
+            >
+              Real-time Aviat transport graphing with center-burst reveal, neon layered area flow,
+              and live 1-second polling over the existing uplink, switch A, and switch B telemetry.
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              padding: "12px 16px",
+              borderRadius: 999,
+              background: liveTone.bg,
+              border: "1px solid " + liveTone.border,
+              color: liveTone.text,
+              fontWeight: 950,
+              letterSpacing: 1.1,
+              minWidth: 150,
+              justifyContent: "center"
+            }}
+          >
+            <span
+              style={{
+                width: 11,
+                height: 11,
+                borderRadius: 999,
+                background: liveTone.text,
+                display: "inline-block",
+                animation: "aviatPulseDot 1.4s infinite"
+              }}
+            />
+            {liveTone.label}
+          </div>
         </div>
 
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "minmax(0, 1.6fr) 320px",
-            gap: 14,
-            marginBottom: 14
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 12
+          }}
+        >
+          <Pill label="Mode" value="Aviat WTM4200 Live" accent="#8fe9ff" />
+          <Pill label="Device" value="155.15.59.4" accent="#93d8ff" />
+          <Pill label="Polling" value={String(POLL_MS / 1000) + "s"} accent="#7effb5" />
+          <Pill label="Points" value={String(history.length) + " / " + MAX_POINTS} accent="#d7c0ff" />
+          <Pill label="Last Update" value={latest.t} accent="#a6ffd5" />
+          <Pill label="Status" value={combinedTone.label} accent={combinedTone.text} />
+        </div>
+
+        <div
+          style={{
+            borderRadius: 32,
+            padding: 22,
+            background:
+              "linear-gradient(180deg, rgba(5,16,38,0.88) 0%, rgba(3,10,25,0.98) 100%)",
+            border: "1px solid rgba(90,131,205,0.22)",
+            boxShadow: "0 34px 90px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.03)"
           }}
         >
           <div
             style={{
-              borderRadius: 34,
-              padding: 24,
-              background:
-                "radial-gradient(circle at top left, rgba(0,150,255,0.14), transparent 24%), linear-gradient(180deg, rgba(8,16,31,0.98) 0%, rgba(4,9,18,0.99) 100%)",
-              border: "1px solid rgba(72,152,255,0.18)",
-              boxShadow: "0 28px 70px rgba(0,0,0,0.28)"
+              display: "grid",
+              gridTemplateColumns: "minmax(0, 1.65fr) minmax(320px, 0.85fr)",
+              gap: 18,
+              alignItems: "stretch"
             }}
           >
             <div
               style={{
-                fontSize: 12,
-                color: "#789dd4",
-                letterSpacing: 2,
-                textTransform: "uppercase",
-                marginBottom: 12
+                borderRadius: 28,
+                overflow: "hidden",
+                padding: 18,
+                minHeight: 460,
+                background:
+                  "radial-gradient(circle at 50% 0%, rgba(130,64,255,0.12) 0%, rgba(130,64,255,0) 32%)," +
+                  "radial-gradient(circle at 50% 100%, rgba(0,214,255,0.10) 0%, rgba(0,214,255,0) 34%)," +
+                  "linear-gradient(180deg, rgba(9,21,48,0.96) 0%, rgba(5,13,28,0.98) 100%)",
+                border: "1px solid rgba(255,255,255,0.07)",
+                position: "relative"
               }}
             >
-              Aviat WTM4200 • Live Operations Surface
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "space-between",
+                  gap: 16,
+                  marginBottom: 16
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      letterSpacing: 1.35,
+                      textTransform: "uppercase",
+                      color: "#6e8ec2",
+                      marginBottom: 8
+                    }}
+                  >
+                    Combined Live Graph
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 30,
+                      fontWeight: 950,
+                      lineHeight: 1.08,
+                      color: "#f3f7ff"
+                    }}
+                  >
+                    Neon Area Traffic Flow
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    padding: "10px 14px",
+                    borderRadius: 999,
+                    background: combinedTone.soft,
+                    border: "1px solid " + combinedTone.border,
+                    color: combinedTone.text,
+                    fontWeight: 900,
+                    fontSize: 13
+                  }}
+                >
+                  {util(combined.totalMbps, CAPACITY.combined)}% LOAD
+                </div>
+              </div>
+
+              <div
+                style={{
+                  borderRadius: 24,
+                  overflow: "hidden",
+                  height: 360,
+                  border: "1px solid rgba(255,255,255,0.06)",
+                  background:
+                    "linear-gradient(180deg, rgba(255,255,255,0.028) 0%, rgba(255,255,255,0.012) 100%)",
+                  animation: firstPaint ? "aviatCenterBurst 0.95s cubic-bezier(.2,.8,.2,1) both" : "none"
+                }}
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart
+                    data={history}
+                    margin={{ top: 24, right: 24, left: 0, bottom: 8 }}
+                  >
+                    <defs>
+                      <linearGradient id="aviatTotalStroke" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="#c996ff" />
+                        <stop offset="100%" stopColor="#7f52ff" />
+                      </linearGradient>
+
+                      <linearGradient id="aviatTotalFill" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="rgba(173,110,255,0.70)" />
+                        <stop offset="45%" stopColor="rgba(123,77,255,0.28)" />
+                        <stop offset="100%" stopColor="rgba(123,77,255,0.02)" />
+                      </linearGradient>
+
+                      <linearGradient id="aviatRxStroke" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="#71f2ff" />
+                        <stop offset="100%" stopColor="#18b6ff" />
+                      </linearGradient>
+
+                      <linearGradient id="aviatRxFill" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="rgba(93,240,255,0.50)" />
+                        <stop offset="50%" stopColor="rgba(34,165,255,0.20)" />
+                        <stop offset="100%" stopColor="rgba(34,165,255,0.02)" />
+                      </linearGradient>
+
+                      <linearGradient id="aviatTxStroke" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="#76ffc7" />
+                        <stop offset="100%" stopColor="#19df95" />
+                      </linearGradient>
+
+                      <linearGradient id="aviatTxFill" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="rgba(96,255,196,0.36)" />
+                        <stop offset="55%" stopColor="rgba(25,223,149,0.16)" />
+                        <stop offset="100%" stopColor="rgba(25,223,149,0.02)" />
+                      </linearGradient>
+                    </defs>
+
+                    <CartesianGrid stroke="rgba(136,167,224,0.10)" vertical={false} />
+                    <XAxis
+                      dataKey="t"
+                      tick={{ fill: "#6e8dbd", fontSize: 11 }}
+                      tickLine={false}
+                      axisLine={false}
+                      minTickGap={18}
+                    />
+                    <YAxis
+                      tick={{ fill: "#6e8dbd", fontSize: 11 }}
+                      tickLine={false}
+                      axisLine={false}
+                      width={44}
+                    />
+
+                    <Tooltip
+                      cursor={{ stroke: "rgba(255,255,255,0.10)", strokeDasharray: "5 6" }}
+                      contentStyle={{
+                        background: "rgba(5,12,26,0.96)",
+                        border: "1px solid rgba(255,255,255,0.10)",
+                        borderRadius: 16,
+                        boxShadow: "0 20px 50px rgba(0,0,0,0.35)"
+                      }}
+                      labelStyle={{ color: "#dbe8ff", fontWeight: 900 }}
+                      formatter={(value, name) => [fmt(value) + " Mbps", String(name).toUpperCase()]}
+                    />
+
+                    <ReferenceLine
+                      y={avgTotal}
+                      stroke="rgba(255,255,255,0.12)"
+                      strokeDasharray="4 6"
+                    />
+
+                    <Area
+                      type="monotone"
+                      dataKey="total"
+                      stroke="url(#aviatTotalStroke)"
+                      fill="url(#aviatTotalFill)"
+                      strokeWidth={3}
+                      fillOpacity={1}
+                      dot={false}
+                      activeDot={{ r: 4, stroke: "#fff", strokeWidth: 0.5, fill: "#b278ff" }}
+                      animationDuration={550}
+                      isAnimationActive
+                    />
+
+                    <Area
+                      type="monotone"
+                      dataKey="rx"
+                      stroke="url(#aviatRxStroke)"
+                      fill="url(#aviatRxFill)"
+                      strokeWidth={2.4}
+                      fillOpacity={1}
+                      dot={false}
+                      activeDot={{ r: 4, stroke: "#fff", strokeWidth: 0.5, fill: "#45dbff" }}
+                      animationDuration={650}
+                      isAnimationActive
+                    />
+
+                    <Area
+                      type="monotone"
+                      dataKey="tx"
+                      stroke="url(#aviatTxStroke)"
+                      fill="url(#aviatTxFill)"
+                      strokeWidth={2.1}
+                      fillOpacity={1}
+                      dot={false}
+                      activeDot={{ r: 4, stroke: "#fff", strokeWidth: 0.5, fill: "#48ffb0" }}
+                      animationDuration={720}
+                      isAnimationActive
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div
+                style={{
+                  marginTop: 14,
+                  display: "grid",
+                  gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+                  gap: 12
+                }}
+              >
+                <MiniStat
+                  title="Peak Total"
+                  value={compactMbps(peakTotal)}
+                  accent="#d2b8ff"
+                  sub="Highest combined burst"
+                />
+                <MiniStat
+                  title="Average"
+                  value={compactMbps(avgTotal)}
+                  accent="#8feaff"
+                  sub="Windowed total average"
+                />
+                <MiniStat
+                  title="Peak RX"
+                  value={compactMbps(peakRx)}
+                  accent="#71efff"
+                  sub="Inbound ceiling"
+                />
+                <MiniStat
+                  title="Peak TX"
+                  value={compactMbps(peakTx)}
+                  accent="#7effb9"
+                  sub="Outbound ceiling"
+                />
+              </div>
             </div>
 
             <div
               style={{
-                fontSize: 52,
-                lineHeight: 0.98,
-                fontWeight: 950,
-                letterSpacing: -1.2,
-                marginBottom: 12
+                display: "grid",
+                gap: 14,
+                alignContent: "start"
               }}
             >
-              Uplink Traffic Command Matrix
-            </div>
+              <MetricCard
+                label="Combined Total"
+                value={combined.totalMbps}
+                color="#d7c1ff"
+                hint="Primary aggregate transport throughput"
+              />
 
-            <div
-              style={{
-                maxWidth: '100%',
-                color: "#a4bcdf",
-                fontSize: 16,
-                lineHeight: 1.6,
-                marginBottom: 20
-              }}
-            >
-              Real-time monitoring board for uplink throughput, aggregate pressure, and
-              distribution path state across the Aviat transport chain.
-            </div>
+              <MetricCard
+                label="Combined RX"
+                value={combined.rxMbps}
+                color="#87eeff"
+                hint="Inbound aggregated load"
+              />
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
-              <HeroMetric label="Combined Total" value={combined.totalMbps} sub="Primary operational throughput" color="#ffffff" />
-              <HeroMetric label="Combined RX" value={combined.rxMbps} sub="Inbound aggregate" color="#8fe9ff" />
-              <HeroMetric label="Combined TX" value={combined.txMbps} sub="Outbound aggregate" color="#9cffd7" />
-            </div>
-          </div>
+              <MetricCard
+                label="Combined TX"
+                value={combined.txMbps}
+                color="#83ffbe"
+                hint="Outbound aggregated load"
+              />
 
-          <div style={{ display: "grid", gap: 14 }}>
-            <RailCard
-              title="Session"
-              value={live.label}
-              sub={err ? err : `Last update ${lastOkAt || "-"}`}
-              color={live.text}
-              border={live.border}
-            />
-            <RailCard
-              title="Aggregate Pressure"
-              value={`${aggregatePressure}%`}
-              sub="Combined throughput against the full modeled available capacity."
-              color="#8fe9ff"
-              border="rgba(63,204,255,0.24)"
-            />
-            <RailCard
-              title="Engine"
-              value={err ? "Alert" : "Stable"}
-              sub={err ? "Polling error detected in transport layer." : "Live telemetry running in normal polling cycle."}
-              color={err ? "#ffb8c5" : "#a9ffd5"}
-              border={err ? "rgba(255,94,122,0.30)" : "rgba(72,255,176,0.20)"}
-            />
+              <div
+                style={{
+                  borderRadius: 24,
+                  padding: 18,
+                  background: "linear-gradient(180deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.018) 100%)",
+                  border: "1px solid rgba(255,255,255,0.075)",
+                  animation: "aviatFloat 3.2s ease-in-out infinite"
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 11,
+                    letterSpacing: 1.3,
+                    textTransform: "uppercase",
+                    color: "#7392bf",
+                    marginBottom: 10
+                  }}
+                >
+                  Telemetry Pulse
+                </div>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gap: 12
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      gap: 12,
+                      color: "#9bb3d8",
+                      fontSize: 14
+                    }}
+                  >
+                    <span>Engine</span>
+                    <strong style={{ color: "#f1f7ff" }}>{error ? "Partial" : "Stable"}</strong>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      gap: 12,
+                      color: "#9bb3d8",
+                      fontSize: 14
+                    }}
+                  >
+                    <span>Polling Interval</span>
+                    <strong style={{ color: "#f1f7ff" }}>{POLL_MS / 1000}s</strong>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      gap: 12,
+                      color: "#9bb3d8",
+                      fontSize: 14
+                    }}
+                  >
+                    <span>Live Window</span>
+                    <strong style={{ color: "#f1f7ff" }}>{MAX_POINTS}s</strong>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      gap: 12,
+                      color: "#9bb3d8",
+                      fontSize: 14
+                    }}
+                  >
+                    <span>Last Tick</span>
+                    <strong style={{ color: "#f1f7ff" }}>{latest.t}</strong>
+                  </div>
+                </div>
+
+                <PressureBar value={combined.totalMbps} cap={CAPACITY.combined} />
+              </div>
+            </div>
           </div>
         </div>
 
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "minmax(0, 1.6fr) 320px",
-            gap: 14,
-            marginBottom: 14
+            gridTemplateColumns: "minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1fr)",
+            gap: 16
           }}
         >
-          <TrafficPanel card={cards.uplink} large />
-          <div style={{ display: "grid", gap: 14 }}>
-            <RailCard
-              title="Operations Signal"
-              value={toneFor(cards.uplink?.totalMbps, cards.uplink?.capacityMbps ?? CAPACITY.uplink).name}
-              sub="Live assessment of the primary uplink capacity state."
-              color={toneFor(cards.uplink?.totalMbps, cards.uplink?.capacityMbps ?? CAPACITY.uplink).text}
-              border={toneFor(cards.uplink?.totalMbps, cards.uplink?.capacityMbps ?? CAPACITY.uplink).border}
-            />
-            <RailCard
-              title="Telemetry"
-              value={lastOkAt ? `Updated ${lastOkAt}` : "Awaiting poll"}
-              sub="Polling interval fixed at 3 seconds with continuous refresh cadence."
-              color="#b9f4ff"
-              border="rgba(63,204,255,0.20)"
-            />
-            <RailCard
-              title="Aggregate State"
-              value={err ? "Issue" : "Live"}
-              sub={err ? err : "Transport telemetry currently active with no reported fetch errors."}
-              color={err ? "#ffb8c5" : "#ffffff"}
-              border="rgba(255,255,255,0.10)"
-            />
-          </div>
-        </div>
-
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-          <TrafficPanel card={cards.switchB} />
-          <TrafficPanel card={cards.switchA} />
+          <LinkPanel card={cards.uplink} />
+          <LinkPanel card={cards.switchB} />
+          <LinkPanel card={cards.switchA} />
         </div>
       </div>
     </div>
   );
 }
-
-
-
-
-
-
-
-
