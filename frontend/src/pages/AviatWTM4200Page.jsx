@@ -421,53 +421,79 @@ function LinkPanel({ card }) {
   if (!card) return null;
 
   const tone = toneFromValue(card.totalMbps, card.cap);
+  const pct = util(card.totalMbps, card.cap);
 
   return (
     <div
       style={{
-        borderRadius: 28,
-        padding: 22,
-        background: "linear-gradient(180deg, rgba(5,16,38,0.92) 0%, rgba(3,11,27,0.97) 100%)",
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: 30,
+        padding: 24,
+        minHeight: 345,
+        background:
+          "radial-gradient(circle at 15% 0%, rgba(131,84,255,0.14) 0%, rgba(131,84,255,0) 32%)," +
+          "radial-gradient(circle at 100% 100%, rgba(0,214,255,0.12) 0%, rgba(0,214,255,0) 34%)," +
+          "linear-gradient(180deg, rgba(6,18,43,0.96) 0%, rgba(2,10,24,0.98) 100%)",
         border: "1px solid " + tone.border,
-        boxShadow: "0 24px 60px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.03)"
+        boxShadow:
+          "0 26px 65px rgba(0,0,0,0.28)," +
+          "inset 0 1px 0 rgba(255,255,255,0.035)," +
+          "inset 0 0 0 1px rgba(255,255,255,0.02)"
       }}
     >
       <div
         style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.00) 26%, rgba(255,255,255,0.00) 74%, rgba(255,255,255,0.03) 100%)"
+        }}
+      />
+
+      <div
+        style={{
+          position: "relative",
           display: "flex",
           alignItems: "flex-start",
           justifyContent: "space-between",
           gap: 16,
-          marginBottom: 16
+          marginBottom: 18
         }}
       >
-        <div>
+        <div style={{ minWidth: 0 }}>
           <div
             style={{
               fontSize: 11,
-              letterSpacing: 1.4,
+              letterSpacing: 1.5,
               textTransform: "uppercase",
-              color: "#7392bf",
-              marginBottom: 8
+              color: "#6f8dc0",
+              marginBottom: 10
             }}
           >
             {card.title}
           </div>
+
           <div
             style={{
-              fontSize: 24,
-              lineHeight: 1.14,
+              fontSize: 23,
+              lineHeight: 1.15,
               fontWeight: 950,
-              color: "#f4f8ff"
+              color: "#f4f8ff",
+              letterSpacing: -0.4,
+              textWrap: "balance"
             }}
           >
             {card.subtitle}
           </div>
+
           <div
             style={{
               marginTop: 10,
               fontSize: 14,
-              color: "#88a5d0"
+              color: "#8ba7cf",
+              lineHeight: 1.5
             }}
           >
             {card.meta}
@@ -476,14 +502,17 @@ function LinkPanel({ card }) {
 
         <div
           style={{
-            padding: "10px 14px",
+            flexShrink: 0,
+            padding: "11px 15px",
             borderRadius: 999,
             border: "1px solid " + tone.border,
-            background: tone.soft,
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.02) 100%)",
+            boxShadow: "0 0 26px " + tone.soft,
             color: tone.text,
-            fontWeight: 900,
+            fontWeight: 950,
             fontSize: 13,
-            letterSpacing: 0.9
+            letterSpacing: 1
           }}
         >
           {tone.label}
@@ -492,32 +521,203 @@ function LinkPanel({ card }) {
 
       <div
         style={{
+          position: "relative",
           display: "grid",
           gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
           gap: 14
         }}
       >
-        <MiniStat
-          title="RX"
-          value={fmt(card.rxMbps)}
-          accent="#84eeff"
-          sub="Inbound path load"
-        />
-        <MiniStat
-          title="TX"
-          value={fmt(card.txMbps)}
-          accent="#7effb5"
-          sub="Outbound path load"
-        />
-        <MiniStat
-          title="TOTAL"
-          value={fmt(card.totalMbps)}
-          accent="#d6c1ff"
-          sub={"Capacity " + compactMbps(card.cap)}
-        />
+        {[
+          {
+            label: "RX",
+            value: fmt(card.rxMbps),
+            accent: "#85efff",
+            sub: "Inbound path load"
+          },
+          {
+            label: "TX",
+            value: fmt(card.txMbps),
+            accent: "#82ffbe",
+            sub: "Outbound path load"
+          },
+          {
+            label: "TOTAL",
+            value: fmt(card.totalMbps),
+            accent: "#d5c0ff",
+            sub: "Capacity " + (card.cap >= 1000 ? (card.cap / 1000).toFixed(2) + " Gbps" : card.cap + " Mbps")
+          }
+        ].map((item) => (
+          <div
+            key={item.label}
+            style={{
+              borderRadius: 22,
+              padding: 16,
+              minHeight: 116,
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.018) 100%)",
+              border: "1px solid rgba(255,255,255,0.075)",
+              boxShadow:
+                "inset 0 1px 0 rgba(255,255,255,0.025)," +
+                "0 14px 34px rgba(0,0,0,0.16)"
+            }}
+          >
+            <div
+              style={{
+                fontSize: 10,
+                letterSpacing: 1.3,
+                textTransform: "uppercase",
+                color: "#6e8bbd",
+                marginBottom: 12
+              }}
+            >
+              {item.label}
+            </div>
+
+            <div
+              style={{
+                fontSize: 24,
+                lineHeight: 1,
+                fontWeight: 1000,
+                color: item.accent,
+                letterSpacing: -0.4
+              }}
+            >
+              {item.value}
+            </div>
+
+            <div
+              style={{
+                marginTop: 8,
+                fontSize: 13,
+                lineHeight: 1.45,
+                color: "#8aa4cb"
+              }}
+            >
+              {item.sub}
+            </div>
+          </div>
+        ))}
       </div>
 
-      <PressureBar value={card.totalMbps} cap={card.cap} />
+      <div style={{ position: "relative", marginTop: 20 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: 9
+          }}
+        >
+          <div
+            style={{
+              fontSize: 11,
+              letterSpacing: 1.35,
+              textTransform: "uppercase",
+              color: "#7290c2"
+            }}
+          >
+            Capacity Pressure
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8
+            }}
+          >
+            <div
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: 999,
+                background: tone.text,
+                boxShadow: "0 0 14px " + tone.text
+              }}
+            />
+            <div
+              style={{
+                fontSize: 15,
+                fontWeight: 950,
+                color: tone.text
+              }}
+            >
+              {pct}%
+            </div>
+          </div>
+        </div>
+
+        <div
+          style={{
+            position: "relative",
+            height: 14,
+            borderRadius: 999,
+            overflow: "hidden",
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.025) 100%)",
+            border: "1px solid rgba(255,255,255,0.07)",
+            boxShadow: "inset 0 2px 10px rgba(0,0,0,0.24)"
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 46px)",
+              opacity: 0.45
+            }}
+          />
+
+          <div
+            style={{
+              position: "relative",
+              width: pct + "%",
+              height: "100%",
+              borderRadius: 999,
+              background:
+                pct >= 90
+                  ? "linear-gradient(90deg, #ffc0d6 0%, #ff5c98 55%, #ff3f85 100%)"
+                  : pct >= 70
+                  ? "linear-gradient(90deg, #ffe289 0%, #ffc04b 55%, #ffab23 100%)"
+                  : "linear-gradient(90deg, #86f4ff 0%, #43dbff 55%, #1db7ff 100%)",
+              boxShadow:
+                pct >= 90
+                  ? "0 0 28px rgba(255,92,152,0.42)"
+                  : pct >= 70
+                  ? "0 0 28px rgba(255,192,75,0.34)"
+                  : "0 0 28px rgba(67,219,255,0.36)"
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(90deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.00) 26%, rgba(255,255,255,0.20) 52%, rgba(255,255,255,0.00) 78%, rgba(255,255,255,0.22) 100%)",
+                mixBlendMode: "screen"
+              }}
+            />
+          </div>
+        </div>
+
+        <div
+          style={{
+            marginTop: 10,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+            color: "#84a0c8",
+            fontSize: 12.5
+          }}
+        >
+          <span>Live load vs provisioned capacity</span>
+          <strong style={{ color: "#c7d7f3", fontWeight: 900 }}>
+            {compactMbps(card.totalMbps)} / {compactMbps(card.cap)}
+          </strong>
+        </div>
+      </div>
     </div>
   );
 }
@@ -1125,3 +1325,4 @@ export default function AviatWTM4200Page() {
     </div>
   );
 }
+
