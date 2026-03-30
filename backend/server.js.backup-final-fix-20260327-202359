@@ -15,8 +15,6 @@ const netNeighbors = require("net");
 const { spawn } = require("child_process");
 const { execFile } = require("child_process");
 const express = require('express');
-const { visitorAlertMiddleware } = require('./visitorAlertMiddleware');
-const aviatRouter = require('./routes/aviat');
 const uplinkTrafficRouter = require('./routes/uplinkTraffic');
 const http = require("http");
 const cors = require("cors");
@@ -37,7 +35,10 @@ app.use('/api', aviatRouter);
 app.use('/api', uplinkTrafficRouter);
 const { startNocLinkEngine } = require("./nocLinkEngine");
 const { startNocPingEngine } = require('./nocPingEngine');
+const { visitorAlertMiddleware } = require("./visitorAlertMiddleware");
+
 app.set("trust proxy", 1);
+app.use(visitorAlertMiddleware);
 
 // =====================================
 // CALLMEBOT_WHATSAPP_HELPER_START
@@ -4178,17 +4179,6 @@ if (!global.__uplinkRealHistoryPollerStarted) {
   }, 10000);
 }
 // ===== UPLINK_REAL_HISTORY_POLLER_END =====
-
-
-
-
-
-
-
-
-
-
-
 
 
 
