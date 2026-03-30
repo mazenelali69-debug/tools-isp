@@ -77,3 +77,12 @@ dump.pm2
 # startup scripts (optional)
 startup-tools.ps1
 audit-*
+*.before-tplink-rebuild-*
+*.ui-backup-*
+*.full-rebuild-*.bak
+*.fix-order-*.bak
+*.finalfix-*.bak
+*.syntaxfix-*.bak
+*.clean-fix-*.bak
+*.broken-*.bak
+*.hardfix-*.bak
