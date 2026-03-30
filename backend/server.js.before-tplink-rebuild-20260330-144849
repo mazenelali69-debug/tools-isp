@@ -33,8 +33,6 @@ const mikrotikUptimeRouter = require("./routes/mikrotikUptime");
 const authRouter = require("./routes/auth");
 const { appendUplinkHistory } = require("./lib/historyStore");
 const app = express();
-const tpLinkJetstreamRouter = require("./routes/tplinkJetstream");
-app.use("/api/tplink/jetstream", tpLinkJetstreamRouter);
 app.use('/api', aviatRouter);
 app.use('/api', uplinkTrafficRouter);
 const { startNocLinkEngine } = require("./nocLinkEngine");
@@ -1091,7 +1089,7 @@ app.post("/api/debug/walk-ifdescr", async (req, res) => {
 });
 
 //
-// API: Universal interfaces via SNMP CLI (snmpwalk) â€” works across vendors
+// API: Universal interfaces via SNMP CLI (snmpwalk) — works across vendors
 // POST /api/interfaces-cli  { ip, community }
 // returns: { ok:true, count, interfaces:[{ifIndex, ifName}] }
 //
@@ -4180,7 +4178,6 @@ if (!global.__uplinkRealHistoryPollerStarted) {
   }, 10000);
 }
 // ===== UPLINK_REAL_HISTORY_POLLER_END =====
-
 
 
 

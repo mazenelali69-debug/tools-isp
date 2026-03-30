@@ -1,371 +1,508 @@
-﻿import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const POLL_MS = 4000;
+const REFRESH_MS = 30000;
+const RING_SIZE = 120;
+const RING_RADIUS = 46;
+const RING_CIRC = 2 * Math.PI * RING_RADIUS;
 
-function num(v) {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : 0;
+function formatUptime(sec) {
+  const total = Math.max(0, Number(sec || 0));
+  const d = Math.floor(total / 86400);
+  const h = Math.floor((total % 86400) / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = Math.floor(total % 60);
+  return `${d}d ${h}h ${m}m ${s}s`;
 }
 
-function stableSignature(payload) {
-  try {
-    const list = Array.isArray(payload?.switches) ? payload.switches : [];
-    return JSON.stringify({
-      vlan1559Status: payload?.vlan1559Status ?? "",
-      switches: list.map((s) => ({
-        ok: !!s?.ok,
-        ip: s?.ip ?? "",
-        sysName: s?.sysName ?? "",
-        sysUpTime: num(s?.sysUpTime),
-        memoryPercent: num(s?.memoryPercent),
-        portsTotal: num(s?.portsTotal),
-        portsUp: num(s?.portsUp),
-        portsDown: num(s?.portsDown),
-        vlan1559Status: s?.vlan1559Status ?? "",
-        traffic: {
-          rxMbps: num(s?.traffic?.rxMbps),
-          txMbps: num(s?.traffic?.txMbps)
-        },
-        ethPort: {
-          rxPct: num(s?.ethPort?.rxPct),
-          txPct: num(s?.ethPort?.txPct),
-          label: s?.ethPort?.label ?? "",
-          index: num(s?.ethPort?.index)
-        }
-      }))
-    });
-  } catch {
-    return "";
-  }
+function formatShortUptime(sec) {
+  const total = Math.max(0, Number(sec || 0));
+  const d = Math.floor(total / 86400);
+  const h = Math.floor((total % 86400) / 3600);
+  if (d > 0) return `${d}d ${h}h`;
+  const m = Math.floor((total % 3600) / 60);
+  return `${h}h ${m}m`;
 }
 
-function uptimeText(ticks) {
-  const sec = Math.max(0, Math.floor(num(ticks) / 100));
-  const d = Math.floor(sec / 86400);
-  const h = Math.floor((sec % 86400) / 3600);
-  const m = Math.floor((sec % 3600) / 60);
-  if (d > 0) return `${d}.${String(h).padStart(2, "0")} day`;
-  if (h > 0) return `${h}h ${m}m`;
-  return `${m}m`;
+function clamp(num, min, max) {
+  return Math.min(Math.max(num, min), max);
 }
 
-function panelStyle() {
-  return {
-    borderRadius: 0,
-    background: "linear-gradient(180deg, rgba(18,24,34,.96), rgba(13,18,28,.95))",
-    border: "1px solid rgba(255,255,255,.08)",
-    boxShadow: "inset 0 1px 0 rgba(255,255,255,.03)"
-  };
+function ringProgressFromUptime(sec) {
+  const days = Number(sec || 0) / 86400;
+  return clamp((days / 30) * 100, 0, 100);
 }
 
-function titleStyle() {
-  return {
-    fontSize: 13,
-    color: "rgba(255,255,255,.88)",
-    fontWeight: 700,
-    marginBottom: 8
-  };
+function uptimeTone(sec) {
+  const days = Number(sec || 0) / 86400;
+  if (days >= 7) return { label: "stable", color: "#22c55e" };
+  if (days >= 1) return { label: "recent reboot", color: "#f59e0b" };
+  return { label: "fresh boot", color: "#ef4444" };
 }
 
-function gaugeTone(ratio, mode) {
-  if (mode === "tx") {
-    if (ratio >= 0.85) return { fill: "#ff4c63", text: "#ff7388" };
-    if (ratio >= 0.65) return { fill: "#ffb02e", text: "#ffc55c" };
-    return { fill: "#63e6be", text: "#7ef0cf" };
-  }
-  if (mode === "rx") {
-    if (ratio >= 0.85) return { fill: "#ff4c63", text: "#ff7388" };
-    if (ratio >= 0.65) return { fill: "#f2db2f", text: "#e7ef6c" };
-    return { fill: "#7ed36f", text: "#92ea82" };
-  }
-  return { fill: "#7ed36f", text: "#92ea82" };
+function Gauge({ label, value, subValue }) {
+  const v = clamp(Number(value || 0), 0, 100);
+  return (
+    <div style={styles.gaugeBox}>
+      <div style={styles.gaugeTop}>
+        <span style={styles.gaugeLabel}>{label}</span>
+        <span style={styles.gaugeValue}>{v.toFixed(1)}%</span>
+      </div>
+      <div style={styles.gaugeTrack}>
+        <div style={{ ...styles.gaugeFill, width: `${v}%` }} />
+      </div>
+      <div style={styles.gaugeSub}>{subValue}</div>
+    </div>
+  );
 }
 
-const GaugeCard = React.memo(function GaugeCard({ title, value, display, max = 100, mode = "rx" }) {
-  const safeMax = Math.max(1, num(max));
-  const n = num(value);
-  const ratio = Math.max(0, Math.min(1, n / safeMax));
-  const deg = ratio * 180;
-  const tone = gaugeTone(ratio, mode);
+function UptimeRing({ seconds }) {
+  const progress = ringProgressFromUptime(seconds);
+  const tone = uptimeTone(seconds);
+  const offset = RING_CIRC - (RING_CIRC * progress) / 100;
 
   return (
-    <div style={{ ...panelStyle(), padding: 10, minHeight: 138 }}>
-      <div style={titleStyle()}>{title}</div>
+    <div style={styles.ringWrap}>
+      <svg width={RING_SIZE} height={RING_SIZE} viewBox="0 0 120 120" style={styles.ringSvg}>
+        <circle cx="60" cy="60" r={RING_RADIUS} stroke="rgba(255,255,255,0.08)" strokeWidth="10" fill="none" />
+        <circle
+          cx="60"
+          cy="60"
+          r={RING_RADIUS}
+          stroke={tone.color}
+          strokeWidth="10"
+          fill="none"
+          strokeLinecap="round"
+          strokeDasharray={RING_CIRC}
+          strokeDashoffset={offset}
+          transform="rotate(-90 60 60)"
+          style={{ transition: "stroke-dashoffset 0.7s ease" }}
+        />
+      </svg>
+      <div style={styles.ringCenter}>
+        <div style={styles.ringTitle}>UPTIME</div>
+        <div style={styles.ringMain}>{formatShortUptime(seconds)}</div>
+        <div style={{ ...styles.ringSub, color: tone.color }}>{tone.label}</div>
+      </div>
+    </div>
+  );
+}
 
-      <div style={{ display: "flex", justifyContent: 'flex-start', alignItems: "center", paddingTop: 2 }}>
-        <div style={{ position: "relative", width: 152, height: 88 }}>
-          <svg width="152" height="88" viewBox="0 0 152 88">
-            <path
-              d="M 18 78 A 58 58 0 0 1 134 78"
-              fill="none"
-              stroke="rgba(255,255,255,.09)"
-              strokeWidth="14"
-              strokeLinecap="butt"
-            />
-            <path
-              d="M 18 78 A 58 58 0 0 1 134 78"
-              fill="none"
-              stroke={tone.fill}
-              strokeWidth="14"
-              strokeLinecap="butt"
-              pathLength="180"
-              strokeDasharray={`${deg} 180`}
-            />
-          </svg>
+function DeviceCard({ device, liveUptime }) {
+  const statusColor = device.status === "UP" ? "#22c55e" : "#ef4444";
 
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent: 'flex-start',
-              paddingBottom: 8
-            }}
-          >
-            <div style={{ fontSize: 24, fontWeight: 800, color: tone.text, lineHeight: 1 }}>
-              {display}
+  return (
+    <div style={styles.card}>
+      <div style={styles.cardTop}>
+        <div>
+          <div style={styles.deviceName}>{device.name || device.ip}</div>
+          <div style={styles.deviceIp}>{device.ip}</div>
+        </div>
+
+        <div style={{ ...styles.statusBadge, borderColor: `${statusColor}55`, color: statusColor }}>
+          {device.status || "UNKNOWN"}
+        </div>
+      </div>
+
+      <div style={styles.uplinkRow}>
+        <div style={styles.infoTile}>
+          <div style={styles.infoLabel}>AUTO UPLINK</div>
+          <div style={styles.infoValue}>{device.uplinkInterface || "Unavailable"}</div>
+        </div>
+        <div style={styles.infoTile}>
+          <div style={styles.infoLabel}>LINK SPEED</div>
+          <div style={styles.infoValue}>{device.speedMb ? `${device.speedMb} Mbps` : "N/A"}</div>
+        </div>
+      </div>
+
+      <div style={styles.middleGrid}>
+        <div style={styles.uptimePanel}>
+          <UptimeRing seconds={liveUptime} />
+          <div style={styles.liveCounter}>{formatUptime(liveUptime)}</div>
+        </div>
+
+        <div style={styles.metricsPanel}>
+          <Gauge label="RX Usage" value={device.rxUsage} subValue={`${Number(device.rxMbps || 0).toFixed(2)} Mbps`} />
+          <Gauge label="TX Usage" value={device.txUsage} subValue={`${Number(device.txMbps || 0).toFixed(2)} Mbps`} />
+
+          <div style={styles.trafficGrid}>
+            <div style={styles.trafficBox}>
+              <div style={styles.trafficLabel}>LIVE RX</div>
+              <div style={styles.trafficValue}>{Number(device.rxMbps || 0).toFixed(2)} Mbps</div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-});
-
-const SegBar = React.memo(function SegBar({ title, value, max, unit = "%", valueColor = "#5aa1ff" }) {
-  const n = num(value);
-  const safeMax = Math.max(1, num(max));
-  const segments = 28;
-  const active = Math.max(0, Math.min(segments, Math.round((n / safeMax) * segments)));
-
-  return (
-    <div style={{ ...panelStyle(), padding: 10, minHeight: 62 }}>
-      <div style={{ ...titleStyle(), marginBottom: 8 }}>{title}</div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 10, alignItems: "center" }}>
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${segments}, 1fr)`, gap: 3 }}>
-          {Array.from({ length: segments }).map((_, i) => {
-            const ratio = (i + 1) / segments;
-            const segColor =
-              ratio <= 0.16 ? "#ff5672" :
-              ratio <= 0.32 ? "#ff4c63" :
-              ratio <= 0.48 ? "#f0d934" :
-              ratio <= 0.66 ? "#5a9cff" :
-              ratio <= 0.84 ? "#66b8ff" :
-              "#6fd16e";
-
-            return (
-              <div
-                key={i}
-                style={{
-                  height: 17,
-                  borderRadius: 2,
-                  background: i < active ? segColor : "rgba(255,255,255,.07)",
-                  boxShadow: i < active ? `0 0 8px ${segColor}33` : "none"
-                }}
-              />
-            );
-          })}
-        </div>
-
-        <div style={{ minWidth: 72, textAlign: "right", fontSize: 14, fontWeight: 800, color: valueColor }}>
-          {Math.round(n)} {unit}
-        </div>
-      </div>
-    </div>
-  );
-});
-
-const UptimeCard = React.memo(function UptimeCard({ uptime, liveTrafficMbps }) {
-  return (
-    <div style={{ display: "grid", gridTemplateRows: "1fr auto", gap: 4 }}>
-      <div style={{ ...panelStyle(), padding: 10, minHeight: 138 }}>
-        <div style={titleStyle()}>Uptime</div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: 'flex-start',
-            minHeight: 92,
-            fontSize: 34,
-            fontWeight: 800,
-            color: "#dce6f7",
-            lineHeight: 1
-          }}
-        >
-          {uptime}
-        </div>
-      </div>
-
-      <div style={{ ...panelStyle(), padding: "8px 10px", minHeight: 48 }}>
-        <div style={{ fontSize: 12, color: "rgba(255,255,255,.78)", fontWeight: 700 }}>Live Traffic</div>
-        <div style={{ marginTop: 6, fontSize: 14, color: "#d4d9e0" }}>
-          {Number(num(liveTrafficMbps)).toFixed(2)} Mbps
-        </div>
-      </div>
-    </div>
-  );
-});
-
-const DeviceCard = React.memo(function DeviceCard({ item, index }) {
-  const rxMbps = num(item?.traffic?.rxMbps);
-  const txMbps = num(item?.traffic?.txMbps);
-  const totalMbps = rxMbps + txMbps;
-
-  const rxPct = num(item?.ethPort?.rxPct);
-  const txPct = num(item?.ethPort?.txPct);
-  const memPct = num(item?.memoryPercent);
-
-  const portsTotal = num(item?.portsTotal);
-  const portsUp = num(item?.portsUp);
-  const portsDown = num(item?.portsDown);
-
-  return (
-    <div style={{ marginTop: index === 0 ? 0 : 12 }}>
-      {index > 0 ? (
-        <div style={{ color: "rgba(255,255,255,.78)", fontSize: 14, marginBottom: 6 }}>
-          ~ Gauges ~
-        </div>
-      ) : null}
-
-      <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1.35fr 1.35fr 1.15fr 2.3fr", gap: 6 }}>
-        <UptimeCard uptime={uptimeText(item?.sysUpTime)} liveTrafficMbps={totalMbps} />
-
-        <GaugeCard
-          title="RX Usage"
-          value={rxPct}
-          display={`${rxPct.toFixed(1)}%`}
-          max={100}
-          mode="rx"
-        />
-
-        <GaugeCard
-          title="Live Traffic"
-          value={totalMbps}
-          display={totalMbps.toFixed(2)}
-          max={1000}
-          mode="rx"
-        />
-
-        <GaugeCard
-          title="TX Usage"
-          value={txPct}
-          display={`${txPct.toFixed(1)}%`}
-          max={100}
-          mode="tx"
-        />
-
-        <div style={{ display: "grid", gridTemplateRows: "1fr auto", gap: 6 }}>
-          <SegBar title="Memory Usage" value={memPct} max={100} unit="%" valueColor="#5cb5ff" />
-
-          <div style={{ ...panelStyle(), padding: "10px 12px", minHeight: 62 }}>
-            <div style={{ fontSize: 13, color: "rgba(255,255,255,.88)", fontWeight: 700, marginBottom: 8 }}>
-              VLAN1559 Status
+            <div style={styles.trafficBox}>
+              <div style={styles.trafficLabel}>LIVE TX</div>
+              <div style={styles.trafficValue}>{Number(device.txMbps || 0).toFixed(2)} Mbps</div>
             </div>
-            <div style={{ fontSize: 14, color: "#d4d9e0" }}>
-              {item.vlan1559Status === "ONLINE" ? "ONLINE" : "DOWN"}
+            <div style={styles.trafficBoxWide}>
+              <div style={styles.trafficLabel}>TOTAL TRAFFIC</div>
+              <div style={styles.trafficValue}>{Number(device.totalMbps || 0).toFixed(2)} Mbps</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div style={{ marginTop: 6, color: "rgba(255,255,255,.64)", fontSize: 12 }}>
-        {(item?.sysName || item?.ip)} · {item?.ip} · {(item?.ok ? "ONLINE" : "ERROR")} · Ports UP {portsUp} / {portsTotal} · Ports DOWN {portsDown}
-      </div>
+      {device.error ? <div style={styles.errorText}>{device.error}</div> : null}
     </div>
   );
-});
+}
 
 export default function TpLinkJetstreamPage() {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState("");
-  const lastSigRef = useRef("");
-  const inFlightRef = useRef(false);
+  const [data, setData] = useState({
+    ok: true,
+    devices: [],
+    online: 0,
+    offline: 0,
+    totalTrafficMbps: 0
+  });
+  const [loading, setLoading] = useState(true);
+  const [tick, setTick] = useState(0);
+
+  async function load() {
+    try {
+      const res = await fetch("/api/tplink/jetstream/devices", { cache: "no-store" });
+      const json = await res.json();
+      setData(json);
+    } catch {
+      setData((prev) => ({
+        ...prev,
+        ok: false,
+        devices: (prev.devices || []).map((x) => ({
+          ...x,
+          status: "DOWN",
+          error: "Failed to load API"
+        }))
+      }));
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    let dead = false;
-
-    async function load() {
-      try {
-        const res = await fetch("/api/tplink-jetstream/health", { cache: "no-store" });
-        const js = await res.json();
-        if (!res.ok || !js?.ok) throw new Error(js?.error || `HTTP ${res.status}`);
-        if (!dead) {
-          setData(js);
-          setError("");
-        }
-      } catch (err) {
-        if (!dead) setError(err?.message || "TP-Link load failed");
-      }
-    }
-
     load();
-    const t = setInterval(load, POLL_MS);
-    return () => {
-      dead = true;
-      clearInterval(t);
-    };
+    const refresh = setInterval(load, REFRESH_MS);
+    return () => clearInterval(refresh);
   }, []);
 
-  const items = useMemo(() => (Array.isArray(data?.switches) ? data.switches : []), [data]);
+  useEffect(() => {
+    const sec = setInterval(() => setTick((x) => x + 1), 1000);
+    return () => clearInterval(sec);
+  }, []);
+
+  const devices = useMemo(() => {
+    return (data.devices || []).map((device) => ({
+      ...device,
+      liveUptime: Math.max(0, Number(device.uptimeSeconds || 0) + tick)
+    }));
+  }, [data.devices, tick]);
 
   return (
-    <div className="dashx-page" style={{ paddingBottom: 24 }}>
-      <div style={{ marginBottom: 12 }}>
-        <div
-          style={{
-            fontSize: 12,
-            textTransform: "uppercase",
-            letterSpacing: ".18em",
-            color: "rgba(255,255,255,.52)"
-          }}
-        >
-          Switch Health
+    <div style={styles.page}>
+      <div style={styles.header}>
+        <div>
+          <div style={styles.eyebrow}>TP-LINK JETSTREAM</div>
+          <h1 style={styles.title}>JetStream Uplink Monitor</h1>
+          <div style={styles.subtitle}>
+            Smart SNMP uplink auto-detection • realtime uptime ring • live RX/TX usage
+          </div>
         </div>
 
-        <div
-          style={{
-            fontSize: 28,
-            fontWeight: 900,
-            color: "#ffffff",
-            marginTop: 4
-          }}
-        >
-          TP-Link JetStream
+        <div style={styles.refreshBadge}>
+          {loading ? "Loading..." : `Refresh ${REFRESH_MS / 1000}s`}
         </div>
       </div>
 
-      {error ? (
-        <div
-          style={{
-            marginBottom: 10,
-            border: "1px solid rgba(255,80,115,.25)",
-            background: "rgba(255,80,115,.08)",
-            color: "#ffb8c4",
-            padding: 10
-          }}
-        >
-          {error}
+      <div style={styles.summaryGrid}>
+        <div style={styles.summaryCard}>
+          <div style={styles.summaryLabel}>Devices</div>
+          <div style={styles.summaryValue}>{data.deviceCount ?? devices.length}</div>
         </div>
-      ) : null}
+        <div style={styles.summaryCard}>
+          <div style={styles.summaryLabel}>Online</div>
+          <div style={styles.summaryValue}>{data.online ?? 0}</div>
+        </div>
+        <div style={styles.summaryCard}>
+          <div style={styles.summaryLabel}>Offline</div>
+          <div style={styles.summaryValue}>{data.offline ?? 0}</div>
+        </div>
+        <div style={styles.summaryCard}>
+          <div style={styles.summaryLabel}>Total Traffic</div>
+          <div style={styles.summaryValue}>{Number(data.totalTrafficMbps || 0).toFixed(2)} Mbps</div>
+        </div>
+      </div>
 
-      <div style={{ display: "grid", gap: 8 }}>
-        {items.map((item, idx) => (
-          <DeviceCard key={item.ip || idx} item={item} index={idx} />
+      <div style={styles.cardsGrid}>
+        {devices.map((device) => (
+          <DeviceCard key={device.ip} device={device} liveUptime={device.liveUptime} />
         ))}
       </div>
     </div>
   );
 }
 
-
-
-
-
-
-
-
-
-
-
+const styles = {
+  page: {
+    minHeight: "100%",
+    padding: "24px",
+    background:
+      "radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 26%), radial-gradient(circle at top right, rgba(34,197,94,0.10), transparent 18%), #071019",
+    color: "#e5eef8"
+  },
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: "16px",
+    marginBottom: "20px",
+    flexWrap: "wrap"
+  },
+  eyebrow: {
+    fontSize: "12px",
+    letterSpacing: "0.24em",
+    color: "#6ee7b7",
+    marginBottom: "8px",
+    fontWeight: 700
+  },
+  title: {
+    margin: 0,
+    fontSize: "34px",
+    lineHeight: 1.05,
+    color: "#f8fbff"
+  },
+  subtitle: {
+    marginTop: "10px",
+    color: "#8fa6bd",
+    fontSize: "14px"
+  },
+  refreshBadge: {
+    padding: "10px 14px",
+    borderRadius: "999px",
+    border: "1px solid rgba(255,255,255,0.12)",
+    background: "rgba(255,255,255,0.04)",
+    color: "#c9d8e6",
+    fontSize: "13px",
+    fontWeight: 700
+  },
+  summaryGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "14px",
+    marginBottom: "18px"
+  },
+  summaryCard: {
+    borderRadius: "18px",
+    padding: "16px 18px",
+    background: "linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03))",
+    border: "1px solid rgba(255,255,255,0.10)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.24)"
+  },
+  summaryLabel: {
+    color: "#8ba2b8",
+    fontSize: "12px",
+    textTransform: "uppercase",
+    letterSpacing: "0.10em"
+  },
+  summaryValue: {
+    marginTop: "8px",
+    fontSize: "28px",
+    fontWeight: 800,
+    color: "#f8fbff"
+  },
+  cardsGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(560px, 1fr))",
+    gap: "18px"
+  },
+  card: {
+    borderRadius: "24px",
+    padding: "20px",
+    background: "linear-gradient(180deg, rgba(8,17,29,0.94), rgba(8,17,29,0.88))",
+    border: "1px solid rgba(255,255,255,0.10)",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.35)"
+  },
+  cardTop: {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "12px",
+    alignItems: "center",
+    marginBottom: "14px"
+  },
+  deviceName: {
+    fontSize: "21px",
+    fontWeight: 800,
+    color: "#f7fbff"
+  },
+  deviceIp: {
+    marginTop: "4px",
+    color: "#87a0b7",
+    fontSize: "13px"
+  },
+  statusBadge: {
+    border: "1px solid rgba(255,255,255,0.16)",
+    padding: "8px 12px",
+    borderRadius: "999px",
+    fontSize: "12px",
+    fontWeight: 800,
+    letterSpacing: "0.08em",
+    background: "rgba(255,255,255,0.03)"
+  },
+  uplinkRow: {
+    display: "grid",
+    gridTemplateColumns: "1.7fr 1fr",
+    gap: "12px",
+    marginBottom: "18px"
+  },
+  infoTile: {
+    borderRadius: "16px",
+    padding: "14px 16px",
+    background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.08)"
+  },
+  infoLabel: {
+    color: "#88a0b7",
+    fontSize: "11px",
+    textTransform: "uppercase",
+    letterSpacing: "0.10em",
+    marginBottom: "7px"
+  },
+  infoValue: {
+    fontSize: "16px",
+    fontWeight: 700,
+    color: "#edf5fd"
+  },
+  middleGrid: {
+    display: "grid",
+    gridTemplateColumns: "260px 1fr",
+    gap: "16px",
+    alignItems: "stretch"
+  },
+  uptimePanel: {
+    borderRadius: "20px",
+    padding: "18px 14px",
+    background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.08)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  ringWrap: {
+    position: "relative",
+    width: `${RING_SIZE}px`,
+    height: `${RING_SIZE}px`
+  },
+  ringSvg: {
+    display: "block"
+  },
+  ringCenter: {
+    position: "absolute",
+    inset: 0,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center"
+  },
+  ringTitle: {
+    fontSize: "11px",
+    letterSpacing: "0.12em",
+    color: "#83a1ba",
+    marginBottom: "4px"
+  },
+  ringMain: {
+    fontSize: "18px",
+    fontWeight: 800,
+    color: "#f7fbff"
+  },
+  ringSub: {
+    marginTop: "2px",
+    fontSize: "11px",
+    fontWeight: 700,
+    textTransform: "uppercase",
+    letterSpacing: "0.08em"
+  },
+  liveCounter: {
+    marginTop: "12px",
+    fontSize: "15px",
+    fontWeight: 700,
+    color: "#dce8f3",
+    textAlign: "center"
+  },
+  metricsPanel: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px"
+  },
+  gaugeBox: {
+    borderRadius: "16px",
+    padding: "14px 16px",
+    background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.08)"
+  },
+  gaugeTop: {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "10px",
+    marginBottom: "10px"
+  },
+  gaugeLabel: {
+    color: "#d6e2ee",
+    fontSize: "13px",
+    fontWeight: 700
+  },
+  gaugeValue: {
+    color: "#f8fbff",
+    fontSize: "14px",
+    fontWeight: 800
+  },
+  gaugeTrack: {
+    height: "10px",
+    borderRadius: "999px",
+    background: "rgba(255,255,255,0.08)",
+    overflow: "hidden"
+  },
+  gaugeFill: {
+    height: "100%",
+    borderRadius: "999px",
+    background: "linear-gradient(90deg, #22c55e, #38bdf8, #60a5fa)"
+  },
+  gaugeSub: {
+    marginTop: "9px",
+    color: "#89a2b9",
+    fontSize: "12px"
+  },
+  trafficGrid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "12px"
+  },
+  trafficBox: {
+    borderRadius: "16px",
+    padding: "14px 16px",
+    background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.08)"
+  },
+  trafficBoxWide: {
+    gridColumn: "1 / span 2",
+    borderRadius: "16px",
+    padding: "14px 16px",
+    background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.08)"
+  },
+  trafficLabel: {
+    color: "#8ca5bd",
+    fontSize: "11px",
+    textTransform: "uppercase",
+    letterSpacing: "0.10em",
+    marginBottom: "8px"
+  },
+  trafficValue: {
+    color: "#f8fbff",
+    fontSize: "20px",
+    fontWeight: 800
+  },
+  errorText: {
+    marginTop: "12px",
+    color: "#fca5a5",
+    fontSize: "12px"
+  }
+};
