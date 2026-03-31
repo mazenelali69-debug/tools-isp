@@ -97,3 +97,4 @@ _FULL_BACKUP_*
 _project-review/
 *.zip
 *.bak
+_health-check/

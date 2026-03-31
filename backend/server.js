@@ -35,6 +35,26 @@ const mikrotikUptimeRouter = require("./routes/mikrotikUptime");
 const authRouter = require("./routes/auth");
 const { appendUplinkHistory } = require("./lib/historyStore");
 const app = express();
+
+/* ===== HEALTH ROUTES ===== */
+app.get("/", (_req, res) => {
+  res.status(200).json({
+    ok: true,
+    service: "tools-isp-backend",
+    message: "API running"
+  });
+});
+
+app.get("/api/health", (_req, res) => {
+  res.status(200).json({
+    ok: true,
+    service: "tools-isp-backend",
+    uptimeSec: Math.round(process.uptime()),
+    ts: Date.now()
+  });
+});
+/* ===== END HEALTH ROUTES ===== */
+
 const tpLinkJetstreamRouter = require("./routes/tplinkJetstream");
 app.use("/api/tplink/jetstream", tpLinkJetstreamRouter);
 app.use('/api', aviatRouter);
@@ -4236,3 +4256,5 @@ app.get("/api/packetloss/series", (req, res) => {
   const host = req.query.host;
   res.json(packetTS.getSeries(host));
 });
+
+
