@@ -86,3 +86,5 @@ audit-*
 *.clean-fix-*.bak
 *.broken-*.bak
 *.hardfix-*.bak
+
+_scan_reports/

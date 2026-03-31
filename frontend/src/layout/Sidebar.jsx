@@ -51,6 +51,15 @@ function SideIcon({ kind }) {
         </svg>
       );
 
+    case "packetloss":
+      return (
+        <svg {...common}>
+          <path d="M4 17h16" />
+          <path d="M7 13l2-2 2 2 3-5 3 3" />
+          <circle cx="18" cy="8" r="1.5" />
+        </svg>
+      );
+
     case "ethernet":
       return (
         <svg {...common}>
@@ -162,6 +171,7 @@ const NAV = [
   { id: "tplinkjetstream", label: "TP-Link-JETStream", icon: "tplinkjetstream" },
   { id: "neighbors", label: "Neighbors", icon: "neighbors" },
   { id: "liveping", label: "Latency LIVE", icon: "liveping" },
+  { id: "packetloss", label: "Packet Loss", icon: "packetloss" },
   { id: "ethernet", label: "Bandwidth LIVE", icon: "ethernet" },
   { id: "uplink", label: "UPLINK Traffic", icon: "uplink" },
   { id: "combined", label: "Combined Traffic", icon: "combined" },
@@ -247,6 +257,8 @@ export default function Sidebar({ active, setActive }) {
     </aside>
   );
 }
+
+
 
 
 

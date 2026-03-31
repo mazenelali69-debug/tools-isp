@@ -1,4 +1,5 @@
-﻿
+﻿const packetTS = require('./packetLossTimeseries');
+
 const { exec, execFileSync } = require("child_process");
 
 function checkVlan1559(cb){
@@ -15,6 +16,7 @@ const netNeighbors = require("net");
 const { spawn } = require("child_process");
 const { execFile } = require("child_process");
 const express = require('express');
+const packetLoss = require('./packetLossRecorder');
 const { visitorAlertMiddleware } = require('./visitorAlertMiddleware');
 const aviatRouter = require('./routes/aviat');
 const uplinkTrafficRouter = require('./routes/uplinkTraffic');
@@ -4220,3 +4222,17 @@ if (!global.__uplinkRealHistoryPollerStarted) {
 
 
 
+
+app.get("/api/packetloss/live", (req, res) => {
+  res.json(packetLoss.getLive());
+});
+
+app.get("/api/packetloss/history", (req, res) => {
+  res.json(packetLoss.getHistory());
+});
+
+
+app.get("/api/packetloss/series", (req, res) => {
+  const host = req.query.host;
+  res.json(packetTS.getSeries(host));
+});

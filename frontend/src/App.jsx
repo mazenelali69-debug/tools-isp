@@ -10,6 +10,7 @@ import DashboardPage from "./pages/DashboardPage";
 import AppShell from "./layout/AppShell";
 import NeighborsPanel from "./NeighborsPanel";
 import LivePingPage from "./pages/LivePingPage";
+import PacketLossPage from "./pages/PacketLossPage.jsx";
 import MonitorStreetPage from "./pages/MonitorStreetPage";
 import MikroTikUptimePage from "./pages/MikroTikUptimePage";
 import TpLinkJetstreamPage from "./pages/TpLinkJetstreamPage";
@@ -32,6 +33,7 @@ const ALLOWED_PAGES = new Set([
   "tplinkjetstream",
   "neighbors",
   "liveping",
+  "packetloss",
   "aviatwtm4200",
   "aviathistory",
   "combined",
@@ -194,6 +196,8 @@ useEffect(() => {
         <NeighborsPanel />
       ) : active === "liveping" ? (
         <LivePingPage />
+      ) : active === "packetloss" ? (
+        <PacketLossPage />
       ) : active === "aviatwtm4200" ? (
         <AviatWTM4200Page />
       ) : active === "aviathistory" ? (
@@ -220,6 +224,8 @@ useEffect(() => {
     </AppShell>
   );
 }
+
+
 
 
 
