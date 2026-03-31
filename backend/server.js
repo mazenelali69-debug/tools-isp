@@ -55,6 +55,33 @@ app.get("/api/health", (_req, res) => {
 });
 /* ===== END HEALTH ROUTES ===== */
 
+/* ===== PING TARGETS ENDPOINT ===== */
+app.get("/api/ping/targets", (_req, res) => {
+  try {
+    const cfgPath = path.join(__dirname, "nocPingTargets.json");
+    const cfgRaw = fs.readFileSync(cfgPath, "utf8");
+    const cfg = JSON.parse(cfgRaw);
+
+    const ranges = Array.isArray(cfg?.ranges) ? cfg.ranges : [];
+    const singleIPs = Array.isArray(cfg?.singleIPs) ? cfg.singleIPs : [];
+
+    return res.status(200).json({
+      ok: true,
+      countRanges: ranges.length,
+      countIPs: singleIPs.length,
+      ranges,
+      singleIPs
+    });
+  } catch (err) {
+    return res.status(500).json({
+      ok: false,
+      error: String(err?.message || err)
+    });
+  }
+});
+/* ===== END PING TARGETS ENDPOINT ===== */
+
+
 const tpLinkJetstreamRouter = require("./routes/tplinkJetstream");
 app.use("/api/tplink/jetstream", tpLinkJetstreamRouter);
 app.use('/api', aviatRouter);
@@ -4256,5 +4283,6 @@ app.get("/api/packetloss/series", (req, res) => {
   const host = req.query.host;
   res.json(packetTS.getSeries(host));
 });
+
 
 
