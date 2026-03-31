@@ -88,3 +88,12 @@ audit-*
 *.hardfix-*.bak
 
 _scan_reports/
+_ARCHIVE_CLEAN_*
+_FULL_BACKUP_*
+*.zip
+*.bak
+_ARCHIVE_CLEAN_*
+_FULL_BACKUP_*
+_project-review/
+*.zip
+*.bak
